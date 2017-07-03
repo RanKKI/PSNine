@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="基础设置">
+        <ListPreference
+            android:key="settings_ob"
+            android:title="排序"
+            android:summary="@string/settings_entries_ob_obdate"
+            android:defaultValue="@string/settings_entries_ob_default_value"
+            android:entryValues="@array/settings_entry_values_ob"
+            android:entries="@array/settings_entries_ob"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_preload"
+            android:title="提前加载" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

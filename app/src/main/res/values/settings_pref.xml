@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="settings_entries_ob">
+        <item>综合排序</item>
+        <item>最新</item>
+    </string-array>
+
+    <string name="settings_entries_ob_default_value">obdate</string>
+    <string name="settings_entries_ob_obdate">综合排序</string>
+    <string name="settings_entries_ob_date">最新</string>
+
+    <string-array name="settings_entry_values_ob">
+        <item>obdate</item>
+        <item>date</item>
+    </string-array>
+
+
+
+
+</resources>

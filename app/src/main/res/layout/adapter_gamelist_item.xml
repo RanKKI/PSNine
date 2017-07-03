@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="2dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/game_trophy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/game_name"
+        android:layout_below="@+id/game_name"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/game_icon"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/game_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="17dp"
+        android:layout_toEndOf="@+id/game_icon"
+        android:text="TextView"
+        android:textColor="#3498DD" />
+
+    <ImageView
+        android:id="@+id/game_icon"
+        android:layout_width="91dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/side_nav_bar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/game_mode"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="麻烦"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/game_percent"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="#BAC5D4" />
+    </LinearLayout>
+</RelativeLayout>

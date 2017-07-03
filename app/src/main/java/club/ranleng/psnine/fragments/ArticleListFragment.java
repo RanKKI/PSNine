@@ -1,0 +1,104 @@
+package club.ranleng.psnine.fragments;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import club.ranleng.psnine.activity.ArticleActivity;
+import club.ranleng.psnine.Listener.RequestWebPageListener;
+import club.ranleng.psnine.R;
+import club.ranleng.psnine.adapter.ArticleListAdapter;
+import club.ranleng.psnine.base.BaseFragment;
+import club.ranleng.psnine.widget.Requests.RequestWebPage;
+
+public class ArticleListFragment extends BaseFragment
+        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,ArticleListAdapter.OnItemClickListener{
+
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Context context;
+    private String type;
+    private FinishLoadListener finishLoadListener;
+
+    public interface FinishLoadListener {
+        void onFinish();
+    }
+
+
+    @Override
+    public View initView(LayoutInflater inflater) {
+        View view = inflater.inflate(R.layout.recyclerview, null);
+        context = inflater.getContext();
+        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_recyclerview);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        return view;
+    }
+
+
+    @Override
+    public void initData() {
+        type = getArguments().getString("type");
+        new RequestWebPage(type,this);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        finishLoadListener = (FinishLoadListener) context;
+    }
+
+    @Override
+    public void onRefresh() {
+        initData();
+    }
+
+    @Override
+    public void onPrepare() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void on404() {
+
+    }
+
+    @Override
+    public void onSuccess(ArrayList<Map<String, Object>> result) {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(context,
+                LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(mLayoutManager);
+        /*
+         * result格式. ArrayList<Map<String, Object>>
+         * 文章ID : id
+         * 文章标题 : title
+         * 文章时间 : time
+         * 文章回复 : reply
+         * 文章作者 : username
+         * 文章作者头像 : icon
+         */
+        ArticleListAdapter mAdapter = new ArticleListAdapter(context, result);
+        mAdapter.setClickListener(this);
+        recyclerView.setAdapter(mAdapter);
+        swipeRefreshLayout.setRefreshing(false);
+        finishLoadListener.onFinish();
+
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Intent intent = new Intent(context,ArticleActivity.class);
+        intent.putExtra("id",view.getTag().toString());
+        intent.putExtra("type",type);
+        startActivity(intent);
+    }
+}

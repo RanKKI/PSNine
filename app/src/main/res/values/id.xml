@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+
+    <!--Tag id-->
+    <item name="tag_pick_img_first" type="id"/>
+    <item name="tag_pick_img_second" type="id"/>
+    <item name="tag_article_replies_id" type="id"/>
+    <item name="tag_article_replies_editable" type="id"/>
+    <item name="tag_article_replies_username" type="id"/>
+</resources>
