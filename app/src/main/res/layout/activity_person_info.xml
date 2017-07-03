@@ -76,7 +76,7 @@
         android:layout_marginRight="16dp"
         android:clickable="true"
         app:backgroundTint="@color/about_page_card_background"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>

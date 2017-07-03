@@ -1,19 +1,14 @@
 package club.ranleng.psnine.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.SettingActivity;
-import club.ranleng.psnine.util.LogUtil;
+import club.ranleng.psnine.activity.Assist.SettingActivity;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 

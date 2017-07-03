@@ -13,7 +13,7 @@ import org.xml.sax.XMLReader;
 
 import java.util.Locale;
 
-import club.ranleng.psnine.activity.ImageActivity;
+import club.ranleng.psnine.activity.Assist.ImageActivity;
 import club.ranleng.psnine.util.LogUtil;
 
 /**

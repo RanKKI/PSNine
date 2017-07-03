@@ -1,5 +1,6 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +24,14 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Assist.AboutActivity;
+import club.ranleng.psnine.activity.Assist.PickImgActivity;
+import club.ranleng.psnine.activity.Assist.SearchActivity;
+import club.ranleng.psnine.activity.Assist.SettingActivity;
+import club.ranleng.psnine.activity.Post.NewGeneActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
@@ -32,13 +41,15 @@ import club.ranleng.psnine.widget.UserStatus;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ArticleListFragment.FinishLoadListener{
 
-    private Toolbar toolbar;
-    private DrawerLayout drawer;
-    private NavigationView navigationView;
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.tabs) TabLayout tabLayout;
     private TextView nav_username;
     private ImageView nav_icon;
+    private Context context;
+    private String[] tabs_keys = {"gene", "topic", "openbox", "guide", "plus"};
 
     @Override
     public void setContentView() {
@@ -47,11 +58,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void findViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        ButterKnife.bind(this);
+        context = this;
         View headerLayout = navigationView.getHeaderView(0);
         nav_username = (TextView) headerLayout.findViewById(R.id.nav_header_username);
         nav_icon = (ImageView) headerLayout.findViewById(R.id.nav_header_icon);
@@ -102,6 +110,30 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        final MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("key",query);
+                intent.putExtra("type",tabs_keys[tabLayout.getSelectedTabPosition()]);
+                startActivity(intent);
+                if(!searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -112,11 +144,10 @@ public class MainActivity extends BaseActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_new){
+            startActivity(new Intent(this, NewGeneActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -150,6 +181,7 @@ public class MainActivity extends BaseActivity
         Fragment f = new ArticleListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("type", i);
+        bundle.putBoolean("search",false);
         f.setArguments(bundle);
         return f;
     }

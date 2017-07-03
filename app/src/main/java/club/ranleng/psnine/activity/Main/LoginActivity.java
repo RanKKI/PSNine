@@ -1,4 +1,4 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Main;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 

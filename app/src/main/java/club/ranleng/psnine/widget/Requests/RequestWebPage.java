@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
+import club.ranleng.psnine.activity.Assist.SettingActivity;
+import club.ranleng.psnine.util.LogUtil;
 import club.ranleng.psnine.widget.ParseWebpage;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -16,14 +18,15 @@ import static club.ranleng.psnine.widget.Requests.RequestClient.okhttpclient;
 public class RequestWebPage {
 
     private RequestWebPageListener listener;
-    private HashMap url = new HashMap<String,String>(){{
+    private HashMap url_list = new HashMap<String,String>(){{
         put("gene","http://psnine.com/gene");
         put("topic","http://psnine.com/topic");
-        put("notice","http://psnine.com/my/notice");
         put("plus","http://psnine.com/node/plus");
         put("news","http://psnine.com/news");
         put("openbox","http://psnine.com/node/openbox");
         put("guide","http://psnine.com/node/guide");
+
+        put("notice","http://psnine.com/my/notice");
         put("photo","http://psnine.com/my/photo");
     }};
 
@@ -33,23 +36,33 @@ public class RequestWebPage {
         add("openbox");
         add("guide");
     }};
-    public RequestWebPage(){
 
-    }
     public RequestWebPage(String type,RequestWebPageListener listener){
         this.listener = listener;
-        new Info().execute((String) url.get(type), type);
+        String url = (String) url_list.get(type);
+        url = url + "?ob="+ SettingActivity.PREF_OB;
+        new Info().execute(url, type);
     }
 
     public RequestWebPage(String type,String id,RequestWebPageListener listener){
         this.listener = listener;
         String url;
         if (type.contentEquals("gene")) {
-            url = "http://psnine.com/gene/" + id;
+            url = "http://psnine.com/gene/" + id ;
         } else {
             url = "http://psnine.com/topic/" + id;
         }
+        url = url + "?ob="+ SettingActivity.PREF_OB;
+
         new Info().execute(url,"article",type);
+    }
+
+    public RequestWebPage(String type,Boolean search, String key, RequestWebPageListener listener){
+        this.listener = listener;
+        String url = (String) url_list.get(type);
+        url = url + "?ob="+ SettingActivity.PREF_OB + "&title=" + key;
+        LogUtil.d(url);
+        new Info().execute(url, type);
     }
 
     public RequestWebPage(RequestWebPageListener listener, String psnid){

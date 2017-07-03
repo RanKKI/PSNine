@@ -1,4 +1,4 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Assist;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

@@ -25,4 +25,6 @@
     <string name="nav_more_header">更多</string>
     <string name="nav_setting">设置</string>
     <string name="nav_about">关于</string>
+
+    <string name="new_gene_waning"><font color="#C9B095">提问题请发到「<font color="#3498DB" >问答</font>」板块，否则将被<font color="#B94A48" >关闭处理</font></font></string>
 </resources>

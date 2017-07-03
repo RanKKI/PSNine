@@ -1,4 +1,4 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Assist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

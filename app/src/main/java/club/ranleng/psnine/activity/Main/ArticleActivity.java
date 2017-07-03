@@ -1,4 +1,4 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Main;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,13 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Post.ReplyActivity;
 import club.ranleng.psnine.adapter.ArticleGameListAdapter;
 import club.ranleng.psnine.adapter.ArticleHeaderAdapter;
 import club.ranleng.psnine.adapter.ArticleReplyAdapter;
@@ -27,7 +27,6 @@ import club.ranleng.psnine.model.ArticleGameList;
 import club.ranleng.psnine.model.ArticleHeader;
 import club.ranleng.psnine.model.ArticleReply;
 import club.ranleng.psnine.model.TextItem;
-import club.ranleng.psnine.util.LogUtil;
 import club.ranleng.psnine.widget.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;

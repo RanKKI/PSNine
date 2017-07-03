@@ -1,17 +1,14 @@
 package club.ranleng.psnine.base;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import club.ranleng.psnine.activity.SettingActivity;
-import club.ranleng.psnine.fragments.SettingFragment;
+import club.ranleng.psnine.activity.Assist.SettingActivity;
 
 
 public abstract class BaseFragment extends Fragment {

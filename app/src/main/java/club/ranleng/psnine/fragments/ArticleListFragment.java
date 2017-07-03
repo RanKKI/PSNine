@@ -1,6 +1,5 @@
 package club.ranleng.psnine.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,12 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-import club.ranleng.psnine.activity.ArticleActivity;
+import club.ranleng.psnine.activity.Main.ArticleActivity;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.ArticleListAdapter;
@@ -48,7 +46,12 @@ public class ArticleListFragment extends BaseFragment
     @Override
     public void initData() {
         type = getArguments().getString("type");
-        new RequestWebPage(type,this);
+        Boolean search = getArguments().getBoolean("search");
+        if(search){
+            new RequestWebPage(type,search,getArguments().getString("key"),this);
+        }else{
+            new RequestWebPage(type,this);
+        }
     }
 
     @Override

@@ -1,9 +1,7 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Assist;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,7 +20,6 @@ import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.PickImgAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.fragments.SettingFragment;
 import club.ranleng.psnine.util.LogUtil;
 import club.ranleng.psnine.widget.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
@@ -69,7 +65,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_pick_photo, menu);
+        getMenuInflater().inflate(R.menu.done_all_menu, menu);
         return true;
     }
 
@@ -81,7 +77,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_pick_photo_finish) {
+        if (id == R.id.action_finish) {
             Intent intent = new Intent();
             //把返回数据存入Intent
             intent.putExtra("result", photo_list);

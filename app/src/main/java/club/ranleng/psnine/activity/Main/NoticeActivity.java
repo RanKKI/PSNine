@@ -1,4 +1,4 @@
-package club.ranleng.psnine.activity;
+package club.ranleng.psnine.activity.Main;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Main.ArticleActivity;
 import club.ranleng.psnine.adapter.NoticeListAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.widget.MakeToast;
