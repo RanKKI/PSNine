@@ -7,14 +7,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -26,35 +22,13 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import club.ranleng.psnine.Listener.RequestGetListener;
-import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.ArticleGameListAdapter;
-import club.ranleng.psnine.adapter.ArticleHeaderAdapter;
-import club.ranleng.psnine.adapter.ArticleReplyAdapter;
-import club.ranleng.psnine.adapter.PSNGameListAdapter;
-import club.ranleng.psnine.adapter.TextItemAdapter;
-import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.PSNPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.fragments.ArticleListFragment;
 import club.ranleng.psnine.fragments.PSNFragment;
-import club.ranleng.psnine.model.ArticleGameList;
-import club.ranleng.psnine.model.ArticleHeader;
-import club.ranleng.psnine.model.ArticleReply;
-import club.ranleng.psnine.model.GameList;
-import club.ranleng.psnine.model.TextItem;
-import club.ranleng.psnine.util.DrawableToBitmap;
-import club.ranleng.psnine.util.FastBlurUtil;
-import club.ranleng.psnine.util.LogUtil;
-import club.ranleng.psnine.widget.MakeToast;
+import club.ranleng.psnine.util.FastBlurUtils;
+import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.widget.Requests.RequestGet;
-import club.ranleng.psnine.widget.Requests.RequestPost;
-import club.ranleng.psnine.widget.Requests.RequestWebPage;
-import club.ranleng.psnine.widget.UserStatus;
-import me.drakeet.multitype.Items;
-import me.drakeet.multitype.MultiTypeAdapter;
-import okhttp3.FormBody;
 
 public class PersonInfoActivity extends BaseActivity implements FloatingActionButton.OnClickListener, PSNFragment.FinishLoadListener{
 
@@ -122,7 +96,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
         builder.setItems(list, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LogUtil.d(which);
+                LogUtils.d(which);
                 switch (which){
                     case 0:
                         break;
@@ -152,7 +126,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
                         resource.getWidth() / scaleRatio,
                         resource.getHeight() / scaleRatio,
                         false);
-                Bitmap blurBitmap = FastBlurUtil.doBlur(scaledBitmap, blurRadius, true);
+                Bitmap blurBitmap = FastBlurUtils.doBlur(scaledBitmap, blurRadius, true);
                 bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 bg.setImageBitmap(blurBitmap);
             }

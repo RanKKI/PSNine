@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import club.ranleng.psnine.util.LogUtil;
 import okhttp3.FormBody;
 
 import static club.ranleng.psnine.widget.Requests.RequestClient.okhttpclient;

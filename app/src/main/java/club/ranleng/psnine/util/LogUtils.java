@@ -28,7 +28,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-public class LogUtil {
+public class LogUtils {
 
     public static final int V = 0x01;
     public static final int D = 0x02;
@@ -39,8 +39,8 @@ public class LogUtil {
     private static final int FILE = 0xF1;
     private static final int JSON = 0xF2;
     private static final int XML = 0xF4;
-    private static final String TOP_BORDER = "╔═══════════════════════════════════════════════════════════════════════════════════════════════════";
-    private static final String LEFT_BORDER = "║ ";
+    private static final String TOP_BORDER =    "╔═══════════════════════════════════════════════════════════════════════════════════════════════════";
+    private static final String LEFT_BORDER =   "║ ";
     private static final String BOTTOM_BORDER = "╚═══════════════════════════════════════════════════════════════════════════════════════════════════";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final int MAX_LEN = 4000;
@@ -55,7 +55,7 @@ public class LogUtil {
     private static boolean sLogBorderSwitch = true; // log边框开关
     private static int sLogFilter = V;    // log过滤器
 
-    private LogUtil() {
+    private LogUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 

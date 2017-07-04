@@ -119,7 +119,7 @@ public class ArticleActivity extends BaseActivity
 
     @Override
     public void on404() {
-        MakeToast.notfound(context);
+        MakeToast.notfound();
         finish();
     }
 
@@ -183,7 +183,7 @@ public class ArticleActivity extends BaseActivity
                 switch (list[which]) {
                     case "回复":
                         if(!UserStatus.isLogin()){
-                            MakeToast.plzlogin(context);
+                            MakeToast.plzlogin();
                             break;
                         }else{
                             //do sth
@@ -207,7 +207,7 @@ public class ArticleActivity extends BaseActivity
                         break;
                     case "顶":
                         if(!UserStatus.isLogin()){
-                            MakeToast.plzlogin(context);
+                            MakeToast.plzlogin();
                             break;
                         }else{
                             builder.setMessage("要付出4铜币来顶一下吗？")

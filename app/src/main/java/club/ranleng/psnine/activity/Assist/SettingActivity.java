@@ -2,13 +2,11 @@ package club.ranleng.psnine.activity.Assist;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import club.ranleng.psnine.fragments.SettingFragment;
-import club.ranleng.psnine.util.LogUtil;
 
 public class SettingActivity extends AppCompatActivity{
 

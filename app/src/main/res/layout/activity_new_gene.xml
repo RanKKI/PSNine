@@ -21,83 +21,62 @@
             android:layout_marginRight="6dp"
             android:layout_marginTop="6dp"
             android:background="#FFFFFF"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp">
 
-            <android.support.v7.widget.CardView
+            <TextView
+                android:id="@+id/new_gene_waning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
+                android:background="#FAF8F0"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:textColor="#C09853" />
+
+            <EditText
+                android:id="@+id/new_gene_main_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#FAF8F0">
+                android:background="#EFEFEF"
+                android:ems="10"
+                android:gravity="left|top"
+                android:hint="请说说你对这些图/音乐/视频/电影的感受和看法，不要超过600字哦"
+                android:nestedScrollingEnabled="true"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/new_gene_waning" />
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
+            <EditText
+                android:id="@+id/new_gene_ele"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#EFEFEF">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:ems="10"
-                    android:gravity="left|top"
-                    android:hint="请说说你对这些图/音乐/视频/电影的感受和看法，不要超过600字哦"
-                    android:nestedScrollingEnabled="true"
-                    android:textSize="14sp" />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#EFEFEF">
-
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:ems="10"
-                    android:hint="元素，选填，只能由「中文字母数字」组成，2~15个字符"
-                    android:inputType="text"
-                    android:textSize="14sp" />
-            </android.support.v7.widget.CardView>
+                android:background="#EFEFEF"
+                android:ems="10"
+                android:hint="元素，选填，只能由「中文字母数字」组成，2~15个字符"
+                android:inputType="text"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/new_gene_select_img"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="#8CC14C"
@@ -114,94 +93,76 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/new_gene_selected_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0 张"
                     android:textColor="#C0A09F" />
             </LinearLayout>
 
-            <android.support.v7.widget.CardView
+            <EditText
+                android:id="@+id/new_gene_video_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#EFEFEF">
+                android:background="#EFEFEF"
+                android:ems="10"
+                android:hint="视频地址，选填，目前仅支持youku和bilibili"
+                android:inputType="text"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/new_gene_select_music_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="音乐类型" />
 
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/new_gene_music_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
                     android:ems="10"
-                    android:hint="视频地址，选填，目前仅支持youku和bilibili"
-                    android:inputType="text"
+                    android:hint="音乐ID"
+                    android:inputType="number"
                     android:textSize="14sp" />
-            </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/new_gene_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="#EFEFEF"
+                android:ems="10"
+                android:hint="出处，选填，http开头哦"
+                android:inputType="text"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/new_gene_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#EFEFEF">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="音乐类型" />
-
-                    <EditText
-                        android:id="@+id/editText2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="音乐ID"
-                        android:inputType="text"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#EFEFEF">
-
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:ems="10"
-                    android:hint="出处，选填，http开头哦"
-                    android:inputType="text"
-                    android:textSize="14sp" />
-            </android.support.v7.widget.CardView>
+                android:background="#3890FF"
+                android:text="提交"
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
     </ScrollView>

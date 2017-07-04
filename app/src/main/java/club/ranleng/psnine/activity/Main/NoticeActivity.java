@@ -69,7 +69,7 @@ public class NoticeActivity extends BaseActivity
 
     @Override
     public void on404() {
-        MakeToast.notfound(this);
+        MakeToast.notfound();
         finish();
     }
 

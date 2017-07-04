@@ -1,15 +1,10 @@
 package club.ranleng.psnine.widget;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import club.ranleng.psnine.util.LogUtil;
 
 /**
  * Created by ran on 22/06/2017.

@@ -14,7 +14,7 @@ import org.xml.sax.XMLReader;
 import java.util.Locale;
 
 import club.ranleng.psnine.activity.Assist.ImageActivity;
-import club.ranleng.psnine.util.LogUtil;
+import club.ranleng.psnine.util.LogUtils;
 
 /**
  * Created by ran on 02/07/2017.
@@ -42,7 +42,7 @@ public class HtmlTagHandler implements TagHandler {
             }
         } else if (tag.toLowerCase(Locale.getDefault()).equals("iframe")){
             int len = output.length();
-            LogUtil.d(len);
+            LogUtils.d(len);
         }
     }
 

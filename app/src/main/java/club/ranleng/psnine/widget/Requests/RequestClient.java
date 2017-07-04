@@ -25,6 +25,7 @@ public class RequestClient {
         okhttpclient = new OkHttpClient.Builder().connectTimeout(30,
                 TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .cookieJar(cookieJar).build();
+                .cookieJar(cookieJar)
+                .build();
     }
 }

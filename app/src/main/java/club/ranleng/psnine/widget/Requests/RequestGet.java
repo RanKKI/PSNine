@@ -3,12 +3,8 @@ package club.ranleng.psnine.widget.Requests;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import club.ranleng.psnine.Listener.RequestGetListener;
-import club.ranleng.psnine.util.LogUtil;
 
 import static club.ranleng.psnine.widget.Requests.RequestClient.okhttpclient;
 
@@ -24,7 +20,7 @@ public class RequestGet {
     }};
 
     public Void execute(String type, String psnid){
-//        LogUtil.d(String.format(url.get(type),psnid));
+//        LogUtils.d(String.format(url.get(type),psnid));
         new Info().execute(String.format(url.get(type),psnid));
         return null;
     }

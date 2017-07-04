@@ -1,26 +1,22 @@
 package club.ranleng.psnine.adapter;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.support.v7.widget.CardView;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.util.LogUtil;
 
 /**
  * Created by ran on 02/07/2017.
@@ -54,9 +50,12 @@ public class PickImgAdapter extends RecyclerView.Adapter<PickImgAdapter.ViewHold
 
         holder.photoview.setTag(R.id.tag_pick_img_first,map.get("id"));
         holder.photoview.setTag(R.id.tag_pick_img_second,rel);
+        clickListener.onShow(holder.photoview,holder.itemView,position);
     }
+
     private OnItemClickListener clickListener;
     public interface OnItemClickListener {
+        void onShow(View view, View root,int position);
         void onClick(View view, View root,int position);
         void onLongClick(View view, int position);
     }

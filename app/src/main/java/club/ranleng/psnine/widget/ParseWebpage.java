@@ -1,7 +1,5 @@
 package club.ranleng.psnine.widget;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,8 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import club.ranleng.psnine.util.LogUtil;
 
 public class ParseWebpage {
 

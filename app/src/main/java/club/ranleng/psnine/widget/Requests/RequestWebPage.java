@@ -9,7 +9,7 @@ import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
-import club.ranleng.psnine.util.LogUtil;
+import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.widget.ParseWebpage;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -61,7 +61,7 @@ public class RequestWebPage {
         this.listener = listener;
         String url = (String) url_list.get(type);
         url = url + "?ob="+ SettingActivity.PREF_OB + "&title=" + key;
-        LogUtil.d(url);
+        LogUtils.d(url);
         new Info().execute(url, type);
     }
 

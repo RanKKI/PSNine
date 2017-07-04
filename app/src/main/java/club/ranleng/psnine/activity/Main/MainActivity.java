@@ -2,8 +2,11 @@ package club.ranleng.psnine.activity.Main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,11 +19,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +41,9 @@ import club.ranleng.psnine.activity.Post.NewGeneActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
+import club.ranleng.psnine.util.CrashUtils;
+import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.Utils;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -46,6 +55,7 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
+    @BindView(R.id.main_fab) FloatingActionButton fab;
     private TextView nav_username;
     private ImageView nav_icon;
     private Context context;
@@ -74,26 +84,42 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         RequestClient.initOkhttpclient(this);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, NewGeneActivity.class));
+//                String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
+//                if(current_tab.contentEquals("gene")){
+//                    startActivity(new Intent(context, NewGeneActivity.class));
+//                }
+            }
+        });
     }
 
     @Override
     public void getData() {
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
+        Utils.init(this);
+        if(CrashUtils.init(new File(getCacheDir(),"crash.txt"))){
+            LogUtils.i("CrashUtils 初始化成功");
+        }else{
+            LogUtils.i("CrashUtils 初始化失败");
+        }
     }
 
     @Override
     public void showContent() {
-        List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
-        fl.add(setup("gene"));
-        fl.add(setup("topic"));
-        fl.add(setup("openbox"));
-        fl.add(setup("guide"));
-        fl.add(setup("plus"));
-        if (viewPager != null) {
-            viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
-        }
-        tabLayout.setupWithViewPager(viewPager); //绑定viewPager
+//        List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
+//        fl.add(setup("gene"));
+//        fl.add(setup("topic"));
+//        fl.add(setup("openbox"));
+//        fl.add(setup("guide"));
+//        fl.add(setup("plus"));
+//        if (viewPager != null) {
+//            viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
+//        }
+//        tabLayout.setupWithViewPager(viewPager); //绑定viewPager
     }
 
     @Override
@@ -113,6 +139,7 @@ public class MainActivity extends BaseActivity
 
         final MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -143,11 +170,6 @@ public class MainActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        if(id == R.id.action_new){
-            startActivity(new Intent(this, NewGeneActivity.class));
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
