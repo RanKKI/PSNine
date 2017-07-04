@@ -109,7 +109,7 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1) {
+        if(requestCode == 10){
             photo_list = data.getExtras().getStringArrayList("result");
             putData("photo_list",photo_list);
             String selected = photo_list.size() + " 张";

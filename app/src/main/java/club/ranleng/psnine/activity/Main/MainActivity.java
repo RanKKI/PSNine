@@ -38,6 +38,7 @@ import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.activity.Assist.SearchActivity;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.activity.Post.NewGeneActivity;
+import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
@@ -87,7 +88,7 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, NewGeneActivity.class));
+                startActivity(new Intent(context, NewTopicActivity.class));
 //                String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
 //                if(current_tab.contentEquals("gene")){
 //                    startActivity(new Intent(context, NewGeneActivity.class));

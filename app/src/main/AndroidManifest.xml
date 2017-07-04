@@ -3,7 +3,9 @@
     package="club.ranleng.psnine">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -14,12 +16,11 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="club.ranleng.psnine.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
@@ -56,7 +57,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.Assist.SettingActivity" />
         <activity android:name=".activity.Assist.SearchActivity" />
-        <activity android:name=".activity.Post.NewGeneActivity"
+        <activity
+            android:name=".activity.Post.NewGeneActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Post.NewTopicActivity"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

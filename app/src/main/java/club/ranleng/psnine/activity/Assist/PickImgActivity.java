@@ -69,7 +69,9 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
 
     @Override
     public void getData() {
-        photo_list = getIntent().getStringArrayListExtra("list");
+        if(getIntent().hasExtra("list")){
+            photo_list = getIntent().getStringArrayListExtra("list");
+        }
         new RequestWebPage("photo",this);
     }
 
@@ -95,7 +97,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
         if (id == R.id.action_finish) {
             Intent intent = new Intent();
             intent.putExtra("result", photo_list);
-            setResult(1, intent);
+            setResult(10, intent);
             finish();
         }else if(id == R.id.action_upload){
             tmpFile = new File(getCacheDir(),System.currentTimeMillis() + ".jpg");
