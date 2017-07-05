@@ -3,9 +3,6 @@ package club.ranleng.psnine.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.ArticleHeader;
-import club.ranleng.psnine.widget.HtmlImageGetter;
-import club.ranleng.psnine.widget.HtmlTagHandler;
+import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
-import static android.text.Html.FROM_HTML_MODE_LEGACY;
+import static android.text.Html.fromHtml;
 
 /**
  * Created by ran on 01/07/2017.
@@ -41,14 +37,8 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
         Context context = holder.itemView.getContext();
-        Spanned spanned;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            spanned = Html.fromHtml(item.content, FROM_HTML_MODE_LEGACY, new HtmlImageGetter(context, holder.content), new HtmlTagHandler(context));
-        } else {
-            spanned = Html.fromHtml(item.content, new HtmlImageGetter(context, holder.content), new HtmlTagHandler(context));
-        }
-        holder.content.setText(spanned);
-        holder.content.setMovementMethod(LinkMovementMethod.getInstance());
+        CmHtml.convert(holder.content,item.content);
+
         holder.time.setText(item.time);
         holder.replies.setText(item.replies);
         holder.username.setText(item.username);

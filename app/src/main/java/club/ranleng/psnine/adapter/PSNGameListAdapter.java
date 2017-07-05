@@ -5,12 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,10 +17,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.model.ArticleHeader;
 import club.ranleng.psnine.model.GameList;
-import club.ranleng.psnine.widget.HtmlImageGetter;
-import club.ranleng.psnine.widget.HtmlTagHandler;
 import me.drakeet.multitype.ItemViewBinder;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;

@@ -2,9 +2,7 @@ package club.ranleng.psnine.activity.Main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,14 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +33,13 @@ import club.ranleng.psnine.activity.Assist.AboutActivity;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.activity.Assist.SearchActivity;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
-import club.ranleng.psnine.activity.Post.NewGeneActivity;
-import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
 import club.ranleng.psnine.util.CrashUtils;
 import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.Utils;
+import club.ranleng.psnine.widget.HTML.CmHtml;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -88,7 +83,11 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, NewTopicActivity.class));
+                Intent intent = new Intent(context,ArticleActivity.class);
+                intent.putExtra("id","10422");
+                intent.putExtra("type","topic");
+                startActivity(intent);
+//                startActivity(new Intent(context, NewTopicActivity.class));
 //                String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
 //                if(current_tab.contentEquals("gene")){
 //                    startActivity(new Intent(context, NewGeneActivity.class));
@@ -102,6 +101,7 @@ public class MainActivity extends BaseActivity
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
+        CmHtml.init(this);
         if(CrashUtils.init(new File(getCacheDir(),"crash.txt"))){
             LogUtils.i("CrashUtils 初始化成功");
         }else{
@@ -111,16 +111,16 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showContent() {
-//        List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
-//        fl.add(setup("gene"));
-//        fl.add(setup("topic"));
+        List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
+        fl.add(setup("gene"));
+        fl.add(setup("topic"));
 //        fl.add(setup("openbox"));
 //        fl.add(setup("guide"));
 //        fl.add(setup("plus"));
-//        if (viewPager != null) {
-//            viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
-//        }
-//        tabLayout.setupWithViewPager(viewPager); //绑定viewPager
+        if (viewPager != null) {
+            viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
+        }
+        tabLayout.setupWithViewPager(viewPager); //绑定viewPager
     }
 
     @Override

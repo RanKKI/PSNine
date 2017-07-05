@@ -2,11 +2,7 @@ package club.ranleng.psnine.adapter;
 
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +18,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.widget.HtmlImageGetter;
-
-import static android.text.Html.FROM_HTML_MODE_LEGACY;
+import club.ranleng.psnine.widget.HTML.CmHtml;
 
 public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.ViewHolder> {
 
@@ -51,15 +45,8 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Map<String, Object> map = mData.get(position);
-        Spanned spanned;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            spanned = Html.fromHtml((String) map.get("title"), FROM_HTML_MODE_LEGACY, new HtmlImageGetter(context, holder.title), null);
-        } else {
-            spanned = Html.fromHtml((String) map.get("title"), new HtmlImageGetter(context, holder.title), null);
-        }
+        CmHtml.convert(holder.title, (String) map.get("title"));
         holder.title.setSingleLine(false);
-        holder.title.setText(spanned);
-        holder.title.setMovementMethod(LinkMovementMethod.getInstance());
         holder.name.setText((String) map.get("username"));
         holder.time.setText((String) map.get("time"));
         holder.itemView.setTag(map.get("url"));
