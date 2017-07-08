@@ -1,4 +1,4 @@
-package club.ranleng.psnine.widget;
+package club.ranleng.psnine.util;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -11,8 +11,8 @@ import club.ranleng.psnine.util.Utils;
 
 public class MakeToast {
 
-    public MakeToast(Context context, String s){
-        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+    public MakeToast(String s){
+        Toast.makeText(Utils.getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
 

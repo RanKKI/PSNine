@@ -44,7 +44,7 @@ public class CmHtml {
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private static Spanned returnHtml(String s){
+    public static Spanned returnHtml(String s){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(context), new HtmlTagHandler(context));
         }else{

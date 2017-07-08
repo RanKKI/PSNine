@@ -11,10 +11,9 @@ import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Main.ArticleActivity;
 import club.ranleng.psnine.adapter.NoticeListAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.widget.MakeToast;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -29,7 +28,7 @@ public class NoticeActivity extends BaseActivity
         if(!UserStatus.isLogin()){
             finish();
         }
-        setContentView(R.layout.recyclerview);
+        setContentView(R.layout.view_recyclerview);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

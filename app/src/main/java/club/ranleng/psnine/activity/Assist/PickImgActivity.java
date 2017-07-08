@@ -1,15 +1,9 @@
 package club.ranleng.psnine.activity.Assist;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -32,9 +25,7 @@ import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.PickImgAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.util.LogUtils;
-import club.ranleng.psnine.widget.MakeToast;
-import club.ranleng.psnine.widget.Requests.RequestGet;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestUpload;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
@@ -52,7 +43,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.recyclerview);
+        setContentView(R.layout.view_recyclerview);
         setTitle("图库");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -83,7 +74,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.pick_img_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_pickimg, menu);
         return true;
     }
 

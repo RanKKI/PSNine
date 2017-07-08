@@ -27,7 +27,7 @@ import club.ranleng.psnine.model.ArticleGameList;
 import club.ranleng.psnine.model.ArticleHeader;
 import club.ranleng.psnine.model.ArticleReply;
 import club.ranleng.psnine.model.TextItem;
-import club.ranleng.psnine.widget.MakeToast;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
@@ -88,7 +88,7 @@ public class ArticleActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.article_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_article, menu);
         return true;
     }
 

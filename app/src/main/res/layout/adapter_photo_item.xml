@@ -31,7 +31,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/ic_action_donall_green" />
+            app:srcCompat="@drawable/done_green" />
 
     </FrameLayout>
 

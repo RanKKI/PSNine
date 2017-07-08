@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.model.ArticleHeader;
 import club.ranleng.psnine.model.Trophy;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
@@ -30,7 +28,7 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        View view = inflater.inflate(R.layout.view_trophy,parent,false);
+        View view = inflater.inflate(R.layout.adapter_trophy,parent,false);
         return new ViewHolder(view);
     }
 
@@ -42,7 +40,7 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
         holder.game_des.setText(item.game_des);
         if(item.has_comment.contentEquals("true")){
             holder.user_name.setText(item.user_name);
-            CmHtml.convert(holder.user_comment,item.user_comment);
+            holder.user_comment.setText(CmHtml.returnHtml(item.user_comment));
             holder.time.setText(item.time);
         }else{
             holder.root.setVisibility(View.GONE);

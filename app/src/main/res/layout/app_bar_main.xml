@@ -43,6 +43,6 @@
         app:fabSize="normal"
         app:layout_anchor="@id/viewpager"
         app:layout_anchorGravity="bottom|right"
-        app:srcCompat="@drawable/nav_pen" />
+        app:srcCompat="@drawable/pen" />
 
 </android.support.design.widget.CoordinatorLayout>

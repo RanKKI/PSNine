@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_article_reply"
         android:title="Reply"
-        android:icon="@drawable/article_reply"
+        android:icon="@drawable/pen"
         app:showAsAction="ifRoom" />
 
 </menu>

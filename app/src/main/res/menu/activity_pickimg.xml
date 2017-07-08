@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_upload"
         android:title="上传"
-        android:icon="@drawable/nav_upload"
+        android:icon="@drawable/upload"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_finish"
         android:title="完成"
-        android:icon="@drawable/ic_action_doneall"
+        android:icon="@drawable/done"
         app:showAsAction="ifRoom" />
 
 

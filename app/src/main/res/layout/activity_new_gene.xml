@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E5E9EF"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    app:cardBackgroundColor="#E5E9EF"
-    tools:context="club.ranleng.psnine.activity.Post.NewGeneActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="club.ranleng.psnine.activity.Main.LoginActivity">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,10 +22,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="6dp"
             android:background="#FFFFFF"
             android:orientation="vertical"
             android:paddingBottom="4dp"
@@ -36,7 +38,7 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:textColor="#C09853" />
+                android:textColor="#C09853"/>
 
             <EditText
                 android:id="@+id/new_gene_main_edittext"
@@ -52,7 +54,7 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/new_gene_ele"
@@ -67,7 +69,7 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,7 +83,7 @@
                     android:layout_height="36dp"
                     android:background="#8CC14C"
                     android:text="点我选择图片"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"/>
 
                 <TextView
                     android:id="@+id/textView3"
@@ -90,14 +92,14 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:text="已选图片："
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/new_gene_selected_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0 张"
-                    android:textColor="#C0A09F" />
+                    android:textColor="#C0A09F"/>
             </LinearLayout>
 
             <EditText
@@ -113,7 +115,7 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,7 +127,7 @@
                     android:id="@+id/new_gene_select_music_type"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:text="音乐类型" />
+                    android:text="音乐类型"/>
 
                 <EditText
                     android:id="@+id/new_gene_music_id"
@@ -135,7 +137,7 @@
                     android:ems="10"
                     android:hint="音乐ID"
                     android:inputType="number"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 
@@ -152,7 +154,7 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <Button
                 android:id="@+id/new_gene_submit"
@@ -162,9 +164,9 @@
                 android:layout_marginTop="6dp"
                 android:background="#3890FF"
                 android:text="提交"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"/>
 
         </LinearLayout>
     </ScrollView>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>

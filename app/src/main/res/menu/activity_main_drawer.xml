@@ -5,19 +5,19 @@
         <menu>
             <item
                 android:id="@+id/nav_login"
-                android:icon="@drawable/nav_login"
+                android:icon="@drawable/login"
                 android:title="@string/nav_login" />
 
             <item
                 android:id="@+id/nav_personal"
                 android:visible="false"
-                android:icon="@drawable/nav_personal"
+                android:icon="@drawable/personal"
                 android:title="@string/nav_personal" />
 
             <item
                 android:id="@+id/nav_notice"
                 android:visible="false"
-                android:icon="@drawable/nav_notice"
+                android:icon="@drawable/notice"
                 android:title="@string/nav_notice" />
 
             <item
@@ -34,11 +34,11 @@
 
             <item
                 android:id="@+id/nav_setting"
-                android:icon="@drawable/nav_setting"
+                android:icon="@drawable/setting"
                 android:title="@string/nav_setting" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/nav_about"
+                android:icon="@drawable/about"
                 android:title="@string/nav_about" />
         </menu>
     </item>

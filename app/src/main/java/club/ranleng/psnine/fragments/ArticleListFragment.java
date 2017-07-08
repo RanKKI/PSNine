@@ -34,7 +34,7 @@ public class ArticleListFragment extends BaseFragment
 
     @Override
     public View initView(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.recyclerview, null);
+        View view = inflater.inflate(R.layout.view_recyclerview, null);
         context = inflater.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
