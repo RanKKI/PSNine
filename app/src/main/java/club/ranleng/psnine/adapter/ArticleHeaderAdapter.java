@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,7 +39,6 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
         Context context = holder.itemView.getContext();
         CmHtml.convert(holder.content,item.content);
-
         holder.time.setText(item.time);
         holder.replies.setText(item.replies);
         holder.username.setText(item.username);
@@ -52,7 +52,7 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.header_content) TextView content;
+        @BindView(R.id.header_content) RecyclerView content;
         @BindView(R.id.header_time) TextView time;
         @BindView(R.id.header_replies) TextView replies;
         @BindView(R.id.header_username) TextView username;

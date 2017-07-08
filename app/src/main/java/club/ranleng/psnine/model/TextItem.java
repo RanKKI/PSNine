@@ -1,10 +1,13 @@
 package club.ranleng.psnine.model;
 
+import android.widget.TextView;
+
 /**
  * Created by ran on 02/07/2017.
  */
 
 public class TextItem {
+
     public final String text;
     public final String color;
     public final int size;

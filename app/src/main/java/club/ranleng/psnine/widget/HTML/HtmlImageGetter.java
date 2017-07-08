@@ -19,9 +19,8 @@ public class HtmlImageGetter implements Html.ImageGetter {
     private Context context;
     private TextView tv;
 
-    public HtmlImageGetter(Context context, TextView tv) {
+    public HtmlImageGetter(Context context) {
         this.context = context;
-        this.tv = tv;
     }
 
     @Override
@@ -54,8 +53,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 height = resource.getHeight();
                 urlDrawable.bitmap = resource;
                 urlDrawable.setBounds(0, 0, width, height);
-                tv.invalidate();
-                tv.setText(tv.getText()); // 解决图文重叠
+
             }
         });
         return urlDrawable;

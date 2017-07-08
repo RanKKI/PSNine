@@ -55,18 +55,17 @@
 
         </LinearLayout>
 
-        <TextView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/header_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_info"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/header_icon"
-            android:layout_weight="1"
-            android:textColor="@android:color/background_dark" />
+            android:layout_toRightOf="@+id/header_icon"/>
 
     </RelativeLayout>
+
 
     <ImageView
         android:id="@+id/imageView3"

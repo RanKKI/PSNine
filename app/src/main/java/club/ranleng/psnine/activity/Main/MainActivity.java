@@ -114,9 +114,9 @@ public class MainActivity extends BaseActivity
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
         fl.add(setup("gene"));
         fl.add(setup("topic"));
-//        fl.add(setup("openbox"));
-//        fl.add(setup("guide"));
-//        fl.add(setup("plus"));
+        fl.add(setup("openbox"));
+        fl.add(setup("guide"));
+        fl.add(setup("plus"));
         if (viewPager != null) {
             viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
         }

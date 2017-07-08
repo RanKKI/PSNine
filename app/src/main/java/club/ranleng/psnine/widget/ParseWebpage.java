@@ -130,7 +130,8 @@ public class ParseWebpage {
 
         map.put("img_size", 0);
         map.put("title", title);
-        map.put("content", "<html><body>" + post + "</body></html>".replace("class=\"imgbgnb\">","class=\"imgbgnb\"/>").replace("alt=\"\">","alt=\"\"/>"));
+        //"<html><head>" + post + "</body></html>".replace("class=\"imgbgnb\">","class=\"imgbgnb\"/>").replace("alt=\"\">","alt=\"\"/>")
+        map.put("content", post);
         map.put("username", username);
         map.put("icon", icon);
         map.put("original", "");
@@ -159,7 +160,7 @@ public class ParseWebpage {
             map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
         }
         map.put("title", "");
-        map.put("content", "<html><body>" + content + "</body></html>");
+        map.put("content", content);
         map.put("username", username);
         map.put("icon", icon);
         map.put("original", original);
@@ -349,6 +350,8 @@ public class ParseWebpage {
         return map;
     }
 
+
+
     public static ArrayList<Map<String, Object>> parsePhoto(String results){
         ArrayList<Map<String, Object>>listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
@@ -363,5 +366,23 @@ public class ParseWebpage {
         }
 
         return listItems;
+    }
+
+    public static Map<String, String> parseTropy(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        map.put("game_icon_url",doc.select("div.imgbgnb").attr("src"));
+        map.put("game_name",doc.select("div.ml64").select("a").first().ownText());
+        map.put("game_des",doc.select("div.ml64").select("span").first().ownText());
+        Elements root = doc.select("div.box.pd10.mt10");
+        if(root.isEmpty() || root == null){
+            map.put("has_comment","false");
+        }else {
+            map.put("has_comment","true");
+            map.put("user_comment",root.select("div.content.pb10").first().ownText());
+            map.put("user_name",root.select("div.meta").select("a").first().ownText());
+            map.put("time",root.select("div.meta").first().ownText());
+        }
+        return map;
     }
 }

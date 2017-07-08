@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
         Map<String, Object> map = item.replies;
 
         CmHtml.convert(holder.title,(String) map.get("title"));
-        holder.title.setSingleLine(false);
+//        holder.title.setSingleLine(false);
         holder.itemView.setTag(R.id.tag_article_replies_id, map.get("id"));
         holder.itemView.setTag(R.id.tag_article_replies_editable, map.get("editable"));
         holder.itemView.setTag(R.id.tag_article_replies_username, map.get("username"));
@@ -56,7 +57,7 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        @BindView(R.id.adapter_list_title) TextView title;
+        @BindView(R.id.adapter_list_title) RecyclerView title;
         @BindView(R.id.adapter_list_name) TextView name;
         @BindView(R.id.adapter_list_time) TextView time;
         @BindView(R.id.adapter_list_icon) ImageView icon;
