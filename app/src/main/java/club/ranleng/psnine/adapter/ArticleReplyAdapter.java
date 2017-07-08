@@ -41,8 +41,7 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleReply item) {
         Map<String, Object> map = item.replies;
 
-        CmHtml.convert(holder.title,(String) map.get("title"));
-//        holder.title.setSingleLine(false);
+        CmHtml.convert(holder.itemView.getContext(),holder.title,(String) map.get("title"));
         holder.itemView.setTag(R.id.tag_article_replies_id, map.get("id"));
         holder.itemView.setTag(R.id.tag_article_replies_editable, map.get("editable"));
         holder.itemView.setTag(R.id.tag_article_replies_username, map.get("username"));

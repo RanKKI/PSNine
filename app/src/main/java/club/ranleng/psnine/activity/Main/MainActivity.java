@@ -33,6 +33,8 @@ import club.ranleng.psnine.activity.Assist.AboutActivity;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.activity.Assist.SearchActivity;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
+import club.ranleng.psnine.activity.Post.NewGeneActivity;
+import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
@@ -83,15 +85,12 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,ArticleActivity.class);
-                intent.putExtra("id","10422");
-                intent.putExtra("type","topic");
-                startActivity(intent);
-//                startActivity(new Intent(context, NewTopicActivity.class));
-//                String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
-//                if(current_tab.contentEquals("gene")){
-//                    startActivity(new Intent(context, NewGeneActivity.class));
-//                }
+                String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
+                if(current_tab.contentEquals("gene")){
+                    startActivity(new Intent(context, NewGeneActivity.class));
+                }else{
+                    startActivity(new Intent(context, NewTopicActivity.class));
+                }
             }
         });
     }
@@ -101,7 +100,6 @@ public class MainActivity extends BaseActivity
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
-        CmHtml.init(this);
         if(CrashUtils.init(new File(getCacheDir(),"crash.txt"))){
             LogUtils.i("CrashUtils 初始化成功");
         }else{

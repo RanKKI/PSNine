@@ -47,6 +47,7 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_new_gene);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -109,12 +110,11 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 10){
+        if(resultCode == 10){
             photo_list = data.getExtras().getStringArrayList("result");
             putData("photo_list",photo_list);
             String selected = photo_list.size() + " 张";
             selected_img.setText(selected);
-            LogUtils.d(photo_list);
         }
     }
 

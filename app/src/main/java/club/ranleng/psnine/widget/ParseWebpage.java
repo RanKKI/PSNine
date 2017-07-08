@@ -178,7 +178,7 @@ public class ParseWebpage {
         Elements post = doc.select("div.post");
         for (Element c : post) {
             if (!c.select("a").hasClass("btn")) {
-                String content = c.select("div.content.pb10").html();
+                String content = c.select("div.content.pb10").first().html();
                 String username = c.select("a.psnnode").text();
                 String icon = c.select("a.l").select("img").attr("src");
                 String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
@@ -371,7 +371,7 @@ public class ParseWebpage {
     public static Map<String, String> parseTropy(String results) {
         Map<String, String> map = new HashMap<>();
         Document doc = Jsoup.parse(results);
-        map.put("game_icon_url",doc.select("div.imgbgnb").attr("src"));
+        map.put("game_icon_url",doc.select("img.imgbgnb").attr("src"));
         map.put("game_name",doc.select("div.ml64").select("a").first().ownText());
         map.put("game_des",doc.select("div.ml64").select("span").first().ownText());
         Elements root = doc.select("div.box.pd10.mt10");
@@ -379,7 +379,7 @@ public class ParseWebpage {
             map.put("has_comment","false");
         }else {
             map.put("has_comment","true");
-            map.put("user_comment",root.select("div.content.pb10").first().ownText());
+            map.put("user_comment",root.select("div.content.pb10").first().html());
             map.put("user_name",root.select("div.meta").select("a").first().ownText());
             map.put("time",root.select("div.meta").first().ownText());
         }

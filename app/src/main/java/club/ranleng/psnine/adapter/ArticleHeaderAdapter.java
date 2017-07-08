@@ -38,16 +38,18 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
         Context context = holder.itemView.getContext();
-        CmHtml.convert(holder.content,item.content);
+        CmHtml.convert(context,holder.content,item.content);
         holder.time.setText(item.time);
         holder.replies.setText(item.replies);
         holder.username.setText(item.username);
         Glide.with(context).load(item.icon).into(holder.icon);
-        holder.imgs_layout.removeAllViews();
-        for(String i : item.img){
-            ImageView imageView = new ImageView(context);
-            Glide.with(context).load(i).into(imageView);
-            holder.imgs_layout.addView(imageView);
+        if(holder.imgs_layout.getTag() == null){
+            holder.imgs_layout.setTag("");
+            for(String i : item.img){
+                ImageView imageView = new ImageView(context);
+                Glide.with(context).load(i).into(imageView);
+                holder.imgs_layout.addView(imageView);
+            }
         }
     }
 

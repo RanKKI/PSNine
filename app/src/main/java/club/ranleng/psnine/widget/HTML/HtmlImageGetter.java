@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import club.ranleng.psnine.util.LogUtils;
+
 public class HtmlImageGetter implements Html.ImageGetter {
 
     private Context context;
@@ -21,6 +23,11 @@ public class HtmlImageGetter implements Html.ImageGetter {
 
     public HtmlImageGetter(Context context) {
         this.context = context;
+    }
+
+    public HtmlImageGetter(Context context, TextView tc) {
+        this.context = context;
+        this.tv = tc;
     }
 
     @Override
@@ -53,6 +60,10 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 height = resource.getHeight();
                 urlDrawable.bitmap = resource;
                 urlDrawable.setBounds(0, 0, width, height);
+                if(tv != null){
+                    tv.invalidate();
+                    tv.setText(tv.getText()); // 解决图文重叠
+                }
 
             }
         });

@@ -45,7 +45,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Map<String, Object> map = mData.get(position);
-        CmHtml.convert(holder.title, (String) map.get("title"));
+        CmHtml.convert(holder.itemView.getContext(),holder.title, (String) map.get("title"));
         holder.title.setSingleLine(false);
         holder.name.setText((String) map.get("username"));
         holder.time.setText((String) map.get("time"));

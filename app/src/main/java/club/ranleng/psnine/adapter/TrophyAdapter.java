@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Trophy;
+import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -40,7 +41,8 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
         holder.game_des.setText(item.game_des);
         if(item.has_comment.contentEquals("true")){
             holder.user_name.setText(item.user_name);
-            holder.user_comment.setText(CmHtml.returnHtml(item.user_comment));
+            LogUtils.d(item.user_comment);
+            holder.user_comment.setText(CmHtml.returnHtml(context,item.user_comment));
             holder.time.setText(item.time);
         }else{
             holder.root.setVisibility(View.GONE);
