@@ -66,7 +66,6 @@
         android:layout_toLeftOf="@+id/psngame_trophy_st_root">
 
         <ImageView
-            android:id="@+id/imageView6"
             android:layout_width="45dp"
             android:layout_height="60dp"
             android:background="#F5FAEC"/>
@@ -92,7 +91,6 @@
         android:layout_centerVertical="false">
 
         <ImageView
-            android:id="@+id/imageView6"
             android:layout_width="80dp"
             android:layout_height="60dp"
             android:background="#E4CDC1"/>

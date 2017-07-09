@@ -19,7 +19,12 @@ public class EmojiDialogAdapter extends RecyclerView.Adapter<EmojiDialogAdapter.
             "叉","方块","三角","圆圈","上","下","左","右","D_PAD","Lone","Ltwo","Lthree","Rone","Rtwo",
             "Rthree","SELECT","START","PS","OPTION","SHARE","T_PAD","LS","RS","LS_上","LS_右上","LS_右",
             "LS_右下","LS_下","LS_左下","LS_左","LS_左上","RS_上","RS_右上","RS_右","RS_右下","RS_下",
-            "RS_左下","RS_左","RS_左上"};
+            "RS_左下","RS_左","RS_左上","阿鲁憨笑","阿鲁皱眉","阿鲁不开心","阿鲁阴笑","阿鲁吃惊","阿鲁懵逼",
+            "阿鲁委屈","阿鲁茫然","阿鲁XD","阿鲁崇拜","阿鲁淫笑","阿鲁獠牙","阿鲁哭","阿鲁茫茫然","阿鲁脸红",
+            "阿鲁亲亲","阿鲁出汗","阿鲁瞌睡","阿鲁墨镜","阿鲁抠鼻","阿鲁吃糖","阿鲁出血","阿鲁口水","阿鲁吐了",
+            "阿鲁鼻涕","阿鲁绷带","阿鲁吐舌","阿鲁闭嘴","阿鲁扶镜","阿鲁打码","阿鲁吐血","阿鲁冒火","阿鲁冻结",
+            "阿鲁挂了","阿鲁点赞","阿鲁异议","阿鲁无奈","阿鲁开森","阿鲁捂脸","阿鲁害羞","阿鲁脸疼","阿鲁琢磨",
+            "阿鲁鼓掌","阿鲁DOGE"};
 
     Integer[] key = { R.raw.weiqu,R.raw.wushi,R.raw.sajiao,R.raw.haixiu,R.raw.shihua,R.raw.liulei,
             R.raw.bizui,R.raw.jiong,R.raw.chouyan,R.raw.wuzui,R.raw.yuncai,R.raw.hecha,R.raw.plusone,
@@ -33,7 +38,14 @@ public class EmojiDialogAdapter extends RecyclerView.Adapter<EmojiDialogAdapter.
             R.raw.psshare,R.raw.pstpad,R.raw.psls,R.raw.psrs,R.raw.pslsshang,R.raw.pslsyoushang,
             R.raw.pslsyou,R.raw.pslsyouxia,R.raw.pslsxia,R.raw.pslszuoxia,R.raw.pslszuo,R.raw.pslszuoshang,
             R.raw.psrsshang,R.raw.psrsyoushang,R.raw.psrsyou,R.raw.psrsyouxia,R.raw.psrsxia,R.raw.psrszuoxia,
-            R.raw.psrszuo,R.raw.psrszuoshang};
+            R.raw.psrszuo,R.raw.psrszuoshang,R.raw.aluhanxiao,R.raw.aluzhoumei,R.raw.alubukaixin,
+            R.raw.aluyinxiao,R.raw.aluchijing,R.raw.alumengbi,R.raw.aluweiqu,R.raw.alumangran,R.raw.aluxd,
+            R.raw.aluchongbai,R.raw.aluyinxiao,R.raw.aluliaoya,R.raw.aluku,R.raw.alumangmangran,
+            R.raw.alulianhong,R.raw.aluqinqin,R.raw.aluchuhan,R.raw.alukeshui,R.raw.alumojing,
+            R.raw.alukoubi,R.raw.aluchitang,R.raw.aluchuxue,R.raw.alukoushui,R.raw.alutule,R.raw.alubiti,
+            R.raw.alubengdai,R.raw.alutushe,R.raw.alubizui,R.raw.alufujing,R.raw.aludama,R.raw.alutuxue,
+            R.raw.alumaohuo,R.raw.aludongjie,R.raw.aluguale,R.raw.aludianzan,R.raw.aluyiyi,R.raw.aluwunai,
+            R.raw.alukaisen,R.raw.aluwulian,R.raw.aluhaixiu,R.raw.alulianteng,R.raw.aluzuomo,R.raw.aluguzhang,R.raw.aludoge};
 
     public EmojiDialogAdapter() {
 
