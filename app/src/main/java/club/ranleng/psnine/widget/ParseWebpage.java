@@ -282,8 +282,16 @@ public class ParseWebpage {
             String difficulty = c.select("td").get(3).select("span").text();
             String perfection = c.select("td").get(3).select("em").text();
             String trophy = c.select("small.h-p").html();
+            String pattern = "/psngame/(\\d+)";
+            // 创建 Pattern 对象
+            Pattern r = Pattern.compile(pattern);
+            // 现在创建 matcher 对象
+            Matcher m = r.matcher(c.select("td").select("p").select("a").attr("href"));
 
             Map<String, Object> map = new HashMap<>();
+            if(m.find()){
+                map.put("trophy_id",m.group(1));
+            }
             map.put("game_icon", game_icon);
             map.put("progress", Integer.valueOf(progress));
             map.put("game_name", game_name);
@@ -373,11 +381,12 @@ public class ParseWebpage {
 
         Document doc = Jsoup.parse(results);
         Elements header = doc.select("div.box.pd10");
-        Boolean is_user;
-        if(doc.select("div.box").size() == 3){
+        Boolean is_user = false;
+        int total =doc.select("div.box").size();
+        Elements user_info = doc.select("div.box").get(1).select("table").select("tbody").select("tr").select("td");
+        String user_href =user_info.get(0).select("p").select("a").attr("href");
+        if( user_href != null && user_href.contains("psnid")){
             is_user = true;
-        }else{
-            is_user = false;
         }
         Map<String, Object> map = new HashMap<>();
         map.put("header_icon",header.select("img").attr("src"));
@@ -386,39 +395,42 @@ public class ParseWebpage {
         listItems.add(map);
 
         if(is_user){
-            Elements user_info = doc.select("div.box").get(1).select("table").select("tbody").select("tr").select("td");
             map = new HashMap<>();
             map.put("username",user_info.get(0).select("p").select("a").text());
             map.put("percentage",user_info.get(0).select("em").text());
-            map.put("first_trophy",user_info.get(1).ownText());
-            map.put("last_trophy",user_info.get(2).ownText());
-            map.put("total_time",user_info.get(3).ownText());
+            if(user_info.size() != 1){
+                map.put("first_trophy",user_info.get(1).ownText());
+                map.put("last_trophy",user_info.get(2).ownText());
+                map.put("total_time",user_info.get(3).ownText());
+            }
             listItems.add(map);
         }
-        Elements trophy;
+
+        int trophy_num;
         if(is_user){
-            trophy = doc.select("div.box").get(2).select("table").select("tr");
+            trophy_num = 2;
         }else{
-            trophy = doc.select("div.box").get(1).select("table").select("tr");
+            trophy_num = 1;
         }
+        for (int c = trophy_num; c < total ; c++) {
+            Elements trophy = doc.select("div.box").get(c).select("table").select("tr");
 
-        LogUtils.d(listItems);
-
-        for (Element i: trophy) {
-            if(!i.attr("id").isEmpty()){
-                map = new HashMap<>();
-                map.put("trophy_icon",i.select("td").get(0).select("img").attr("src"));
-                map.put("trophy_name",i.select("td").get(1).select("p").text());
-                map.put("trophy_des",i.select("td").get(1).select("em").text());
-                map.put("trophy_tips",i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
-                if(is_user){
-                    map.put("trophy_date",i.select("td").get(2).select("em").html());
+            for (Element i: trophy) {
+                if(!i.attr("id").isEmpty()){
+                    map = new HashMap<>();
+                    map.put("trophy_icon",i.select("td").get(0).select("img").attr("src"));
+                    map.put("trophy_name",i.select("td").get(1).select("p").text());
+                    map.put("trophy_id",i.select("td").get(1).select("p").select("a").first().attr("href").replace("http://psnine.com/trophy/",""));
+                    map.put("trophy_des",i.select("td").get(1).select("em").get(i.select("td").get(1).select("em").size()-1).text());
+                    map.put("trophy_tips",i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
+                    if(is_user){
+                        map.put("trophy_date",i.select("td").get(2).select("em").html());
+                    }
+                    map.put("trophy_percent",i.select("td.twoge").first().ownText());
+                    listItems.add(map);
                 }
-                map.put("trophy_percent",i.select("td.twoge").first().ownText());
-                listItems.add(map);
             }
         }
-
 
         return listItems;
     }

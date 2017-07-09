@@ -1,82 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/adapter_list_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
-
-        <ImageView
-            android:id="@+id/adapter_list_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/adapter_list_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="false"
-            android:layout_centerHorizontal="false"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_toRightOf="@+id/adapter_list_icon"
-            android:singleLine="true"
-            android:text="TextView"
-            android:textColor="#399adc" />
-
-        <TextView
-            android:id="@+id/adapter_list_reply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/adapter_list_time"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:layout_toRightOf="@+id/adapter_list_name"
-            android:text="1 回复"
-            android:textAlignment="viewEnd" />
-
-        <TextView
-            android:id="@+id/adapter_list_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/adapter_list_name"
-            android:layout_centerVertical="false"
-            android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@+id/adapter_list_icon"
-            android:text="xxxx"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/adapter_list_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/adapter_list_icon"
-            android:layout_marginTop="4dp"
-            android:singleLine="true"
-            android:text="TextView"
-            android:textColor="#333333" />
-    </RelativeLayout>
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        app:srcCompat="@color/about_page_category_text_color" />
+        android:id="@+id/adapter_list_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/adapter_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@+id/adapter_list_icon"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#399adc"/>
+
+    <TextView
+        android:id="@+id/adapter_list_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/adapter_list_time"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_toRightOf="@+id/adapter_list_name"
+        android:text="1 回复"
+        android:textAlignment="viewEnd"/>
+
+    <TextView
+        android:id="@+id/adapter_list_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adapter_list_name"
+        android:layout_centerVertical="false"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@+id/adapter_list_icon"
+        android:text="xxxx"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/adapter_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adapter_list_icon"
+        android:layout_marginTop="4dp"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#333333"/>
+</RelativeLayout>

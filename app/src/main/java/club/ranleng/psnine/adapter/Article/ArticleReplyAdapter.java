@@ -60,12 +60,11 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
         @BindView(R.id.adapter_list_time) TextView time;
         @BindView(R.id.adapter_list_icon) ImageView icon;
         @BindView(R.id.adapter_list_reply) TextView reply;
-        @BindView(R.id.adapter_list_root) ImageView root;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            root.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override

@@ -20,6 +20,8 @@ import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import me.drakeet.support.about.Line;
+import me.drakeet.support.about.LineViewBinder;
 
 public class ArticleListFragment extends BaseFragment
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,ArticleListAdapter.OnItemClickListener{
@@ -88,9 +90,10 @@ public class ArticleListFragment extends BaseFragment
         Items items = new Items();
 
         adapter.register(ArticleList.class, new ArticleListAdapter(this));
-
+        adapter.register(Line.class,new LineViewBinder());
         for(Map<String, Object> map : result){
             items.add(new ArticleList(map));
+            items.add(new Line());
         }
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);

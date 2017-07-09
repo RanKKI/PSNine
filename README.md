@@ -32,12 +32,10 @@ Unofficial native android application for PSNine
     - [ ] 主页
     - [ ] 基因
 - [ ] 游戏
-    - [ ] 相关文章
     - [ ] 关联奖杯
-        - [ ] 奖杯
+        - [x] 奖杯
             - [ ] 奖杯Tips
-        - [ ] 个人奖杯获取
-    - [ ] 头图
+        - [x] 个人奖杯获取
 - [x] 其他
     - [x] 设置
     - [x] 关于

@@ -18,15 +18,23 @@ import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.adapter.NoticeListAdapter;
+import club.ranleng.psnine.adapter.PSNGame.PSNGameHeaderAdapter;
 import club.ranleng.psnine.adapter.PSNGame.PSNGameTrophyAdapter;
+import club.ranleng.psnine.adapter.PSNGame.PSNGameUserAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Common.ArticleList;
+import club.ranleng.psnine.model.PSNGame.PSNGameHeader;
 import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
+import club.ranleng.psnine.model.PSNGame.PSNGameUser;
 import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import me.drakeet.support.about.Category;
+import me.drakeet.support.about.CategoryViewBinder;
+import me.drakeet.support.about.Line;
+import me.drakeet.support.about.LineViewBinder;
 
 public class GameActivity extends BaseActivity
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,PSNGameTrophyAdapter.OnItemClickListener{
@@ -97,16 +105,25 @@ public class GameActivity extends BaseActivity
         Items items = new Items();
 
         adapter.register(PSNGameTrophy.class, new PSNGameTrophyAdapter(this));
+        adapter.register(PSNGameHeader.class, new PSNGameHeaderAdapter());
+        adapter.register(PSNGameUser.class, new PSNGameUserAdapter());
+        adapter.register(Line.class,new LineViewBinder());
+        adapter.register(Category.class, new CategoryViewBinder());
 
         Map<String, Object> header = result.get(0);
+        items.add(new PSNGameHeader(header));
         result.remove(0);
+        items.add(new Line());
         if((Boolean) header.get("is_user")){
-            Map<String, Object> user = result.get(0);
+            items.add(new PSNGameUser(result.get(0)));
+            items.add(new Line());
             result.remove(0);
         }
 
+        items.add(new Category("奖杯"));
         for(Map<String, Object> i : result){
-            items.add(new PSNGameTrophy());
+            items.add(new PSNGameTrophy(i));
+            items.add(new Line());
         }
         
         adapter.setItems(items);
@@ -116,9 +133,6 @@ public class GameActivity extends BaseActivity
 
     @Override
     public void onClick(View view, int position) {
-        Intent intent = new Intent(context,ArticleActivity.class);
-        intent.putExtra("id",view.getTag().toString());
-        intent.putExtra("type","topic");
-        startActivity(intent);
+
     }
 }

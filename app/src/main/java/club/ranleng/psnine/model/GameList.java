@@ -14,6 +14,7 @@ public class GameList {
     public final String perfection;
     public final String trophy;
     public final int progress;
+    public final String id;
 
 
     public GameList(Map<String, Object> map) {
@@ -29,6 +30,7 @@ public class GameList {
         last_time = (String) map.get("spent_time");
         difficulty = (String) map.get("difficulty");
         perfection = (String) map.get("perfection");
+        this.id = (String) map.get("trophy_id");
         trophy = ((String) map.get("trophy"))
                 .replace("<span class=\"text-platinum\">", a)
                 .replace("<span class=\"text-gold\">", b)

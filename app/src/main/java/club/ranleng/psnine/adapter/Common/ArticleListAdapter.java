@@ -60,7 +60,6 @@ public class ArticleListAdapter extends ItemViewBinder<ArticleList, ArticleListA
         @BindView(R.id.adapter_list_time) TextView time;
         @BindView(R.id.adapter_list_reply) TextView reply;
         @BindView(R.id.adapter_list_icon) ImageView icon;
-        @BindView(R.id.adapter_list_root) LinearLayout root;
 
         ViewHolder(View itemView) {
             super(itemView);

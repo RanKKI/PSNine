@@ -1,15 +1,11 @@
 package club.ranleng.psnine.activity.Post;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,9 +15,6 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.model.TextItem;
-import club.ranleng.psnine.util.LogUtils;
-import club.ranleng.psnine.widget.Requests.RequestUpload;
 
 public class NewTopicActivity extends BaseActivity implements View.OnClickListener, DialogInterface.OnClickListener {
 

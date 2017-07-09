@@ -30,6 +30,7 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
 
     private Context context;
     private String type;
+    private String psnid;
     @BindView(R.id.personinforecyclerview) RecyclerView recyclerView;
 
     private FinishLoadListener finishLoadListener;
@@ -52,7 +53,7 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
 
     @Override
     public void initData() {
-        String psnid = getArguments().getString("psnid");
+        psnid = getArguments().getString("psnid");
         type = getArguments().getString("type");
         new RequestWebPage(this,psnid);
     }
@@ -93,8 +94,8 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
     @Override
     public void onClick(View view, int position) {
         Intent intent = new Intent(context, GameActivity.class);
-        intent.putExtra("game_id","8983");
-        intent.putExtra("username","ranleng");
+        intent.putExtra("game_id",view.getTag().toString());
+        intent.putExtra("username",psnid);
         startActivity(intent);
     }
 }

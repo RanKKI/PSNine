@@ -21,7 +21,7 @@
             android:background="#E4CDC1"/>
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/psngame_trophy_icon"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_marginLeft="3dp"
@@ -37,30 +37,33 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/psngame_trophy_icon_root"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/psngame_trophy_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textColor="#BF6A3A"
-            android:textSize="16sp"/>
+            android:textSize="13sp"/>
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
+            android:id="@+id/psngame_trophy_des"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="TextView"
-            android:textColor="#B8C4CE"/>
+            android:textColor="#B8C4CE"
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/psngame_trophy_date_root"
         android:layout_width="45dp"
         android:layout_height="60dp"
-        android:layout_toLeftOf="@+id/psngame_trophy_percent_root">
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/psngame_trophy_st_root">
 
         <ImageView
             android:id="@+id/imageView6"
@@ -69,36 +72,53 @@
             android:background="#F5FAEC"/>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/psngame_trophy_date"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="07-07\n11:55"
             android:textAlignment="center"
-            android:textColor="#659F13"/>
+            android:textColor="#659F13"
+            android:textSize="12sp"/>
 
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/psngame_trophy_percent_root"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/psngame_trophy_st_root"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="false">
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textAlignment="center"/>
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:background="#E4CDC1"/>
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/psngame_trophy_percent_root"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="珍贵度"
-            android:textAlignment="center"/>
-    </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/psngame_trophy_percent"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="珍贵度"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
 </RelativeLayout>

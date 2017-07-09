@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
@@ -42,10 +44,21 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull PSNGameTrophy item) {
-
+        Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
+        holder.name.setText(item.name);
+        holder.des.setText(item.des);
+        holder.date.setText(item.date);
+        holder.percent.setText(item.percent);
+        holder.itemView.setTag(item.id);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @BindView(R.id.psngame_trophy_icon) ImageView icon;
+        @BindView(R.id.psngame_trophy_name) TextView name;
+        @BindView(R.id.psngame_trophy_des) TextView des;
+        @BindView(R.id.psngame_trophy_date) TextView date;
+        @BindView(R.id.psngame_trophy_percent) TextView percent;
 
         ViewHolder(View itemView) {
             super(itemView);
