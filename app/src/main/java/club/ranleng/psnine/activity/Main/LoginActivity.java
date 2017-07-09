@@ -28,9 +28,6 @@ public class LoginActivity extends BaseActivity implements LoginListener{
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_login);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         setTitle("登陆");
     }
 
@@ -41,6 +38,9 @@ public class LoginActivity extends BaseActivity implements LoginListener{
 
     @Override
     public void setupViews() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         swipeRefreshLayout.setEnabled(false);
     }
 

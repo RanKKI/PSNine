@@ -52,8 +52,6 @@ public class RequestWebPage {
         } else {
             url = "http://psnine.com/topic/" + id;
         }
-        url = url  + "?page=4";
-        LogUtils.d(url);
         new Info().execute(url,"article",type);
     }
 

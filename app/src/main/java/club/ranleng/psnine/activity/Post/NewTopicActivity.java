@@ -67,6 +67,9 @@ public class NewTopicActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void setupViews() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         select_mode.setOnClickListener(this);
         submit.setOnClickListener(this);
         magic.setOnClickListener(this);

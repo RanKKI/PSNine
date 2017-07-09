@@ -29,9 +29,6 @@ public class NoticeActivity extends BaseActivity
             finish();
         }
         setContentView(R.layout.view_recyclerview);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         setTitle("短消息");
     }
 
@@ -43,6 +40,9 @@ public class NoticeActivity extends BaseActivity
 
     @Override
     public void setupViews() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 

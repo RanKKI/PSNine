@@ -53,7 +53,9 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
     @Override
     public void setupViews() {
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         fab.setOnClickListener(this);
         requestGet = new RequestGet();
     }

@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity
                 myActionMenuItem.collapseActionView();
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String s) {
                 // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
@@ -161,15 +162,6 @@ public class MainActivity extends BaseActivity
         });
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -183,7 +175,9 @@ public class MainActivity extends BaseActivity
         }else if(id == R.id.nav_notice){
             startActivity(new Intent(this, NoticeActivity.class));
         }else if(id == R.id.nav_photo){
-            startActivity(new Intent(this, PickImgActivity.class));
+            Intent intent = new Intent(this, PickImgActivity.class);
+            intent.putExtra("form_main",true);
+            startActivity(intent);
         }else if(id == R.id.nav_personal){
             Intent intent = new Intent(this, PersonInfoActivity.class);
             intent.putExtra("psnid", UserStatus.getusername());
@@ -216,6 +210,7 @@ public class MainActivity extends BaseActivity
     private ArrayList<Integer> when_logout = new ArrayList<Integer>(){{
         add(R.id.nav_login);
     }};
+
     @Override
     public void onFinish() {
         Menu menu = navigationView.getMenu();

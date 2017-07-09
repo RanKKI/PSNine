@@ -15,6 +15,12 @@
             android:summary="提前加载下一页的内容"
             android:title="提前加载" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_emoji_dialog"
+            android:summary="选择完表情关闭表情框"
+            android:title="表情框" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

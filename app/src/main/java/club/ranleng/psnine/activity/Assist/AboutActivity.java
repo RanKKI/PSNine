@@ -25,7 +25,7 @@ public class AboutActivity extends AbsAboutActivity {
     protected void onCreateHeader(ImageView icon, TextView slogan, TextView version) {
         setHeaderContentColor(getResources().getColor(R.color.colorPrimary));
         setNavigationIcon(R.drawable.ic_action_back);
-        icon.setImageResource(R.mipmap.ic_launcher);
+        icon.setImageResource(R.mipmap.ic_launcher_round);
         slogan.setText(R.string.about_header);
         slogan.setTextColor(Color.parseColor("#000000"));
         version.setText(getVersion());
@@ -41,11 +41,12 @@ public class AboutActivity extends AbsAboutActivity {
 
         items.add(new Category("Open Source Licenses"));
         items.add(new License("Okhttp", "Square", License.APACHE_2, "https://github.com/square/okhttp"));
-        items.add(new License("Glide", "Sam Judd", "BSD, part MIT and Apache 2.0", "https://github.com/bumptech/glide"));
+        items.add(new License("Glide", "SamJudd", "BSD, part MIT and Apache 2.0", "https://github.com/bumptech/glide"));
         items.add(new License("PersistentCookieJar", "franmontiel", License.APACHE_2, "https://github.com/franmontiel/PersistentCookieJar"));
-        items.add(new License("JKeyboardPanelSwitch", "Jacks gong.", License.APACHE_2, "https://github.com/drakeet/MultiType"));
+//        items.add(new License("JKeyboardPanelSwitch", "Jacksgong", License.APACHE_2, "https://github.com/Jacksgong/JKeyboardPanelSwitch"));
         items.add(new License("MultiType", "Drakeet", License.APACHE_2, "https://github.com/drakeet/MultiType"));
         items.add(new License("about-page", "Drakeet", License.APACHE_2, "https://github.com/drakeet/about-page"));
+        items.add(new License("AndroidUtilCode", "Blankj", License.APACHE_2, "https://github.com/Blankj/AndroidUtilCode"));
     }
     /**
      * 获取版本号

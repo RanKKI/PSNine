@@ -47,7 +47,6 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_new_gene);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -58,6 +57,9 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setupViews() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         select_img.setOnClickListener(this);
         music_type.setOnClickListener(this);
         submit.setOnClickListener(this);

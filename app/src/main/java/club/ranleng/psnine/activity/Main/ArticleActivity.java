@@ -48,9 +48,6 @@ public class ArticleActivity extends BaseActivity
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_article);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -63,7 +60,9 @@ public class ArticleActivity extends BaseActivity
     @Override
     public void setupViews() {
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         swipeRefreshLayout.setOnRefreshListener(this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
