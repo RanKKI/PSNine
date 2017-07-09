@@ -66,23 +66,32 @@ public class RequestWebPage {
     public RequestWebPage(RequestWebPageListener listener,String type,String id,String username){
         this.listener = listener;
         String url = "";
-        if(type.contentEquals("psngame")){
+        if(type.contentEquals("personal")){
+            url = String.format("http://psnine.com/psnid/%s",id);
+            if(username.contentEquals("psngame")){
+                url += "/";
+            }else if(username.contentEquals("msg")){
+                url += "/comment";
+            }else if(username.contentEquals("topic")){
+                url += "/topic";
+            }else if(username.contentEquals("gene")){
+                url += "/gene";
+            }
+            new Info().execute(url,"personal",username);
+        }else if(type.contentEquals("psngame")){
             url = "http://psnine.com/psngame/" + id ;
             if(username != null){
                 url = url + "?psnid=" + username;
             }
+            new Info().execute(url,type);
+
         }else if(type.contentEquals("psngametrophytips")){
             url = "http://psnine.com/trophy/" + id ;
+            new Info().execute(url,type);
         }
 
-        new Info().execute(url,type);
-    }
 
-    public RequestWebPage(RequestWebPageListener listener, String psnid){
-        this.listener = listener;
-        new Info().execute(String.format("http://psnine.com/psnid/%s",psnid),"psn");
     }
-
 
     private class Info extends AsyncTask<String, Void, ArrayList<Map<String, Object>>> {
 
@@ -93,6 +102,7 @@ public class RequestWebPage {
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... params) {
+
             okhttp3.Request build = new okhttp3.Request.Builder().url(params[0]).build();
             String result = null;
 
@@ -124,8 +134,16 @@ public class RequestWebPage {
                     return listItems;
                 case "photo":
                     return ParseWebpage.parsePhoto(result);
-                case "psn":
-                    return ParseWebpage.parsePersonal(result);
+                case "personal":
+                    if(params[2].contentEquals("psngame")){
+                        return ParseWebpage.parsePersonal(result);
+                    }else if(params[2].contentEquals("gene")){
+                        return ParseWebpage.parseGene(result);
+                    }else if(params[2].contentEquals("topic")){
+                        return ParseWebpage.parseNormal(result);
+                    }else if(params[2].contentEquals("msg")){
+                        return ParseWebpage.parseBReplies(result);
+                    }
                 case "psngame":
                     return ParseWebpage.parsePSNGame(result);
                 case "psngametrophytips":
