@@ -20,4 +20,5 @@ public class TextUtils {
     public static int toI(EditText editText){
         return Integer.valueOf(toS(editText));
     }
+
 }

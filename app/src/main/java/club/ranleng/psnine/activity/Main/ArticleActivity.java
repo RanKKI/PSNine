@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.RepliesDialog;
 import club.ranleng.psnine.widget.Requests.RequestPost;
+import club.ranleng.psnine.widget.Requests.RequestUpload;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
 import me.drakeet.multitype.Items;
@@ -42,7 +44,7 @@ public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener, ArticleReplyAdapter.OnItemClickListener{
 
     private String type;
-    private String id;
+    private String a_id;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -76,10 +78,10 @@ public class ArticleActivity extends BaseActivity
     public void getData() {
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
-        id = intent.getStringExtra("id");
-        setTitle("No. " + id);
+        a_id = intent.getStringExtra("id");
+        setTitle("No. " + a_id);
         context = this;
-        new RequestWebPage(this,type,id);
+        new RequestWebPage(this,type,a_id);
     }
 
     @Override
@@ -103,12 +105,24 @@ public class ArticleActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_article_reply) {
-            startActivity(new Intent(this,ReplyActivity.class));
+            Intent intent = new Intent(this,ReplyActivity.class);
+            intent.putExtra("type",type);
+            intent.putExtra("id",a_id);
+            startActivityForResult(intent,100);
         }
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == 100){
+                getData();
+            }
+        }
 
+    }
     @Override
     public void onRefresh() {
         getData();

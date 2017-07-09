@@ -16,14 +16,16 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.TextUtils;
+import club.ranleng.psnine.widget.Requests.RequestPost;
 import okhttp3.FormBody;
 
-public class NewGeneActivity extends BaseActivity implements View.OnClickListener {
+public class NewGeneActivity extends BaseActivity implements View.OnClickListener, ReplyPostListener {
 
     @BindView(R.id.new_gene_waning) TextView waning;
     @BindView(R.id.new_gene_selected_img) TextView selected_img;
@@ -81,9 +83,8 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
         putData("content",TextUtils.toS(main_edit));
         putData("element",TextUtils.toS(ele));
         putData("video", TextUtils.toS(video_url));
-        putData("muid", TextUtils.toI(music_id));
+        putData("muid", TextUtils.toS(music_id));
         putData("url", TextUtils.toS(url));
-        putData("photo", photo_list);
     }
 
     @Override
@@ -105,7 +106,22 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
             builder.create().show();
         } else if (id == R.id.new_gene_submit) {
             putAllData();
-            LogUtils.d(body);
+            FormBody.Builder b = new FormBody.Builder();
+            for (Map.Entry entry : body.entrySet()) {
+                b.add((String) entry.getKey(),(String) entry.getValue());
+            }
+            String p = "";
+            for (String s : photo_list) {
+                p += s + ",";
+            }
+            if(!p.contentEquals("")){
+                p = p.substring(0, p.length() - 1);
+            }
+            b.add("photo",p);
+            b.add("addgene","");
+
+
+            new RequestPost(this,context,"newgene",b.build());
             //// TODO: 04/07/2017  提交新基因功能
         }
     }
@@ -114,17 +130,21 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == 10){
             photo_list = data.getExtras().getStringArrayList("result");
-            putData("photo_list",photo_list);
             String selected = photo_list.size() + " 张";
             selected_img.setText(selected);
         }
     }
 
     private void putData(String key, Object data){
-        if(!key.contentEquals("photo") && body.containsKey(key)){
+        if(body.containsKey(key)){
             body.remove(key);
         }
 
         body.put(key,data);
+    }
+
+    @Override
+    public void ReplyPostFinish() {
+        finish();
     }
 }

@@ -33,8 +33,8 @@ Unofficial native android application for PSNine
             - [x] 相机上传
             - [x] 本地上传
 - [ ] 发帖
-    - [ ] 主页
-    - [ ] 基因
+    - [ ] 主页 (这个理论上没有问题. 还没有测试)
+    - [x] 基因
 - [x] 游戏
     - [x] 关联奖杯
         - [x] 奖杯

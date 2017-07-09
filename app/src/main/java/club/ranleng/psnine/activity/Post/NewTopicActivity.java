@@ -12,11 +12,16 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.util.TextUtils;
+import club.ranleng.psnine.widget.Requests.RequestPost;
+import okhttp3.FormBody;
 
-public class NewTopicActivity extends BaseActivity implements View.OnClickListener, DialogInterface.OnClickListener {
+public class NewTopicActivity extends BaseActivity
+        implements View.OnClickListener, DialogInterface.OnClickListener, ReplyPostListener {
 
     @BindView(R.id.new_topic_content) EditText content;
     @BindView(R.id.new_topic_title) EditText title;
@@ -70,8 +75,6 @@ public class NewTopicActivity extends BaseActivity implements View.OnClickListen
 
         String waning_a = "提问题请发到「<font color='blue'>问答</font>」板块，闲聊请发到「<font color='blue'>机因</font>」，否则将被关闭+<font color='red'>扣分处理</font>";
         waning_top.setText(Html.fromHtml(waning_a));
-
-
     }
 
     @Override
@@ -93,7 +96,14 @@ public class NewTopicActivity extends BaseActivity implements View.OnClickListen
         if(id == R.id.new_topic_mode){
             showDialog(mode_name,0);
         }else if(id == R.id.new_topic_submit){
+            FormBody.Builder b = new FormBody.Builder();
+            b.add("open",String.valueOf(mode));
+            b.add("title", TextUtils.toS(title));
+            b.add("content",TextUtils.toS(content));
+            b.add("node","talk");
+            b.add("addtopic","");
 
+            new RequestPost(this,context,"newtopic",b.build());
         }else if(id == R.id.new_topic_magic){
             showDialog(magic_dialog,1);
         }
@@ -173,6 +183,11 @@ public class NewTopicActivity extends BaseActivity implements View.OnClickListen
                 CAA("[img]");
             }
         }
+
+    }
+
+    @Override
+    public void ReplyPostFinish() {
 
     }
 }

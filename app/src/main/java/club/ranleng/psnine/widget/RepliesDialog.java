@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
+import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.activity.Main.PersonInfoActivity;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
@@ -14,7 +15,7 @@ import okhttp3.FormBody;
  * Created by ran on 09/07/2017.
  */
 
-public class RepliesDialog {
+public class RepliesDialog{
 
     public RepliesDialog(final Context context,Boolean editable, final String comment_id, final String username){
         final String[] list;
@@ -57,7 +58,7 @@ public class RepliesDialog {
                                                     .add("param",comment_id)
                                                     .add("updown","up")
                                                     .build();
-                                            new RequestPost(context,"updown",body);
+                                            new RequestPost(null,context,"updown",body);
                                         }
                                     });
                             builder.create().show();
@@ -68,4 +69,5 @@ public class RepliesDialog {
         });
         builder.create().show();
     }
+
 }

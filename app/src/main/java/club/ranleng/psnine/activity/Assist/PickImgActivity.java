@@ -27,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.Listener.RequestGetListener;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
@@ -39,7 +40,8 @@ import club.ranleng.psnine.widget.Requests.RequestUpload;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import okhttp3.FormBody;
 
-public class PickImgActivity extends BaseActivity implements RequestWebPageListener, PickImgAdapter.OnItemClickListener, RequestGetListener{
+public class PickImgActivity extends BaseActivity
+        implements RequestWebPageListener, PickImgAdapter.OnItemClickListener, RequestGetListener{
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
@@ -231,7 +233,7 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         FormBody body = new FormBody.Builder().add("delimg",String.valueOf(view.getTag(R.id.tag_pick_img_first))).build();
-                        new RequestPost(view.getContext(),"photo",body);
+                        new RequestPost(null,view.getContext(),"photo",body);
                         pickImgAdapter.rmData(position);
                     }
                 })
@@ -242,4 +244,5 @@ public class PickImgActivity extends BaseActivity implements RequestWebPageListe
                 });
         builder.create().show();
     }
+
 }
