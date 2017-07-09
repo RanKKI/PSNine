@@ -151,6 +151,7 @@ public class ArticleActivity extends BaseActivity
 
         ArrayList<Map<String, Object>> replies_list = (ArrayList<Map<String, Object>>) result.get(1).get("list");
         items.add(new Category("回复"));
+        items.add(new Line());
         for(Map<String, Object> map: replies_list ){
             ArticleReply articleReply = new ArticleReply(map);
             items.add(articleReply);

@@ -21,6 +21,13 @@
             android:summary="选择完表情关闭表情框"
             android:title="表情框" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_single_line"
+            android:summary="标题内容浓缩到一行"
+            android:title="单行标题" />
+
+
     </PreferenceCategory>
 
 </PreferenceScreen>

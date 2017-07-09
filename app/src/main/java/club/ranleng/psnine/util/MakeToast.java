@@ -11,16 +11,15 @@ import club.ranleng.psnine.util.Utils;
 
 public class MakeToast {
 
-    public MakeToast(String s){
+    public static void str(String s){
         Toast.makeText(Utils.getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
-
     public static void plzlogin(){
-        Toast.makeText(Utils.getContext(), "请先登陆", Toast.LENGTH_SHORT).show();
+        str("请先登陆");
     }
 
     public static void notfound(){
-        Toast.makeText(Utils.getContext(), "404 - Not Found", Toast.LENGTH_SHORT).show();
+        str("404 - Not Found");
     }
 }

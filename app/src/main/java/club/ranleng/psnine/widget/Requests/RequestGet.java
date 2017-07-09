@@ -17,12 +17,16 @@ public class RequestGet {
     private Map<String, String> url = new HashMap<String, String>(){{
         put("upgame","http://psnine.com/psnid/%s/upgame");
         put("upbase","http://psnine.com/psnid/%s/upbase");
+        put("dao","http://psnine.com/set/qidao/ajax");
     }};
 
-    public Void execute(String type, String psnid){
+    public void execute(String type){
+        new Info().execute(url.get(type));
+    }
+
+    public void execute(String type, String psnid){
 //        LogUtils.d(String.format(url.get(type),psnid));
         new Info().execute(String.format(url.get(type),psnid));
-        return null;
     }
 
     private class Info extends AsyncTask<String, Void, Void> {

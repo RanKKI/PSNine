@@ -40,9 +40,11 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
 import club.ranleng.psnine.util.CrashUtils;
 import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.Utils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import club.ranleng.psnine.widget.Requests.RequestClient;
+import club.ranleng.psnine.widget.Requests.RequestGet;
 import club.ranleng.psnine.widget.UserStatus;
 
 public class MainActivity extends BaseActivity
@@ -213,6 +215,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onFinish() {
+        if(!UserStatus.getdao()){
+            new RequestGet().execute("dao");
+            MakeToast.str("签到成功");
+            UserStatus.setdao(true);
+        }
         Menu menu = navigationView.getMenu();
         if(UserStatus.isLogin()){
             for(Integer i : when_login){

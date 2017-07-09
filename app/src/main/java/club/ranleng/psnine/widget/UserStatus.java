@@ -6,6 +6,9 @@ import org.jsoup.nodes.Document;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import club.ranleng.psnine.util.MakeToast;
+import club.ranleng.psnine.widget.Requests.RequestGet;
+
 /**
  * Created by ran on 22/06/2017.
  * 用户状态.
@@ -51,10 +54,23 @@ public class UserStatus {
         user_icon_url = usericon;
     }
 
+    private static Boolean dao = true;
+
+    public static Boolean getdao(){
+        return dao;
+    }
+
+    public static void setdao(Boolean d){
+        dao = d;
+    }
+
     public static void Check(String result){
         if(result.contains("个人主页")){
             isLogin(true);
             Document doc = Jsoup.parse(result);
+            if(doc.select("a.yuan").size() == 2){
+                setdao(false);
+            }
             String pattern = "<li><a href=\"http://psnine.com/psnid/(.*)\">个人主页</a>";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(result);

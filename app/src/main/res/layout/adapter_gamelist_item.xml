@@ -26,6 +26,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="17dp"
         android:layout_toEndOf="@+id/game_icon"
+        android:layout_toRightOf="@+id/game_icon"
+        android:layout_toStartOf="@+id/aaaaaa"
         android:text="TextView"
         android:textColor="#3498DD"/>
 
@@ -36,6 +38,7 @@
         app:srcCompat="@drawable/emoji_icon"/>
 
     <LinearLayout
+        android:id="@+id/aaaaaa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
