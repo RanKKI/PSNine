@@ -76,8 +76,8 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Main.GameActivity">
-        </activity>
+        <activity android:name=".activity.Main.GameTrophyActivity"/>
+        <activity android:name=".activity.Main.GameTrophyTipsActivity"/>
     </application>
 
 </manifest>

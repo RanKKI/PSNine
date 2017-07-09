@@ -65,11 +65,17 @@ public class RequestWebPage {
 
     public RequestWebPage(RequestWebPageListener listener,String type,String id,String username){
         this.listener = listener;
-        String url = "http://psnine.com/psngame/" + id ;
-        if(username != null){
-            url = url + "?psnid=" + username;
+        String url = "";
+        if(type.contentEquals("psngame")){
+            url = "http://psnine.com/psngame/" + id ;
+            if(username != null){
+                url = url + "?psnid=" + username;
+            }
+        }else if(type.contentEquals("psngametrophytips")){
+            url = "http://psnine.com/trophy/" + id ;
         }
-        new Info().execute(url,"psngame",type);
+
+        new Info().execute(url,type);
     }
 
     public RequestWebPage(RequestWebPageListener listener, String psnid){
@@ -122,6 +128,8 @@ public class RequestWebPage {
                     return ParseWebpage.parsePersonal(result);
                 case "psngame":
                     return ParseWebpage.parsePSNGame(result);
+                case "psngametrophytips":
+                    return ParseWebpage.parsePSNGameTrophy(result);
             }
             return ParseWebpage.parseNormal(result);
         }

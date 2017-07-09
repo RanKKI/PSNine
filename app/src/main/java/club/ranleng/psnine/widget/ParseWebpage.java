@@ -34,8 +34,8 @@ public class ParseWebpage {
             map.put("username", username);
             map.put("id", id);
             map.put("icon", icon);
-            map.put("time",time);
-            map.put("reply",reply+"评论");
+            map.put("time", time);
+            map.put("reply", reply + "评论");
             listItems.add(map);
         }
 
@@ -50,7 +50,7 @@ public class ParseWebpage {
 
         for (Element e : elements) {
             String icon = "";
-            if(!e.select("a.ava").select("img").isEmpty()){
+            if (!e.select("a.ava").select("img").isEmpty()) {
                 icon = e.select("a.ava").select("img").attr("src");
             }
             String title = e.select("div.mr64").select("div.content.pd10").select("a").text();
@@ -64,8 +64,8 @@ public class ParseWebpage {
             map.put("username", username);
             map.put("id", id);
             map.put("icon", icon);
-            map.put("time",time);
-            map.put("reply",reply+"评论");
+            map.put("time", time);
+            map.put("reply", reply + "评论");
             listItems.add(map);
         }
 
@@ -84,20 +84,20 @@ public class ParseWebpage {
             String username = e.select("div.meta").select("a").text();
             String id = "";
             Elements a = e.select("a");
-            for(Element i : a){
-                if(i.attr("href").contains("ttp://psnine.com/gene/")){
-                    id = i.attr("href").replace("http://psnine.com/gene/","");
+            for (Element i : a) {
+                if (i.attr("href").contains("ttp://psnine.com/gene/")) {
+                    id = i.attr("href").replace("http://psnine.com/gene/", "");
                 }
             }
-            String[] tr = e.select("div.meta").text().replace(username,"").replace(" ","").split("前");
+            String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
 
             Map<String, Object> map = new HashMap<>();
             map.put("title", content);
             map.put("username", username);
             map.put("id", id);
             map.put("icon", icon);
-            map.put("time",tr[0]+"前");
-            map.put("reply",tr[1]);
+            map.put("time", tr[0] + "前");
+            map.put("reply", tr[1]);
             listItems.add(map);
         }
 
@@ -114,7 +114,7 @@ public class ParseWebpage {
         String username = doc.select("a.title2").text();
         Elements icon_e = doc.select("div.side").select("div.box").select("p");
         String icon = "";
-        if(!icon_e.isEmpty()){
+        if (!icon_e.isEmpty()) {
             icon = doc.select("div.side").select("div.box").select("p").get(0).select("a").select("img").attr("src");
         }
 
@@ -137,8 +137,8 @@ public class ParseWebpage {
         map.put("username", username);
         map.put("icon", icon);
         map.put("original", "");
-        map.put("time","");
-        map.put("replies","");
+        map.put("time", "");
+        map.put("replies", "");
         return map;
     }
 
@@ -150,11 +150,11 @@ public class ParseWebpage {
         String content = doc.select("div.content.pb10").first().html();
         String username = doc.select("div.meta").select("a.psnnode").first().ownText();
         String original = "";
-        if(!doc.select("a.text-info").isEmpty()) {
+        if (!doc.select("a.text-info").isEmpty()) {
             original = doc.select("a.text-info").attr("href");
         }
         String icon = doc.select("div.side").select("div.box").select("p").select("a").select("img").attr("src");
-        String[] temp = doc.select("div.meta").first().ownText().replace(" ","").split("前");
+        String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
         Elements img = doc.select("div.content.pd10").select("a").select("img");
 
         map.put("img_size", img.size());
@@ -166,22 +166,28 @@ public class ParseWebpage {
         map.put("username", username);
         map.put("icon", icon);
         map.put("original", original);
-        map.put("time",temp[0]+"前");
-        map.put("replies",temp[1]);
+        map.put("time", temp[0] + "前");
+        map.put("replies", temp[1]);
         map.put("page_size", 1);
         return map;
     }
 
     public static Map<String, Object> parseReplies(String results) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", parseAReplies(results));
+        return map;
+    }
+
+    public static ArrayList<Map<String, Object>> parseAReplies(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-        results = results.replace("<img src=\"http://ww4.sinaimg.cn","<br/><img src=\"http://ww4.sinaimg.cn");
+        results = results.replace("<img src=\"http://ww4.sinaimg.cn", "<br/><img src=\"http://ww4.sinaimg.cn");
 
         Document doc = Jsoup.parse(results);
         Elements post = doc.select("div.post");
         for (Element c : post) {
             if (!c.select("a").hasClass("btn")) {
                 String content = c.select("div.content.pb10").first().html();
-                String username = c.select("a.psnnode").text();
+                String username = c.select("div.meta").select("a.psnnode").text();
                 String icon = c.select("a.l").select("img").attr("src");
                 String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
                 Map<String, Object> map = new HashMap<>();
@@ -199,9 +205,38 @@ public class ParseWebpage {
                 listItems.add(map);
             }
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("list",listItems);
-        return map;
+        return listItems;
+    }
+
+    public static ArrayList<Map<String, Object>> parseBReplies(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
+        results = results.replace("<img src=\"http://ww4.sinaimg.cn", "<br/><img src=\"http://ww4.sinaimg.cn");
+
+        Document doc = Jsoup.parse(results);
+        Elements post = doc.select("ul.list").select("li");
+        for (Element c : post) {
+            String content = c.select("div.content.pb10").html();
+            String username = c.select("div.meta").select("a.psnnode").text();
+            String icon = c.select("a.l").select("img").attr("src");
+            String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
+            Map<String, Object> map = new HashMap<>();
+
+            if (!c.select("span.r").select("a.text-info").isEmpty()) {
+                map.put("editable", true);
+            } else {
+                map.put("editable", false);
+            }
+            map.put("title", content);
+            map.put("username", username);
+            map.put("id", comment_id);
+            map.put("icon", icon);
+            map.put("time", "");
+            if(!map.toString().equals("{icon=, title=, time=, username=, id=, editable=false}")){
+                listItems.add(map);
+            }
+
+        }
+        return listItems;
     }
 
     public static Boolean parseIsMoreReplies(String results) {
@@ -236,10 +271,6 @@ public class ParseWebpage {
         String percent = psninfo.get(3).ownText();
         String watched = psninfo.get(4).ownText();
 
-
-
-
-
         Map<String, Object> map = new HashMap<>();
         map.put("icon", icon);
         map.put("region", region);
@@ -262,8 +293,8 @@ public class ParseWebpage {
 
         // 现在创建 matcher 对象
         Matcher m = r.matcher(results);
-        if(m.find()){
-            map.put("bgurl",m.group());
+        if (m.find()) {
+            map.put("bgurl", m.group());
         }
         return map;
     }
@@ -289,8 +320,8 @@ public class ParseWebpage {
             Matcher m = r.matcher(c.select("td").select("p").select("a").attr("href"));
 
             Map<String, Object> map = new HashMap<>();
-            if(m.find()){
-                map.put("trophy_id",m.group(1));
+            if (m.find()) {
+                map.put("trophy_id", m.group(1));
             }
             map.put("game_icon", game_icon);
             map.put("progress", Integer.valueOf(progress));
@@ -313,11 +344,11 @@ public class ParseWebpage {
         for (Element c : game_list) {
             Map<String, Object> map = new HashMap<>();
             Elements qa = c.select("div.content.pb10");
-            if(!qa.isEmpty()){
+            if (!qa.isEmpty()) {
                 String user_icon = c.select("a").select("img").attr("src");
                 String title = c.select("div.content.pb10").html();
                 String username = c.select("a.psnnode").text();
-                String time = c.select("div.meta").text().replace(" ", "").replace("查看出处","").replace(username,"");
+                String time = c.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
                 String url = c.select("div.meta").select("a").get(0).attr("href");
 
                 map.put("user_icon", user_icon);
@@ -337,9 +368,9 @@ public class ParseWebpage {
 
         Document doc = Jsoup.parse(results);
         Elements game_list = doc.select("div.box");
-        if(game_list.size() == 4){
+        if (game_list.size() == 4) {
             Elements c = game_list.select("tr");
-            for(Element i : c){
+            for (Element i : c) {
                 Map<String, Object> map = new HashMap<>();
                 String game_icon = i.select("img.imgbgnb").attr("src");
                 String game_name = i.select("td.pd10").select("p").select("a").text();
@@ -347,86 +378,86 @@ public class ParseWebpage {
                 String game_percent = i.select("td.twoge").select("em").text();
                 String game_trophy = i.select("td.pd10").select("div.meta").html();
 
-                map.put("game_icon",game_icon);
-                map.put("game_name",game_name);
-                map.put("game_mode",game_mode);
-                map.put("game_percent",game_percent);
-                map.put("game_trophy",game_trophy);
+                map.put("game_icon", game_icon);
+                map.put("game_name", game_name);
+                map.put("game_mode", game_mode);
+                map.put("game_percent", game_percent);
+                map.put("game_trophy", game_trophy);
                 listItems.add(map);
             }
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("gamelist",listItems);
+        map.put("gamelist", listItems);
         return map;
     }
 
-    public static ArrayList<Map<String, Object>> parsePhoto(String results){
-        ArrayList<Map<String, Object>>listItems = new ArrayList<>();
+    public static ArrayList<Map<String, Object>> parsePhoto(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
         Elements photo = doc.select("div.imgbox");
-        for(Element i : photo){
+        for (Element i : photo) {
             Map<String, Object> map = new HashMap<>();
             String img = i.select("img.imgbgnb").attr("src");
             int id = Integer.valueOf(i.select("input[name=delimg]").attr("value"));
-            map.put("url",img);
-            map.put("id",id);
+            map.put("url", img);
+            map.put("id", id);
             listItems.add(map);
         }
 
         return listItems;
     }
 
-    public static ArrayList<Map<String, Object>> parsePSNGame(String results){
-        ArrayList<Map<String, Object>>listItems = new ArrayList<>();
+    public static ArrayList<Map<String, Object>> parsePSNGame(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
 
         Document doc = Jsoup.parse(results);
         Elements header = doc.select("div.box.pd10");
         Boolean is_user = false;
-        int total =doc.select("div.box").size();
+        int total = doc.select("div.box").size();
         Elements user_info = doc.select("div.box").get(1).select("table").select("tbody").select("tr").select("td");
-        String user_href =user_info.get(0).select("p").select("a").attr("href");
-        if( user_href != null && user_href.contains("psnid")){
+        String user_href = user_info.get(0).select("p").select("a").attr("href");
+        if (user_href != null && user_href.contains("psnid")) {
             is_user = true;
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("header_icon",header.select("img").attr("src"));
-        map.put("header_name",header.select("h1").first().ownText());
-        map.put("is_user",is_user);
+        map.put("header_icon", header.select("img").attr("src"));
+        map.put("header_name", header.select("h1").first().ownText());
+        map.put("is_user", is_user);
         listItems.add(map);
 
-        if(is_user){
+        if (is_user) {
             map = new HashMap<>();
-            map.put("username",user_info.get(0).select("p").select("a").text());
-            map.put("percentage",user_info.get(0).select("em").text());
-            if(user_info.size() != 1){
-                map.put("first_trophy",user_info.get(1).ownText());
-                map.put("last_trophy",user_info.get(2).ownText());
-                map.put("total_time",user_info.get(3).ownText());
+            map.put("username", user_info.get(0).select("p").select("a").text());
+            map.put("percentage", user_info.get(0).select("em").text());
+            if (user_info.size() != 1) {
+                map.put("first_trophy", user_info.get(1).ownText());
+                map.put("last_trophy", user_info.get(2).ownText());
+                map.put("total_time", user_info.get(3).ownText());
             }
             listItems.add(map);
         }
 
         int trophy_num;
-        if(is_user){
+        if (is_user) {
             trophy_num = 2;
-        }else{
+        } else {
             trophy_num = 1;
         }
-        for (int c = trophy_num; c < total ; c++) {
+        for (int c = trophy_num; c < total; c++) {
             Elements trophy = doc.select("div.box").get(c).select("table").select("tr");
 
-            for (Element i: trophy) {
-                if(!i.attr("id").isEmpty()){
+            for (Element i : trophy) {
+                if (!i.attr("id").isEmpty()) {
                     map = new HashMap<>();
-                    map.put("trophy_icon",i.select("td").get(0).select("img").attr("src"));
-                    map.put("trophy_name",i.select("td").get(1).select("p").text());
-                    map.put("trophy_id",i.select("td").get(1).select("p").select("a").first().attr("href").replace("http://psnine.com/trophy/",""));
-                    map.put("trophy_des",i.select("td").get(1).select("em").get(i.select("td").get(1).select("em").size()-1).text());
-                    map.put("trophy_tips",i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
-                    if(is_user){
-                        map.put("trophy_date",i.select("td").get(2).select("em").html());
+                    map.put("trophy_icon", i.select("td").get(0).select("img").attr("src"));
+                    map.put("trophy_name", i.select("td").get(1).select("p").text());
+                    map.put("trophy_id", i.select("td").get(1).select("p").select("a").first().attr("href").replace("http://psnine.com/trophy/", ""));
+                    map.put("trophy_des", i.select("td").get(1).select("em").get(i.select("td").get(1).select("em").size() - 1).text());
+                    map.put("trophy_tips", i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
+                    if (is_user) {
+                        map.put("trophy_date", i.select("td").get(2).select("em").html());
                     }
-                    map.put("trophy_percent",i.select("td.twoge").first().ownText());
+                    map.put("trophy_percent", i.select("td.twoge").first().ownText());
                     listItems.add(map);
                 }
             }
@@ -435,20 +466,47 @@ public class ParseWebpage {
         return listItems;
     }
 
+    public static ArrayList<Map<String, Object>> parsePSNGameTrophy(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        Elements header = doc.select("div.box.pd5");
+        Map<String, Object> map = new HashMap<>();
+        map.put("trophy_icon", header.select("img").attr("src"));
+        map.put("trophy_id", "");
+        map.put("trophy_name", header.select("div.ml80.pd10").select("h1").first().text());
+        map.put("trophy_des", header.select("div.ml80.pd10").select("em").first().text());
+        map.put("trophy_date", "");
+        map.put("trophy_percent", "");
+        map.put("trophy_tips", "");
+        listItems.add(map);
+
+        for (Map<String, Object> i : parseAReplies(results)) {
+            listItems.add(i);
+        }
+
+        for (Map<String, Object> i : parseBReplies(results)) {
+            listItems.add(i);
+        }
+
+
+        return listItems;
+    }
+
     public static Map<String, String> parseTropy(String results) {
         Map<String, String> map = new HashMap<>();
         Document doc = Jsoup.parse(results);
-        map.put("game_icon_url",doc.select("img.imgbgnb").attr("src"));
-        map.put("game_name",doc.select("div.ml64").select("a").first().ownText());
-        map.put("game_des",doc.select("div.ml64").select("span").first().ownText());
+        map.put("game_icon_url", doc.select("img.imgbgnb").attr("src"));
+        map.put("game_name", doc.select("div.ml64").select("a").first().ownText());
+        map.put("game_des", doc.select("div.ml64").select("span").first().ownText());
         Elements root = doc.select("div.box.pd10.mt10");
-        if(root.isEmpty() || root == null){
-            map.put("has_comment","false");
-        }else {
-            map.put("has_comment","true");
-            map.put("user_comment",root.select("div.content.pb10").first().html());
-            map.put("user_name",root.select("div.meta").select("a").first().ownText());
-            map.put("time",root.select("div.meta").first().ownText());
+        if (root.isEmpty() || root == null) {
+            map.put("has_comment", "false");
+        } else {
+            map.put("has_comment", "true");
+            map.put("user_comment", root.select("div.content.pb10").first().html());
+            map.put("user_name", root.select("div.meta").select("a").first().ownText());
+            map.put("time", root.select("div.meta").first().ownText());
         }
         return map;
     }

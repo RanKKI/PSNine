@@ -9,4 +9,7 @@
     <item name="tag_article_replies_id" type="id"/>
     <item name="tag_article_replies_editable" type="id"/>
     <item name="tag_article_replies_username" type="id"/>
+
+    <item name="tag_game_id" type="id"/>
+    <item name="tag_game_name" type="id"/>
 </resources>

@@ -61,7 +61,8 @@ public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdap
         }
         holder.profile_game_trophy.setText(spanned);
         holder.profile_game_percent.setProgress(item.progress);
-        holder.itemView.setTag(item.id);
+        holder.itemView.setTag(R.id.tag_game_id,item.id);
+        holder.itemView.setTag(R.id.tag_game_name,item.game_name);
         Glide.with(context).load(item.game_icon).into(holder.profile_game_img);
     }
 

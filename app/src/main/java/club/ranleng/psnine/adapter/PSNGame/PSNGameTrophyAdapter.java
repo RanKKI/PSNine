@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +48,13 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
         holder.name.setText(item.name);
         holder.des.setText(item.des);
+        if(item.date.contentEquals("")){
+            holder.psngame_trophy_date_root.setVisibility(View.INVISIBLE);
+        }
         holder.date.setText(item.date);
+        if(item.percent.contentEquals("")){
+            holder.psngame_trophy_st_root.setVisibility(View.INVISIBLE);
+        }
         holder.percent.setText(item.percent);
         holder.itemView.setTag(item.id);
     }
@@ -59,6 +66,8 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
         @BindView(R.id.psngame_trophy_des) TextView des;
         @BindView(R.id.psngame_trophy_date) TextView date;
         @BindView(R.id.psngame_trophy_percent) TextView percent;
+        @BindView(R.id.psngame_trophy_date_root) FrameLayout psngame_trophy_date_root;
+        @BindView(R.id.psngame_trophy_st_root) FrameLayout psngame_trophy_st_root;
 
         ViewHolder(View itemView) {
             super(itemView);

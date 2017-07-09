@@ -50,6 +50,14 @@ public class CmHtml {
         }
     }
 
+    public static Spanned returnHtml(Context c,TextView t, String s){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
+        }else{
+            return Html.fromHtml(s,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
+        }
+    }
+
     public static void convert(Context c,RecyclerView t, String s) {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(context,
                 LinearLayoutManager.VERTICAL, false);
@@ -72,7 +80,7 @@ public class CmHtml {
         }
 
         if(!doc.toString().contains(key)){
-            items.add(new TextSpannedItem(returnHtml(c,doc.toString())));
+            items.add(new TextSpannedItem(doc.toString()));
         }else {
             String[] trophy = doc.toString().split(key);
             if(trophy.length == trophy_num + 2){
@@ -81,7 +89,7 @@ public class CmHtml {
                     if(i % 2 == 0){
                         items.add(new Trophy(ParseWebpage.parseTropy(content)));
                     }else{
-                        items.add(new TextSpannedItem(returnHtml(c,content)));
+                        items.add(new TextSpannedItem(content));
                     }
                 }
             }

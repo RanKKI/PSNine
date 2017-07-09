@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Main.GameActivity;
+import club.ranleng.psnine.activity.Main.GameTrophyActivity;
 import club.ranleng.psnine.adapter.PSNGameListAdapter;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.model.GameList;
@@ -93,8 +93,9 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
 
     @Override
     public void onClick(View view, int position) {
-        Intent intent = new Intent(context, GameActivity.class);
-        intent.putExtra("game_id",view.getTag().toString());
+        Intent intent = new Intent(context, GameTrophyActivity.class);
+        intent.putExtra("game_id",view.getTag(R.id.tag_game_id).toString());
+        intent.putExtra("game_name",view.getTag(R.id.tag_game_name).toString());
         intent.putExtra("username",psnid);
         startActivity(intent);
     }

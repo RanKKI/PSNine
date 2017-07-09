@@ -30,11 +30,8 @@ public class TextEditableItemAdapter extends ItemViewBinder<TextSpannedItem, Tex
 
     @Override
     protected void onBindViewHolder(@NonNull TextEditableItemAdapter.ViewHolder holder, @NonNull TextSpannedItem item) {
-        holder.text.setText(item.text);
-//        holder.text.setTextColor(Color.parseColor(item.color));
+        holder.text.setText(CmHtml.returnHtml(holder.itemView.getContext(),holder.text,item.text));
         holder.text.setTextSize(14);
-        holder.text.invalidate();
-        holder.text.setText(holder.text.getText()); // 解决图文重叠
         holder.text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

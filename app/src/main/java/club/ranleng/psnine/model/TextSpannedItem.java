@@ -9,8 +9,8 @@ import android.text.Spanned;
 
 public class TextSpannedItem {
 
-    public final Spanned text;
-    public TextSpannedItem(Spanned text){
+    public final String text;
+    public TextSpannedItem(String text){
         this.text = text;
     }
 }

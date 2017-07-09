@@ -26,6 +26,7 @@ import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.util.MakeToast;
+import club.ranleng.psnine.widget.RepliesDialog;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
@@ -162,79 +163,10 @@ public class ArticleActivity extends BaseActivity
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    private void showDialog(Boolean editable, final String comment_id, final String username){
-        final String[] list;
-        if(type.contentEquals("gene")){
-            if(editable){
-                list = new String[]{"回复", "修改", "查看用户"};
-            }else{
-                list = new String[]{"回复", "查看用户"};
-            }
-        }else{
-            if(editable){
-                list = new String[]{"回复", "修改", "顶", "查看用户"};
-            }else{
-                list = new String[]{"回复", "顶", "查看用户"};
-            }
-        }
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setItems(list, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (list[which]) {
-                    case "回复":
-                        if(!UserStatus.isLogin()){
-                            MakeToast.plzlogin();
-                            break;
-                        }else{
-                            //do sth
-                        }
-                        break;
-                    case "修改":
-//                        final EditText reply = new EditText(context);
-//                        builder.setView(reply).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                new CommitAction.edit().execute("comment", comment_id, reply.getText().toString());
-//                            }
-//                        });
-//
-//                        builder.create().show();
-                        break;
-                    case "查看用户":
-                        Intent intent = new Intent(context,  PersonInfoActivity.class);
-                        intent.putExtra("psnid",username);
-                        startActivity(intent);
-                        break;
-                    case "顶":
-                        if(!UserStatus.isLogin()){
-                            MakeToast.plzlogin();
-                            break;
-                        }else{
-                            builder.setMessage("要付出4铜币来顶一下吗？")
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            FormBody body = new FormBody.Builder()
-                                                    .add("type","comment")
-                                                    .add("param",comment_id)
-                                                    .add("updown","up")
-                                                    .build();
-                                            new RequestPost(context,"updown",body);
-                                        }
-                                    });
-                            builder.create().show();
-                        }
-                        break;
-                }
-            }
-        });
-        builder.create().show();
-    }
 
     @Override
     public void onClick(View view, int position) {
-        showDialog((Boolean) view.getTag(R.id.tag_article_replies_editable),
+        new RepliesDialog(context,(Boolean) view.getTag(R.id.tag_article_replies_editable),
                 (String) view.getTag(R.id.tag_article_replies_id),
                 (String) view.getTag(R.id.tag_article_replies_username));
     }
