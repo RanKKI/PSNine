@@ -12,15 +12,11 @@ import android.widget.TextView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
 
 import club.ranleng.psnine.adapter.TextEditableItemAdapter;
-import club.ranleng.psnine.adapter.TrophyAdapter;
+import club.ranleng.psnine.adapter.Article.TrophyAdapter;
 import club.ranleng.psnine.model.TextSpannedItem;
-import club.ranleng.psnine.model.Trophy;
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.model.Article.Trophy;
 import club.ranleng.psnine.widget.ParseWebpage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;

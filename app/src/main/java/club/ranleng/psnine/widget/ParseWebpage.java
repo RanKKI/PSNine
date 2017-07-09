@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import club.ranleng.psnine.util.LogUtils;
+
 public class ParseWebpage {
 
     public static ArrayList<Map<String, Object>> parseNormal(String results) {
@@ -350,8 +352,6 @@ public class ParseWebpage {
         return map;
     }
 
-
-
     public static ArrayList<Map<String, Object>> parsePhoto(String results){
         ArrayList<Map<String, Object>>listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
@@ -364,6 +364,61 @@ public class ParseWebpage {
             map.put("id",id);
             listItems.add(map);
         }
+
+        return listItems;
+    }
+
+    public static ArrayList<Map<String, Object>> parsePSNGame(String results){
+        ArrayList<Map<String, Object>>listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        Elements header = doc.select("div.box.pd10");
+        Boolean is_user;
+        if(doc.select("div.box").size() == 3){
+            is_user = true;
+        }else{
+            is_user = false;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("header_icon",header.select("img").attr("src"));
+        map.put("header_name",header.select("h1").first().ownText());
+        map.put("is_user",is_user);
+        listItems.add(map);
+
+        if(is_user){
+            Elements user_info = doc.select("div.box").get(1).select("table").select("tbody").select("tr").select("td");
+            map = new HashMap<>();
+            map.put("username",user_info.get(0).select("p").select("a").text());
+            map.put("percentage",user_info.get(0).select("em").text());
+            map.put("first_trophy",user_info.get(1).ownText());
+            map.put("last_trophy",user_info.get(2).ownText());
+            map.put("total_time",user_info.get(3).ownText());
+            listItems.add(map);
+        }
+        Elements trophy;
+        if(is_user){
+            trophy = doc.select("div.box").get(2).select("table").select("tr");
+        }else{
+            trophy = doc.select("div.box").get(1).select("table").select("tr");
+        }
+
+        LogUtils.d(listItems);
+
+        for (Element i: trophy) {
+            if(!i.attr("id").isEmpty()){
+                map = new HashMap<>();
+                map.put("trophy_icon",i.select("td").get(0).select("img").attr("src"));
+                map.put("trophy_name",i.select("td").get(1).select("p").text());
+                map.put("trophy_des",i.select("td").get(1).select("em").text());
+                map.put("trophy_tips",i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
+                if(is_user){
+                    map.put("trophy_date",i.select("td").get(2).select("em").html());
+                }
+                map.put("trophy_percent",i.select("td.twoge").first().ownText());
+                listItems.add(map);
+            }
+        }
+
 
         return listItems;
     }

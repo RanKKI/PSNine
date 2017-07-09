@@ -1,6 +1,7 @@
 package club.ranleng.psnine.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Main.GameActivity;
 import club.ranleng.psnine.adapter.PSNGameListAdapter;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.model.GameList;
@@ -24,7 +26,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
  * Created by ran on 03/07/2017.
  */
 
-public class PSNFragment extends BaseFragment implements RequestWebPageListener {
+public class PSNFragment extends BaseFragment implements RequestWebPageListener, PSNGameListAdapter.OnItemClickListener {
 
     private Context context;
     private String type;
@@ -78,7 +80,7 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener 
             MultiTypeAdapter adapter = new MultiTypeAdapter();
             Items items = new Items();
 
-            adapter.register(GameList.class, new PSNGameListAdapter());
+            adapter.register(GameList.class, new PSNGameListAdapter(this));
             result.remove(0);
             for(Map<String, Object> map : result){
                 items.add(new GameList(map));
@@ -86,5 +88,13 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener 
             adapter.setItems(items);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Intent intent = new Intent(context, GameActivity.class);
+        intent.putExtra("game_id","8983");
+        intent.putExtra("username","ranleng");
+        startActivity(intent);
     }
 }

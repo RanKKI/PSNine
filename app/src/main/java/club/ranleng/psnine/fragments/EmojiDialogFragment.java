@@ -3,22 +3,19 @@ package club.ranleng.psnine.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
-import club.ranleng.psnine.adapter.EmojiDialogAdapter;
+import club.ranleng.psnine.adapter.Common.EmojiDialogAdapter;
 
 /**
  * Created by ran on 08/07/2017.

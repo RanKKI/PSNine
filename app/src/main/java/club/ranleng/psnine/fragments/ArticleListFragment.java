@@ -14,9 +14,12 @@ import java.util.Map;
 import club.ranleng.psnine.activity.Main.ArticleActivity;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.ArticleListAdapter;
+import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.base.BaseFragment;
+import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 
 public class ArticleListFragment extends BaseFragment
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,ArticleListAdapter.OnItemClickListener{
@@ -48,7 +51,7 @@ public class ArticleListFragment extends BaseFragment
         type = getArguments().getString("type");
         Boolean search = getArguments().getBoolean("search");
         if(search){
-            new RequestWebPage(type,search,getArguments().getString("key"),this);
+            new RequestWebPage(this,type,search,getArguments().getString("key"));
         }else{
             new RequestWebPage(type,this);
         }
@@ -80,18 +83,17 @@ public class ArticleListFragment extends BaseFragment
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(context,
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-        /*
-         * result格式. ArrayList<Map<String, Object>>
-         * 文章ID : id
-         * 文章标题 : title
-         * 文章时间 : time
-         * 文章回复 : reply
-         * 文章作者 : username
-         * 文章作者头像 : icon
-         */
-        ArticleListAdapter mAdapter = new ArticleListAdapter(context, result);
-        mAdapter.setClickListener(this);
-        recyclerView.setAdapter(mAdapter);
+
+        MultiTypeAdapter adapter = new MultiTypeAdapter();
+        Items items = new Items();
+
+        adapter.register(ArticleList.class, new ArticleListAdapter(this));
+
+        for(Map<String, Object> map : result){
+            items.add(new ArticleList(map));
+        }
+        adapter.setItems(items);
+        recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
         finishLoadListener.onFinish();
 

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Article;
 
 import android.support.annotation.NonNull;
 

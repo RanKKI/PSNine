@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter;
+package club.ranleng.psnine.adapter.Article;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.model.ArticleGameList;
+import club.ranleng.psnine.model.Article.ArticleGameList;
 import me.drakeet.multitype.ItemViewBinder;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;

@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.model.GameList;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -28,6 +29,16 @@ import static android.text.Html.FROM_HTML_MODE_LEGACY;
 
 public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdapter.ViewHolder> {
 
+
+    private OnItemClickListener clickListener;
+
+    public interface OnItemClickListener {
+        void onClick(View view, int position);
+    }
+
+    public PSNGameListAdapter(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -53,7 +64,7 @@ public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdap
         Glide.with(context).load(item.game_icon).into(holder.profile_game_img);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.profile_game_title) TextView profile_game_title;
         @BindView(R.id.profile_game_time) TextView profile_game_time;
         @BindView(R.id.profile_game_difficulty) TextView profile_game_difficulty;
@@ -65,7 +76,12 @@ public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdap
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            clickListener.onClick(itemView, getAdapterPosition());
+        }
     }
 }

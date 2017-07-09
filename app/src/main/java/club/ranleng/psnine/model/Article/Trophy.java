@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Article;
 
 import android.content.Context;
 import android.support.annotation.AttrRes;

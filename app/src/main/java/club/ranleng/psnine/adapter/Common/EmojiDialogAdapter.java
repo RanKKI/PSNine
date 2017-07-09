@@ -1,26 +1,15 @@
-package club.ranleng.psnine.adapter;
+package club.ranleng.psnine.adapter.Common;
 
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.widget.HTML.CmHtml;
 
 public class EmojiDialogAdapter extends RecyclerView.Adapter<EmojiDialogAdapter.ViewHolder> {
 

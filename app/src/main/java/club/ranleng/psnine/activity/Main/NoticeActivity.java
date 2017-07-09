@@ -9,6 +9,8 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.NoticeListAdapter;
@@ -20,8 +22,8 @@ import club.ranleng.psnine.widget.UserStatus;
 public class NoticeActivity extends BaseActivity
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,NoticeListAdapter.OnItemClickListener{
 
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void setContentView() {
@@ -34,8 +36,7 @@ public class NoticeActivity extends BaseActivity
 
     @Override
     public void findViews() {
-        recyclerView = (RecyclerView) findViewById(R.id.fragment_recyclerview);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        ButterKnife.bind(this);
     }
 
     @Override

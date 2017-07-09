@@ -18,14 +18,14 @@ import java.util.Map;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Post.ReplyActivity;
-import club.ranleng.psnine.adapter.ArticleGameListAdapter;
-import club.ranleng.psnine.adapter.ArticleHeaderAdapter;
-import club.ranleng.psnine.adapter.ArticleReplyAdapter;
+import club.ranleng.psnine.adapter.Article.ArticleGameListAdapter;
+import club.ranleng.psnine.adapter.Article.ArticleHeaderAdapter;
+import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
 import club.ranleng.psnine.adapter.TextItemAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.model.ArticleGameList;
-import club.ranleng.psnine.model.ArticleHeader;
-import club.ranleng.psnine.model.ArticleReply;
+import club.ranleng.psnine.model.Article.ArticleGameList;
+import club.ranleng.psnine.model.Article.ArticleHeader;
+import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.TextItem;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
@@ -76,7 +76,7 @@ public class ArticleActivity extends BaseActivity
         id = intent.getStringExtra("id");
         setTitle("No. " + id);
         context = this;
-        new RequestWebPage(type,id,this);
+        new RequestWebPage(this,type,id);
     }
 
     @Override

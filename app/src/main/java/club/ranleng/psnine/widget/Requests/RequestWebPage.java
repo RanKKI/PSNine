@@ -44,23 +44,32 @@ public class RequestWebPage {
         new Info().execute(url, type);
     }
 
-    public RequestWebPage(String type,String id,RequestWebPageListener listener){
+    public RequestWebPage(RequestWebPageListener listener,String type,String id){
         this.listener = listener;
         String url;
         if (type.contentEquals("gene")) {
             url = "http://psnine.com/gene/" + id ;
-        } else {
+        }else {
             url = "http://psnine.com/topic/" + id;
         }
         new Info().execute(url,"article",type);
     }
 
-    public RequestWebPage(String type,Boolean search, String key, RequestWebPageListener listener){
+    public RequestWebPage(RequestWebPageListener listener,String type,Boolean search, String key){
         this.listener = listener;
         String url = (String) url_list.get(type);
         url = url + "?ob="+ SettingActivity.PREF_OB + "&title=" + key;
         LogUtils.d(url);
         new Info().execute(url, type);
+    }
+
+    public RequestWebPage(RequestWebPageListener listener,String type,String id,String username){
+        this.listener = listener;
+        String url = "http://psnine.com/psngame/" + id ;
+        if(username != null){
+            url = url + "?psnid=" + username;
+        }
+        new Info().execute(url,"psngame",type);
     }
 
     public RequestWebPage(RequestWebPageListener listener, String psnid){
@@ -107,20 +116,13 @@ public class RequestWebPage {
                     listItems.add(ParseWebpage.parseReplies(result));
                     listItems.add(ParseWebpage.parseGameList(result));
                     return listItems;
-//                case "news":
-//                    return ParseWebpage.parseNews(result);
                 case "photo":
                     return ParseWebpage.parsePhoto(result);
                 case "psn":
                     return ParseWebpage.parsePersonal(result);
+                case "psngame":
+                    return ParseWebpage.parsePSNGame(result);
             }
-//            if(params[1].contentEquals("gene")){
-//                return ParseWebpage.parseGene(result);
-//            }else if(params[1].contentEquals("notice")){
-//                return ParseWebpage.parseNotice(result);
-//            }else if(params[1].contentEquals("article")){
-//
-//            }
             return ParseWebpage.parseNormal(result);
         }
 
