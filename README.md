@@ -31,10 +31,10 @@ Unofficial native android application for PSNine
 - [ ] 发帖
     - [ ] 主页
     - [ ] 基因
-- [ ] 游戏
-    - [ ] 关联奖杯
+- [x] 游戏
+    - [x] 关联奖杯
         - [x] 奖杯
-            - [ ] 奖杯Tips
+            - [x] 奖杯Tips
         - [x] 个人奖杯获取
 - [x] 其他
     - [x] 设置
