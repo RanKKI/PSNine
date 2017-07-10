@@ -21,8 +21,10 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.TextUtils;
 import club.ranleng.psnine.widget.Requests.RequestPost;
+import club.ranleng.psnine.widget.UserStatus;
 import okhttp3.FormBody;
 
 public class NewGeneActivity extends BaseActivity implements View.OnClickListener, ReplyPostListener {
@@ -49,6 +51,10 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_new_gene);
+        if(!UserStatus.isLogin()){
+            MakeToast.plzlogin();
+            finish();
+        }
     }
 
     @Override
@@ -122,7 +128,6 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
 
             new RequestPost(this,context,"newgene",b.build());
-            //// TODO: 04/07/2017  提交新基因功能
         }
     }
 

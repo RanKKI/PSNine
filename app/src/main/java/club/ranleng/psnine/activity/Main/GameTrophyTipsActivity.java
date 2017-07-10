@@ -25,7 +25,6 @@ import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
 import club.ranleng.psnine.model.PSNGame.PSNGameUser;
 import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
-import club.ranleng.psnine.widget.RepliesDialog;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -125,8 +124,6 @@ public class GameTrophyTipsActivity extends BaseActivity
 
     @Override
     public void onClick(View view, int position) {
-        new RepliesDialog(context,(Boolean) view.getTag(R.id.tag_article_replies_editable),
-                (String) view.getTag(R.id.tag_article_replies_id),
-                (String) view.getTag(R.id.tag_article_replies_username));
+
     }
 }

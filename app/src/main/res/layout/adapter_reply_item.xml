@@ -1,74 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/adapter_list_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        />
+
+    <TextView
+        android:id="@+id/adapter_list_name"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/adapter_list_icon"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#399adc"/>
+
+    <TextView
+        android:id="@+id/adapter_list_time"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/adapter_list_name"/>
+
+    <TextView
+        android:id="@+id/adapter_list_reply"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/adapter_list_time"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/adapter_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginRight="13dp"
-        android:orientation="horizontal">
+        android:layout_alignEnd="@+id/adapter_list_reply"
+        android:layout_below="@+id/adapter_list_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/adapter_list_icon"
+        android:layout_weight="1"
+        android:textColor="#333333"/>
 
-        <ImageView
-            android:id="@+id/adapter_list_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginTop="3dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/adapter_list_name"
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="TextView"
-                    android:textColor="#399adc" />
-
-                <TextView
-                    android:id="@+id/adapter_list_time"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/adapter_list_reply"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/adapter_list_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#333333" />
+    <ImageView
+        android:id="@+id/reply_dot"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/adapter_list_reply"
+        app:srcCompat="@drawable/dot_selector"
+        android:layout_above="@+id/adapter_list_title"/>
 
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-</FrameLayout>
+</RelativeLayout>

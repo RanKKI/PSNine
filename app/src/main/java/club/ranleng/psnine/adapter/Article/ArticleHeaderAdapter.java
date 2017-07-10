@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleHeader;
+import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -26,6 +27,10 @@ import static android.text.Html.fromHtml;
  */
 
 public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleHeaderAdapter.ViewHolder> {
+
+    public ArticleHeaderAdapter (OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
 
     @NonNull
     @Override
@@ -42,8 +47,9 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
         holder.replies.setText(item.replies);
         holder.username.setText(item.username);
         Glide.with(context).load(item.icon).into(holder.icon);
+        holder.itemView.setTag(R.id.tag_header_editable,item.editable);
         if(holder.imgs_layout.getTag() == null){
-            holder.imgs_layout.setTag("");
+            holder.imgs_layout.setTag(R.id.tag_header_imgs,"");
             for(String i : item.img){
                 ImageView imageView = new ImageView(context);
                 Glide.with(context).load(i).into(imageView);
@@ -52,18 +58,32 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    private OnItemClickListener clickListener;
+    public interface OnItemClickListener {
+        void onHeaderClick(View view);
+    }
+
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.header_content) RecyclerView content;
         @BindView(R.id.header_time) TextView time;
         @BindView(R.id.header_replies) TextView replies;
         @BindView(R.id.header_username) TextView username;
         @BindView(R.id.header_icon) ImageView icon;
+        @BindView(R.id.article_header_dot) ImageView dot;
         @BindView(R.id.header_images_layout) LinearLayout imgs_layout;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            dot.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            if(clickListener != null){
+                clickListener.onHeaderClick(itemView);
+            }
+        }
     }
 }

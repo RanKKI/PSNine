@@ -103,6 +103,9 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     public void getData() {
         type = getIntent().getStringExtra("type");
         a_id = getIntent().getStringExtra("id");
+        if(getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null){
+            editText.append(String.format("@%s ",getIntent().getStringExtra("username")));
+        }
     }
 
     @Override

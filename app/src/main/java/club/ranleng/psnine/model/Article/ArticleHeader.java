@@ -15,6 +15,7 @@ public class ArticleHeader {
     public final String time;
     public final String replies;
     public final String original;
+    public final Boolean editable;
     public final ArrayList<String> img = new ArrayList<>();
     public final ArrayList<String> pages = new ArrayList<>();
 
@@ -25,6 +26,7 @@ public class ArticleHeader {
         this.icon = (String) map.get("icon");
         this.time = (String) map.get("time");
         this.replies = (String) map.get("replies");
+        this.editable = (Boolean) map.get("editable");
         this.original = (String) map.get("original");
         for (int i = 0; i < (int) map.get("img_size"); i++) {
             img.add((String) map.get("img_" + String.valueOf(i)));

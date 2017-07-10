@@ -41,7 +41,6 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
         holder.game_des.setText(item.game_des);
         if(item.has_comment.contentEquals("true")){
             holder.user_name.setText(item.user_name);
-            LogUtils.d(item.user_comment);
             holder.user_comment.setText(CmHtml.returnHtml(context,item.user_comment));
             holder.time.setText(item.time);
         }else{

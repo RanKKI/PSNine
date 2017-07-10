@@ -87,6 +87,10 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!UserStatus.isLogin()){
+                    MakeToast.plzlogin();
+                    return;
+                }
                 String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
                 if(current_tab.contentEquals("gene")){
                     startActivity(new Intent(context, NewGeneActivity.class));

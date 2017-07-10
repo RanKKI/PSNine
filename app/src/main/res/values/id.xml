@@ -12,4 +12,7 @@
 
     <item name="tag_game_id" type="id"/>
     <item name="tag_game_name" type="id"/>
+
+    <item name="tag_header_imgs" type="id"/>
+    <item name="tag_header_editable" type="id"/>
 </resources>

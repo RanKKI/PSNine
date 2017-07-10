@@ -26,9 +26,7 @@ import me.drakeet.multitype.ItemViewBinder;
 public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleReplyAdapter.ViewHolder> {
 
 
-    public ArticleReplyAdapter(OnItemClickListener clickListener){
-        this.clickListener = clickListener;
-    }
+
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -52,6 +50,9 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
     private OnItemClickListener clickListener;
     public interface OnItemClickListener {
         void onClick(View view,int position);
+    }
+    public ArticleReplyAdapter(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

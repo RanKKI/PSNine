@@ -1,5 +1,7 @@
 package club.ranleng.psnine.widget;
 
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -130,6 +132,12 @@ public class ParseWebpage {
             map.put("page_size", 1);
         }
 
+        if(doc.select("div.alert-info.pd10").select("div.meta").select("span").select("a").size() != 2){
+            map.put("editable",true);
+        }else{
+            map.put("editable",false);
+        }
+
         map.put("img_size", 0);
         map.put("title", title);
         //"<html><head>" + post + "</body></html>".replace("class=\"imgbgnb\">","class=\"imgbgnb\"/>").replace("alt=\"\">","alt=\"\"/>")
@@ -160,6 +168,12 @@ public class ParseWebpage {
         map.put("img_size", img.size());
         for (int i = 0; i < img.size(); i++) {
             map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
+        }
+
+        if(doc.select("div.meta").get(1).select("span").select("a").size() != 2){
+            map.put("editable",true);
+        }else{
+            map.put("editable",false);
         }
         map.put("title", "");
         map.put("content", content);
@@ -508,6 +522,15 @@ public class ParseWebpage {
             map.put("user_name", root.select("div.meta").select("a").first().ownText());
             map.put("time", root.select("div.meta").first().ownText());
         }
+        return map;
+    }
+
+    public static Map<String, String> parseTopicEdit(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        map.put("title",doc.select("input[name=title]").attr("value"));
+        map.put("mode",doc.select("select[name=open]").select("option[selected=selected]").attr("value"));
+        map.put("content",doc.select("textarea[name=content]").text());
         return map;
     }
 }

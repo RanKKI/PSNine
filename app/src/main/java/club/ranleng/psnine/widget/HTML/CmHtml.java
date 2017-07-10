@@ -17,6 +17,7 @@ import club.ranleng.psnine.adapter.TextEditableItemAdapter;
 import club.ranleng.psnine.adapter.Article.TrophyAdapter;
 import club.ranleng.psnine.model.TextSpannedItem;
 import club.ranleng.psnine.model.Article.Trophy;
+import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.widget.ParseWebpage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -83,14 +84,12 @@ public class CmHtml {
             items.add(new TextSpannedItem(doc.toString()));
         }else {
             String[] trophy = doc.toString().split(key);
-            if(trophy.length == trophy_num + 2){
-                for (int i = 1; i < trophy.length + 1; i++) {
-                    String content = trophy[i-1];
-                    if(i % 2 == 0){
-                        items.add(new Trophy(ParseWebpage.parseTropy(content)));
-                    }else{
-                        items.add(new TextSpannedItem(content));
-                    }
+            for (int i = 0; i < trophy.length; i++) {
+                String content = trophy[i];
+                if(i % 2 == 1){
+                    items.add(new Trophy(ParseWebpage.parseTropy(content)));
+                }else{
+                    items.add(new TextSpannedItem(content));
                 }
             }
         }

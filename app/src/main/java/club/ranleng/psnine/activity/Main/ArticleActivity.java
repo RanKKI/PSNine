@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -27,9 +26,7 @@ import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.util.MakeToast;
-import club.ranleng.psnine.widget.RepliesDialog;
 import club.ranleng.psnine.widget.Requests.RequestPost;
-import club.ranleng.psnine.widget.Requests.RequestUpload;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
 import me.drakeet.multitype.Items;
@@ -41,7 +38,8 @@ import me.drakeet.support.about.LineViewBinder;
 import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
-        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener, ArticleReplyAdapter.OnItemClickListener{
+        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,
+        ArticleReplyAdapter.OnItemClickListener, ArticleHeaderAdapter.OnItemClickListener{
 
     private String type;
     private String a_id;
@@ -93,6 +91,9 @@ public class ArticleActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_article, menu);
+        if(!UserStatus.isLogin()){
+            menu.findItem(R.id.action_article_reply).setVisible(false);
+        }
         return true;
     }
 
@@ -105,10 +106,7 @@ public class ArticleActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_article_reply) {
-            Intent intent = new Intent(this,ReplyActivity.class);
-            intent.putExtra("type",type);
-            intent.putExtra("id",a_id);
-            startActivityForResult(intent,100);
+            RepliesActiv();
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,7 +143,7 @@ public class ArticleActivity extends BaseActivity
         Items items = new Items();
 
         adapter.register(ArticleReply.class, new ArticleReplyAdapter(this));
-        adapter.register(ArticleHeader.class, new ArticleHeaderAdapter());
+        adapter.register(ArticleHeader.class, new ArticleHeaderAdapter(this));
         adapter.register(ArticleGameList.class, new ArticleGameListAdapter());
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
@@ -181,8 +179,84 @@ public class ArticleActivity extends BaseActivity
 
     @Override
     public void onClick(View view, int position) {
-        new RepliesDialog(context,(Boolean) view.getTag(R.id.tag_article_replies_editable),
+        RepliesDialog((Boolean) view.getTag(R.id.tag_article_replies_editable),
                 (String) view.getTag(R.id.tag_article_replies_id),
                 (String) view.getTag(R.id.tag_article_replies_username));
+    }
+
+    private void RepliesActiv(){
+        RepliesActiv(null);
+    }
+
+    private void RepliesActiv(String username){
+        Intent intent = new Intent(context,ReplyActivity.class);
+        intent.putExtra("type",type);
+        intent.putExtra("id",a_id);
+        intent.putExtra("username",username);
+        startActivityForResult(intent,100);
+    }
+
+
+
+    private void RepliesDialog(Boolean editable, final String comment_id, final String username){
+        final String[] list;
+        if(editable){
+            list = new String[]{"回复", "修改", "顶", "查看用户"};
+        }else{
+            list = new String[]{"回复", "顶", "查看用户"};
+        }
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setItems(list, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (list[which]) {
+                    case "回复":
+                        if(!UserStatus.isLogin()){
+                            MakeToast.plzlogin();
+                            break;
+                        }else{
+                            RepliesActiv(username);
+                        }
+                        break;
+                    case "修改":
+                        break;
+                    case "查看用户":
+                        Intent intent = new Intent(context,  PersonInfoActivity.class);
+                        intent.putExtra("psnid",username);
+                        context.startActivity(intent);
+                        break;
+                    case "顶":
+                        if(!UserStatus.isLogin()){
+                            MakeToast.plzlogin();
+                            break;
+                        }else{
+                            builder.setMessage("要付出4铜币来顶一下吗？")
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            FormBody body = new FormBody.Builder()
+                                                    .add("type","comment")
+                                                    .add("param",comment_id)
+                                                    .add("updown","up")
+                                                    .build();
+                                            new RequestPost(null,context,"updown",body);
+                                        }
+                                    });
+                            builder.create().show();
+                        }
+                        break;
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+    @Override
+    public void onHeaderClick(View view) {
+//        TODO
+//        Intent intent = new Intent(this, NewTopicActivity.class);
+//        intent.putExtra("topic_id",a_id);
+//        intent.putExtra("editable",(Boolean) view.getTag(R.id.tag_header_editable));
+//        startActivity(intent);
     }
 }
