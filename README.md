@@ -3,7 +3,7 @@ Unofficial native android application for PSNine
 
 ### Screen captures
 
-![1d309577820c8d6d9d7f3f7777514cab](https://raw.githubusercontent.com/RanKKI/PSNine/dev/res/1d309577820c8d6d9d7f3f7777514cab.gif)![e9035ef0f741ea913e244f580b2a4789](https://raw.githubusercontent.com/RanKKI/PSNine/dev/res/e9035ef0f741ea913e244f580b2a4789.gif)
+![1d309577820c8d6d9d7f3f7777514cab](https://raw.githubusercontent.com/RanKKI/PSNine/master/res/1d309577820c8d6d9d7f3f7777514cab.gif)![e9035ef0f741ea913e244f580b2a4789](https://raw.githubusercontent.com/RanKKI/PSNine/master/res/e9035ef0f741ea913e244f580b2a4789.gif)
 
 ### Download
 
