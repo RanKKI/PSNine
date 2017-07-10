@@ -51,6 +51,7 @@ import club.ranleng.psnine.util.AndroidUtilCode.Utils;
 import club.ranleng.psnine.util.PhoneUtils;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.Requests.RequestGet;
+import club.ranleng.psnine.widget.Requests.checkUpdate;
 import club.ranleng.psnine.widget.UserStatus;
 
 public class MainActivity extends BaseActivity
@@ -118,6 +119,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void getData() {
+        new checkUpdate(this);
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
