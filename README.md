@@ -5,6 +5,10 @@ Unofficial native android application for PSNine
 
 ![1d309577820c8d6d9d7f3f7777514cab](https://raw.githubusercontent.com/RanKKI/PSNine/dev/res/1d309577820c8d6d9d7f3f7777514cab.gif)![e9035ef0f741ea913e244f580b2a4789](https://raw.githubusercontent.com/RanKKI/PSNine/dev/res/e9035ef0f741ea913e244f580b2a4789.gif)
 
+### Download
+
+[Download Link (Github) ](https://github.com/RanKKI/PSNine/blob/master/app/app-release.apk?raw=true "Download Link (Github)")
+
 ### TODO
 
 - [ ] 浏览
