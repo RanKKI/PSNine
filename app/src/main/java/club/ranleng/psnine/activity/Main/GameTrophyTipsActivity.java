@@ -118,6 +118,11 @@ public class GameTrophyTipsActivity extends BaseActivity
     }
 
     @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
     public void onClick(View view, int position) {
 
     }

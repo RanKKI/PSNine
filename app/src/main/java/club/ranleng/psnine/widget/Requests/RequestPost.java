@@ -55,7 +55,7 @@ public class RequestPost {
         put("photo","http://psnine.com/my/photo");
 
         put("reply","http://psnine.com/set/comment/post");
-
+        put("editreply","http://psnine.com/set/edit/ajax");
         put("newgene","http://psnine.com/set/gene/post");
 
         put("newtopic","http://psnine.com/set/topic/post");
@@ -108,6 +108,7 @@ public class RequestPost {
             if(type.contentEquals("editreply")){
                 if (result == 200) {
                     MakeToast.str("修改成功");
+                    replyPostListener.ReplyPostFinish();
                 } else if (result == 404) {
                     MakeToast.str("请认真回复");
                 }

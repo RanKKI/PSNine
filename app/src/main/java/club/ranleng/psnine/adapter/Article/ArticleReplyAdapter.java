@@ -42,6 +42,9 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
         holder.itemView.setTag(R.id.tag_article_replies_id, map.get("id"));
         holder.itemView.setTag(R.id.tag_article_replies_editable, map.get("editable"));
         holder.itemView.setTag(R.id.tag_article_replies_username, map.get("username"));
+        if((Boolean) map.get("editable")){
+            holder.itemView.setTag(R.id.tag_article_replies_content, map.get("title"));
+        }
         holder.name.setText((String) map.get("username"));
         holder.time.setText((String) map.get("time"));
         Glide.with(holder.itemView.getContext()).load(map.get("icon")).into(holder.icon);
@@ -49,7 +52,7 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
     }
     private OnItemClickListener clickListener;
     public interface OnItemClickListener {
-        void onClick(View view,int position);
+        void onClick(View root);
     }
     public ArticleReplyAdapter(OnItemClickListener clickListener){
         this.clickListener = clickListener;
@@ -71,7 +74,7 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
         @Override
         public void onClick(View v) {
             if (clickListener != null) {
-                clickListener.onClick(itemView, getAdapterPosition());
+                clickListener.onClick(itemView);
             }
         }
     }

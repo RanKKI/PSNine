@@ -21,10 +21,13 @@ import club.ranleng.psnine.activity.Post.ReplyActivity;
 import club.ranleng.psnine.adapter.Article.ArticleGameListAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleHeaderAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
+import club.ranleng.psnine.adapter.Common.MutilPagesAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
+import club.ranleng.psnine.model.Article.MutilPages;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
@@ -39,18 +42,27 @@ import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,
-        ArticleReplyAdapter.OnItemClickListener, ArticleHeaderAdapter.OnItemClickListener,ArticleGameListAdapter.OnItemClickListener{
+        ArticleReplyAdapter.OnItemClickListener, ArticleHeaderAdapter.OnItemClickListener,
+        ArticleGameListAdapter.OnItemClickListener, MutilPagesAdapter.OnPageChange{
 
     private String type;
     private String a_id;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Context context;
+    private Boolean form_reply = false;
+    private static Context context;
+    private int current_page = 1;
+    private int max_pages = 1;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_article);
+        context = this;
+    }
+
+    public static Context getContext(){
+        return context;
     }
 
     @Override
@@ -70,16 +82,16 @@ public class ArticleActivity extends BaseActivity
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-    }
-
-    @Override
-    public void getData() {
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
         a_id = intent.getStringExtra("id");
         setTitle("No. " + a_id);
         context = this;
-        new RequestWebPage(this,type,a_id);
+    }
+
+    @Override
+    public void getData() {
+        new RequestWebPage(this,type,a_id,true,String.valueOf(current_page));
     }
 
     @Override
@@ -106,7 +118,7 @@ public class ArticleActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_article_reply) {
-            RepliesActiv();
+            Replies();
         }
 
         return super.onOptionsItemSelected(item);
@@ -117,6 +129,7 @@ public class ArticleActivity extends BaseActivity
         if(resultCode == RESULT_OK){
             if(requestCode == 100){
                 getData();
+                form_reply = true;
             }
         }
 
@@ -147,9 +160,20 @@ public class ArticleActivity extends BaseActivity
         adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
+        adapter.register(MutilPages.class,new MutilPagesAdapter(this));
 
         ArticleHeader articleHeader = new ArticleHeader(result.get(0));
+        if((int) result.get(0).get("page_size") != 1){
+            max_pages = (int) result.get(0).get("page_size");
+            ArrayList<String> l = new ArrayList<>();
+            for (int i = 1; i < max_pages+1; i++) {
+                l.add((String) result.get(0).get("page_" + String.valueOf(i)));
+            }
+            items.add(new MutilPages(l));
+        }
+        items.add(new Line());
         items.add(articleHeader);
+
 
         ArrayList<Map<String, Object>> game_list = (ArrayList<Map<String, Object>>) result.get(2).get("gamelist");
         if(game_list.size() != 0){
@@ -172,33 +196,48 @@ public class ArticleActivity extends BaseActivity
 
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
-
+        if(max_pages != 1){
+            recyclerView.scrollToPosition(1);
+        }
+        if(form_reply){
+            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            form_reply = false;
+        }
         swipeRefreshLayout.setRefreshing(false);
     }
 
-
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view) {
         RepliesDialog((Boolean) view.getTag(R.id.tag_article_replies_editable),
                 (String) view.getTag(R.id.tag_article_replies_id),
-                (String) view.getTag(R.id.tag_article_replies_username));
+                (String) view.getTag(R.id.tag_article_replies_username),
+                (String) view.getTag(R.id.tag_article_replies_content));
     }
 
-    private void RepliesActiv(){
-        RepliesActiv(null);
+    private void Replies(){
+        Replies(null);
     }
 
-    private void RepliesActiv(String username){
+    private void Replies(String username){
+        Replies(username,null,null);
+    }
+
+    private void Replies(String username, String content, String comment_id){
         Intent intent = new Intent(context,ReplyActivity.class);
         intent.putExtra("type",type);
         intent.putExtra("id",a_id);
         intent.putExtra("username",username);
+        if(content != null){
+            intent.putExtra("content",content);
+            intent.putExtra("comment_id",comment_id);
+        }
         startActivityForResult(intent,100);
     }
 
 
 
-    private void RepliesDialog(Boolean editable, final String comment_id, final String username){
+
+    private void RepliesDialog(Boolean editable, final String comment_id, final String username, final String content){
         final String[] list;
         if(editable){
             list = new String[]{"回复", "修改", "顶", "查看用户"};
@@ -216,10 +255,11 @@ public class ArticleActivity extends BaseActivity
                             MakeToast.plzlogin();
                             break;
                         }else{
-                            RepliesActiv(username);
+                            Replies(username);
                         }
                         break;
                     case "修改":
+                        Replies(null,content,comment_id);
                         break;
                     case "查看用户":
                         Intent intent = new Intent(context,  PersonInfoActivity.class);
@@ -265,5 +305,12 @@ public class ArticleActivity extends BaseActivity
         Intent intent = new Intent(context, GameTrophyActivity.class);
         intent.putExtra("game_id",view.getTag().toString());
         startActivity(intent);
+    }
+
+    @Override
+    public void onpagechage(int page) {
+        current_page = page;
+        recyclerView.scrollToPosition(1);
+        getData();
     }
 }

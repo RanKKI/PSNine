@@ -38,6 +38,8 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     private Context context;
     private String type;
     private String a_id;
+    private String comment_id;
+    private Boolean edit = false;
 
     @Override
     public void setContentView() {
@@ -56,14 +58,24 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
         reply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FormBody body = new FormBody.Builder()
-                        .add("type",type)
-                        .add("param",a_id)
-                        .add("old","yes")
-                        .add("com","")
-                        .add("content",editText.getText().toString())
-                        .build();
-                new RequestPost(ReplyActivity.this,context,"reply",body);
+                if(edit){
+                    FormBody body = new FormBody.Builder()
+                            .add("type","comment")
+                            .add("id",comment_id)
+                            .add("content",editText.getText().toString())
+                            .build();
+                    new RequestPost(ReplyActivity.this,context,"editreply",body);
+                }else{
+                    FormBody body = new FormBody.Builder()
+                            .add("type",type)
+                            .add("param",a_id)
+                            .add("old","yes")
+                            .add("com","")
+                            .add("content",editText.getText().toString())
+                            .build();
+                    new RequestPost(ReplyActivity.this,context,"reply",body);
+                }
+
 
             }
         });
@@ -165,6 +177,11 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
                     LogUtils.d("已删除tempreply");
                 }
             }
+        }
+        if(getIntent().hasExtra("content")){
+            edit = true;
+            comment_id = getIntent().getStringExtra("comment_id");
+            editText.append(getIntent().getStringExtra("content"));
         }
         if(getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null){
             editText.append(String.format("@%s ",getIntent().getStringExtra("username")));

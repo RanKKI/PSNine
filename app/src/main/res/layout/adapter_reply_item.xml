@@ -15,51 +15,57 @@
         android:layout_height="40dp"
         />
 
-    <TextView
-        android:id="@+id/adapter_list_name"
-        android:layout_width="190dp"
+    <LinearLayout
+        android:id="@+id/bbbb"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/adapter_list_icon"
-        android:singleLine="true"
-        android:text="TextView"
-        android:textColor="#399adc"/>
+        android:orientation="horizontal"
+        android:weightSum="20">
 
-    <TextView
-        android:id="@+id/adapter_list_time"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/adapter_list_name"/>
+        <TextView
+            android:id="@+id/adapter_list_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="6"
+            android:singleLine="true"
+            android:text="TextView"
+            android:textColor="#399adc"/>
 
-    <TextView
-        android:id="@+id/adapter_list_reply"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/adapter_list_time"/>
+        <TextView
+            android:id="@+id/adapter_list_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="7"/>
+
+        <TextView
+            android:id="@+id/adapter_list_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="7"/>
+
+        <ImageView
+            android:id="@+id/reply_dot"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="2"
+            app:srcCompat="@drawable/dot_selector"/>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/adapter_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/adapter_list_reply"
-        android:layout_below="@+id/adapter_list_name"
+        android:layout_below="@+id/bbbb"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/adapter_list_icon"
-        android:layout_weight="1"
         android:textColor="#333333"/>
-
-    <ImageView
-        android:id="@+id/reply_dot"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/adapter_list_reply"
-        app:srcCompat="@drawable/dot_selector"
-        android:layout_above="@+id/adapter_list_title"/>
 
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package club.ranleng.psnine.adapter.Article;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Assist.ImageActivity;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.ScreenUtils;
@@ -44,18 +46,26 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
 
         //设置
-        Context context = holder.itemView.getContext();
+        final Context context = holder.itemView.getContext();
         CmHtml.convert(context,holder.content,item.content);
         holder.time.setText(item.time);
         holder.replies.setText(item.replies);
         holder.username.setText(item.username);
         Glide.with(context).load(item.icon).into(holder.icon);
         holder.itemView.setTag(R.id.tag_header_editable,item.editable);
-        if(holder.imgs_layout.getTag() == null){
+        if(holder.imgs_layout.getTag(R.id.tag_header_imgs) == null){
             holder.imgs_layout.setTag(R.id.tag_header_imgs,"");
-            for(String i : item.img){
+            for(final String i : item.img){
                 ImageView imageView = new ImageView(context);
                 Glide.with(context).load(i).into(imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, ImageActivity.class);
+                        intent.putExtra("url",i);
+                        context.startActivity(intent);
+                    }
+                });
                 holder.imgs_layout.addView(imageView);
             }
         }

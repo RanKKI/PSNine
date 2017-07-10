@@ -44,13 +44,16 @@ public class RequestWebPage {
         new Info().execute(url, type);
     }
 
-    public RequestWebPage(RequestWebPageListener listener,String type,String id){
+    public RequestWebPage(RequestWebPageListener listener,String type,String id,Boolean mutil, String page){
         this.listener = listener;
         String url;
         if (type.contentEquals("gene")) {
             url = "http://psnine.com/gene/" + id ;
         }else {
-            url = "http://psnine.com/topic/" + id;
+            url = "http://psnine.com/topic/" + id ;
+        }
+        if(mutil){
+            url = url + "?page=" + page;
         }
         new Info().execute(url,"article",type);
     }

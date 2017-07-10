@@ -40,6 +40,10 @@
                 android:id="@+id/nav_about"
                 android:icon="@drawable/about"
                 android:title="@string/nav_about" />
+            <item
+                android:id="@+id/nav_cache"
+                android:icon="@drawable/cache"
+                android:title="缓存 " />
         </menu>
     </item>
 

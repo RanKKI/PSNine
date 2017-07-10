@@ -34,6 +34,10 @@ public class SupportActivity extends AppCompatActivity {
                 intent = new Intent(this,ArticleActivity.class);
                 intent.putExtra("id",path.replace("/topic/",""));
                 intent.putExtra("type","topic");
+            } else if(path.contains("/t/")){
+                intent = new Intent(this,ArticleActivity.class);
+                intent.putExtra("id",path.replace("/t/",""));
+                intent.putExtra("type","topic");
             } else {
                 MakeToast.str("暂时还不支持");
                 finish();

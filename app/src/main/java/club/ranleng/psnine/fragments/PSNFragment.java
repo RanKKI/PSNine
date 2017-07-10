@@ -114,8 +114,8 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
                 @Override
                 public void onClick(View view, int position) {
                     Intent intent = new Intent(context,ArticleActivity.class);
-                    intent.putExtra("id",view.getTag().toString());
-                    intent.putExtra("type",type);
+                    intent.putExtra("id",(String) view.getTag(R.id.tag_list_id));
+                    intent.putExtra("type",(String) view.getTag(R.id.tag_list_type));
                     startActivity(intent);
                 }
             }));

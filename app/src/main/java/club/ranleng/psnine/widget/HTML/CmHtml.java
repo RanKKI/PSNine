@@ -13,10 +13,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import club.ranleng.psnine.adapter.Common.TableAdapter;
 import club.ranleng.psnine.adapter.TextEditableItemAdapter;
 import club.ranleng.psnine.adapter.Article.TrophyAdapter;
+import club.ranleng.psnine.model.Common.Table;
 import club.ranleng.psnine.model.TextSpannedItem;
 import club.ranleng.psnine.model.Article.Trophy;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.ParseWebpage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -28,34 +31,26 @@ import me.drakeet.multitype.MultiTypeAdapter;
 public class CmHtml {
 
     private static Context context;
-    private static String[] trophy_class = {"div.pd10.t1","div.pd10.t2","div.pd10.t3","div.pd10.t4"};
-
-    public static void init(Context c) {
-        context = c;
-    }
-
-    public static void convert(Context c,TextView t, String s) {
-        if(s.contains("blockquote")){
-            s = s.replace("blockquote","a");
-        }
-        t.setText(returnHtml(c,s));
-        t.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+    private static String[] trophy_class = {"div.pd10.t1","div.pd10.t2","div.pd10.t3","div.pd10.t4","table.tbl"};
 
     public static Spanned returnHtml(Context c,String s){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(c), new HtmlTagHandler(c));
-        }else{
-            return Html.fromHtml(s,new HtmlImageGetter(context), new HtmlTagHandler(c));
-        }
+        return mHtml.fromHtml(s,new HtmlImageGetter(c),new HtmlTagHandler(c));
+
+        //原生HTML
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(c), new HtmlTagHandler(c));
+//        }else{
+//            return Html.fromHtml(s,new HtmlImageGetter(context), new HtmlTagHandler(c));
+//        }
     }
 
     public static Spanned returnHtml(Context c,TextView t, String s){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
-        }else{
-            return Html.fromHtml(s,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
-        }
+        return mHtml.fromHtml(s,new HtmlImageGetter(c,t),new HtmlTagHandler(c));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
+//        }else{
+//            return Html.fromHtml(s,new HtmlImageGetter(c,t), new HtmlTagHandler(c));
+//        }
     }
 
     public static void convert(Context c,RecyclerView t, String s) {
@@ -67,15 +62,16 @@ public class CmHtml {
 
         adapter.register(Trophy.class, new TrophyAdapter());
         adapter.register(TextSpannedItem.class, new TextEditableItemAdapter());
+        adapter.register(Table.class, new TableAdapter());
 
         Document doc = Jsoup.parse(s);
         String key = "817857B0693710898411438234078B55";
-        int trophy_num = 0;
+        int tt_num = 1;
         for (String d: trophy_class) {
             for(Element i : doc.select(d)){
                 Element a = i.before(key);
                 Element b = i.after(key);
-                trophy_num ++;
+                tt_num += 2;
             }
         }
 
@@ -86,7 +82,11 @@ public class CmHtml {
             for (int i = 0; i < trophy.length; i++) {
                 String content = trophy[i];
                 if(i % 2 == 1){
-                    items.add(new Trophy(ParseWebpage.parseTropy(content)));
+                    if(content.contains("tbody")){
+                        items.add(new Table(ParseWebpage.parseTable(content)));
+                    }else{
+                        items.add(new Trophy(ParseWebpage.parseTropy(content)));
+                    }
                 }else{
                     items.add(new TextSpannedItem(content));
                 }

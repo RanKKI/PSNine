@@ -25,7 +25,6 @@ Unofficial native android application for PSNine
 - [o] 帖子header布局
 - [x] 短消息闪退
 - [x] 图片放大之类的
-- [o] 表格
 - [ ] 加载更多
 - [x] handle url
 - [ ] 用户名 深色背景上问题

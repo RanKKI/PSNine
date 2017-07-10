@@ -1,6 +1,7 @@
 package club.ranleng.psnine.activity.Main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,17 +13,21 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +45,10 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
 import club.ranleng.psnine.util.AndroidUtilCode.CrashUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.CrashHandler;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
+import club.ranleng.psnine.util.PhoneUtils;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.Requests.RequestGet;
 import club.ranleng.psnine.widget.UserStatus;
@@ -98,6 +105,15 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
+        refresh_cache();
+    }
+
+    private void refresh_cache(){
+        try {
+            navigationView.getMenu().findItem(R.id.nav_cache).setTitle("缓存 "+ PhoneUtils.getFormatSize(PhoneUtils.getFolderSize(getCacheDir().getAbsoluteFile())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -105,6 +121,44 @@ public class MainActivity extends BaseActivity
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(this);
+        final File file = new File(getFilesDir() + "/crash");
+        if (file.exists()) {
+            try {
+                FileInputStream inputStream = this.openFileInput("crash");
+                byte[] bytes = new byte[1024];
+
+                int len = inputStream.read(bytes);
+                inputStream.close();
+                String content = new String(bytes,0,len);
+                TextView textView = new TextView(this);
+                textView.setTextSize(12);
+                textView.setText(content);
+                AlertDialog c = new AlertDialog.Builder(context)
+                        .setView(textView)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (file.delete()) {
+                                    MakeToast.str("已删除crash文件");
+                                }
+                            }
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                if (file.delete()) {
+                                    MakeToast.str("已删除crash文件");
+                                }
+                            }
+                        })
+                        .create();
+                c.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if(CrashUtils.init(new File(getCacheDir(),"crash.txt"))){
             LogUtils.i("CrashUtils 初始化成功");
         }else{
@@ -140,7 +194,6 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
-
         final MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
 
@@ -191,6 +244,26 @@ public class MainActivity extends BaseActivity
             startActivity(new Intent(this, AboutActivity.class));
         }else if(id == R.id.nav_setting){
             startActivity(new Intent(this, SettingActivity.class));
+        }else if(id == R.id.nav_cache){
+            AlertDialog b = new AlertDialog.Builder(context)
+                    .setTitle("确定要清除缓存么")
+                    .setMessage("清除缓存虽然可以减少手机空间的占用, 但下次加载的时候会耗费更多的流量")
+                    .setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(PhoneUtils.deleteDir(getCacheDir())){
+                                MakeToast.str("成功清除缓存");
+                                refresh_cache();
+                            }
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create();
+            b.show();
         }
 
         drawer.closeDrawer(GravityCompat.START);

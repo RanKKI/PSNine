@@ -546,4 +546,21 @@ public class ParseWebpage {
         map.put("content",doc.select("textarea[name=content]").text());
         return map;
     }
+
+    public static ArrayList<ArrayList<String>> parseTable(String results) {
+        ArrayList<ArrayList<String>> listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        Elements elements = doc.select("tr");
+        for(Element i: elements){
+            ArrayList<String> list = new ArrayList<>();
+            Elements c = i.select("td");
+            for(Element f: c){
+                list.add(f.html());
+            }
+            listItems.add(list);
+        }
+
+        return listItems;
+    }
 }

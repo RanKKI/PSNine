@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+
 public class HtmlImageGetter implements Html.ImageGetter {
 
     private Context context;
@@ -41,8 +43,8 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 int h_screen = dm.heightPixels;
                 float ratio = 1;
                 //max length each line 24
-                if (width > w_screen / 3 * 2 || height > h_screen / 3 * 2) {
-                    ratio = (float) w_screen / width;
+                if (width > w_screen / 3 * 2|| height > h_screen / 3 * 2) {
+                    ratio = (float) w_screen / 3 * 2 / width ;
                 }
                 if (width <= 50 || height <= 50) {
                     ratio = 2;

@@ -6,7 +6,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -224,7 +223,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
             maxScale = scale * 4;
             minScale = scale * 2;
 
-            Log.i("TAG", scale + "");
             /**
              * 将图片移动到 图片中心
              *
@@ -306,7 +304,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.i("TAG","onTouch"+1);
         // 双击的时候不让其 移动
         if (gestureDetector.onTouchEvent(event)) {
             return true;
@@ -322,7 +319,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
             x += event.getX(i);
             y += event.getY(i);
         }
-        Log.i("TEST","pointerCount:"+pointerCount+"X:"+x+"Y:"+y);
         x /= pointerCount;
         y /= pointerCount;
 
@@ -341,7 +337,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
-                Log.i("TAG","onTouch"+2);
                 // 解决事件冲突
                 // 当图片的 高度和宽度 大于屏幕的寬高度的时候，为图片的事件，否则为viewPager
                 if (ischong(f)) {
@@ -352,7 +347,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i("TAG","onTouch"+3);
                 // 解决事件冲突
                 if (ischong(f)) {
                     if (getParent() instanceof ViewPager) {
@@ -390,7 +384,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                Log.i("TAG","onTouch"+4);
                 lastPointCount = 0;
                 break;
         }

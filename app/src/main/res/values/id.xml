@@ -9,6 +9,7 @@
     <item name="tag_article_replies_id" type="id"/>
     <item name="tag_article_replies_editable" type="id"/>
     <item name="tag_article_replies_username" type="id"/>
+    <item name="tag_article_replies_content" type="id"/>
 
     <item name="tag_game_id" type="id"/>
     <item name="tag_game_name" type="id"/>
@@ -19,4 +20,7 @@
 
     <item name="tag_list_id" type="id"/>
     <item name="tag_list_type" type="id"/>
+
+    <item name="tag_mutil_pages_id" type="id"/>
+    <item name="tag_mutil_pages_name" type="id"/>
 </resources>
