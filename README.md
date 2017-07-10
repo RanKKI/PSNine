@@ -19,6 +19,20 @@ Unofficial native android application for PSNine
     - [ ] 加载更多
 - [ ] 发帖
     - [ ] 主页 (这个理论上没有问题. 还没有测试)
+
+- [x] 复制文字
+- [o] 游戏列表重叠
+- [o] 帖子header布局
+- [x] 短消息闪退
+- [x] 图片放大之类的
+- [o] 表格
+- [ ] 加载更多
+- [x] handle url
+- [ ] 用户名 深色背景上问题
+- [ ] 图库批量上传
+- [x] 文章中的游戏列表点击跳转到奖杯页面.
+
+
 License
 -------
 

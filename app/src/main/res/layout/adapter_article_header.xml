@@ -20,48 +20,55 @@
             android:layout_height="50dp"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
-        <TextView
-            android:id="@+id/header_username"
-            android:layout_width="180dp"
+        <LinearLayout
+            android:id="@+id/info_root"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/header_icon"
-            android:textColor="#399adc"/>
+            android:orientation="horizontal"
+            android:weightSum="20">
 
-        <TextView
-            android:id="@+id/header_time"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/header_username"
-            android:textColor="#CCCCCE"/>
+            <TextView
+                android:id="@+id/header_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="10"
+                android:textColor="#399adc"/>
 
-        <TextView
-            android:id="@+id/header_replies"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/header_time"
-            android:textColor="#CCCCCE"/>
+            <TextView
+                android:id="@+id/header_time"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="4"
+                android:textColor="#CCCCCE"/>
 
-        <ImageView
-            android:id="@+id/article_header_dot"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/dot_selector"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/header_replies"
-            android:layout_above="@+id/header_content"
-            android:layout_alignParentTop="true"/>
+            <TextView
+                android:id="@+id/header_replies"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="4"
+                android:textColor="#CCCCCE"/>
+
+            <ImageView
+                android:id="@+id/article_header_dot"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/dot_selector"/>
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/header_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/header_replies"
-            android:layout_below="@+id/header_username"
+            android:layout_below="@+id/info_root"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/header_icon"/>

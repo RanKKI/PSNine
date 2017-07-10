@@ -1,5 +1,7 @@
 package club.ranleng.psnine.model.PSNGame;
 
+import android.support.annotation.Nullable;
+
 import java.util.Map;
 
 /**
@@ -12,8 +14,8 @@ public class PSNGameTrophy {
     public final String name;
     public final String des;
     public final String percent;
-    public final String date;
-    public final String id;
+    @Nullable public final String date;
+    @Nullable public final String id;
 
     public PSNGameTrophy(Map<String, Object> map){
 

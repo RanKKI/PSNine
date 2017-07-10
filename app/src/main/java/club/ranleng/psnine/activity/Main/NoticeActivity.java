@@ -13,14 +13,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.NoticeListAdapter;
+import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
+import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import club.ranleng.psnine.widget.UserStatus;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
+import me.drakeet.support.about.Line;
+import me.drakeet.support.about.LineViewBinder;
 
 public class NoticeActivity extends BaseActivity
-        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,NoticeListAdapter.OnItemClickListener{
+        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,ArticleListAdapter.OnItemClickListener{
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
@@ -78,37 +84,26 @@ public class NoticeActivity extends BaseActivity
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-        /*
-         * result格式. ArrayList<Map<String, Object>>
-         * 文章ID : id
-         * 文章类型 : type
-         * 文章标题 : title
-         * 文章时间 : time
-         * 文章回复 : reply
-         * 文章作者 : username
-         * 文章作者头像 : user_icon
-         */
-        NoticeListAdapter mAdapter = new NoticeListAdapter(this, result);
-        mAdapter.setClickListener(this);
-        recyclerView.setAdapter(mAdapter);
+        MultiTypeAdapter adapter = new MultiTypeAdapter();
+        Items items = new Items();
+
+        adapter.register(ArticleList.class, new ArticleListAdapter(this));
+        adapter.register(Line.class,new LineViewBinder());
+        for(Map<String, Object> map : result){
+            items.add(new ArticleList(map));
+            items.add(new Line());
+        }
+        adapter.setItems(items);
+        recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
     }
 
+
     @Override
     public void onClick(View view, int position) {
-        String url = view.getTag().toString();
-        String id;
-        String type;
-        if (url.contains("gene")) {
-            type = "gene";
-            id = url.replace("http://psnine.com/gene/", "");
-        } else {
-            type = "topic";
-            id = url.replace("http://psnine.com/topic/", "");
-        }
         Intent intent = new Intent(this,ArticleActivity.class);
-        intent.putExtra("id",id);
-        intent.putExtra("type",type);
+        intent.putExtra("id",(String) view.getTag(R.id.tag_list_id));
+        intent.putExtra("type",(String) view.getTag(R.id.tag_list_type));
         startActivity(intent);
     }
 }

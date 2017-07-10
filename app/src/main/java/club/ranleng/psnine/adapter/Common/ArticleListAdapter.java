@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,7 +17,7 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.model.Common.ArticleList;
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
 /**
@@ -47,13 +46,14 @@ public class ArticleListAdapter extends ItemViewBinder<ArticleList, ArticleListA
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleList item) {
         Map<String, Object> map = item.data;
-        holder.title.setText((String) map.get("title"));
+        holder.title.setText(CmHtml.returnHtml(holder.itemView.getContext(),holder.title,(String) map.get("title")));
         holder.title.setSingleLine(SettingActivity.PREF_SINGLELINE);
         holder.name.setText((String) map.get("username"));
         holder.time.setText((String) map.get("time"));
         holder.reply.setText((String) map.get("reply"));
         Glide.with(holder.itemView.getContext()).load(map.get("icon")).into(holder.icon);
-        holder.itemView.setTag(map.get("id"));
+        holder.itemView.setTag(R.id.tag_list_id,map.get("id"));
+        holder.itemView.setTag(R.id.tag_list_type,map.get("type"));
     }
 
 

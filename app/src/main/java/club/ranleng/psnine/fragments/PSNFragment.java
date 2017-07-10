@@ -24,6 +24,7 @@ import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.model.GameList;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -97,6 +98,10 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
         Items items = new Items();
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
+        if(result.isEmpty()){
+            items.add(new Line());
+            items.add(new Category("这个人没有这页诶"));
+        }
         if(type.contentEquals("psngame")){
             finishLoadListener.onFinish(result.get(0));
             adapter.register(GameList.class, new PSNGameListAdapter(this));
@@ -121,7 +126,6 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
             }
         }else if(type.contentEquals("msg")){
             adapter.register(ArticleReply.class, new ArticleReplyAdapter(null));
-            items.add(new Line());
             for(Map<String, Object> map: result){
                 ArticleReply articleReply = new ArticleReply(map);
                 items.add(articleReply);

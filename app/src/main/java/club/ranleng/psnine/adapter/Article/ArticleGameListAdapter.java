@@ -7,6 +7,7 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleGameList;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.AndroidUtilCode.ScreenUtils;
 import me.drakeet.multitype.ItemViewBinder;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
@@ -25,6 +28,17 @@ import static android.text.Html.FROM_HTML_MODE_LEGACY;
  */
 
 public class ArticleGameListAdapter  extends ItemViewBinder<ArticleGameList, ArticleGameListAdapter.ViewHolder> {
+
+    private OnItemClickListener clickListener;
+
+    public interface OnItemClickListener {
+        void onGameClick(View view);
+    }
+
+    public ArticleGameListAdapter(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
     @NonNull
     @Override
     protected ArticleGameListAdapter.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -45,9 +59,10 @@ public class ArticleGameListAdapter  extends ItemViewBinder<ArticleGameList, Art
         }
         holder.game_trophy.setText(spanned);
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.game_icon);
+        holder.itemView.setTag(item.trophy_id);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.game_mode) TextView game_mode;
         @BindView(R.id.game_name) TextView game_name;
         @BindView(R.id.game_percent) TextView game_percent;
@@ -57,7 +72,14 @@ public class ArticleGameListAdapter  extends ItemViewBinder<ArticleGameList, Art
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            if(clickListener != null){
+                clickListener.onGameClick(itemView);
+            }
+        }
     }
 }

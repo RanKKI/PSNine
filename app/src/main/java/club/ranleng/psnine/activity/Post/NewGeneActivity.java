@@ -20,7 +20,6 @@ import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.TextUtils;
 import club.ranleng.psnine.widget.Requests.RequestPost;

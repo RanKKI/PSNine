@@ -9,7 +9,7 @@ import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.activity.Assist.SettingActivity;
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.ParseWebpage;
 import club.ranleng.psnine.widget.UserStatus;
 

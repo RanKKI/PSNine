@@ -1,7 +1,5 @@
 package club.ranleng.psnine.widget;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,8 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import club.ranleng.psnine.util.LogUtils;
 
 public class ParseWebpage {
 
@@ -38,9 +34,47 @@ public class ParseWebpage {
             map.put("icon", icon);
             map.put("time", time);
             map.put("reply", reply + "评论");
+            map.put("type","topic");
             listItems.add(map);
         }
 
+        return listItems;
+    }
+
+    public static ArrayList<Map<String, Object>> parseNotice(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        Elements game_list = doc.select("ul.list").select("li");
+
+        for (Element c : game_list) {
+            Map<String, Object> map = new HashMap<>();
+            Elements qa = c.select("div.content.pb10");
+            if (!qa.isEmpty()) {
+                String user_icon = c.select("a").select("img").attr("src");
+                String title = c.select("div.content.pb10").html();
+                String username = c.select("a.psnnode").text();
+                String time = c.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
+                String url = c.select("div.meta").select("a").get(0).attr("href");
+
+                map.put("icon", user_icon);
+                map.put("title", title);
+                map.put("username", username);
+                map.put("time", time);
+                map.put("username", username);
+                map.put("reply", "");
+                if (url.contains("gene")) {
+                    map.put("type","gene");
+                    map.put("id",url.replace("http://psnine.com/gene/", ""));
+                } else {
+                    map.put("type","topic");
+                    map.put("id",url.replace("http://psnine.com/topic/", ""));
+                }
+
+                listItems.add(map);
+            }
+
+        }
         return listItems;
     }
 
@@ -67,6 +101,7 @@ public class ParseWebpage {
             map.put("id", id);
             map.put("icon", icon);
             map.put("time", time);
+            map.put("type","topic");
             map.put("reply", reply + "评论");
             listItems.add(map);
         }
@@ -100,6 +135,7 @@ public class ParseWebpage {
             map.put("icon", icon);
             map.put("time", tr[0] + "前");
             map.put("reply", tr[1]);
+            map.put("type","gene");
             listItems.add(map);
         }
 
@@ -349,33 +385,6 @@ public class ParseWebpage {
         return listItems;
     }
 
-    public static ArrayList<Map<String, Object>> parseNotice(String results) {
-        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-
-        Document doc = Jsoup.parse(results);
-        Elements game_list = doc.select("ul.list").select("li");
-
-        for (Element c : game_list) {
-            Map<String, Object> map = new HashMap<>();
-            Elements qa = c.select("div.content.pb10");
-            if (!qa.isEmpty()) {
-                String user_icon = c.select("a").select("img").attr("src");
-                String title = c.select("div.content.pb10").html();
-                String username = c.select("a.psnnode").text();
-                String time = c.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
-                String url = c.select("div.meta").select("a").get(0).attr("href");
-
-                map.put("user_icon", user_icon);
-                map.put("title", title);
-                map.put("username", username);
-                map.put("time", time);
-                map.put("url", url);
-                listItems.add(map);
-            }
-
-        }
-        return listItems;
-    }
 
     public static Map<String, Object> parseGameList(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
@@ -388,6 +397,7 @@ public class ParseWebpage {
                 Map<String, Object> map = new HashMap<>();
                 String game_icon = i.select("img.imgbgnb").attr("src");
                 String game_name = i.select("td.pd10").select("p").select("a").text();
+                String game_id = i.select("td.pd10").select("p").select("a").attr("href").replace("http://psnine.com/psngame/","");
                 String game_mode = i.select("td.twoge").select("span").text();
                 String game_percent = i.select("td.twoge").select("em").text();
                 String game_trophy = i.select("td.pd10").select("div.meta").html();
@@ -397,6 +407,7 @@ public class ParseWebpage {
                 map.put("game_mode", game_mode);
                 map.put("game_percent", game_percent);
                 map.put("game_trophy", game_trophy);
+                map.put("trophy_id",game_id);
                 listItems.add(map);
             }
         }
@@ -470,6 +481,8 @@ public class ParseWebpage {
                     map.put("trophy_tips", i.select("td").get(1).select("p").select("em.alert-success.pd5").text());
                     if (is_user) {
                         map.put("trophy_date", i.select("td").get(2).select("em").html());
+                    }else{
+                        map.put("trophy_date","");
                     }
                     map.put("trophy_percent", i.select("td.twoge").first().ownText());
                     listItems.add(map);

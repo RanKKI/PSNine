@@ -32,6 +32,7 @@ public class TextEditableItemAdapter extends ItemViewBinder<TextSpannedItem, Tex
     protected void onBindViewHolder(@NonNull TextEditableItemAdapter.ViewHolder holder, @NonNull TextSpannedItem item) {
         holder.text.setText(CmHtml.returnHtml(holder.itemView.getContext(),holder.text,item.text));
         holder.text.setTextSize(14);
+        holder.text.setTextIsSelectable(true);
         holder.text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

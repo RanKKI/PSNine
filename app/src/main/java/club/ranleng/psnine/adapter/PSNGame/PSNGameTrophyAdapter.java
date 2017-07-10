@@ -50,12 +50,16 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
         holder.des.setText(item.des);
         if(item.date.contentEquals("")){
             holder.psngame_trophy_date_root.setVisibility(View.INVISIBLE);
+        }else{
+            holder.date.setText(item.date);
         }
-        holder.date.setText(item.date);
+
         if(item.percent.contentEquals("")){
             holder.psngame_trophy_st_root.setVisibility(View.INVISIBLE);
+        }else{
+            holder.percent.setText(item.percent);
         }
-        holder.percent.setText(item.percent);
+
         holder.itemView.setTag(item.id);
     }
 

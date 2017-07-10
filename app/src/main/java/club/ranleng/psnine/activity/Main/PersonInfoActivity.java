@@ -27,7 +27,7 @@ import club.ranleng.psnine.adapter.ViewPagerAdapter.PSNPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.PSNFragment;
 import club.ranleng.psnine.util.FastBlurUtils;
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.Requests.RequestGet;
 
 public class PersonInfoActivity extends BaseActivity implements FloatingActionButton.OnClickListener, PSNFragment.FinishLoadListener{

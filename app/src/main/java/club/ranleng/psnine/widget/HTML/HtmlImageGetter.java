@@ -14,8 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import club.ranleng.psnine.util.LogUtils;
-
 public class HtmlImageGetter implements Html.ImageGetter {
 
     private Context context;

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import club.ranleng.psnine.fragments.SettingFragment;
-import club.ranleng.psnine.util.LogUtils;
 
 public class SettingActivity extends AppCompatActivity{
 
@@ -17,11 +16,13 @@ public class SettingActivity extends AppCompatActivity{
     public static final String KEY_PREF_OB = "settings_ob";
     public static final String KEY_PREF_EMOJI = "settings_emoji_dialog";
     public static final String KEY_PREF_SINGLELINE = "settings_single_line";
+    public static final String KEY_PREF_SAVE_TEMP_REPLY = "settings_save_temp_reply";
 
     public static Boolean PREF_PRELOAD = false;
     public static String PREF_OB = "obdate";
     public static Boolean PREF_EMOJI = true;
     public static Boolean PREF_SINGLELINE = true;
+    public static Boolean PREF_SAVE_TEMP_REPLY = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class SettingActivity extends AppCompatActivity{
         PREF_OB = sharedPref.getString(KEY_PREF_OB,"obdate");
         PREF_EMOJI = sharedPref.getBoolean(KEY_PREF_EMOJI,true);
         PREF_SINGLELINE = sharedPref.getBoolean(KEY_PREF_SINGLELINE,true);
+        PREF_SAVE_TEMP_REPLY = sharedPref.getBoolean(KEY_PREF_SAVE_TEMP_REPLY,true);
     }
 
 

@@ -5,7 +5,12 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Main.ArticleActivity;
+import club.ranleng.psnine.activity.Main.PersonInfoActivity;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.MakeToast;
+import club.ranleng.psnine.widget.UserStatus;
 
 public class SupportActivity extends AppCompatActivity {
 
@@ -13,24 +18,31 @@ public class SupportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        String scheme = intent.getScheme();
-        Uri uri = intent.getData();
-        String str = "";
+        Intent intents = getIntent();
+        Intent intent = null;
+        Uri uri = intents.getData();
         if (uri != null) {
-            String host = uri.getHost();
-            String dataString = intent.getDataString();
-            String from = uri.getQueryParameter("from");
             String path = uri.getPath();
-            String encodedPath = uri.getEncodedPath();
-            String queryString = uri.getQuery();
-            LogUtils.d(host);
-            LogUtils.d(dataString);
-            LogUtils.d(from);
-            LogUtils.d(path);
-            LogUtils.d(encodedPath);
-            LogUtils.d(queryString);
+            if(path.contains("/psnid/")){
+                intent = new Intent(this, PersonInfoActivity.class);
+                intent.putExtra("psnid", path.replace("/psnid/",""));
+            }else if(path.contains("/gene/")){
+                intent = new Intent(this,ArticleActivity.class);
+                intent.putExtra("id",path.replace("/gene/",""));
+                intent.putExtra("type","gene");
+            } else if(path.contains("/topic/")){
+                intent = new Intent(this,ArticleActivity.class);
+                intent.putExtra("id",path.replace("/topic/",""));
+                intent.putExtra("type","topic");
+            } else {
+                MakeToast.str("暂时还不支持");
+                finish();
+            }
 
+            if(intent != null){
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }

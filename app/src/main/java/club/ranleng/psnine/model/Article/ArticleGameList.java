@@ -16,6 +16,7 @@ public class ArticleGameList {
     public final String percent;
     public final String trophy;
     public final String icon;
+    public final String trophy_id;
 
     public ArticleGameList(@NonNull Map<String, Object> map) {
 
@@ -28,6 +29,7 @@ public class ArticleGameList {
         this.mode = (String) map.get("game_mode");
         this.percent = (String) map.get("game_percent");
         String temp = (String) map.get("game_trophy");
+        this.trophy_id = (String) map.get("trophy_id");
         this.trophy = temp.replace("<em class=\"text-platinum\">", a)
                 .replace("<em class=\"text-gold\">", b)
                 .replace("<em class=\"text-silver\">", c)

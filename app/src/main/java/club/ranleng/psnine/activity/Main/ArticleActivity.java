@@ -39,7 +39,7 @@ import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,
-        ArticleReplyAdapter.OnItemClickListener, ArticleHeaderAdapter.OnItemClickListener{
+        ArticleReplyAdapter.OnItemClickListener, ArticleHeaderAdapter.OnItemClickListener,ArticleGameListAdapter.OnItemClickListener{
 
     private String type;
     private String a_id;
@@ -144,7 +144,7 @@ public class ArticleActivity extends BaseActivity
 
         adapter.register(ArticleReply.class, new ArticleReplyAdapter(this));
         adapter.register(ArticleHeader.class, new ArticleHeaderAdapter(this));
-        adapter.register(ArticleGameList.class, new ArticleGameListAdapter());
+        adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
 
@@ -258,5 +258,12 @@ public class ArticleActivity extends BaseActivity
 //        intent.putExtra("topic_id",a_id);
 //        intent.putExtra("editable",(Boolean) view.getTag(R.id.tag_header_editable));
 //        startActivity(intent);
+    }
+
+    @Override
+    public void onGameClick(View view) {
+        Intent intent = new Intent(context, GameTrophyActivity.class);
+        intent.putExtra("game_id",view.getTag().toString());
+        startActivity(intent);
     }
 }

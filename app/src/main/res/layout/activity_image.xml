@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/imageview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:srcCompat="@android:color/background_dark"
-    tools:context="club.ranleng.psnine.activity.Assist.ImageActivity">
 
-</ImageView>
+    tools:context="club.ranleng.psnine.activity.Assist.ImageActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <club.ranleng.psnine.view.ZoomImageView
+        android:id="@+id/imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <ImageView
+        android:id="@+id/imageView_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_action_close"/>
+
+</FrameLayout>

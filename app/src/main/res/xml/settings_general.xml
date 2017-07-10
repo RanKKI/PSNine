@@ -27,6 +27,12 @@
             android:summary="标题内容浓缩到一行"
             android:title="单行标题" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_save_temp_reply"
+            android:summary="回复时正常退出可缓存已输入内容"
+            android:title="保存草稿" />
+
 
     </PreferenceCategory>
 

@@ -16,7 +16,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleHeader;
-import club.ranleng.psnine.util.LogUtils;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.AndroidUtilCode.ScreenUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -41,6 +42,8 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
+
+        //设置
         Context context = holder.itemView.getContext();
         CmHtml.convert(context,holder.content,item.content);
         holder.time.setText(item.time);

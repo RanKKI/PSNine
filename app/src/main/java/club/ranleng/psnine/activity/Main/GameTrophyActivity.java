@@ -3,8 +3,6 @@ package club.ranleng.psnine.activity.Main;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,17 +14,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
-import club.ranleng.psnine.adapter.NoticeListAdapter;
 import club.ranleng.psnine.adapter.PSNGame.PSNGameHeaderAdapter;
 import club.ranleng.psnine.adapter.PSNGame.PSNGameTrophyAdapter;
 import club.ranleng.psnine.adapter.PSNGame.PSNGameUserAdapter;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.model.PSNGame.PSNGameHeader;
 import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
 import club.ranleng.psnine.model.PSNGame.PSNGameUser;
-import club.ranleng.psnine.util.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
@@ -75,7 +69,11 @@ public class GameTrophyActivity extends BaseActivity
         }
         String game_id = intent.getStringExtra("game_id");
         String username = intent.getStringExtra("username");
-        setTitle(intent.getStringExtra("game_name"));
+        if(intent.hasExtra("game_name")){
+            setTitle(intent.getStringExtra("game_name"));
+        }else{
+            setTitle(game_id);
+        }
         new RequestWebPage(this,"psngame",game_id,username);
     }
 
