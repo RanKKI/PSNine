@@ -27,16 +27,6 @@ public class UserStatus {
         isLogin = b;
     }
 
-    private static boolean isSignin = false;
-
-    public static boolean isSignin(){
-        return isSignin;
-    }
-
-    public static void isSignin(Boolean b){
-        isSignin = b;
-    }
-
 
     private static String username = "";
     private static String user_icon_url = "";
@@ -65,6 +55,9 @@ public class UserStatus {
     }
 
     public static void Check(String result){
+        if(result == null){
+            return;
+        }
         if(result.contains("个人主页")){
             isLogin(true);
             Document doc = Jsoup.parse(result);

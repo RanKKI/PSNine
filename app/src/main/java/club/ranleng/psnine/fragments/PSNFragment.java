@@ -125,7 +125,7 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
                 items.add(new Line());
             }
         }else if(type.contentEquals("msg")){
-            adapter.register(ArticleReply.class, new ArticleReplyAdapter(null));
+            adapter.register(ArticleReply.class, new ArticleReplyAdapter());
             for(Map<String, Object> map: result){
                 ArticleReply articleReply = new ArticleReply(map);
                 items.add(articleReply);

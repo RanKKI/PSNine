@@ -29,7 +29,7 @@ import me.drakeet.support.about.Line;
 import me.drakeet.support.about.LineViewBinder;
 
 public class GameTrophyTipsActivity extends BaseActivity
-        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,PSNGameTrophyAdapter.OnItemClickListener,ArticleReplyAdapter.OnItemClickListener{
+        implements RequestWebPageListener,SwipeRefreshLayout.OnRefreshListener,PSNGameTrophyAdapter.OnItemClickListener{
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
@@ -99,7 +99,7 @@ public class GameTrophyTipsActivity extends BaseActivity
         adapter.register(PSNGameTrophy.class, new PSNGameTrophyAdapter(null));
         adapter.register(Line.class,new LineViewBinder());
         adapter.register(Category.class, new CategoryViewBinder());
-        adapter.register(ArticleReply.class, new ArticleReplyAdapter(this));
+        adapter.register(ArticleReply.class, new ArticleReplyAdapter());
 
         Map<String, Object> header = result.get(0);
         items.add(new PSNGameTrophy(header));
@@ -115,11 +115,6 @@ public class GameTrophyTipsActivity extends BaseActivity
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override

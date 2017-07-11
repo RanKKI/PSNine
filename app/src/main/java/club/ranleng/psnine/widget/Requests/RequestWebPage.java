@@ -58,11 +58,15 @@ public class RequestWebPage {
         new Info().execute(url,"article",type);
     }
 
-    public RequestWebPage(RequestWebPageListener listener,String type,Boolean search, String key){
+    public RequestWebPage(RequestWebPageListener listener,String type,Boolean search, String key, String page){
         this.listener = listener;
         String url = (String) url_list.get(type);
-        url = url + "?ob="+ SettingActivity.PREF_OB + "&title=" + key;
-        LogUtils.d(url);
+        url = url + "?ob="+ SettingActivity.PREF_OB;
+        if(search){
+            url  += "&title=" + key;
+        }
+        url += "&page=" + page;
+
         new Info().execute(url, type);
     }
 
@@ -115,6 +119,9 @@ public class RequestWebPage {
                     return null;
                 }
                 result = response.body().string();
+                if(result == null){
+                    return null;
+                }
                 response.close();
             } catch (IOException e) {
                 e.printStackTrace();

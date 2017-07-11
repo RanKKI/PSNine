@@ -6,10 +6,7 @@
     <!--Tag id-->
     <item name="tag_pick_img_first" type="id"/>
     <item name="tag_pick_img_second" type="id"/>
-    <item name="tag_article_replies_id" type="id"/>
-    <item name="tag_article_replies_editable" type="id"/>
-    <item name="tag_article_replies_username" type="id"/>
-    <item name="tag_article_replies_content" type="id"/>
+
 
     <item name="tag_game_id" type="id"/>
     <item name="tag_game_name" type="id"/>
@@ -23,4 +20,10 @@
 
     <item name="tag_mutil_pages_id" type="id"/>
     <item name="tag_mutil_pages_name" type="id"/>
+
+    <item name="adapter_article_menu_reply" type="id"/>
+    <item name="adapter_article_menu_up" type="id"/>
+    <item name="adapter_article_menu_edit" type="id"/>
+    <item name="adapter_article_menu_user" type="id"/>
+
 </resources>

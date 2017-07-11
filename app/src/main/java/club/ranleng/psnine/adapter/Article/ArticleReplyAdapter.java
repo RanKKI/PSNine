@@ -2,9 +2,12 @@ package club.ranleng.psnine.adapter.Article;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleReply;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -23,9 +27,17 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 01/07/2017.
  */
 
-public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleReplyAdapter.ViewHolder> {
+public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleReplyAdapter.ViewHolder>{
 
+    private int position;
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     @NonNull
     @Override
@@ -36,29 +48,19 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleReply item) {
-        Map<String, Object> map = item.replies;
 
-        CmHtml.convert(holder.itemView.getContext(),holder.title,(String) map.get("title"));
-        holder.itemView.setTag(R.id.tag_article_replies_id, map.get("id"));
-        holder.itemView.setTag(R.id.tag_article_replies_editable, map.get("editable"));
-        holder.itemView.setTag(R.id.tag_article_replies_username, map.get("username"));
-        if((Boolean) map.get("editable")){
-            holder.itemView.setTag(R.id.tag_article_replies_content, map.get("title"));
-        }
-        holder.name.setText((String) map.get("username"));
-        holder.time.setText((String) map.get("time"));
-        Glide.with(holder.itemView.getContext()).load(map.get("icon")).into(holder.icon);
+        CmHtml.convert(holder.itemView.getContext(),holder.title,item.title);
+        holder.itemView.setTag(item.editable);
+        holder.name.setText(item.username);
+        holder.time.setText(item.time);
+        Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
 
     }
-    private OnItemClickListener clickListener;
-    public interface OnItemClickListener {
-        void onClick(View root);
-    }
-    public ArticleReplyAdapter(OnItemClickListener clickListener){
-        this.clickListener = clickListener;
-    }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnCreateContextMenuListener{
+
         @BindView(R.id.adapter_list_title) RecyclerView title;
         @BindView(R.id.adapter_list_name) TextView name;
         @BindView(R.id.adapter_list_time) TextView time;
@@ -68,14 +70,18 @@ public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleRep
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
+
         @Override
-        public void onClick(View v) {
-            if (clickListener != null) {
-                clickListener.onClick(itemView);
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            if(((Boolean) itemView.getTag())){
+                menu.add(getAdapterPosition(), R.id.adapter_article_menu_edit, 0, "修改");//groupId, itemId, order, title
             }
+            menu.add(getAdapterPosition(), R.id.adapter_article_menu_reply, 0, "回复");
+            menu.add(getAdapterPosition(), R.id.adapter_article_menu_up, 0, "顶");
+            menu.add(getAdapterPosition(), R.id.adapter_article_menu_user, 0, "查看用户");
         }
     }
 }

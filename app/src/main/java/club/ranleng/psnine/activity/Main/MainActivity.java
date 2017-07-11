@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,19 +42,16 @@ import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
-import club.ranleng.psnine.util.AndroidUtilCode.CrashUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.CrashHandler;
-import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.PhoneUtils;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.Requests.RequestGet;
-import club.ranleng.psnine.widget.Requests.checkUpdate;
 import club.ranleng.psnine.widget.UserStatus;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ArticleListFragment.FinishLoadListener{
+        implements NavigationView.OnNavigationItemSelectedListener, ArticleListFragment.FinishLoadListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -63,6 +59,7 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.main_fab) FloatingActionButton fab;
+
     private TextView nav_username;
     private ImageView nav_icon;
     private Context context;
@@ -91,17 +88,16 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         RequestClient.initOkhttpclient(this);
+        if (!UserStatus.isLogin()) {
+            fab.setVisibility(View.INVISIBLE);
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!UserStatus.isLogin()){
-                    MakeToast.plzlogin();
-                    return;
-                }
                 String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
-                if(current_tab.contentEquals("gene")){
+                if (current_tab.contentEquals("gene")) {
                     startActivity(new Intent(context, NewGeneActivity.class));
-                }else{
+                } else {
                     startActivity(new Intent(context, NewTopicActivity.class));
                 }
             }
@@ -109,9 +105,9 @@ public class MainActivity extends BaseActivity
         refresh_cache();
     }
 
-    private void refresh_cache(){
+    private void refresh_cache() {
         try {
-            navigationView.getMenu().findItem(R.id.nav_cache).setTitle("缓存 "+ PhoneUtils.getFormatSize(PhoneUtils.getFolderSize(getCacheDir().getAbsoluteFile())));
+            navigationView.getMenu().findItem(R.id.nav_cache).setTitle("缓存 " + PhoneUtils.getFormatSize(PhoneUtils.getFolderSize(getCacheDir().getAbsoluteFile())));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,12 +115,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void getData() {
-        new checkUpdate(this);
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
-        CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(this);
+//        CrashHandler crashHandler = new CrashHandler();
+//        crashHandler.init(this);
         final File file = new File(getFilesDir() + "/crash");
         if (file.exists()) {
             try {
@@ -133,7 +128,7 @@ public class MainActivity extends BaseActivity
 
                 int len = inputStream.read(bytes);
                 inputStream.close();
-                String content = new String(bytes,0,len);
+                String content = new String(bytes, 0, len);
                 TextView textView = new TextView(this);
                 textView.setTextSize(12);
                 textView.setText(content);
@@ -143,15 +138,7 @@ public class MainActivity extends BaseActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (file.delete()) {
-                                    MakeToast.str("已删除crash文件");
-                                }
-                            }
-                        })
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                if (file.delete()) {
-                                    MakeToast.str("已删除crash文件");
+                                    LogUtils.d("已删除crash文件");
                                 }
                             }
                         })
@@ -161,11 +148,8 @@ public class MainActivity extends BaseActivity
                 e.printStackTrace();
             }
         }
-        if(CrashUtils.init(new File(getCacheDir(),"crash.txt"))){
-            LogUtils.i("CrashUtils 初始化成功");
-        }else{
-            LogUtils.i("CrashUtils 初始化失败");
-        }
+
+
     }
 
     @Override
@@ -204,10 +188,10 @@ public class MainActivity extends BaseActivity
             public boolean onQueryTextSubmit(String query) {
                 // Toast like print
                 Intent intent = new Intent(context, SearchActivity.class);
-                intent.putExtra("key",query);
-                intent.putExtra("type",tabs_keys[tabLayout.getSelectedTabPosition()]);
+                intent.putExtra("key", query);
+                intent.putExtra("type", tabs_keys[tabLayout.getSelectedTabPosition()]);
                 startActivity(intent);
-                if(!searchView.isIconified()) {
+                if (!searchView.isIconified()) {
                     searchView.setIconified(true);
                 }
                 myActionMenuItem.collapseActionView();
@@ -230,30 +214,30 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if(id == R.id.nav_login){
+        if (id == R.id.nav_login) {
             startActivity(new Intent(this, LoginActivity.class));
-        }else if(id == R.id.nav_notice){
+        } else if (id == R.id.nav_notice) {
             startActivity(new Intent(this, NoticeActivity.class));
-        }else if(id == R.id.nav_photo){
+        } else if (id == R.id.nav_photo) {
             Intent intent = new Intent(this, PickImgActivity.class);
-            intent.putExtra("form_main",true);
+            intent.putExtra("form_main", true);
             startActivity(intent);
-        }else if(id == R.id.nav_personal){
+        } else if (id == R.id.nav_personal) {
             Intent intent = new Intent(this, PersonInfoActivity.class);
             intent.putExtra("psnid", UserStatus.getusername());
             startActivity(intent);
-        }else if(id == R.id.nav_about){
+        } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
-        }else if(id == R.id.nav_setting){
+        } else if (id == R.id.nav_setting) {
             startActivity(new Intent(this, SettingActivity.class));
-        }else if(id == R.id.nav_cache){
+        } else if (id == R.id.nav_cache) {
             AlertDialog b = new AlertDialog.Builder(context)
                     .setTitle("确定要清除缓存么")
                     .setMessage("清除缓存虽然可以减少手机空间的占用, 但下次加载的时候会耗费更多的流量")
                     .setPositiveButton("继续", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(PhoneUtils.deleteDir(getCacheDir())){
+                            if (PhoneUtils.deleteDir(getCacheDir())) {
                                 MakeToast.str("成功清除缓存");
                                 refresh_cache();
                             }
@@ -276,43 +260,43 @@ public class MainActivity extends BaseActivity
         Fragment f = new ArticleListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("type", i);
-        bundle.putBoolean("search",false);
+        bundle.putBoolean("search", false);
         f.setArguments(bundle);
         return f;
     }
 
-    private ArrayList<Integer> when_login = new ArrayList<Integer>(){{
+    private ArrayList<Integer> when_login = new ArrayList<Integer>() {{
         add(R.id.nav_notice);
         add(R.id.nav_photo);
         add(R.id.nav_personal);
     }};
 
-    private ArrayList<Integer> when_logout = new ArrayList<Integer>(){{
+    private ArrayList<Integer> when_logout = new ArrayList<Integer>() {{
         add(R.id.nav_login);
     }};
 
     @Override
     public void onFinish() {
-        if(!UserStatus.getdao()){
+        if (!UserStatus.getdao()) {
             new RequestGet().execute("dao");
             MakeToast.str("签到成功");
             UserStatus.setdao(true);
         }
         Menu menu = navigationView.getMenu();
-        if(UserStatus.isLogin()){
-            for(Integer i : when_login){
+        if (UserStatus.isLogin()) {
+            for (Integer i : when_login) {
                 menu.findItem(i).setVisible(true);
             }
-            for(Integer i : when_logout){
+            for (Integer i : when_logout) {
                 menu.findItem(i).setVisible(false);
             }
             nav_username.setText(UserStatus.getusername());
             Glide.with(this).load(UserStatus.getusericonurl()).into(nav_icon);
-        }else{
-            for(Integer i : when_logout){
+        } else {
+            for (Integer i : when_logout) {
                 menu.findItem(i).setVisible(true);
             }
-            for(Integer i : when_login){
+            for (Integer i : when_login) {
                 menu.findItem(i).setVisible(false);
             }
         }
