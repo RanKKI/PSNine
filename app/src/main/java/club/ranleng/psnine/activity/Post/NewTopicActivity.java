@@ -105,11 +105,6 @@ public class NewTopicActivity extends BaseActivity
     }
 
     @Override
-    public void showContent() {
-
-    }
-
-    @Override
     public void onClick(View v) {
         int id = v.getId();
 

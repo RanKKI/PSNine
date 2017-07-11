@@ -58,10 +58,6 @@ public class NoticeActivity extends BaseActivity
         new RequestWebPage(this,"notice");
     }
 
-    @Override
-    public void showContent() {
-
-    }
 
     @Override
     public void onRefresh() {

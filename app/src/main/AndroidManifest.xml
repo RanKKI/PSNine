@@ -54,8 +54,7 @@
         <activity android:name=".activity.Assist.PickImgActivity"/>
         <activity
             android:name=".activity.Main.PersonInfoActivity"
-            android:label="@string/title_activity_person_info"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_person_info"/>
         <activity android:name=".activity.Assist.SettingActivity"/>
         <activity android:name=".activity.Assist.SearchActivity"/>
         <activity

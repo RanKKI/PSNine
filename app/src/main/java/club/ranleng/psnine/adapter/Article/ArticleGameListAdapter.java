@@ -60,6 +60,11 @@ public class ArticleGameListAdapter  extends ItemViewBinder<ArticleGameList, Art
         holder.game_trophy.setText(spanned);
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.game_icon);
         holder.itemView.setTag(item.trophy_id);
+        if(item.is_comment){
+            holder.game_comment.setText(item.comment);
+        }else{
+            holder.game_comment.setVisibility(View.GONE);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -68,6 +73,7 @@ public class ArticleGameListAdapter  extends ItemViewBinder<ArticleGameList, Art
         @BindView(R.id.game_percent) TextView game_percent;
         @BindView(R.id.game_trophy) TextView game_trophy;
         @BindView(R.id.game_icon) ImageView game_icon;
+        @BindView(R.id.game_comment) TextView game_comment;
 
         ViewHolder(View itemView) {
             super(itemView);

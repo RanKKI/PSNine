@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class GameTrophyTipsActivity extends BaseActivity
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+
     private Context context;
 
     @Override
@@ -64,12 +67,8 @@ public class GameTrophyTipsActivity extends BaseActivity
         Intent intent = getIntent();
         String trophy_id = intent.getStringExtra("trophy_id");
         setTitle("奖杯: " + trophy_id);
+        setTitleColor(R.color.secondary_text);
         new RequestWebPage(this,"psngametrophytips",trophy_id,null);
-    }
-
-    @Override
-    public void showContent() {
-
     }
 
     @Override
@@ -106,7 +105,12 @@ public class GameTrophyTipsActivity extends BaseActivity
         result.remove(0);
         items.add(new Line());
 
-        items.add(new Category("奖杯TIPS"));
+        if(result.size() != 0){
+            items.add(new Category("奖杯TIPS"));
+        }else{
+            items.add(new Category("没有奖杯TIPS"));
+        }
+
         for(Map<String, Object> i : result){
             items.add(new ArticleReply(i));
             items.add(new Line());

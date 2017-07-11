@@ -15,6 +15,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Map;
 
+import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Post.ReplyActivity;
@@ -43,8 +44,7 @@ import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener, SwipeRefreshLayout.OnRefreshListener,
-        ArticleHeaderAdapter.OnItemClickListener, ArticleGameListAdapter.OnItemClickListener,
-        MutilPagesAdapter.OnPageChange {
+        ArticleGameListAdapter.OnItemClickListener, MutilPagesAdapter.OnPageChange,ReplyPostListener {
 
     private static Context context;
     private String type;
@@ -101,11 +101,6 @@ public class ArticleActivity extends BaseActivity
     }
 
     @Override
-    public void showContent() {
-
-    }
-
-    @Override
     public boolean onContextItemSelected(MenuItem item) {
         final ArticleReply articleReply = (ArticleReply) items.get(item.getGroupId());
         switch (item.getItemId()) {
@@ -144,8 +139,9 @@ public class ArticleActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_article, menu);
-        if (!UserStatus.isLogin()) {
-            menu.findItem(R.id.action_article_reply).setVisible(false);
+
+        if(type.contentEquals("gene")){
+            menu.findItem(R.id.action_artivle_up).setVisible(false);
         }
         return true;
     }
@@ -157,9 +153,19 @@ public class ArticleActivity extends BaseActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(!UserStatus.isLogin()){
+            MakeToast.plzlogin();
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_article_reply) {
             Replies();
+        } else if (id == R.id.action_artivle_fav) {
+            FormBody body = new FormBody.Builder().add("type",type).add("param",a_id).build();
+            new RequestPost(this,context,"fav",body);
+        } else if (id == R.id.action_artivle_up) {
+            FormBody body = new FormBody.Builder().add("type",type).add("param",a_id).add("updown","up").build();
+            new RequestPost(this,context,"updown",body);
         }
 
         return super.onOptionsItemSelected(item);
@@ -203,7 +209,7 @@ public class ArticleActivity extends BaseActivity
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(MutilPages.class, new MutilPagesAdapter(this));
         adapter.register(ArticleReply.class, new ArticleReplyAdapter());
-        adapter.register(ArticleHeader.class, new ArticleHeaderAdapter(this));
+        adapter.register(ArticleHeader.class, new ArticleHeaderAdapter());
         adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
 
 
@@ -220,7 +226,8 @@ public class ArticleActivity extends BaseActivity
         items.add(articleHeader);
 
         for (int i = 0; i < (int) result.get(0).get("img_size"); i++) {
-            items.add(new Image((String) result.get(0).get("img_" + String.valueOf(i))));
+            String url = (String) result.get(0).get("img_" + String.valueOf(i));
+            items.add(new Image(url));
             items.add(new Line());
         }
 
@@ -233,6 +240,7 @@ public class ArticleActivity extends BaseActivity
         for (Map<String, Object> map : game_list) {
             ArticleGameList articleGameList = new ArticleGameList(map);
             items.add(articleGameList);
+            items.add(new Line());
         }
 
         ArrayList<Map<String, Object>> replies_list = (ArrayList<Map<String, Object>>) result.get(1).get("list");
@@ -246,6 +254,7 @@ public class ArticleActivity extends BaseActivity
 
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
+
         if (max_pages != 1) {
             recyclerView.scrollToPosition(1);
         }
@@ -254,11 +263,6 @@ public class ArticleActivity extends BaseActivity
             form_reply = false;
         }
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onHeaderClick(View view) {
-//        TODO
     }
 
     @Override
@@ -294,5 +298,10 @@ public class ArticleActivity extends BaseActivity
             intent.putExtra("comment_id", comment_id);
         }
         startActivityForResult(intent, 100);
+    }
+
+    @Override
+    public void ReplyPostFinish() {
+        MakeToast.str("成功");
     }
 }

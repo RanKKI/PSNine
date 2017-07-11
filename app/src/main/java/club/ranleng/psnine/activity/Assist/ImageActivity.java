@@ -54,10 +54,7 @@ public class ImageActivity extends BaseActivity {
         Glide.with(this).load(getIntent().getStringExtra("url")).into(imageview);
     }
 
-    @Override
-    public void showContent() {
 
-    }
     private final class TouchListener implements View.OnTouchListener {
 
         /** 记录是拖拉照片模式还是放大缩小照片模式 */

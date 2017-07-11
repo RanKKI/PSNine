@@ -82,12 +82,6 @@ public class PickImgActivity extends BaseActivity
     }
 
     @Override
-    public void showContent() {
-
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_pickimg, menu);
 

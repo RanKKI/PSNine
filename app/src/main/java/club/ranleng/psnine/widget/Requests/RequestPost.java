@@ -31,7 +31,7 @@ public class RequestPost {
         //fav params
         //type
         //param
-        put("fav","http://psnine.com/set/fav/post");
+        put("fav","http://psnine.com/set/fav/ajax");
 
         //upforpsn params
         //no params
@@ -41,7 +41,7 @@ public class RequestPost {
         //type
         //param
         //updown
-        put("updown","http://psnine.com/set/updown/post");
+        put("updown","http://psnine.com/set/updown/ajax");
 
         //editreply params
         //type
@@ -129,6 +129,10 @@ public class RequestPost {
                     }
                 } else if (result == 404) {
                     MakeToast.str("发帖失败");
+                }
+            }else{
+                if(replyPostListener != null){
+                    replyPostListener.ReplyPostFinish();
                 }
             }
         }

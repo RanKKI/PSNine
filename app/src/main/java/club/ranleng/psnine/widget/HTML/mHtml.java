@@ -1,22 +1,33 @@
 package club.ranleng.psnine.widget.HTML;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.provider.Browser;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
+import android.text.ParcelableSpan;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.BulletSpan;
+import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
@@ -29,6 +40,10 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.text.style.UpdateAppearance;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import org.ccil.cowan.tagsoup.HTMLSchema;
 import org.ccil.cowan.tagsoup.Parser;
@@ -48,6 +63,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Assist.ImageActivity;
 import club.ranleng.psnine.activity.Main.ArticleActivity;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
@@ -136,6 +152,8 @@ class HtmlToSpannedConverter implements ContentHandler {
         sColorMap.put("green", 0xFF008000);
         sColorMap.put("deeppink",0xFFFF1493);
         sColorMap.put("orange",0xFFFFAB00);
+        sColorMap.put("lightblue",0xFFADD8E6);
+        sColorMap.put("brown",0xFFBC5C75);
     }
 
     private static Pattern getTextAlignPattern() {
@@ -423,7 +441,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void startTbody(Editable text, Attributes attributes){
-        start(text, new Background(0xFF008000)); //ababababa
+        start(text, new Background(0xFF008000));
     }
 
     private void endTbody(Editable text){
@@ -537,7 +555,7 @@ class HtmlToSpannedConverter implements ContentHandler {
 
         if(classs != null){
             if(classs.equals("mark")){
-                start(text, new Background(0xFFA9A9A9));
+                start(text, new Background(0xFF999999));
             }
         }
     }
@@ -551,10 +569,12 @@ class HtmlToSpannedConverter implements ContentHandler {
         if (b != null) {
             setSpanFromMark(text, b, new BackgroundColorSpan(b.mBackgroundColor));
         }
+
         Foreground f = getLast(text, Foreground.class);
         if (f != null) {
             setSpanFromMark(text, f, new ForegroundColorSpan(f.mForegroundColor));
         }
+
     }
 
     private static void startImg(Editable text, Attributes attributes, Html.ImageGetter img) {
@@ -756,6 +776,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private static class Background {
+
         private int mBackgroundColor;
 
         public Background(int backgroundColor) {

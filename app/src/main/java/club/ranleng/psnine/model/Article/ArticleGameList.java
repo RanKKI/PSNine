@@ -17,6 +17,8 @@ public class ArticleGameList {
     public final String trophy;
     public final String icon;
     public final String trophy_id;
+    public final Boolean is_comment;
+    public final String comment;
 
     public ArticleGameList(@NonNull Map<String, Object> map) {
 
@@ -37,6 +39,8 @@ public class ArticleGameList {
                 .replace("</em>","</font>");
 
         this.icon = (String) map.get("game_icon");
+        this.is_comment = (Boolean) map.get("is_comment");
+        this.comment = (String) map.get("comment");
 
     }
 }

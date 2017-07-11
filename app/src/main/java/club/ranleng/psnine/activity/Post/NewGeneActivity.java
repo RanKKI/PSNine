@@ -79,11 +79,6 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    @Override
-    public void showContent() {
-
-    }
-
     private void putAllData(){
         putData("content",TextUtils.toS(main_edit));
         putData("element",TextUtils.toS(ele));

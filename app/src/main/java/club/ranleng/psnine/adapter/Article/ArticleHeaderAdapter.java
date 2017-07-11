@@ -27,12 +27,6 @@ import me.drakeet.multitype.ItemViewBinder;
 
 public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleHeaderAdapter.ViewHolder> {
 
-    private OnItemClickListener clickListener;
-
-    public ArticleHeaderAdapter(OnItemClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -54,12 +48,7 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
         }
     }
 
-    public interface OnItemClickListener {
-        void onHeaderClick(View view);
-    }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.header_content) RecyclerView content;
         @BindView(R.id.header_time) TextView time;
         @BindView(R.id.header_replies) TextView replies;
@@ -69,14 +58,6 @@ public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleH
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (clickListener != null) {
-                clickListener.onHeaderClick(itemView);
-            }
         }
     }
 }

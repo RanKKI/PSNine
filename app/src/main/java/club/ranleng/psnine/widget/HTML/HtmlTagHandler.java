@@ -44,7 +44,9 @@ public class HtmlTagHandler implements mHtml.TagHandler {
             }
 
         }
+
     }
+
 
     public class ClickableImage extends ClickableSpan {
 
@@ -58,7 +60,6 @@ public class HtmlTagHandler implements mHtml.TagHandler {
 
         @Override
         public void onClick(View widget) {
-            ;
             Intent intent = new Intent(context, ImageActivity.class);
             intent.putExtra("url", url);
             context.startActivity(intent);

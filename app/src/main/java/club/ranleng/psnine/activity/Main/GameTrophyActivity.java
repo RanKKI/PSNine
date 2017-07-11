@@ -77,10 +77,6 @@ public class GameTrophyActivity extends BaseActivity
         new RequestWebPage(this,"psngame",game_id,username);
     }
 
-    @Override
-    public void showContent() {
-
-    }
 
     @Override
     public void onRefresh() {

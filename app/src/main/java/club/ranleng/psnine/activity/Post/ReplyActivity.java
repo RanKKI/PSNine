@@ -29,6 +29,7 @@ import club.ranleng.psnine.fragments.EmojiDialogFragment;
 import club.ranleng.psnine.util.AndroidUtilCode.KeyboardUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.TextUtils;
+import club.ranleng.psnine.widget.EmojiUrlToStr;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import okhttp3.FormBody;
 
@@ -215,29 +216,33 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
             }
         }
         if (getIntent().hasExtra("content")) {
+
+            EmojiUrlToStr emojiUrlToStr = new EmojiUrlToStr();
             edit = true;
             comment_id = getIntent().getStringExtra("comment_id");
             String content = getIntent().getStringExtra("content");
+            content = content.replace("\n","").replace("\r","");
             content = content.replace("&nbsp;", " ").replace("<br>", "\n");
             String pattern = "<a href=\"http://psnine.com/psnid/.*\">(@.*)</a>";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(content);
 
-            if (m.find()) {
-                content = content.replace(m.group(0), m.group(1));
+            while (m.find()) {
+                content = content.replace(m.group(0), m.group(1).replace("\n","").replace("\r",""));
             }
 
+            pattern = "<img src=\"http://photo.psnine.com/face/(.*?).gif\">";
+            r = Pattern.compile(pattern);
+            m = r.matcher(content);
+            while (m.find()) {
+                content = content.replace(m.group(0), emojiUrlToStr.convert(m.group(1)));
+            }
             editText.append(content);
             original_content = content;
         }
         if (getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null) {
             editText.append(String.format("@%s ", getIntent().getStringExtra("username")));
         }
-    }
-
-    @Override
-    public void showContent() {
-
     }
 
     @Override

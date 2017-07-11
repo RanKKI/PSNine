@@ -50,11 +50,6 @@ public class LoginActivity extends BaseActivity implements LoginListener{
     }
 
     @Override
-    public void showContent() {
-
-    }
-
-    @Override
     protected void onStop(){
         super.onStop();
         unbinder.unbind();

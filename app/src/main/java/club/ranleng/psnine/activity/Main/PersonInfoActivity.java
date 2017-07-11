@@ -31,6 +31,7 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.PSNFragment;
 import club.ranleng.psnine.util.FastBlurUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestGet;
 
 import static android.R.attr.bitmap;
@@ -64,6 +65,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
         }
         fab.setOnClickListener(this);
         requestGet = new RequestGet();
+        toolbar.setTitleTextColor(getResources().getColor(R.color.cardview_light_background));
     }
 
     @Override
@@ -72,10 +74,9 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
         psnid = getIntent().getStringExtra("psnid");
         setTitle(psnid.toUpperCase());
         // Load personal background image
-
+        showContent();
     }
 
-    @Override
     public void showContent() {
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
         fl.add(add("psngame"));
@@ -123,6 +124,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
         builder.create().show();
     }
 
+
     @Override
     public void onFinish(Map<String, Object> results) {
         Glide.with(this).load(results.get("bgurl"))
@@ -131,16 +133,15 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 int scaleRatio = 4;
                 int blurRadius = 30;
+
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(resource,
                         resource.getWidth() / scaleRatio,
                         resource.getHeight() / scaleRatio,
                         false);
                 Bitmap blurBitmap = FastBlurUtils.doBlur(scaledBitmap, blurRadius, true);
                 bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                LogUtils.d(blurBitmap.getWidth());
-                LogUtils.d(blurBitmap.getHeight());
-//                blurBitmap.setPixel(200,200,getResources().getColor(R.color.cardview_light_background));
-                bg.setImageBitmap(blurBitmap);
+                bg.setImageBitmap(resource);
+//                bg.setImageBitmap(blurBitmap);
             }
         });
 

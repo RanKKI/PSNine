@@ -44,6 +44,7 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
+import club.ranleng.psnine.util.CrashHandler;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.PhoneUtils;
 import club.ranleng.psnine.widget.Requests.RequestClient;
@@ -88,12 +89,13 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         RequestClient.initOkhttpclient(this);
-        if (!UserStatus.isLogin()) {
-            fab.setVisibility(View.INVISIBLE);
-        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!UserStatus.isLogin()) {
+                    MakeToast.plzlogin();
+                    return;
+                }
                 String current_tab = tabs_keys[tabLayout.getSelectedTabPosition()];
                 if (current_tab.contentEquals("gene")) {
                     startActivity(new Intent(context, NewGeneActivity.class));
@@ -118,8 +120,8 @@ public class MainActivity extends BaseActivity
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         SettingActivity.initSetting(this);
         Utils.init(this);
-//        CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(this);
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(this);
         final File file = new File(getFilesDir() + "/crash");
         if (file.exists()) {
             try {
@@ -149,11 +151,6 @@ public class MainActivity extends BaseActivity
             }
         }
 
-
-    }
-
-    @Override
-    public void showContent() {
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
         fl.add(setup("gene"));
         fl.add(setup("topic"));
@@ -164,6 +161,7 @@ public class MainActivity extends BaseActivity
             viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
         }
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
+
     }
 
     @Override
@@ -251,6 +249,12 @@ public class MainActivity extends BaseActivity
                     }).create();
             b.show();
         }
+//        else if(id == R.id.back_door){
+//            Intent intent = new Intent(context, ArticleActivity.class);
+//            intent.putExtra("id","10422");
+//            intent.putExtra("type","topic");
+//            startActivity(intent);
+//        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -401,6 +401,7 @@ public class ParseWebpage {
                 String game_mode = i.select("td.twoge").select("span").text();
                 String game_percent = i.select("td.twoge").select("em").text();
                 String game_trophy = i.select("td.pd10").select("div.meta").html();
+                Elements game_comment = i.select("td.pd10").select("blockquote");
 
                 map.put("game_icon", game_icon);
                 map.put("game_name", game_name);
@@ -408,6 +409,10 @@ public class ParseWebpage {
                 map.put("game_percent", game_percent);
                 map.put("game_trophy", game_trophy);
                 map.put("trophy_id",game_id);
+                map.put("is_comment",game_comment.hasText());
+                if(game_comment.hasText()){
+                    map.put("comment",game_comment.text());
+                }
                 listItems.add(map);
             }
         }
@@ -457,7 +462,10 @@ public class ParseWebpage {
             if (user_info.size() != 1) {
                 map.put("first_trophy", user_info.get(1).ownText());
                 map.put("last_trophy", user_info.get(2).ownText());
-                map.put("total_time", user_info.get(3).ownText());
+                if(user_info.size() > 3){
+                    map.put("total_time", user_info.get(3).ownText());
+                }
+
             }
             listItems.add(map);
         }

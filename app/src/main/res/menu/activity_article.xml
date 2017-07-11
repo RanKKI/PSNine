@@ -3,9 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_artivle_up"
+        android:title="顶"/>
+    <item
+        android:id="@+id/action_artivle_fav"
+        android:title="收藏"/>
+
+    <item
         android:id="@+id/action_article_reply"
-        android:title="Reply"
-        android:icon="@drawable/pen"
-        app:showAsAction="ifRoom" />
+        android:title="回复" />
 
 </menu>
