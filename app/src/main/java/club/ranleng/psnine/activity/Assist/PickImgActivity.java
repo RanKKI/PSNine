@@ -78,7 +78,7 @@ public class PickImgActivity extends BaseActivity
         if(getIntent().hasExtra("list")){
             photo_list = getIntent().getStringArrayListExtra("list");
         }
-        new RequestWebPage("photo",this);
+        new RequestWebPage(this,"photo");
     }
 
     @Override

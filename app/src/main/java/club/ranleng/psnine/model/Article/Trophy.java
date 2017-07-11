@@ -29,6 +29,7 @@ public class Trophy{
     public final String user_comment;
     public final String time;
     public final String has_comment;
+    public final String trophy_id;
 
     public Trophy(Map<String, String> map) {
         this.game_icon_url = map.get("game_icon_url");
@@ -38,7 +39,7 @@ public class Trophy{
         this.user_comment = map.get("user_comment");
         this.time = map.get("time");
         this.has_comment = map.get("has_comment");
-
+        this.trophy_id = map.get("trophy_id");
     }
 
 

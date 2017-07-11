@@ -37,7 +37,7 @@ public class RequestWebPage {
         add("guide");
     }};
 
-    public RequestWebPage(String type,RequestWebPageListener listener){
+    public RequestWebPage(RequestWebPageListener listener,String type){
         this.listener = listener;
         String url = (String) url_list.get(type);
         url = url + "?ob="+ SettingActivity.PREF_OB;
@@ -72,7 +72,7 @@ public class RequestWebPage {
 
     public RequestWebPage(RequestWebPageListener listener,String type,String id,String username){
         this.listener = listener;
-        String url = "";
+        String url;
         if(type.contentEquals("personal")){
             url = String.format("http://psnine.com/psnid/%s",id);
             if(username.contentEquals("psngame")){

@@ -18,12 +18,8 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.ImageActivity;
 import club.ranleng.psnine.model.Article.ArticleHeader;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.AndroidUtilCode.ScreenUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
-
-import static android.text.Html.fromHtml;
 
 /**
  * Created by ran on 01/07/2017.
@@ -31,70 +27,54 @@ import static android.text.Html.fromHtml;
 
 public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleHeaderAdapter.ViewHolder> {
 
-    public ArticleHeaderAdapter (OnItemClickListener clickListener){
+    private OnItemClickListener clickListener;
+
+    public ArticleHeaderAdapter(OnItemClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        View view = inflater.inflate(R.layout.adapter_article_header,parent,false);
+        View view = inflater.inflate(R.layout.adapter_article_header, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
 
-        //设置
-        final Context context = holder.itemView.getContext();
-        CmHtml.convert(context,holder.content,item.content);
-        holder.time.setText(item.time);
-        holder.replies.setText(item.replies);
-        holder.username.setText(item.username);
-        Glide.with(context).load(item.icon).into(holder.icon);
-        holder.itemView.setTag(R.id.tag_header_editable,item.editable);
-        if(holder.imgs_layout.getTag(R.id.tag_header_imgs) == null){
-            holder.imgs_layout.setTag(R.id.tag_header_imgs,"");
-            for(final String i : item.img){
-                ImageView imageView = new ImageView(context);
-                Glide.with(context).load(i).into(imageView);
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, ImageActivity.class);
-                        intent.putExtra("url",i);
-                        context.startActivity(intent);
-                    }
-                });
-                holder.imgs_layout.addView(imageView);
-            }
+        if (holder.itemView.getTag() == null) {
+            final Context context = holder.itemView.getContext();
+            CmHtml.convert(context, holder.content, item.content);
+            holder.time.setText(item.time);
+            holder.replies.setText(item.replies);
+            holder.username.setText(item.username);
+            Glide.with(context).load(item.icon).into(holder.icon);
+            holder.itemView.setTag("");
         }
     }
 
-    private OnItemClickListener clickListener;
     public interface OnItemClickListener {
         void onHeaderClick(View view);
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.header_content) RecyclerView content;
         @BindView(R.id.header_time) TextView time;
         @BindView(R.id.header_replies) TextView replies;
         @BindView(R.id.header_username) TextView username;
         @BindView(R.id.header_icon) ImageView icon;
-        @BindView(R.id.article_header_dot) ImageView dot;
-        @BindView(R.id.header_images_layout) LinearLayout imgs_layout;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            dot.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onHeaderClick(itemView);
             }
         }

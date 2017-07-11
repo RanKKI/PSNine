@@ -526,6 +526,7 @@ public class ParseWebpage {
         map.put("game_icon_url", doc.select("img.imgbgnb").attr("src"));
         map.put("game_name", doc.select("div.ml64").select("a").first().ownText());
         map.put("game_des", doc.select("div.ml64").select("span").first().ownText());
+        map.put("trophy_id",doc.select("a").first().attr("href").replace("http://psnine.com/trophy/",""));
         Elements root = doc.select("div.box.pd10.mt10");
         if (root.isEmpty() || root == null) {
             map.put("has_comment", "false");

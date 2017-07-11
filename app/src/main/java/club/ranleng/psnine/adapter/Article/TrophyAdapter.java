@@ -1,6 +1,7 @@
 package club.ranleng.psnine.adapter.Article;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Main.GameTrophyTipsActivity;
 import club.ranleng.psnine.model.Article.Trophy;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
@@ -33,8 +35,8 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Trophy item) {
-        Context context = holder.itemView.getContext();
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Trophy item) {
+        final Context context = holder.itemView.getContext();
         Glide.with(context).load(item.game_icon_url).into(holder.game_icon);
         holder.game_name.setText(item.game_name);
         holder.game_des.setText(item.game_des);
@@ -45,6 +47,14 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
         }else{
             holder.root.setVisibility(View.GONE);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, GameTrophyTipsActivity.class);
+                intent.putExtra("trophy_id",item.trophy_id);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

@@ -55,7 +55,7 @@ public class NoticeActivity extends BaseActivity
 
     @Override
     public void getData() {
-        new RequestWebPage("notice",this);
+        new RequestWebPage(this,"notice");
     }
 
     @Override

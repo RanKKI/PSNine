@@ -16,8 +16,6 @@ public class ArticleHeader {
     public final String replies;
     public final String original;
     public final Boolean editable;
-    public final ArrayList<String> img = new ArrayList<>();
-    public final ArrayList<String> pages = new ArrayList<>();
 
     public ArticleHeader(@NonNull Map<String, Object> map) {
         this.title = (String) map.get("title");
@@ -28,14 +26,6 @@ public class ArticleHeader {
         this.replies = (String) map.get("replies");
         this.editable = (Boolean) map.get("editable");
         this.original = (String) map.get("original");
-        for (int i = 0; i < (int) map.get("img_size"); i++) {
-            img.add((String) map.get("img_" + String.valueOf(i)));
-        }
-
-        for (int i = 1; i < (int) map.get("page_size"); i++) {
-            pages.add((String) map.get("page_" + String.valueOf(i + 1)));
-        }
-
     }
 
 }
