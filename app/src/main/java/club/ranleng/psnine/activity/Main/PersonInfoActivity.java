@@ -1,13 +1,16 @@
 package club.ranleng.psnine.activity.Main;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +33,8 @@ import club.ranleng.psnine.util.FastBlurUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.Requests.RequestGet;
 
+import static android.R.attr.bitmap;
+
 public class PersonInfoActivity extends BaseActivity implements FloatingActionButton.OnClickListener, PSNFragment.FinishLoadListener{
 
     @BindView(R.id.personal_bg) ImageView bg;
@@ -39,6 +44,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
     @BindView(R.id.tabs) TabLayout tabs;
     private RequestGet requestGet;
     private String psnid;
+    private Context context;
 
     @Override
     public void setContentView() {
@@ -62,6 +68,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
 
     @Override
     public void getData() {
+        context = this;
         psnid = getIntent().getStringExtra("psnid");
         setTitle(psnid.toUpperCase());
         // Load personal background image
@@ -130,6 +137,9 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
                         false);
                 Bitmap blurBitmap = FastBlurUtils.doBlur(scaledBitmap, blurRadius, true);
                 bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                LogUtils.d(blurBitmap.getWidth());
+                LogUtils.d(blurBitmap.getHeight());
+//                blurBitmap.setPixel(200,200,getResources().getColor(R.color.cardview_light_background));
                 bg.setImageBitmap(blurBitmap);
             }
         });
