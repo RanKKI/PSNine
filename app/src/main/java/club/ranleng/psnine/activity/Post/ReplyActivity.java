@@ -2,7 +2,10 @@ package club.ranleng.psnine.activity.Post;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,23 +16,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
-import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.EmojiDialogFragment;
 import club.ranleng.psnine.util.AndroidUtilCode.KeyboardUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.TextUtils;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import okhttp3.FormBody;
 
-public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.EmojiDialogListener,ReplyPostListener{
+public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.EmojiDialogListener, ReplyPostListener {
 
     @BindView(R.id.reply_activity_button) Button reply_button;
     @BindView(R.id.reply_activity_edittext) EditText editText;
@@ -40,6 +43,7 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     private String a_id;
     private String comment_id;
     private Boolean edit = false;
+    private String original_content;
 
     @Override
     public void setContentView() {
@@ -58,22 +62,22 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
         reply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(edit){
+                if (edit) {
                     FormBody body = new FormBody.Builder()
-                            .add("type","comment")
-                            .add("id",comment_id)
-                            .add("content",editText.getText().toString())
+                            .add("type", "comment")
+                            .add("id", comment_id)
+                            .add("content", editText.getText().toString())
                             .build();
-                    new RequestPost(ReplyActivity.this,context,"editreply",body);
-                }else{
+                    new RequestPost(ReplyActivity.this, context, "editreply", body);
+                } else {
                     FormBody body = new FormBody.Builder()
-                            .add("type",type)
-                            .add("param",a_id)
-                            .add("old","yes")
-                            .add("com","")
-                            .add("content",editText.getText().toString())
+                            .add("type", type)
+                            .add("param", a_id)
+                            .add("old", "yes")
+                            .add("com", "")
+                            .add("content", editText.getText().toString())
                             .build();
-                    new RequestPost(ReplyActivity.this,context,"reply",body);
+                    new RequestPost(ReplyActivity.this, context, "reply", body);
                 }
 
 
@@ -84,14 +88,14 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
             @Override
             public void onClick(View v) {
                 EmojiDialogFragment a = new EmojiDialogFragment();
-                a.show(getSupportFragmentManager(),"reply_emoji");
+                a.show(getSupportFragmentManager(), "reply_emoji");
             }
         });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(context, PickImgActivity.class),1);
+                startActivityForResult(new Intent(context, PickImgActivity.class), 1);
             }
         });
 
@@ -105,9 +109,9 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 10){
-            for(String i : data.getExtras().getStringArrayList("result")){
-                editText.append(String.format("[img]%s[/img]\n",i));
+        if (resultCode == 10) {
+            for (String i : data.getExtras().getStringArrayList("result")) {
+                editText.append(String.format("[img]%s[/img]\n", i));
             }
         }
     }
@@ -121,26 +125,60 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
-            if(SettingActivity.PREF_SAVE_TEMP_REPLY){
-                if(!TextUtils.toS(editText).equals("")){
-                    save();
-                }
-            }
+            askForSave();
+            return true;
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            askForSave();
+        }
+
+        return false;
+
+    }
+
+    private void askForSave() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("是否保存成草稿 (下次打开时自动加载")
+                .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        save();
+                        finish();
+                    }
+                }).setNegativeButton("不保存", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(getFilesDir() + "/" + String.valueOf(a_id));
+                        if(file.exists()){
+                            if(file.delete()){
+
+                            }
+                        }
+                        finish();
+                    }
+                }).create();
+        if (!TextUtils.toS(editText).equals("")) {
+            alertDialog.show();
+        }else{
+            finish();
+        }
     }
 
     private void save() {
 
         String content = editText.getText().toString();
         try {
-            FileOutputStream outputStream = openFileOutput("tempreply",
+            FileOutputStream outputStream = openFileOutput(String.valueOf(a_id),
                     Activity.MODE_PRIVATE);
             outputStream.write(content.getBytes());
             outputStream.flush();
             outputStream.close();
-            MakeToast.str("已保存为草稿");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,12 +187,12 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
 
     private void read() {
         try {
-            FileInputStream inputStream = this.openFileInput("tempreply");
+            FileInputStream inputStream = this.openFileInput(String.valueOf(a_id));
             byte[] bytes = new byte[1024];
 
             int len = inputStream.read(bytes);
             inputStream.close();
-            String content = new String(bytes,0,len);
+            String content = new String(bytes, 0, len);
             editText.append(content);
             editText.setSelection(editText.length());
 
@@ -169,22 +207,31 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     public void getData() {
         type = getIntent().getStringExtra("type");
         a_id = getIntent().getStringExtra("id");
-        if(SettingActivity.PREF_SAVE_TEMP_REPLY) {
-            File file = new File(getFilesDir() + "/tempreply");
-            if (file.exists()) {
-                read();
-                if (file.delete()) {
-                    LogUtils.d("已删除tempreply");
-                }
+        File file = new File(getFilesDir() + "/" + String.valueOf(a_id));
+        if (file.exists()) {
+            read();
+            if (file.delete()) {
+                LogUtils.d("已删除tempreply");
             }
         }
-        if(getIntent().hasExtra("content")){
+        if (getIntent().hasExtra("content")) {
             edit = true;
             comment_id = getIntent().getStringExtra("comment_id");
-            editText.append(getIntent().getStringExtra("content"));
+            String content = getIntent().getStringExtra("content");
+            content = content.replace("&nbsp;", " ").replace("<br>", "\n");
+            String pattern = "<a href=\"http://psnine.com/psnid/.*\">(@.*)</a>";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(content);
+
+            if (m.find()) {
+                content = content.replace(m.group(0), m.group(1));
+            }
+
+            editText.append(content);
+            original_content = content;
         }
-        if(getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null){
-            editText.append(String.format("@%s ",getIntent().getStringExtra("username")));
+        if (getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null) {
+            editText.append(String.format("@%s ", getIntent().getStringExtra("username")));
         }
     }
 
@@ -195,7 +242,7 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
 
     @Override
     public void onSelected(String name) {
-        editText.append(String.format("[%s]",name));
+        editText.append(String.format("[%s]", name));
     }
 
     @Override

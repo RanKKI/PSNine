@@ -21,12 +21,14 @@ import club.ranleng.psnine.activity.Post.ReplyActivity;
 import club.ranleng.psnine.adapter.Article.ArticleGameListAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleHeaderAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
+import club.ranleng.psnine.adapter.Common.ImageAdapter;
 import club.ranleng.psnine.adapter.Common.MutilPagesAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Article.MutilPages;
+import club.ranleng.psnine.model.Common.Image;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
@@ -44,25 +46,26 @@ public class ArticleActivity extends BaseActivity
         ArticleHeaderAdapter.OnItemClickListener, ArticleGameListAdapter.OnItemClickListener,
         MutilPagesAdapter.OnPageChange {
 
+    private static Context context;
     private String type;
     private String a_id;
+    private int current_page = 1;
+    private int max_pages = 1;
+    private Boolean form_reply = false;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Boolean form_reply = false;
-    private static Context context;
-    private int current_page = 1;
-    private int max_pages = 1;
     private Items items;
+    private LinearLayoutManager mLayoutManager;
+
+    public static Context getContext() {
+        return context;
+    }
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_article);
         context = this;
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class ArticleActivity extends BaseActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         swipeRefreshLayout.setOnRefreshListener(this);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
+        mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         registerForContextMenu(recyclerView);
@@ -196,6 +199,7 @@ public class ArticleActivity extends BaseActivity
         items = new Items();
 
         adapter.register(Line.class, new LineViewBinder());
+        adapter.register(Image.class, new ImageAdapter());
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(MutilPages.class, new MutilPagesAdapter(this));
         adapter.register(ArticleReply.class, new ArticleReplyAdapter());
@@ -214,6 +218,11 @@ public class ArticleActivity extends BaseActivity
         }
         items.add(new Line());
         items.add(articleHeader);
+
+        for (int i = 0; i < (int) result.get(0).get("img_size"); i++) {
+            items.add(new Image((String) result.get(0).get("img_" + String.valueOf(i))));
+            items.add(new Line());
+        }
 
 
         ArrayList<Map<String, Object>> game_list = (ArrayList<Map<String, Object>>) result.get(2).get("gamelist");
@@ -241,7 +250,7 @@ public class ArticleActivity extends BaseActivity
             recyclerView.scrollToPosition(1);
         }
         if (form_reply) {
-            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            recyclerView.scrollToPosition(mLayoutManager.findLastVisibleItemPosition());
             form_reply = false;
         }
         swipeRefreshLayout.setRefreshing(false);

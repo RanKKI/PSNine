@@ -54,14 +54,6 @@
                 android:layout_weight="4"
                 android:textColor="#CCCCCE"/>
 
-            <ImageView
-                android:id="@+id/article_header_dot"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_weight="2"
-                app:srcCompat="@drawable/dot_selector"/>
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -75,22 +67,5 @@
 
     </RelativeLayout>
 
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:srcCompat="@android:color/darker_gray" />
-
-    <LinearLayout
-        android:id="@+id/header_images_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="3dp"
-        android:orientation="vertical">
-
-    </LinearLayout>
 
 </LinearLayout>
