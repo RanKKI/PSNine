@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
-import club.ranleng.psnine.activity.Assist.SettingActivity;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.widget.ParseWebpage;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -18,83 +17,83 @@ import static club.ranleng.psnine.widget.Requests.RequestClient.okhttpclient;
 public class RequestWebPage {
 
     private RequestWebPageListener listener;
-    private HashMap url_list = new HashMap<String,String>(){{
-        put("gene","http://psnine.com/gene");
-        put("topic","http://psnine.com/topic");
-        put("plus","http://psnine.com/node/plus");
-        put("news","http://psnine.com/news");
-        put("openbox","http://psnine.com/node/openbox");
-        put("guide","http://psnine.com/node/guide");
+    private HashMap url_list = new HashMap<String, String>() {{
+        put("gene", "http://psnine.com/gene");
+        put("topic", "http://psnine.com/topic");
+        put("plus", "http://psnine.com/node/plus");
+        put("news", "http://psnine.com/news");
+        put("openbox", "http://psnine.com/node/openbox");
+        put("guide", "http://psnine.com/node/guide");
 
-        put("notice","http://psnine.com/my/notice");
-        put("photo","http://psnine.com/my/photo");
+        put("notice", "http://psnine.com/my/notice");
+        put("photo", "http://psnine.com/my/photo");
     }};
 
-    private ArrayList<String> normaltype = new ArrayList<String>(){{
+    private ArrayList<String> normaltype = new ArrayList<String>() {{
         add("topic");
         add("plus");
         add("openbox");
         add("guide");
     }};
 
-    public RequestWebPage(RequestWebPageListener listener,String type){
+    public RequestWebPage(RequestWebPageListener listener, String type) {
         this.listener = listener;
         String url = (String) url_list.get(type);
-        url = url + "?ob="+ SettingActivity.PREF_OB;
+        url = url + "?ob=" + KEY.PREF_OB;
         new Info().execute(url, type);
     }
 
-    public RequestWebPage(RequestWebPageListener listener,String type,String id,Boolean mutil, String page){
+    public RequestWebPage(RequestWebPageListener listener, String type, String id, Boolean mutil, String page) {
         this.listener = listener;
         String url;
         if (type.contentEquals("gene")) {
-            url = "http://psnine.com/gene/" + id ;
-        }else {
-            url = "http://psnine.com/topic/" + id ;
+            url = "http://psnine.com/gene/" + id;
+        } else {
+            url = "http://psnine.com/topic/" + id;
         }
-        if(mutil){
+        if (mutil) {
             url = url + "?page=" + page;
         }
-        new Info().execute(url,"article",type);
+        new Info().execute(url, "article", type);
     }
 
-    public RequestWebPage(RequestWebPageListener listener,String type,Boolean search, String key, String page){
+    public RequestWebPage(RequestWebPageListener listener, String type, Boolean search, String key, String page) {
         this.listener = listener;
         String url = (String) url_list.get(type);
-        url = url + "?ob="+ SettingActivity.PREF_OB;
-        if(search){
-            url  += "&title=" + key;
+        url = url + "?ob=" + KEY.PREF_OB;
+        if (search) {
+            url += "&title=" + key;
         }
         url += "&page=" + page;
 
         new Info().execute(url, type);
     }
 
-    public RequestWebPage(RequestWebPageListener listener,String type,String id,String username){
+    public RequestWebPage(RequestWebPageListener listener, String type, String id, String username) {
         this.listener = listener;
         String url;
-        if(type.contentEquals("personal")){
-            url = String.format("http://psnine.com/psnid/%s",id);
-            if(username.contentEquals("psngame")){
+        if (type.contentEquals("personal")) {
+            url = String.format("http://psnine.com/psnid/%s", id);
+            if (username.contentEquals("psngame")) {
                 url += "/";
-            }else if(username.contentEquals("msg")){
+            } else if (username.contentEquals("msg")) {
                 url += "/comment";
-            }else if(username.contentEquals("topic")){
+            } else if (username.contentEquals("topic")) {
                 url += "/topic";
-            }else if(username.contentEquals("gene")){
+            } else if (username.contentEquals("gene")) {
                 url += "/gene";
             }
-            new Info().execute(url,"personal",username);
-        }else if(type.contentEquals("psngame")){
-            url = "http://psnine.com/psngame/" + id ;
-            if(username != null){
+            new Info().execute(url, "personal", username);
+        } else if (type.contentEquals("psngame")) {
+            url = "http://psnine.com/psngame/" + id;
+            if (username != null) {
                 url = url + "?psnid=" + username;
             }
-            new Info().execute(url,type);
+            new Info().execute(url, type);
 
-        }else if(type.contentEquals("psngametrophytips")){
-            url = "http://psnine.com/trophy/" + id ;
-            new Info().execute(url,type);
+        } else if (type.contentEquals("psngametrophytips")) {
+            url = "http://psnine.com/trophy/" + id;
+            new Info().execute(url, type);
         }
 
 
@@ -115,11 +114,11 @@ public class RequestWebPage {
 
             try {
                 okhttp3.Response response = okhttpclient.newCall(build).execute();
-                if(response.code() == 404){
+                if (response.code() == 404) {
                     return null;
                 }
                 result = response.body().string();
-                if(result == null){
+                if (result == null) {
                     return null;
                 }
                 response.close();
@@ -127,14 +126,14 @@ public class RequestWebPage {
                 e.printStackTrace();
             }
             UserStatus.Check(result);
-            switch (params[1]){
+            switch (params[1]) {
                 case "gene":
                     return ParseWebpage.parseGene(result);
                 case "notice":
                     return ParseWebpage.parseNotice(result);
                 case "article":
                     ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-                    listItems.add(ParseWebpage.parseTopciBody(result,!normaltype.contains(params[2])));
+                    listItems.add(ParseWebpage.parseTopciBody(result, !normaltype.contains(params[2])));
 //                    if(params[2].contentEquals("gene")){
 //                        listItems.add(ParseWebpage.parseGeneArticleBody(result));
 //                    }else if(normaltype.contains(params[2])){
@@ -146,13 +145,13 @@ public class RequestWebPage {
                 case "photo":
                     return ParseWebpage.parsePhoto(result);
                 case "personal":
-                    if(params[2].contentEquals("psngame")){
+                    if (params[2].contentEquals("psngame")) {
                         return ParseWebpage.parsePersonal(result);
-                    }else if(params[2].contentEquals("gene")){
+                    } else if (params[2].contentEquals("gene")) {
                         return ParseWebpage.parseGene(result);
-                    }else if(params[2].contentEquals("topic")){
+                    } else if (params[2].contentEquals("topic")) {
                         return ParseWebpage.parseNormal(result);
-                    }else if(params[2].contentEquals("msg")){
+                    } else if (params[2].contentEquals("msg")) {
                         return ParseWebpage.parseBReplies(result);
                     }
                 case "psngame":
@@ -166,9 +165,9 @@ public class RequestWebPage {
         @Override
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
-            if(result != null){
+            if (result != null) {
                 listener.onSuccess(result);
-            }else{
+            } else {
                 listener.on404();
             }
         }

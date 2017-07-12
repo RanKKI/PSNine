@@ -14,8 +14,8 @@ import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.adapter.Common.EmojiDialogAdapter;
+import club.ranleng.psnine.model.KEY;
 
 /**
  * Created by ran on 08/07/2017.
@@ -63,7 +63,7 @@ public class EmojiDialogFragment extends DialogFragment {
             @Override
             public void onClick(String name) {
                 emojiDialogListener.onSelected(name);
-                if(SettingActivity.PREF_EMOJI){
+                if(KEY.PREF_EMOJI){
                     EmojiDialogFragment.this.getDialog().dismiss();
                 }
             }

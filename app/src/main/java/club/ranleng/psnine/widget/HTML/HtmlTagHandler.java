@@ -12,7 +12,8 @@ import org.xml.sax.Attributes;
 
 import java.util.Locale;
 
-import club.ranleng.psnine.activity.Assist.ImageActivity;
+import club.ranleng.psnine.activity.Assist.FragActivity;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 
 /**
@@ -60,7 +61,8 @@ public class HtmlTagHandler implements mHtml.TagHandler {
 
         @Override
         public void onClick(View widget) {
-            Intent intent = new Intent(context, ImageActivity.class);
+            Intent intent = new Intent(context, FragActivity.class);
+            intent.putExtra("key", KEY.IMAGE);
             intent.putExtra("url", url);
             context.startActivity(intent);
         }

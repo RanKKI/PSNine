@@ -41,32 +41,28 @@
             android:name=".activity.Main.ArticleActivity"
             android:label="@string/title_activity_article"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.Main.NoticeActivity"
+        <activity
+            android:name=".activity.Main.NoticeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activity.Main.LoginActivity"/>
         <activity
             android:name=".activity.Post.ReplyActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
-        <activity android:name=".activity.Assist.ImageActivity"/>
         <activity
             android:name=".activity.Assist.AboutActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.Assist.PickImgActivity"
+        <activity
+            android:name=".activity.Assist.PickImgActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.Main.PersonInfoActivity"
             android:label="@string/title_activity_person_info"
             android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".activity.Assist.SettingActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.Assist.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.Post.NewGeneActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.Post.NewTopicActivity"
             android:windowSoftInputMode="adjustResize"/>
@@ -80,7 +76,6 @@
                 <data
                     android:host="psnine.com"
                     android:scheme="http"/>
-
                 <data
                     android:host="d7vg.com"
                     android:scheme="http"/>
@@ -88,6 +83,9 @@
         </activity>
         <activity android:name=".activity.Main.GameTrophyActivity"/>
         <activity android:name=".activity.Main.GameTrophyTipsActivity"/>
+        <activity android:name=".activity.Assist.FragActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

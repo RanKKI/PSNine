@@ -1,5 +1,6 @@
 package club.ranleng.psnine.activity.Main;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -25,8 +25,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,15 +32,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.AboutActivity;
+import club.ranleng.psnine.activity.Assist.FragActivity;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
-import club.ranleng.psnine.activity.Assist.SearchActivity;
-import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.activity.Post.NewGeneActivity;
 import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
 import club.ranleng.psnine.util.CrashHandler;
 import club.ranleng.psnine.util.MakeToast;
@@ -66,6 +63,14 @@ public class MainActivity extends BaseActivity
     private ImageView nav_icon;
     private Context context;
     private String[] tabs_keys = {"gene", "topic", "openbox", "guide", "plus"};
+    private ArrayList<Integer> when_login = new ArrayList<Integer>() {{
+        add(R.id.nav_notice);
+        add(R.id.nav_photo);
+        add(R.id.nav_personal);
+    }};
+    private ArrayList<Integer> when_logout = new ArrayList<Integer>() {{
+        add(R.id.nav_login);
+    }};
 
     @Override
     public void setContentView() {
@@ -119,7 +124,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void getData() {
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
-        SettingActivity.initSetting(this);
+        KEY.initSetting(this);
         Utils.init(this);
         CrashHandler crashHandler = new CrashHandler();
 //        crashHandler.init(this);
@@ -131,7 +136,7 @@ public class MainActivity extends BaseActivity
         fl.add(setup("guide"));
         fl.add(setup("plus"));
         if (viewPager != null) {
-            viewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
+            viewPager.setAdapter(new MainPagerAdapter(getFragmentManager(), fl));  //設定Adapter給viewPager
         }
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
 
@@ -174,8 +179,9 @@ public class MainActivity extends BaseActivity
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Toast like print
-                Intent intent = new Intent(context, SearchActivity.class);
-                intent.putExtra("key", query);
+                Intent intent = new Intent(context, FragActivity.class);
+                intent.putExtra("key", KEY.SEARCH);
+                intent.putExtra("query", query);
                 intent.putExtra("type", tabs_keys[tabLayout.getSelectedTabPosition()]);
                 startActivity(intent);
                 if (!searchView.isIconified()) {
@@ -216,7 +222,9 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
         } else if (id == R.id.nav_setting) {
-            startActivity(new Intent(this, SettingActivity.class));
+            Intent intent = new Intent(this, FragActivity.class);
+            intent.putExtra("key", KEY.SETTING);
+            startActivity(intent);
         } else if (id == R.id.nav_cache) {
             AlertDialog b = new AlertDialog.Builder(context)
                     .setTitle("确定要清除缓存么")
@@ -257,16 +265,6 @@ public class MainActivity extends BaseActivity
         f.setArguments(bundle);
         return f;
     }
-
-    private ArrayList<Integer> when_login = new ArrayList<Integer>() {{
-        add(R.id.nav_notice);
-        add(R.id.nav_photo);
-        add(R.id.nav_personal);
-    }};
-
-    private ArrayList<Integer> when_logout = new ArrayList<Integer>() {{
-        add(R.id.nav_login);
-    }};
 
     @Override
     public void onFinish() {

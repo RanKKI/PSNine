@@ -15,8 +15,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Assist.SettingActivity;
 import club.ranleng.psnine.model.Common.ArticleList;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -47,7 +47,7 @@ public class ArticleListAdapter extends ItemViewBinder<ArticleList, ArticleListA
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleList item) {
         Map<String, Object> map = item.data;
         holder.title.setText(CmHtml.returnHtml(holder.itemView.getContext(),holder.title,(String) map.get("title")));
-        holder.title.setSingleLine(SettingActivity.PREF_SINGLELINE);
+        holder.title.setSingleLine(KEY.PREF_SINGLELINE);
         holder.name.setText((String) map.get("username"));
         holder.time.setText((String) map.get("time"));
         holder.reply.setText((String) map.get("reply"));

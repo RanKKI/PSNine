@@ -1,16 +1,14 @@
 package club.ranleng.psnine.activity.Main;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,7 +27,6 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.PSNPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.PSNFragment;
-import club.ranleng.psnine.util.FastBlurUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestGet;
@@ -72,6 +69,9 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
     public void getData() {
         context = this;
         psnid = getIntent().getStringExtra("psnid");
+        if(psnid == null){
+            finish();
+        }
         setTitle(psnid.toUpperCase());
         // Load personal background image
         showContent();
@@ -84,7 +84,7 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
         fl.add(add("topic"));
         fl.add(add("gene"));
         if (viewpager != null) {
-            viewpager.setAdapter(new PSNPagerAdapter(getSupportFragmentManager(), fl));  //設定Adapter給viewPager
+            viewpager.setAdapter(new PSNPagerAdapter(getFragmentManager(), fl));  //設定Adapter給viewPager
         }
         tabs.setupWithViewPager(viewpager); //绑定viewPager
     }
@@ -131,17 +131,8 @@ public class PersonInfoActivity extends BaseActivity implements FloatingActionBu
                 .asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                int scaleRatio = 4;
-                int blurRadius = 30;
-
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(resource,
-                        resource.getWidth() / scaleRatio,
-                        resource.getHeight() / scaleRatio,
-                        false);
-                Bitmap blurBitmap = FastBlurUtils.doBlur(scaledBitmap, blurRadius, true);
                 bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 bg.setImageBitmap(resource);
-//                bg.setImageBitmap(blurBitmap);
             }
         });
 

@@ -45,6 +45,7 @@ public class ArticleListFragment extends BaseFragment
     private int lastPosition;
     private int lastItemCount;
 
+
     @Override
     public View initView(LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.view_recyclerview, null);
