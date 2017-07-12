@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,7 @@ public class PickImgActivity extends BaseActivity
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private ArrayList<String> photo_list = new ArrayList<>();
     private PickImgAdapter pickImgAdapter;
@@ -55,8 +57,8 @@ public class PickImgActivity extends BaseActivity
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.view_recyclerview);
-        setTitle("图库");
+        setContentView(R.layout.toolbar_recyclerview);
+
     }
 
     @Override
@@ -67,6 +69,8 @@ public class PickImgActivity extends BaseActivity
     @Override
     public void setupViews() {
         context = this;
+        setSupportActionBar(toolbar);
+        setTitle("图库");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

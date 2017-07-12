@@ -28,6 +28,7 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.EmojiDialogFragment;
 import club.ranleng.psnine.util.AndroidUtilCode.KeyboardUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.util.ReadFile;
 import club.ranleng.psnine.util.TextUtils;
 import club.ranleng.psnine.widget.EmojiUrlToStr;
 import club.ranleng.psnine.widget.Requests.RequestPost;
@@ -149,13 +150,13 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
                 .setPositiveButton("保存", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        save();
+                        ReadFile.save(a_id,TextUtils.toS(editText));
                         finish();
                     }
                 }).setNegativeButton("不保存", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        File file = new File(getFilesDir() + "/" + String.valueOf(a_id));
+                        File file = new File(getFilesDir() + "/" + a_id);
                         if(file.exists()){
                             if(file.delete()){
 
@@ -169,21 +170,6 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
         }else{
             finish();
         }
-    }
-
-    private void save() {
-
-        String content = editText.getText().toString();
-        try {
-            FileOutputStream outputStream = openFileOutput(String.valueOf(a_id),
-                    Activity.MODE_PRIVATE);
-            outputStream.write(content.getBytes());
-            outputStream.flush();
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void read() {
@@ -208,13 +194,10 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     public void getData() {
         type = getIntent().getStringExtra("type");
         a_id = getIntent().getStringExtra("id");
-        File file = new File(getFilesDir() + "/" + String.valueOf(a_id));
-        if (file.exists()) {
-            read();
-            if (file.delete()) {
-                LogUtils.d("已删除tempreply");
-            }
-        }
+
+        editText.append(ReadFile.read(a_id));
+        editText.setSelection(editText.length());
+
         if (getIntent().hasExtra("content")) {
 
             EmojiUrlToStr emojiUrlToStr = new EmojiUrlToStr();

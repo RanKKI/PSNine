@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class ParseWebpage {
 
+
     public static ArrayList<Map<String, Object>> parseNormal(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
 
@@ -53,6 +54,15 @@ public class ParseWebpage {
             if (!qa.isEmpty()) {
                 String user_icon = c.select("a").select("img").attr("src");
                 String title = c.select("div.content.pb10").html();
+
+                String pattern = "<img src=\"http://ww4.sinaimg.cn/.*\">";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(title);
+
+                while (m.find()) {
+                    title = title.replace(m.group(0), "[图片]");
+                }
+
                 String username = c.select("a.psnnode").text();
                 String time = c.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
                 String url = c.select("div.meta").select("a").get(0).attr("href");
@@ -76,6 +86,78 @@ public class ParseWebpage {
 
         }
         return listItems;
+    }
+
+    public static Map<String, Object> parseTopciBody(String results, Boolean is_gene){
+        Map<String, Object> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+
+        String username;
+        String icon = "https://static-resource.np.community.playstation.net/avatar/3RD/UP10631304010_B041E9E7D6C08ADC46E7_L.png";
+        String time;
+        String replies;
+        String content;
+        String original = null;
+        Boolean editable = false;
+        int img_size = 0;
+        int page_size = 1;
+
+        if(is_gene){
+            content = doc.select("div.content.pb10").first().html();
+            username = doc.select("div.meta").select("a.psnnode").first().ownText();
+            Elements img = doc.select("div.content.pd10").select("a").select("img");
+            img_size = img.size();
+            for (int i = 0; i < img.size(); i++) {
+                map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
+            }
+            if(doc.select("div.meta").get(1).select("span").select("a").size() != 2){
+                editable = true;
+            }
+
+            icon = doc.select("div.side").select("div.box").select("p").select("a").select("img").attr("src");
+            String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
+            time = temp[0] + "前";
+            replies = temp[1];
+
+            if (!doc.select("a.text-info").isEmpty()) {
+                original = doc.select("a.text-info").attr("href");
+            }
+
+        }else{
+            content = doc.select("div.content.pd10").html();
+            username = doc.select("a.title2").text();
+            Elements page = doc.select("div.page").select("ul").select("li");
+            if (!page.isEmpty()) {
+                page_size = page.size();
+                for (int i = 0; i < page.size(); i++) {
+                    map.put("page_" + String.valueOf(i + 1), page.get(i).select("a").text());
+                }
+            }
+
+            if(doc.select("div.alert-info.pd10").select("div.meta").select("span").select("a").size() != 2){
+                editable = true;
+            }
+
+            Elements icon_e = doc.select("div.side").select("div.box").select("p");
+            if (!icon_e.isEmpty()) {
+                icon = icon_e.get(0).select("a").select("img").attr("src");
+            }
+
+            time = doc.select("div.pd10").select("div.meta").first().select("span").get(1).text();
+            replies = doc.select("div.pd10").select("div.meta").first().ownText();
+        }
+
+        map.put("img_size", img_size);
+        map.put("page_size", page_size);
+        map.put("content", content);
+        map.put("username", username);
+        map.put("editable",editable);
+
+        map.put("icon", icon);
+        map.put("original", original);
+        map.put("time", time);
+        map.put("replies", replies);
+        return map;
     }
 
     public static ArrayList<Map<String, Object>> parseNews(String results) {
@@ -140,86 +222,6 @@ public class ParseWebpage {
         }
 
         return listItems;
-    }
-
-    public static Map<String, Object> parseTopicArticleBody(String results) {
-
-        Map<String, Object> map = new HashMap<>();
-        Document doc = Jsoup.parse(results);
-
-        String post = doc.select("div.content.pd10").html();
-        String title = doc.select("div.pd10").first().select("h1").text();
-        String username = doc.select("a.title2").text();
-        Elements icon_e = doc.select("div.side").select("div.box").select("p");
-        String icon = "";
-        if (!icon_e.isEmpty()) {
-            icon = doc.select("div.side").select("div.box").select("p").get(0).select("a").select("img").attr("src");
-        }
-
-        Elements page = doc.select("div.page").select("ul").select("li");
-        if (!page.isEmpty()) {
-            map.put("page_size", page.size());
-
-            for (int i = 0; i < page.size(); i++) {
-                String p_name = page.get(i).select("a").text();
-                map.put("page_" + String.valueOf(i + 1), p_name);
-            }
-        } else {
-            map.put("page_size", 1);
-        }
-
-        if(doc.select("div.alert-info.pd10").select("div.meta").select("span").select("a").size() != 2){
-            map.put("editable",true);
-        }else{
-            map.put("editable",false);
-        }
-
-        map.put("img_size", 0);
-        map.put("title", title);
-        //"<html><head>" + post + "</body></html>".replace("class=\"imgbgnb\">","class=\"imgbgnb\"/>").replace("alt=\"\">","alt=\"\"/>")
-        map.put("content", post);
-        map.put("username", username);
-        map.put("icon", icon);
-        map.put("original", "");
-        map.put("time", "");
-        map.put("replies", "");
-        return map;
-    }
-
-    public static Map<String, Object> parseGeneArticleBody(String results) {
-
-        Map<String, Object> map = new HashMap<>();
-        Document doc = Jsoup.parse(results);
-
-        String content = doc.select("div.content.pb10").first().html();
-        String username = doc.select("div.meta").select("a.psnnode").first().ownText();
-        String original = "";
-        if (!doc.select("a.text-info").isEmpty()) {
-            original = doc.select("a.text-info").attr("href");
-        }
-        String icon = doc.select("div.side").select("div.box").select("p").select("a").select("img").attr("src");
-        String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
-        Elements img = doc.select("div.content.pd10").select("a").select("img");
-
-        map.put("img_size", img.size());
-        for (int i = 0; i < img.size(); i++) {
-            map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
-        }
-
-        if(doc.select("div.meta").get(1).select("span").select("a").size() != 2){
-            map.put("editable",true);
-        }else{
-            map.put("editable",false);
-        }
-        map.put("title", "");
-        map.put("content", content);
-        map.put("username", username);
-        map.put("icon", icon);
-        map.put("original", original);
-        map.put("time", temp[0] + "前");
-        map.put("replies", temp[1]);
-        map.put("page_size", 1);
-        return map;
     }
 
     public static Map<String, Object> parseReplies(String results) {

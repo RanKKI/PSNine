@@ -5,8 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import club.ranleng.psnine.R;
 import club.ranleng.psnine.fragments.SettingFragment;
 
 public class SettingActivity extends AppCompatActivity{
@@ -22,12 +26,17 @@ public class SettingActivity extends AppCompatActivity{
     public static Boolean PREF_EMOJI = true;
     public static Boolean PREF_SINGLELINE = true;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.toolbar_framelayout);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
         setTitle("设置");
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingFragment())
+                .replace(R.id.framelayout, new SettingFragment())
                 .commit();
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

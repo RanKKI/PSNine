@@ -642,16 +642,7 @@ class HtmlToSpannedConverter implements ContentHandler {
         if (i != null) {
             return i;
         }
-        AlertDialog d = new AlertDialog.Builder(ArticleActivity.getContext())
-                .setMessage("未知颜色: " + color)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                throw new IllegalArgumentException("Unknown color: " + color);
-            }
-        }).create();
-        d.show();
-        return -1;
+        throw new IllegalArgumentException("Unknown color: " + color);
     }
 
     public void setDocumentLocator(Locator locator) {

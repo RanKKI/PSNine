@@ -47,6 +47,7 @@ import club.ranleng.psnine.util.AndroidUtilCode.Utils;
 import club.ranleng.psnine.util.CrashHandler;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.PhoneUtils;
+import club.ranleng.psnine.util.ReadFile;
 import club.ranleng.psnine.widget.Requests.RequestClient;
 import club.ranleng.psnine.widget.Requests.RequestGet;
 import club.ranleng.psnine.widget.UserStatus;
@@ -121,35 +122,7 @@ public class MainActivity extends BaseActivity
         SettingActivity.initSetting(this);
         Utils.init(this);
         CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(this);
-        final File file = new File(getFilesDir() + "/crash");
-        if (file.exists()) {
-            try {
-                FileInputStream inputStream = this.openFileInput("crash");
-                byte[] bytes = new byte[1024];
-
-                int len = inputStream.read(bytes);
-                inputStream.close();
-                String content = new String(bytes, 0, len);
-                TextView textView = new TextView(this);
-                textView.setTextSize(12);
-                textView.setText(content);
-                AlertDialog c = new AlertDialog.Builder(context)
-                        .setView(textView)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (file.delete()) {
-                                    LogUtils.d("已删除crash文件");
-                                }
-                            }
-                        })
-                        .create();
-                c.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        crashHandler.init(this);
 
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
         fl.add(setup("gene"));
@@ -162,6 +135,22 @@ public class MainActivity extends BaseActivity
         }
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
 
+        final File file = new File(getFilesDir() + "/crash");
+        if (file.exists()) {
+            TextView textView = new TextView(this);
+            textView.setTextSize(10);
+            textView.setText(ReadFile.read("crash"));
+            AlertDialog c = new AlertDialog.Builder(context)
+                    .setView(textView)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            c.show();
+        }
     }
 
     @Override

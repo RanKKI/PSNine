@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class ArticleHeader {
 
-    public final String title;
     public final String content;
     public final String username;
     public final String icon;
@@ -18,7 +17,6 @@ public class ArticleHeader {
     public final Boolean editable;
 
     public ArticleHeader(@NonNull Map<String, Object> map) {
-        this.title = (String) map.get("title");
         this.content = (String) map.get("content");
         this.username = (String) map.get("username");
         this.icon = (String) map.get("icon");

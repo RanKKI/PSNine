@@ -44,7 +44,7 @@ import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener, SwipeRefreshLayout.OnRefreshListener,
-        ArticleGameListAdapter.OnItemClickListener, MutilPagesAdapter.OnPageChange,ReplyPostListener {
+        ArticleGameListAdapter.OnItemClickListener, MutilPagesAdapter.OnPageChange, ReplyPostListener {
 
     private static Context context;
     private String type;
@@ -52,19 +52,16 @@ public class ArticleActivity extends BaseActivity
     private int current_page = 1;
     private int max_pages = 1;
     private Boolean form_reply = false;
+    private Boolean editable = false;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Items items;
     private LinearLayoutManager mLayoutManager;
 
-    public static Context getContext() {
-        return context;
-    }
-
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_article);
+        setContentView(R.layout.toolbar_recyclerview);
         context = this;
     }
 
@@ -137,11 +134,16 @@ public class ArticleActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_article, menu);
 
-        if(type.contentEquals("gene")){
+        if (type.contentEquals("gene")) {
             menu.findItem(R.id.action_artivle_up).setVisible(false);
+        }
+
+        if(editable){
+            menu.findItem(R.id.action_article_edit).setVisible(true);
         }
         return true;
     }
@@ -153,7 +155,7 @@ public class ArticleActivity extends BaseActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(!UserStatus.isLogin()){
+        if (!UserStatus.isLogin()) {
             MakeToast.plzlogin();
             return true;
         }
@@ -161,11 +163,11 @@ public class ArticleActivity extends BaseActivity
         if (id == R.id.action_article_reply) {
             Replies();
         } else if (id == R.id.action_artivle_fav) {
-            FormBody body = new FormBody.Builder().add("type",type).add("param",a_id).build();
-            new RequestPost(this,context,"fav",body);
+            FormBody body = new FormBody.Builder().add("type", type).add("param", a_id).build();
+            new RequestPost(this, context, "fav", body);
         } else if (id == R.id.action_artivle_up) {
-            FormBody body = new FormBody.Builder().add("type",type).add("param",a_id).add("updown","up").build();
-            new RequestPost(this,context,"updown",body);
+            FormBody body = new FormBody.Builder().add("type", type).add("param", a_id).add("updown", "up").build();
+            new RequestPost(this, context, "updown", body);
         }
 
         return super.onOptionsItemSelected(item);
@@ -213,15 +215,17 @@ public class ArticleActivity extends BaseActivity
         adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
 
 
-        ArticleHeader articleHeader = new ArticleHeader(result.get(0));
-        if ((int) result.get(0).get("page_size") != 1) {
-            max_pages = (int) result.get(0).get("page_size");
+        Map<String, Object> header = result.get(0);
+        ArticleHeader articleHeader = new ArticleHeader(header);
+        max_pages = (int) header.get("page_size");
+        if (max_pages != 1) {
             ArrayList<String> l = new ArrayList<>();
             for (int i = 1; i < max_pages + 1; i++) {
-                l.add((String) result.get(0).get("page_" + String.valueOf(i)));
+                l.add((String) header.get("page_" + String.valueOf(i)));
             }
             items.add(new MutilPages(l));
         }
+        editable = (Boolean) header.get("editable");
         items.add(new Line());
         items.add(articleHeader);
 
@@ -262,6 +266,7 @@ public class ArticleActivity extends BaseActivity
             recyclerView.scrollToPosition(mLayoutManager.findLastVisibleItemPosition());
             form_reply = false;
         }
+        invalidateOptionsMenu();
         swipeRefreshLayout.setRefreshing(false);
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,8 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.new_gene_select_music_type) Button music_type;
     @BindView(R.id.new_gene_submit) Button submit;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     private Context context;
     private ArrayList<String> photo_list = new ArrayList<>();
     private Map<String, Object> body = new HashMap<>();
@@ -64,6 +67,7 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setupViews() {
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

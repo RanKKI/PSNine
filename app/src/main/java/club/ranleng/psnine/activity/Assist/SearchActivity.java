@@ -1,24 +1,30 @@
 package club.ranleng.psnine.activity.Assist;
 
-import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import java.io.File;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.fragments.ArticleListFragment;
-import club.ranleng.psnine.fragments.SettingFragment;
 
 public class SearchActivity extends AppCompatActivity implements ArticleListFragment.FinishLoadListener{
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.toolbar_framelayout);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Fragment f = new ArticleListFragment();
         Bundle bundle = new Bundle();
@@ -29,12 +35,10 @@ public class SearchActivity extends AppCompatActivity implements ArticleListFrag
 
         setTitle(getIntent().getStringExtra("key"));
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+
 
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, f)
+                .replace(R.id.framelayout, f)
                 .commit();
     }
 

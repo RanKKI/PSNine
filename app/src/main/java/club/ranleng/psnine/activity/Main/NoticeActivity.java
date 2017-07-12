@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
 import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Common.ArticleList;
@@ -30,14 +30,14 @@ public class NoticeActivity extends BaseActivity
 
     @BindView(R.id.fragment_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     public void setContentView() {
         if(!UserStatus.isLogin()){
             finish();
         }
-        setContentView(R.layout.view_recyclerview);
-        setTitle("短消息");
+        setContentView(R.layout.toolbar_recyclerview);
     }
 
     @Override
@@ -47,6 +47,8 @@ public class NoticeActivity extends BaseActivity
 
     @Override
     public void setupViews() {
+        setSupportActionBar(toolbar);
+        setTitle("短消息");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

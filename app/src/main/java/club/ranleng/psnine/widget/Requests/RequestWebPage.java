@@ -134,11 +134,12 @@ public class RequestWebPage {
                     return ParseWebpage.parseNotice(result);
                 case "article":
                     ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-                    if(params[2].contentEquals("gene")){
-                        listItems.add(ParseWebpage.parseGeneArticleBody(result));
-                    }else if(normaltype.contains(params[2])){
-                        listItems.add(ParseWebpage.parseTopicArticleBody(result));
-                    }
+                    listItems.add(ParseWebpage.parseTopciBody(result,!normaltype.contains(params[2])));
+//                    if(params[2].contentEquals("gene")){
+//                        listItems.add(ParseWebpage.parseGeneArticleBody(result));
+//                    }else if(normaltype.contains(params[2])){
+//                        listItems.add(ParseWebpage.parseTopicArticleBody(result));
+//                    }
                     listItems.add(ParseWebpage.parseReplies(result));
                     listItems.add(ParseWebpage.parseGameList(result));
                     return listItems;
