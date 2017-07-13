@@ -22,6 +22,7 @@ public class RequestGet {
         put("upbase","http://psnine.com/psnid/%s/upbase");
         put("dao","http://psnine.com/set/qidao/ajax");
         put("edittopic","http://psnine.com/topic/%s/edit");
+        put("editgene","http://psnine.com/gene/%s/edit");
     }};
     private YetanotherListener yetanotherListener;
 

@@ -98,34 +98,38 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
         Items items = new Items();
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
-        if(result.isEmpty()){
+        adapter.register(ArticleReply.class, new ArticleReplyAdapter());
+        adapter.register(GameList.class, new PSNGameListAdapter(this));
+        adapter.register(ArticleList.class, new ArticleListAdapter(new ArticleListAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(context,ArticleActivity.class);
+                intent.putExtra("id",(String) view.getTag(R.id.tag_list_id));
+                intent.putExtra("type",(String) view.getTag(R.id.tag_list_type));
+                startActivity(intent);
+            }
+        }));
+        if(result.isEmpty() || result.toString().equals("[{}]") || result.get(0).isEmpty() || result.get(0).toString().equals("{}")){
             items.add(new Line());
             items.add(new Category("这个人没有这页诶"));
         }
+
         if(type.contentEquals("psngame")){
             finishLoadListener.onFinish(result.get(0));
-            adapter.register(GameList.class, new PSNGameListAdapter(this));
             result.remove(0);
             for(Map<String, Object> map : result){
                 items.add(new GameList(map));
             }
         }else if(type.contentEquals("topic") || type.contentEquals("gene")){
-            adapter.register(ArticleList.class, new ArticleListAdapter(new ArticleListAdapter.OnItemClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    Intent intent = new Intent(context,ArticleActivity.class);
-                    intent.putExtra("id",(String) view.getTag(R.id.tag_list_id));
-                    intent.putExtra("type",(String) view.getTag(R.id.tag_list_type));
-                    startActivity(intent);
-                }
-            }));
-            adapter.register(Line.class,new LineViewBinder());
+            result.remove(0);
             for(Map<String, Object> map : result){
+                if(map.isEmpty()){
+                    return;
+                }
                 items.add(new ArticleList(map));
                 items.add(new Line());
             }
         }else if(type.contentEquals("msg")){
-            adapter.register(ArticleReply.class, new ArticleReplyAdapter());
             for(Map<String, Object> map: result){
                 ArticleReply articleReply = new ArticleReply(map);
                 items.add(articleReply);

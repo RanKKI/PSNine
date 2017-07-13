@@ -56,6 +56,7 @@ public class RequestPost {
 
         put("reply","http://psnine.com/set/comment/post");
         put("editreply","http://psnine.com/set/edit/ajax");
+
         put("newgene","http://psnine.com/set/gene/post");
 
         put("newtopic","http://psnine.com/set/topic/post");

@@ -97,7 +97,7 @@ public class NewTopicActivity extends BaseActivity
     @Override
     public void getData() {
         if(getIntent().hasExtra("editable") && getIntent().getBooleanExtra("editable",false)){
-            edit = getIntent().getBooleanExtra("edit",false);
+            edit = getIntent().getBooleanExtra("editable",false);
             topid_id = getIntent().getStringExtra("topic_id");
             new RequestGet().execute(this,"edittopic",topid_id);
             swipeRefreshLayout.setRefreshing(true);
@@ -122,9 +122,10 @@ public class NewTopicActivity extends BaseActivity
                 b.add("topicid",topid_id);
             }else{
                 b.add("addtopic","");
-            }
 
+            }
             new RequestPost(this,context,"newtopic",b.build());
+
         }else if(id == R.id.new_topic_magic){
             showDialog(magic_dialog,1);
         }
@@ -220,7 +221,6 @@ public class NewTopicActivity extends BaseActivity
     @Override
     public void onSuccess(String result) {
         Map<String, String> map = ParseWebpage.parseTopicEdit(result);
-        LogUtils.d(map);
         title.setText(map.get("title"));
         content.setText(map.get("content"));
         mode = Integer.valueOf(map.get("mode"));

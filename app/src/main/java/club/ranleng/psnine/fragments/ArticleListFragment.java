@@ -22,6 +22,7 @@ import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import me.drakeet.support.about.Category;
 import me.drakeet.support.about.Line;
 import me.drakeet.support.about.LineViewBinder;
 
@@ -41,6 +42,7 @@ public class ArticleListFragment extends BaseFragment
     private Boolean search;
 
     private int current_page = 1;
+    private int max_page = 1;
     private int itemCount;
     private int lastPosition;
     private int lastItemCount;
@@ -69,7 +71,7 @@ public class ArticleListFragment extends BaseFragment
                     return;
                 }
 
-                if (lastItemCount != itemCount && lastPosition == itemCount - 1) {
+                if (lastItemCount != itemCount && lastPosition == itemCount - 1 && current_page != max_page) {
                     current_page++;
                     initData();
                     lastItemCount = itemCount;
@@ -92,7 +94,12 @@ public class ArticleListFragment extends BaseFragment
             search = getArguments().getBoolean("search");
             key = getArguments().getString("key");
         }
-        new RequestWebPage(this, type, search, key, String.valueOf(current_page));
+        if(type.contentEquals("notice")){
+            new RequestWebPage(this,"notice");
+        }else{
+            new RequestWebPage(this, type, search, key, String.valueOf(current_page));
+        }
+
     }
 
     @Override
@@ -103,6 +110,7 @@ public class ArticleListFragment extends BaseFragment
 
     @Override
     public void onRefresh() {
+        items = new Items();
         initData();
     }
 
@@ -118,6 +126,9 @@ public class ArticleListFragment extends BaseFragment
 
     @Override
     public void onSuccess(ArrayList<Map<String, Object>> result) {
+        Map<String, Object> header = result.get(0);
+        max_page = (int) header.get("max_page");
+        result.remove(0);
         if (current_page == 1) {
             adapter.setItems(items);
             recyclerView.setAdapter(adapter);

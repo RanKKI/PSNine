@@ -81,7 +81,7 @@
                 <EditText
                     android:id="@+id/new_topic_content"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:background="#EFEFEF"
                     android:ems="10"

@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+//        drawer.setDrawerListener(toggle);
         toggle.syncState();
         RequestClient.initOkhttpclient(this);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity
         KEY.initSetting(this);
         Utils.init(this);
         CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(this);
+        crashHandler.init(this);
 
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
         fl.add(setup("gene"));
@@ -210,7 +210,10 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_login) {
             startActivity(new Intent(this, LoginActivity.class));
         } else if (id == R.id.nav_notice) {
-            startActivity(new Intent(this, NoticeActivity.class));
+//            startActivity(new Intent(this, NoticeActivity.class));
+            Intent intent = new Intent(this, FragActivity.class);
+            intent.putExtra("key", KEY.NOTICE);
+            startActivity(intent);
         } else if (id == R.id.nav_photo) {
             Intent intent = new Intent(this, PickImgActivity.class);
             intent.putExtra("form_main", true);
@@ -246,12 +249,6 @@ public class MainActivity extends BaseActivity
                     }).create();
             b.show();
         }
-//        else if(id == R.id.back_door){
-//            Intent intent = new Intent(context, ArticleActivity.class);
-//            intent.putExtra("id","10422");
-//            intent.putExtra("type","topic");
-//            startActivity(intent);
-//        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

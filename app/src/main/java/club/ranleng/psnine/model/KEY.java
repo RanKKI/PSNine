@@ -14,6 +14,7 @@ public class KEY {
     public static final int PICKIMG = 6045224;
     public static final int SETTING = 6262658;
     public static final int IMAGE = 8390671;
+    public static final int NOTICE = 2146093;
 
     //PREF KEY
     public static final String KEY_PREF_PRELOAD = "settings_preload";

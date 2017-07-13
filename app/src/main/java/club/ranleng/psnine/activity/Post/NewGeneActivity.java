@@ -3,6 +3,7 @@ package club.ranleng.psnine.activity.Post;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -18,16 +19,20 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.ReplyPostListener;
+import club.ranleng.psnine.Listener.YetanotherListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.PickImgActivity;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.util.TextUtils;
+import club.ranleng.psnine.widget.ParseWebpage;
+import club.ranleng.psnine.widget.Requests.RequestGet;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.UserStatus;
 import okhttp3.FormBody;
 
-public class NewGeneActivity extends BaseActivity implements View.OnClickListener, ReplyPostListener {
+public class NewGeneActivity extends BaseActivity implements View.OnClickListener, ReplyPostListener, YetanotherListener {
 
     @BindView(R.id.new_gene_waning) TextView waning;
     @BindView(R.id.new_gene_selected_img) TextView selected_img;
@@ -43,8 +48,11 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.new_gene_submit) Button submit;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.swipelayout) SwipeRefreshLayout swipeRefreshLayout;
 
     private Context context;
+    private Boolean edit;
+    private String topid_id;
     private ArrayList<String> photo_list = new ArrayList<>();
     private Map<String, Object> body = new HashMap<>();
     private String[] music_type_list = {"单曲", "专辑", "电台", "歌单"};
@@ -76,11 +84,17 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
         submit.setOnClickListener(this);
         String text = "提问题请发到「<font color='blue' >问答</font>」板块，否则将被<font color='red' >关闭处理</font>";
         waning.setText(Html.fromHtml(text));
+        swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
     public void getData() {
-
+        if(getIntent().hasExtra("editable") && getIntent().getBooleanExtra("editable",false)){
+            edit = getIntent().getBooleanExtra("editable",false);
+            topid_id = getIntent().getStringExtra("topic_id");
+            new RequestGet().execute(this,"editgene",topid_id);
+            swipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     private void putAllData(){
@@ -109,6 +123,7 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
             });
             builder.create().show();
         } else if (id == R.id.new_gene_submit) {
+            swipeRefreshLayout.setRefreshing(true);
             putAllData();
             FormBody.Builder b = new FormBody.Builder();
             for (Map.Entry entry : body.entrySet()) {
@@ -122,9 +137,14 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
                 p = p.substring(0, p.length() - 1);
             }
             b.add("photo",p);
-            b.add("addgene","");
+            if(edit){
+                b.add("geneid",topid_id);
+                b.add("editgene","");
 
+            }else{
+                b.add("addgene","");
 
+            }
             new RequestPost(this,context,"newgene",b.build());
         }
     }
@@ -148,6 +168,29 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void ReplyPostFinish() {
+        swipeRefreshLayout.setRefreshing(false);
         finish();
+    }
+
+    @Override
+    public void onPrepare() {
+
+    }
+
+    @Override
+    public void onSuccess(String result) {
+        Map<String, String> map = ParseWebpage.parseGeneEdit(result);
+        main_edit.setText(map.get("content"));
+        ele.setText(map.get("element"));
+        String[] temp = map.get("photo").split(",");
+        for (int i = 0; i < temp.length; i++) {
+            photo_list.add(temp[i]);
+        }
+        video_url.setText(map.get("video"));
+        music_id.setText(map.get("muid"));
+        url.setText(map.get("url"));
+        String selected = photo_list.size() + " 张";
+        selected_img.setText(selected);
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -41,9 +41,6 @@
             android:name=".activity.Main.ArticleActivity"
             android:label="@string/title_activity_article"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".activity.Main.NoticeActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activity.Main.LoginActivity"/>
         <activity
             android:name=".activity.Post.ReplyActivity"

@@ -11,14 +11,31 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+
 public class ParseWebpage {
+
+    private static Map<String, Object> ListInfo(Document doc){
+        Map<String, Object> map = new HashMap<>();
+
+        Elements div_page = doc.select("div.page").select("ul").select("li");
+        int div_page_size = div_page.size();
+
+        if(div_page_size != 0 && div_page.get(div_page_size-1).attr("class").equals("disabled")){
+            int max_page = Integer.valueOf(div_page.get(div_page_size-2).select("a").text());
+            map.put("max_page",max_page);
+        }
+        return map;
+    }
 
 
     public static ArrayList<Map<String, Object>> parseNormal(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
 
         Document doc = Jsoup.parse(results);
+        listItems.add(ListInfo(doc));
         Elements elements = doc.select("ul.list").select("li");
+
 
         for (Element e : elements) {
             String icon = e.select("a.l").select("img").attr("src");
@@ -42,14 +59,52 @@ public class ParseWebpage {
         return listItems;
     }
 
+
+    public static ArrayList<Map<String, Object>> parseGene(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        listItems.add(ListInfo(doc));
+        Elements elements = doc.select("ul.list.genelist").select("li");
+
+        for (Element e : elements) {
+            String icon = e.select("a.l").select("img").attr("src");
+            String content = e.select("div.content.pb10").text();
+            String username = e.select("div.meta").select("a").text();
+            String id = "";
+            Elements a = e.select("a");
+            for (Element i : a) {
+                if (i.attr("href").contains("ttp://psnine.com/gene/")) {
+                    id = i.attr("href").replace("http://psnine.com/gene/", "");
+                }
+            }
+            String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("title", content);
+            map.put("username", username);
+            map.put("id", id);
+            map.put("icon", icon);
+            map.put("time", tr[0] + "前");
+            map.put("reply", tr[1]);
+            map.put("type","gene");
+            listItems.add(map);
+        }
+
+        return listItems;
+    }
+
     public static ArrayList<Map<String, Object>> parseNotice(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
 
         Document doc = Jsoup.parse(results);
+        Map<String, Object> map = new HashMap<>();
+        map.put("max_page",1);
+        listItems.add(map);
         Elements game_list = doc.select("ul.list").select("li");
 
         for (Element c : game_list) {
-            Map<String, Object> map = new HashMap<>();
+            map = new HashMap<>();
             Elements qa = c.select("div.content.pb10");
             if (!qa.isEmpty()) {
                 String user_icon = c.select("a").select("img").attr("src");
@@ -98,14 +153,27 @@ public class ParseWebpage {
         String replies;
         String content;
         String original = null;
+        String video;
         Boolean editable = false;
         int img_size = 0;
         int page_size = 1;
+
+        video = doc.select("embed").attr("src");
+        if(video.isEmpty()){
+            video = null;
+        }
 
         if(is_gene){
             content = doc.select("div.content.pb10").first().html();
             username = doc.select("div.meta").select("a.psnnode").first().ownText();
             Elements img = doc.select("div.content.pd10").select("a").select("img");
+            Elements or = doc.select("a.text-info");
+            if(or.size() != 0){
+                if(or.get(0).text().equals("出处")){
+                    original = or.get(0).attr("href");
+                }
+            }
+
             img_size = img.size();
             for (int i = 0; i < img.size(); i++) {
                 map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
@@ -118,10 +186,6 @@ public class ParseWebpage {
             String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
             time = temp[0] + "前";
             replies = temp[1];
-
-            if (!doc.select("a.text-info").isEmpty()) {
-                original = doc.select("a.text-info").attr("href");
-            }
 
         }else{
             content = doc.select("div.content.pd10").html();
@@ -152,6 +216,7 @@ public class ParseWebpage {
         map.put("content", content);
         map.put("username", username);
         map.put("editable",editable);
+        map.put("video",video);
 
         map.put("icon", icon);
         map.put("original", original);
@@ -185,39 +250,6 @@ public class ParseWebpage {
             map.put("time", time);
             map.put("type","topic");
             map.put("reply", reply + "评论");
-            listItems.add(map);
-        }
-
-        return listItems;
-    }
-
-    public static ArrayList<Map<String, Object>> parseGene(String results) {
-        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-
-        Document doc = Jsoup.parse(results);
-        Elements elements = doc.select("ul.list.genelist").select("li");
-
-        for (Element e : elements) {
-            String icon = e.select("a.l").select("img").attr("src");
-            String content = e.select("div.content.pb10").text();
-            String username = e.select("div.meta").select("a").text();
-            String id = "";
-            Elements a = e.select("a");
-            for (Element i : a) {
-                if (i.attr("href").contains("ttp://psnine.com/gene/")) {
-                    id = i.attr("href").replace("http://psnine.com/gene/", "");
-                }
-            }
-            String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("title", content);
-            map.put("username", username);
-            map.put("id", id);
-            map.put("icon", icon);
-            map.put("time", tr[0] + "前");
-            map.put("reply", tr[1]);
-            map.put("type","gene");
             listItems.add(map);
         }
 
@@ -555,6 +587,26 @@ public class ParseWebpage {
         map.put("title",doc.select("input[name=title]").attr("value"));
         map.put("mode",doc.select("select[name=open]").select("option[selected=selected]").attr("value"));
         map.put("content",doc.select("textarea[name=content]").text());
+        return map;
+    }
+
+    public static Map<String, String> parseGeneEdit(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        map.put("content",doc.select("textarea[name=content]").text());
+        map.put("element",doc.select("input[name=element]").attr("value"));
+        map.put("photo",doc.select("input[name=photo]").attr("value"));
+        map.put("video",doc.select("input[name=video]").attr("value"));
+        map.put("muid",doc.select("input[name=muid]").attr("value"));
+        map.put("url",doc.select("input[name=url]").attr("value"));
+        return map;
+    }
+
+    public static Map<String, String> parseVideo(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        String url = doc.select("embed").attr("src");
+        LogUtils.d(url);
         return map;
     }
 

@@ -57,7 +57,7 @@ public class FragActivity extends BaseActivity implements ArticleListFragment.Fi
             bundle.putBoolean("search",true);
             bundle.putString("key", getIntent().getStringExtra("query"));
             f.setArguments(bundle);
-            title = getIntent().getStringExtra("key");
+            title = getIntent().getStringExtra("query");
             openFragment(f);
         }else if (key == KEY.SETTING){
             Fragment f = new SettingFragment();
@@ -70,6 +70,15 @@ public class FragActivity extends BaseActivity implements ArticleListFragment.Fi
             imageView.setOnTouchListener(new TouchListener(imageView));
             ViewGroupUtils.replaceView(frameLayout, imageView);
             Glide.with(this).load(getIntent().getStringExtra("url")).into(imageView);
+        }else if(key == KEY.NOTICE){
+            Fragment f = new ArticleListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "notice");
+            bundle.putBoolean("search",false);
+            bundle.putString("key", null);
+            f.setArguments(bundle);
+            title = "短消息";
+            openFragment(f);
         }
     }
 

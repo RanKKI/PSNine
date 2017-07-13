@@ -2,6 +2,7 @@ package club.ranleng.psnine.adapter.Common;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.Assist.FragActivity;
 import club.ranleng.psnine.model.Common.Image;
 import club.ranleng.psnine.model.KEY;
+import club.ranleng.psnine.widget.GlideInToImageView;
 import me.drakeet.multitype.ItemViewBinder;
 
 /**
@@ -35,20 +37,19 @@ public class ImageAdapter extends ItemViewBinder<Image, ImageAdapter.ViewHolder>
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Image item) {
-        if (holder.itemView.getTag() == null) {
-            holder.itemView.setTag("");
-            final Context context = holder.itemView.getContext();
-            Glide.with(context).load(item.url).into(holder.root);
-            holder.root.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, FragActivity.class);
-                    intent.putExtra("key", KEY.IMAGE);
-                    intent.putExtra("url", item.url);
-                    context.startActivity(intent);
-                }
-            });
-        }
+        holder.itemView.setTag(item.url);
+        final Context context = holder.itemView.getContext();
+//            Glide.with(context).load(item.url).into(holder.root);
+        new GlideInToImageView(context, item.url, holder.root);
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FragActivity.class);
+                intent.putExtra("key", KEY.IMAGE);
+                intent.putExtra("url", (String) v.getTag());
+                context.startActivity(intent);
+            }
+        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

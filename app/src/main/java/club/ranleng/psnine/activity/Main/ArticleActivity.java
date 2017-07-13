@@ -3,6 +3,7 @@ package club.ranleng.psnine.activity.Main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,24 +13,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
 import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Post.NewGeneActivity;
+import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.activity.Post.ReplyActivity;
 import club.ranleng.psnine.adapter.Article.ArticleGameListAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleHeaderAdapter;
 import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
 import club.ranleng.psnine.adapter.Common.ImageAdapter;
 import club.ranleng.psnine.adapter.Common.MutilPagesAdapter;
+import club.ranleng.psnine.adapter.TextEditableItemAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Article.MutilPages;
 import club.ranleng.psnine.model.Common.Image;
+import club.ranleng.psnine.model.TextSpannedItem;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
@@ -58,6 +65,7 @@ public class ArticleActivity extends BaseActivity
     private SwipeRefreshLayout swipeRefreshLayout;
     private Items items;
     private LinearLayoutManager mLayoutManager;
+    private String original = null;
 
     @Override
     public void setContentView() {
@@ -145,6 +153,13 @@ public class ArticleActivity extends BaseActivity
         if(editable){
             menu.findItem(R.id.action_article_edit).setVisible(true);
         }
+
+        if(original != null){
+            menu.findItem(R.id.action_article_original).setVisible(true);
+        }else {
+            menu.findItem(R.id.action_article_original).setVisible(false);
+        }
+
         return true;
     }
 
@@ -168,6 +183,21 @@ public class ArticleActivity extends BaseActivity
         } else if (id == R.id.action_artivle_up) {
             FormBody body = new FormBody.Builder().add("type", type).add("param", a_id).add("updown", "up").build();
             new RequestPost(this, context, "updown", body);
+        } else if (id ==R.id.action_article_original){
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(original)));
+        }else if( id == R.id.action_article_edit){
+            if(type.contentEquals("gene")){
+                Intent intent = new Intent(this, NewGeneActivity.class);
+                intent.putExtra("editable",editable);
+                intent.putExtra("topic_id",a_id);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(this, NewTopicActivity.class);
+                intent.putExtra("editable",editable);
+                intent.putExtra("topic_id",a_id);
+                startActivity(intent);
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -212,6 +242,7 @@ public class ArticleActivity extends BaseActivity
         adapter.register(MutilPages.class, new MutilPagesAdapter(this));
         adapter.register(ArticleReply.class, new ArticleReplyAdapter());
         adapter.register(ArticleHeader.class, new ArticleHeaderAdapter());
+        adapter.register(TextSpannedItem.class, new TextEditableItemAdapter());
         adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
 
 
@@ -226,15 +257,23 @@ public class ArticleActivity extends BaseActivity
             items.add(new MutilPages(l));
         }
         editable = (Boolean) header.get("editable");
-        items.add(new Line());
         items.add(articleHeader);
+        items.add(new Line());
 
-        for (int i = 0; i < (int) result.get(0).get("img_size"); i++) {
-            String url = (String) result.get(0).get("img_" + String.valueOf(i));
+        for (int i = 0; i < (int) header.get("img_size"); i++) {
+            String url = (String) header.get("img_" + String.valueOf(i));
             items.add(new Image(url));
             items.add(new Line());
         }
 
+        if(header.get("video") != null){
+            items.add(new TextSpannedItem(String.format("<a href=\"%s\">打开视频链接</a>",header.get("video"))));
+            items.add(new Line());
+        }
+
+        if(header.get("original") != null){
+            original = (String) header.get("original");
+        }
 
         ArrayList<Map<String, Object>> game_list = (ArrayList<Map<String, Object>>) result.get(2).get("gamelist");
         if (game_list.size() != 0) {
@@ -269,6 +308,7 @@ public class ArticleActivity extends BaseActivity
         invalidateOptionsMenu();
         swipeRefreshLayout.setRefreshing(false);
     }
+
 
     @Override
     public void onGameClick(View view) {

@@ -1,8 +1,10 @@
 package club.ranleng.psnine.adapter;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,14 @@ public class TextEditableItemAdapter extends ItemViewBinder<TextSpannedItem, Tex
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TextEditableItemAdapter.ViewHolder holder, @NonNull TextSpannedItem item) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull TextSpannedItem item) {
+        if(item.text.contains("打开视频链接")){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                holder.text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }else{
+                holder.text.setGravity(Gravity.CENTER);
+            }
+        }
         holder.text.setText(CmHtml.returnHtml(holder.itemView.getContext(),holder.text,item.text));
         holder.text.setTextSize(14);
         holder.text.setMovementMethod(LinkMovementMethod.getInstance());

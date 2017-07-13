@@ -10,6 +10,13 @@
     tools:context="club.ranleng.psnine.activity.Main.LoginActivity">
 
     <include layout="@layout/view_toolbar"/>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,7 +50,7 @@
             <EditText
                 android:id="@+id/new_gene_main_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:background="#EFEFEF"
                 android:ems="10"
@@ -171,5 +178,5 @@
 
         </LinearLayout>
     </ScrollView>
-
+</android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

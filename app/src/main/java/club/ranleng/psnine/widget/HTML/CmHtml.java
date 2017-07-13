@@ -1,12 +1,9 @@
 package club.ranleng.psnine.widget.HTML;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -81,6 +78,7 @@ public class CmHtml {
             String[] trophy = doc.toString().split(key);
             for (int i = 0; i < trophy.length; i++) {
                 String content = trophy[i];
+                LogUtils.d(content);
                 if(i % 2 == 1){
                     if(content.contains("tbody")){
                         items.add(new Table(ParseWebpage.parseTable(content)));
