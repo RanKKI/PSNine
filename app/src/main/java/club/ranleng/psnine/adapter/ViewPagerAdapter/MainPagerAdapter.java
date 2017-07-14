@@ -15,7 +15,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments; //切換頁面的Fragments
     private String[] titles = {
-            "基因", "首页", "开箱", "攻略", "PLUS"
+            "基因", "首页", "开箱", "攻略", "PLUS", "PSN游戏"
     };
 
     public MainPagerAdapter(FragmentManager fm, List<Fragment> f) {

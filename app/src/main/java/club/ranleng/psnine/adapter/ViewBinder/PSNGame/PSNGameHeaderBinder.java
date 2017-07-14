@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.PSNGame;
+package club.ranleng.psnine.adapter.ViewBinder.PSNGame;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +14,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.PSNGame.PSNGameHeader;
-import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
 import me.drakeet.multitype.ItemViewBinder;
 
 /**
  * Created by ran on 09/07/2017.
  */
 
-public class PSNGameHeaderAdapter extends ItemViewBinder<PSNGameHeader, PSNGameHeaderAdapter.ViewHolder> {
+public class PSNGameHeaderBinder extends ItemViewBinder<PSNGameHeader, PSNGameHeaderBinder.ViewHolder> {
 
-    public PSNGameHeaderAdapter(){
+    public PSNGameHeaderBinder(){
     }
 
     @NonNull

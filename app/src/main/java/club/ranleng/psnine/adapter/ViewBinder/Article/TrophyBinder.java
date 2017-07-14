@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.Article;
+package club.ranleng.psnine.adapter.ViewBinder.Article;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,9 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Main.GameTrophyTipsActivity;
+import club.ranleng.psnine.activity.Assist.FragActivity;
 import club.ranleng.psnine.model.Article.Trophy;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -25,7 +26,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 01/07/2017.
  */
 
-public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHolder> {
+public class TrophyBinder extends ItemViewBinder<Trophy, TrophyBinder.ViewHolder> {
 
     @NonNull
     @Override
@@ -50,7 +51,8 @@ public class TrophyAdapter extends ItemViewBinder<Trophy, TrophyAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, GameTrophyTipsActivity.class);
+                Intent intent = new Intent(context, FragActivity.class);
+                intent.putExtra("key", KEY.TROPHYTIPS);
                 intent.putExtra("trophy_id",item.trophy_id);
                 context.startActivity(intent);
             }

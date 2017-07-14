@@ -1,14 +1,11 @@
-package club.ranleng.psnine.adapter.Common;
+package club.ranleng.psnine.adapter.ViewBinder.Common;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,7 +23,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 10/07/2017.
  */
 
-public class TableAdapter extends ItemViewBinder<Table, TableAdapter.ViewHolder> {
+public class TableBinder extends ItemViewBinder<Table, TableBinder.ViewHolder> {
 
 
     @NonNull

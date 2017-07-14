@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.PSNGame;
+package club.ranleng.psnine.adapter.ViewBinder.PSNGame;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,8 +14,6 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
-import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -24,7 +21,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 09/07/2017.
  */
 
-public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameTrophyAdapter.ViewHolder> {
+public class PSNGameTrophyBinder extends ItemViewBinder<PSNGameTrophy, PSNGameTrophyBinder.ViewHolder> {
 
     private OnItemClickListener clickListener;
 
@@ -32,7 +29,7 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
         void onClick(View view, int position);
     }
 
-    public PSNGameTrophyAdapter (OnItemClickListener clickListener){
+    public PSNGameTrophyBinder(OnItemClickListener clickListener){
         this.clickListener = clickListener;
     }
 
@@ -51,12 +48,14 @@ public class PSNGameTrophyAdapter extends ItemViewBinder<PSNGameTrophy, PSNGameT
         if(item.date.contentEquals("")){
             holder.psngame_trophy_date_root.setVisibility(View.INVISIBLE);
         }else{
+            holder.psngame_trophy_date_root.setVisibility(View.VISIBLE);
             holder.date.setText(item.date);
         }
 
         if(item.percent.contentEquals("")){
             holder.psngame_trophy_st_root.setVisibility(View.INVISIBLE);
         }else{
+            holder.psngame_trophy_st_root.setVisibility(View.VISIBLE);
             holder.percent.setText(item.percent);
         }
 

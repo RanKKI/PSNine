@@ -1,25 +1,20 @@
-package club.ranleng.psnine.adapter.Article;
+package club.ranleng.psnine.adapter.ViewBinder.Article;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleReply;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -27,7 +22,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 01/07/2017.
  */
 
-public class ArticleReplyAdapter extends ItemViewBinder<ArticleReply, ArticleReplyAdapter.ViewHolder>{
+public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleReplyBinder.ViewHolder>{
 
     private int position;
 

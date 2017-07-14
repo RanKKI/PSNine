@@ -1,6 +1,5 @@
-package club.ranleng.psnine.adapter.Common;
+package club.ranleng.psnine.adapter.ViewBinder.Common;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -9,25 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.MutilPages;
-import club.ranleng.psnine.model.Common.Table;
-import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
 /**
  * Created by ran on 10/07/2017.
  */
 
-public class MutilPagesAdapter extends ItemViewBinder<MutilPages, MutilPagesAdapter.ViewHolder> {
+public class MutilPagesBinder extends ItemViewBinder<MutilPages, MutilPagesBinder.ViewHolder> {
 
     private OnPageChange onPageChange;
     private String[] list_name;
@@ -36,7 +28,7 @@ public class MutilPagesAdapter extends ItemViewBinder<MutilPages, MutilPagesAdap
         void onpagechage(int page);
     }
 
-    public MutilPagesAdapter(OnPageChange onPageChange){
+    public MutilPagesBinder(OnPageChange onPageChange){
         this.onPageChange = onPageChange;
     }
 

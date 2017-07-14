@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.Common;
+package club.ranleng.psnine.adapter.ViewBinder.Common;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.model.KEY;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -25,7 +24,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 01/07/2017.
  */
 
-public class ArticleListAdapter extends ItemViewBinder<ArticleList, ArticleListAdapter.ViewHolder> {
+public class ArticleListBinder extends ItemViewBinder<ArticleList, ArticleListBinder.ViewHolder> {
 
     private OnItemClickListener clickListener;
 
@@ -33,7 +32,7 @@ public class ArticleListAdapter extends ItemViewBinder<ArticleList, ArticleListA
         void onClick(View view, int position);
     }
 
-    public ArticleListAdapter(OnItemClickListener clickListener){
+    public ArticleListBinder(OnItemClickListener clickListener){
         this.clickListener = clickListener;
     }
 

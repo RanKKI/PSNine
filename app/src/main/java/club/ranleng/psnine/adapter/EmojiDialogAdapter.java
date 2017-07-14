@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.Common;
+package club.ranleng.psnine.adapter;
 
 
 import android.support.v7.widget.RecyclerView;

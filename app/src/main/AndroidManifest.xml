@@ -78,10 +78,8 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Main.GameTrophyActivity"/>
-        <activity android:name=".activity.Main.GameTrophyTipsActivity"/>
         <activity android:name=".activity.Assist.FragActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter;
+package club.ranleng.psnine.adapter.ViewBinder;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -21,11 +21,11 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 02/07/2017.
  */
 
-public class TextEditableItemAdapter extends ItemViewBinder<TextSpannedItem, TextEditableItemAdapter.ViewHolder> {
+public class TextEditableItemBinder extends ItemViewBinder<TextSpannedItem, TextEditableItemBinder.ViewHolder> {
 
     @NonNull
     @Override
-    protected TextEditableItemAdapter.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+    protected TextEditableItemBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
         View view = inflater.inflate(R.layout.adapter_text_item,parent,false);
         return new ViewHolder(view);
     }

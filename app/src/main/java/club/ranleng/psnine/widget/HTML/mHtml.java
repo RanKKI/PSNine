@@ -553,6 +553,12 @@ class HtmlToSpannedConverter implements ContentHandler {
         if(classs != null){
             if(classs.equals("mark")){
                 start(text, new Background(0xFF999999));
+            }else if(classs.equals("pf_ps3")){
+                start(text, new Background(0xFF0AAAE9));
+            }else if(classs.equals("pf_ps4")){
+                start(text, new Background(0xFF8662DD));
+            }else if(classs.equals("pf_psv")){
+                start(text, new Background(0xFFF05561));
             }
         }
     }
@@ -638,6 +644,10 @@ class HtmlToSpannedConverter implements ContentHandler {
         Integer i = sColorMap.get(color.toLowerCase(Locale.US));
         if (i != null) {
             return i;
+        }
+        if(color.contains("#")){
+            String new_color = color.replace("#","#FF");
+            return Color.parseColor(new_color);
         }
         throw new IllegalArgumentException("Unknown color: " + color);
     }

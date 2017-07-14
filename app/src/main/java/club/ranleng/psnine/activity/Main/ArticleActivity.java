@@ -13,30 +13,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
 import club.ranleng.psnine.Listener.ReplyPostListener;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Assist.FragActivity;
 import club.ranleng.psnine.activity.Post.NewGeneActivity;
 import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.activity.Post.ReplyActivity;
-import club.ranleng.psnine.adapter.Article.ArticleGameListAdapter;
-import club.ranleng.psnine.adapter.Article.ArticleHeaderAdapter;
-import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
-import club.ranleng.psnine.adapter.Common.ImageAdapter;
-import club.ranleng.psnine.adapter.Common.MutilPagesAdapter;
-import club.ranleng.psnine.adapter.TextEditableItemAdapter;
+import club.ranleng.psnine.adapter.ViewBinder.Article.ArticleGameListBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Article.ArticleHeaderBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Article.ArticleReplyBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Common.ImageBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Common.MutilPagesBinder;
+import club.ranleng.psnine.adapter.ViewBinder.TextEditableItemBinder;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Article.MutilPages;
 import club.ranleng.psnine.model.Common.Image;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.model.TextSpannedItem;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestPost;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
@@ -51,7 +51,7 @@ import okhttp3.FormBody;
 
 public class ArticleActivity extends BaseActivity
         implements RequestWebPageListener, SwipeRefreshLayout.OnRefreshListener,
-        ArticleGameListAdapter.OnItemClickListener, MutilPagesAdapter.OnPageChange, ReplyPostListener {
+        ArticleGameListBinder.OnItemClickListener, MutilPagesBinder.OnPageChange, ReplyPostListener {
 
     private static Context context;
     private String type;
@@ -237,13 +237,13 @@ public class ArticleActivity extends BaseActivity
         items = new Items();
 
         adapter.register(Line.class, new LineViewBinder());
-        adapter.register(Image.class, new ImageAdapter());
+        adapter.register(Image.class, new ImageBinder());
         adapter.register(Category.class, new CategoryViewBinder());
-        adapter.register(MutilPages.class, new MutilPagesAdapter(this));
-        adapter.register(ArticleReply.class, new ArticleReplyAdapter());
-        adapter.register(ArticleHeader.class, new ArticleHeaderAdapter());
-        adapter.register(TextSpannedItem.class, new TextEditableItemAdapter());
-        adapter.register(ArticleGameList.class, new ArticleGameListAdapter(this));
+        adapter.register(MutilPages.class, new MutilPagesBinder(this));
+        adapter.register(ArticleReply.class, new ArticleReplyBinder());
+        adapter.register(ArticleHeader.class, new ArticleHeaderBinder());
+        adapter.register(TextSpannedItem.class, new TextEditableItemBinder());
+        adapter.register(ArticleGameList.class, new ArticleGameListBinder(this));
 
 
         Map<String, Object> header = result.get(0);
@@ -312,7 +312,8 @@ public class ArticleActivity extends BaseActivity
 
     @Override
     public void onGameClick(View view) {
-        Intent intent = new Intent(context, GameTrophyActivity.class);
+        Intent intent = new Intent(context, FragActivity.class);
+        intent.putExtra("key", KEY.TROPHY);
         intent.putExtra("game_id", view.getTag().toString());
         startActivity(intent);
     }

@@ -1,16 +1,13 @@
-package club.ranleng.psnine.adapter.Common;
+package club.ranleng.psnine.adapter.ViewBinder.Common;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +22,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 10/07/2017.
  */
 
-public class ImageAdapter extends ItemViewBinder<Image, ImageAdapter.ViewHolder> {
+public class ImageBinder extends ItemViewBinder<Image, ImageBinder.ViewHolder> {
 
 
     @NonNull

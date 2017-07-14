@@ -39,7 +39,9 @@ import club.ranleng.psnine.activity.Post.NewTopicActivity;
 import club.ranleng.psnine.adapter.ViewPagerAdapter.MainPagerAdapter;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragments.ArticleListFragment;
+import club.ranleng.psnine.fragments.PSNGameListFragment;
 import club.ranleng.psnine.model.KEY;
+import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
 import club.ranleng.psnine.util.AndroidUtilCode.Utils;
 import club.ranleng.psnine.util.CrashHandler;
 import club.ranleng.psnine.util.MakeToast;
@@ -130,11 +132,18 @@ public class MainActivity extends BaseActivity
         crashHandler.init(this);
 
         List<Fragment> fl = new ArrayList<>(); //填充要的Fragment頁卡
+
+        Fragment f = new PSNGameListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("search", false);
+        f.setArguments(bundle);
+
         fl.add(setup("gene"));
         fl.add(setup("topic"));
         fl.add(setup("openbox"));
         fl.add(setup("guide"));
         fl.add(setup("plus"));
+        fl.add(f);
         if (viewPager != null) {
             viewPager.setAdapter(new MainPagerAdapter(getFragmentManager(), fl));  //設定Adapter給viewPager
         }
@@ -155,6 +164,9 @@ public class MainActivity extends BaseActivity
                     })
                     .create();
             c.show();
+        }
+        if (file.delete()) {
+            LogUtils.d("已删除");
         }
     }
 

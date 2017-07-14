@@ -14,30 +14,30 @@ import java.util.Map;
 
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Main.ArticleActivity;
-import club.ranleng.psnine.adapter.ViewBinder.Common.ArticleListBinder;
+import club.ranleng.psnine.activity.Assist.FragActivity;
+import club.ranleng.psnine.adapter.ViewBinder.PSNGamesListBinder;
 import club.ranleng.psnine.base.BaseFragment;
-import club.ranleng.psnine.model.Common.ArticleList;
+import club.ranleng.psnine.model.KEY;
+import club.ranleng.psnine.model.PSNGames;
 import club.ranleng.psnine.util.MakeToast;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
+import club.ranleng.psnine.widget.UserStatus;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import me.drakeet.support.about.Line;
 import me.drakeet.support.about.LineViewBinder;
 
-public class ArticleListFragment extends BaseFragment
+public class PSNGameListFragment extends BaseFragment
         implements RequestWebPageListener, SwipeRefreshLayout.OnRefreshListener,
-        ArticleListBinder.OnItemClickListener {
+        PSNGamesListBinder.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context context;
-    private FinishLoadListener finishLoadListener;
     private MultiTypeAdapter adapter;
     private Items items;
 
     private String key;
-    private String type;
     private Boolean search;
 
     private int current_page = 1;
@@ -79,7 +79,7 @@ public class ArticleListFragment extends BaseFragment
         });
 
         adapter = new MultiTypeAdapter();
-        adapter.register(ArticleList.class, new ArticleListBinder(this));
+        adapter.register(PSNGames.class, new PSNGamesListBinder(this));
         adapter.register(Line.class, new LineViewBinder());
         items = new Items();
 
@@ -89,22 +89,10 @@ public class ArticleListFragment extends BaseFragment
     @Override
     public void initData() {
         if (current_page == 1) {
-            type = getArguments().getString("type");
             search = getArguments().getBoolean("search");
             key = getArguments().getString("key");
         }
-        if(type.contentEquals("notice")){
-            new RequestWebPage(this,"notice");
-        }else{
-            new RequestWebPage(this, type, search, key, String.valueOf(current_page));
-        }
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        finishLoadListener = (FinishLoadListener) context;
+        new RequestWebPage(this, "psngames", "newest" , "all", "all", search, key, String.valueOf(current_page));
     }
 
     @Override
@@ -128,30 +116,27 @@ public class ArticleListFragment extends BaseFragment
         Map<String, Object> header = result.get(0);
         max_page = (int) header.get("max_page");
         result.remove(0);
+
         if (current_page == 1) {
             adapter.setItems(items);
             recyclerView.setAdapter(adapter);
         }
 
         for (Map<String, Object> map : result) {
-            items.add(new ArticleList(map));
+            items.add(new PSNGames(map));
             items.add(new Line());
         }
 
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
-        finishLoadListener.onFinish();
     }
 
     @Override
     public void onClick(View view, int position) {
-        Intent intent = new Intent(context, ArticleActivity.class);
-        intent.putExtra("id", (String) view.getTag(R.id.tag_list_id));
-        intent.putExtra("type", (String) view.getTag(R.id.tag_list_type));
+        Intent intent = new Intent(context, FragActivity.class);
+        intent.putExtra("key", KEY.TROPHY);
+        intent.putExtra("game_id",view.getTag(R.id.tag_game_id).toString());
         startActivity(intent);
     }
 
-    public interface FinishLoadListener {
-        void onFinish();
-    }
 }

@@ -16,9 +16,6 @@ Unofficial native android application for PSNine
 - [ ] 发帖
     - [ ] 主页 (这个理论上没有问题. 还没有测试)
 
-- [ ] 图库批量上传
-
-
 License
 -------
 

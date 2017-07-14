@@ -1,19 +1,15 @@
-package club.ranleng.psnine.adapter.PSNGame;
+package club.ranleng.psnine.adapter.ViewBinder.PSNGame;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.model.PSNGame.PSNGameTrophy;
 import club.ranleng.psnine.model.PSNGame.PSNGameUser;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -21,9 +17,9 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 09/07/2017.
  */
 
-public class PSNGameUserAdapter extends ItemViewBinder<PSNGameUser, PSNGameUserAdapter.ViewHolder> {
+public class PSNGameUserBinder extends ItemViewBinder<PSNGameUser, PSNGameUserBinder.ViewHolder> {
 
-    public PSNGameUserAdapter(){
+    public PSNGameUserBinder(){
 
     }
 

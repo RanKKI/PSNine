@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter.Article;
+package club.ranleng.psnine.adapter.ViewBinder.Article;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -22,7 +22,7 @@ import me.drakeet.multitype.ItemViewBinder;
  * Created by ran on 01/07/2017.
  */
 
-public class ArticleHeaderAdapter extends ItemViewBinder<ArticleHeader, ArticleHeaderAdapter.ViewHolder> {
+public class ArticleHeaderBinder extends ItemViewBinder<ArticleHeader, ArticleHeaderBinder.ViewHolder> {
 
     @NonNull
     @Override

@@ -14,7 +14,7 @@ import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.Common.EmojiDialogAdapter;
+import club.ranleng.psnine.adapter.EmojiDialogAdapter;
 import club.ranleng.psnine.model.KEY;
 
 /**

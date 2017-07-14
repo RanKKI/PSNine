@@ -24,6 +24,7 @@ public class RequestWebPage {
         put("news", "http://psnine.com/news");
         put("openbox", "http://psnine.com/node/openbox");
         put("guide", "http://psnine.com/node/guide");
+        put("psngames", "http://psnine.com/psngame?ob=%s&pf=%s&dlc=%s&page=%s");
 
         put("notice", "http://psnine.com/my/notice");
         put("photo", "http://psnine.com/my/photo");
@@ -40,6 +41,16 @@ public class RequestWebPage {
         this.listener = listener;
         String url = (String) url_list.get(type);
         url = url + "?ob=" + KEY.PREF_OB;
+        new Info().execute(url, type);
+    }
+
+    public RequestWebPage(RequestWebPageListener listener, String type, String ob, String pf, String dlc, Boolean search, String key, String page) {
+        this.listener = listener;
+        String url = (String) url_list.get(type);
+        url = String.format(url, ob, pf, dlc,page);
+        if(search){
+            url = url + "&title=" + key;
+        }
         new Info().execute(url, type);
     }
 
@@ -127,6 +138,8 @@ public class RequestWebPage {
             }
             UserStatus.Check(result);
             switch (params[1]) {
+                case "psngames":
+                    return ParseWebpage.parsePSNGames(result);
                 case "gene":
                     return ParseWebpage.parseGene(result);
                 case "notice":

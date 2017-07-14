@@ -290,7 +290,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-        // TODO Auto-generated method stub
 
     }
 

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter;
+package club.ranleng.psnine.adapter.ViewBinder;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
 import club.ranleng.psnine.model.GameList;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -27,7 +26,7 @@ import static android.text.Html.FROM_HTML_MODE_LEGACY;
  * Created by ran on 01/07/2017.
  */
 
-public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdapter.ViewHolder> {
+public class PSNGameListBinder extends ItemViewBinder<GameList, PSNGameListBinder.ViewHolder> {
 
 
     private OnItemClickListener clickListener;
@@ -36,7 +35,7 @@ public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdap
         void onClick(View view, int position);
     }
 
-    public PSNGameListAdapter(OnItemClickListener clickListener){
+    public PSNGameListBinder(OnItemClickListener clickListener){
         this.clickListener = clickListener;
     }
     @NonNull
@@ -62,7 +61,6 @@ public class PSNGameListAdapter extends ItemViewBinder<GameList, PSNGameListAdap
         holder.profile_game_trophy.setText(spanned);
         holder.profile_game_percent.setProgress(item.progress);
         holder.itemView.setTag(R.id.tag_game_id,item.id);
-        holder.itemView.setTag(R.id.tag_game_name,item.game_name);
         Glide.with(context).load(item.game_icon).into(holder.profile_game_img);
     }
 

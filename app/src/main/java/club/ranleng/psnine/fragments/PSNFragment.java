@@ -15,16 +15,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.RequestWebPageListener;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.activity.Assist.FragActivity;
 import club.ranleng.psnine.activity.Main.ArticleActivity;
-import club.ranleng.psnine.activity.Main.GameTrophyActivity;
-import club.ranleng.psnine.adapter.Article.ArticleReplyAdapter;
-import club.ranleng.psnine.adapter.Common.ArticleListAdapter;
-import club.ranleng.psnine.adapter.PSNGameListAdapter;
+import club.ranleng.psnine.adapter.ViewBinder.PSNGameListBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Article.ArticleReplyBinder;
+import club.ranleng.psnine.adapter.ViewBinder.Common.ArticleListBinder;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Common.ArticleList;
 import club.ranleng.psnine.model.GameList;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.model.KEY;
 import club.ranleng.psnine.widget.Requests.RequestWebPage;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -37,7 +37,7 @@ import me.drakeet.support.about.LineViewBinder;
  * Created by ran on 03/07/2017.
  */
 
-public class PSNFragment extends BaseFragment implements RequestWebPageListener, PSNGameListAdapter.OnItemClickListener {
+public class PSNFragment extends BaseFragment implements RequestWebPageListener, PSNGameListBinder.OnItemClickListener {
 
     private Context context;
     private String type;
@@ -98,9 +98,9 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
         Items items = new Items();
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(Line.class,new LineViewBinder());
-        adapter.register(ArticleReply.class, new ArticleReplyAdapter());
-        adapter.register(GameList.class, new PSNGameListAdapter(this));
-        adapter.register(ArticleList.class, new ArticleListAdapter(new ArticleListAdapter.OnItemClickListener() {
+        adapter.register(ArticleReply.class, new ArticleReplyBinder());
+        adapter.register(GameList.class, new PSNGameListBinder(this));
+        adapter.register(ArticleList.class, new ArticleListBinder(new ArticleListBinder.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(context,ArticleActivity.class);
@@ -143,9 +143,9 @@ public class PSNFragment extends BaseFragment implements RequestWebPageListener,
 
     @Override
     public void onClick(View view, int position) {
-        Intent intent = new Intent(context, GameTrophyActivity.class);
+        Intent intent = new Intent(context, FragActivity.class);
+        intent.putExtra("key", KEY.TROPHY);
         intent.putExtra("game_id",view.getTag(R.id.tag_game_id).toString());
-        intent.putExtra("game_name",view.getTag(R.id.tag_game_name).toString());
         intent.putExtra("username",psnid);
         startActivity(intent);
     }
