@@ -8,8 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import club.ranleng.psnine.model.KEY;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 
+import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.widget.KEY;
+
+/**
+ * Created by ran .
+ */
 
 public abstract class BaseFragment extends Fragment {
 
@@ -61,15 +68,15 @@ public abstract class BaseFragment extends Fragment {
      * 懒加载
      */
     protected void lazyLoad() {
-        //设置中的preload为true
-//        if(!NetworkUtils.isNetworkAvailable(MainActivity.context)){
-//            Toast.makeText(this.getContext(), "无网络链接", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        if(!NetworkUtils.isConnected()){
+            MakeToast.str("无网络连接");
+            return;
+        }
 
         if (isPrepared && KEY.PREF_PRELOAD && !isLoadData) {
             isLoadData = true;
             initData();
+            return;
         }
 
         if (!isPrepared || !isVisible) {

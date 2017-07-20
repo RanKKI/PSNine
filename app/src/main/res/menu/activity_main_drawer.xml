@@ -43,7 +43,7 @@
             <item
                 android:id="@+id/nav_cache"
                 android:icon="@drawable/cache"
-                android:title="缓存 " />
+                android:title="@string/nav_cache" />
         </menu>
     </item>
 

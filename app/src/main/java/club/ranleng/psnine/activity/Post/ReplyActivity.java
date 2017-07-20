@@ -1,51 +1,57 @@
-package club.ranleng.psnine.activity.Post;
+package club.ranleng.psnine.activity.post;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.blankj.utilcode.util.KeyboardUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import club.ranleng.psnine.Listener.ReplyPostListener;
+import butterknife.OnClick;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Assist.PickImgActivity;
+import club.ranleng.psnine.activity.ImageGalleryActivity;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.fragments.EmojiDialogFragment;
-import club.ranleng.psnine.util.AndroidUtilCode.KeyboardUtils;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.ReadFile;
-import club.ranleng.psnine.util.TextUtils;
-import club.ranleng.psnine.widget.EmojiUrlToStr;
-import club.ranleng.psnine.widget.Requests.RequestPost;
+import club.ranleng.psnine.event.EmojiEvent;
+import club.ranleng.psnine.fragment.EmojiDialogFragment;
+import club.ranleng.psnine.utils.LocalFile;
+import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.utils.TextUtils;
+import club.ranleng.psnine.widget.KEY;
+import club.ranleng.psnine.widget.Internet;
 import okhttp3.FormBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
-public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.EmojiDialogListener, ReplyPostListener {
+public class ReplyActivity extends BaseActivity {
 
-    @BindView(R.id.reply_activity_button) Button reply_button;
     @BindView(R.id.reply_activity_edittext) EditText editText;
-    @BindView(R.id.reply_activity_emoji) ImageView emoji;
-    @BindView(R.id.reply_activity_image) ImageView imageView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     private Context context;
-    private String type;
-    private String a_id;
+    private int type;
+    private int id;
     private String comment_id;
     private Boolean edit = false;
     private String original_content;
+    private EmojiDialogFragment emojiDialogFragment;
+    private Comment comment;
 
     @Override
     public void setContentView() {
@@ -55,67 +61,69 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
     @Override
     public void findViews() {
         ButterKnife.bind(this);
+        emojiDialogFragment = new EmojiDialogFragment();
     }
 
     @Override
     public void setupViews() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        context = this;
-        reply_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edit) {
-                    FormBody body = new FormBody.Builder()
-                            .add("type", "comment")
-                            .add("id", comment_id)
-                            .add("content", editText.getText().toString())
-                            .build();
-                    new RequestPost(ReplyActivity.this, context, "editreply", body);
-                } else {
-                    FormBody body = new FormBody.Builder()
-                            .add("type", type)
-                            .add("param", a_id)
-                            .add("old", "yes")
-                            .add("com", "")
-                            .add("content", editText.getText().toString())
-                            .build();
-                    new RequestPost(ReplyActivity.this, context, "reply", body);
-                }
-
-
-            }
-        });
-
-        emoji.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EmojiDialogFragment a = new EmojiDialogFragment();
-                a.show(getSupportFragmentManager(), "reply_emoji");
-            }
-        });
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(context, PickImgActivity.class), 1);
-            }
-        });
-
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.requestFocus();
         KeyboardUtils.showSoftInput(editText);
-
     }
 
+    @Override
+    public void getData() {
+        EventBus.getDefault().register(this);
+        comment = Internet.retrofit.create(Comment.class);
+
+        Intent intent = getIntent();
+        type = getIntent().getIntExtra("type",-1);
+        id = getIntent().getIntExtra("id",-1);
+
+        if (intent.hasExtra("edit") && intent.getBooleanExtra("edit", false)) {
+            edit = true;
+            comment_id = intent.getStringExtra("comment_id");
+            type = KEY.TYPE_COMMENT;
+            String content = intent.getStringExtra("content");
+
+            content = content.replace("\n", "").replace("\r", "");
+            content = content.replace("&nbsp;", " ").replace("<br>", "\n");
+            String pattern = "<a href=\"http://psnine.com/psnid/.*\">(@.*)</a>";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(content);
+
+            while (m.find()) {
+                content = content.replace(m.group(0), m.group(1).replace("\n", "").replace("\r", ""));
+            }
+
+            pattern = "<img src=\"http://photo.psnine.com/face/(.*?).gif\">";
+            r = Pattern.compile(pattern);
+            m = r.matcher(content);
+            while (m.find()) {
+                content = content.replace(m.group(0), KEY.EMOJI_URL_STR.get(m.group(1)));
+            }
+            original_content = content;
+            editText.append(content);
+        } else if (LocalFile.isFileExists(String.valueOf(id))) {
+            editText.setText(LocalFile.read(String.valueOf(id)));
+        }
+
+
+        if (getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null) {
+            editText.append(String.format("@%s ", getIntent().getStringExtra("username")));
+        }
+        
+    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 10) {
-            for (String i : data.getExtras().getStringArrayList("result")) {
-                editText.append(String.format("[img]%s[/img]\n", i));
-            }
-        }
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -140,9 +148,7 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             askForSave();
         }
-
         return false;
-
     }
 
     private void askForSave() {
@@ -150,93 +156,94 @@ public class ReplyActivity extends BaseActivity implements EmojiDialogFragment.E
                 .setPositiveButton("保存", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ReadFile.save(a_id,TextUtils.toS(editText));
+                        LocalFile.save(String.valueOf(id), editText);
                         finish();
                     }
                 }).setNegativeButton("不保存", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        File file = new File(getFilesDir() + "/" + a_id);
-                        if(file.exists()){
-                            if(file.delete()){
-
-                            }
-                        }
                         finish();
                     }
                 }).create();
-        if (!TextUtils.toS(editText).equals("")) {
-            alertDialog.show();
-        }else{
+
+        if (TextUtils.toS(editText).equals("") || TextUtils.toS(editText).equals(original_content)) {
+            LocalFile.del(String.valueOf(id));
             finish();
+        } else {
+            alertDialog.show();
         }
     }
 
-    private void read() {
-        try {
-            FileInputStream inputStream = this.openFileInput(String.valueOf(a_id));
-            byte[] bytes = new byte[1024];
-
-            int len = inputStream.read(bytes);
-            inputStream.close();
-            String content = new String(bytes, 0, len);
-            editText.append(content);
-            editText.setSelection(editText.length());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    @OnClick(R.id.reply_activity_emoji)
+    public void emoji() {
+        emojiDialogFragment.show(getFragmentManager(), "reply_emoji");
     }
 
 
-    @Override
-    public void getData() {
-        type = getIntent().getStringExtra("type");
-        a_id = getIntent().getStringExtra("id");
+    @OnClick(R.id.reply_activity_image)
+    public void pickImg() {
+        startActivityForResult(new Intent(this, ImageGalleryActivity.class), KEY.REQUEST_PICKIMG);
+    }
 
-        editText.append(ReadFile.read(a_id));
-        editText.setSelection(editText.length());
 
-        if (getIntent().hasExtra("content")) {
 
-            EmojiUrlToStr emojiUrlToStr = new EmojiUrlToStr();
-            edit = true;
-            comment_id = getIntent().getStringExtra("comment_id");
-            String content = getIntent().getStringExtra("content");
-            content = content.replace("\n","").replace("\r","");
-            content = content.replace("&nbsp;", " ").replace("<br>", "\n");
-            String pattern = "<a href=\"http://psnine.com/psnid/.*\">(@.*)</a>";
-            Pattern r = Pattern.compile(pattern);
-            Matcher m = r.matcher(content);
+    @OnClick(R.id.reply_activity_button)
+    public void submit() {
+        Call<ResponseBody> call;
+        FormBody.Builder body = new FormBody.Builder();
+        final String str;
 
-            while (m.find()) {
-                content = content.replace(m.group(0), m.group(1).replace("\n","").replace("\r",""));
+        if (edit) {
+            body.add("type", "comment")
+                    .add("id", comment_id)
+                    .add("content", TextUtils.toS(editText));
+            call = comment.editReply(body.build());
+            str = "修改成功";
+        } else {
+            body.add("type", KEY.INT_TYPE(type))
+                    .add("param", String.valueOf(id))
+                    .add("old", "yes")
+                    .add("com","")
+                    .add("content",TextUtils.toS(editText));
+            call = comment.Reply(body.build());
+            str = "回复成功";
+        }
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                MakeToast.str(str);
+                finish();
             }
 
-            pattern = "<img src=\"http://photo.psnine.com/face/(.*?).gif\">";
-            r = Pattern.compile(pattern);
-            m = r.matcher(content);
-            while (m.find()) {
-                content = content.replace(m.group(0), emojiUrlToStr.convert(m.group(1)));
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
             }
-            editText.append(content);
-            original_content = content;
-        }
-        if (getIntent().hasExtra("username") && getIntent().getStringExtra("username") != null) {
-            editText.append(String.format("@%s ", getIntent().getStringExtra("username")));
-        }
+        });
+    }
+
+    @Subscribe
+    public void onEmojiSelect(EmojiEvent emojiEvent) {
+        editText.append(String.format("[%s]", emojiEvent.getEmoji()));
     }
 
     @Override
-    public void onSelected(String name) {
-        editText.append(String.format("[%s]", name));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == KEY.REQUEST_PICKIMG) {
+            for (String i : data.getExtras().getStringArrayList("result")) {
+                editText.append(String.format("[img]%s[/img]\n", i));
+            }
+        }
     }
 
-    @Override
-    public void ReplyPostFinish() {
-        editText.setText("");
-        setResult(RESULT_OK);
-        finish();
+    interface Comment {
+
+        @POST("set/comment/post")
+        Call<ResponseBody> Reply(@Body FormBody body);
+
+        @POST("set/edit/ajax")
+        Call<ResponseBody> editReply(@Body FormBody body);
+
     }
 }

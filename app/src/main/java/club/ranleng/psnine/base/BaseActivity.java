@@ -2,10 +2,7 @@ package club.ranleng.psnine.base;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
-import club.ranleng.psnine.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -32,7 +29,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         findViews();
         setupViews();
         getData();
-//        showContent();
 
     }
 
@@ -43,7 +39,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract void setupViews();
 
     public abstract void getData();
-
-//    public abstract void showContent();
 
 }

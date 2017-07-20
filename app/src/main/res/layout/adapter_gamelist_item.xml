@@ -13,16 +13,16 @@
         android:id="@+id/game_icon"
         android:layout_width="91dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/emoji_icon"/>
+        app:srcCompat="@drawable/emoji"/>
 
     <TextView
         android:id="@+id/game_trophy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/game_name"
-        android:layout_marginStart="3dp"
-        android:layout_toEndOf="@+id/game_icon"
-        android:layout_toStartOf="@+id/aaaaaa"
+        android:layout_marginLeft="3dp"
+        android:layout_toLeftOf="@+id/aaaaaa"
+        android:layout_toRightOf="@+id/game_icon"
         android:text="TextView"/>
 
     <TextView
@@ -30,8 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="3dp"
         android:layout_marginStart="3dp"
         android:layout_toEndOf="@+id/game_icon"
+        android:layout_toLeftOf="@+id/aaaaaa"
         android:layout_toRightOf="@+id/game_icon"
         android:layout_toStartOf="@+id/aaaaaa"
         android:text="TextView"

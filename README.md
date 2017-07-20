@@ -13,8 +13,7 @@ Unofficial native android application for PSNine
 - [ ] 浏览
     - [ ] 获取回复
         - [ ] 更多回复
-- [ ] 发帖
-    - [ ] 主页 (这个理论上没有问题. 还没有测试)
+
 
 License
 -------

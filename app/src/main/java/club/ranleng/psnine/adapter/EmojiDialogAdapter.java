@@ -1,6 +1,10 @@
 package club.ranleng.psnine.adapter;
 
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +51,6 @@ public class EmojiDialogAdapter extends RecyclerView.Adapter<EmojiDialogAdapter.
             R.raw.alumaohuo,R.raw.aludongjie,R.raw.aluguale,R.raw.aludianzan,R.raw.aluyiyi,R.raw.aluwunai,
             R.raw.alukaisen,R.raw.aluwulian,R.raw.aluhaixiu,R.raw.alulianteng,R.raw.aluzuomo,R.raw.aluguzhang,R.raw.aludoge};
 
-    public EmojiDialogAdapter() {
-
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -60,7 +60,14 @@ public class EmojiDialogAdapter extends RecyclerView.Adapter<EmojiDialogAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.icon.setImageDrawable(holder.itemView.getResources().getDrawable(key[position],null));
+        Drawable drawable;
+        Resources resources = holder.itemView.getResources();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable = resources.getDrawable(key[position],null);
+        }else{
+            drawable = ResourcesCompat.getDrawable(resources,key[position],null);
+        }
+        holder.icon.setImageDrawable(drawable);
     }
 
     @Override

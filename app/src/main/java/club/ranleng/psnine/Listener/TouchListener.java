@@ -8,35 +8,45 @@ import android.widget.ImageView;
 
 import java.text.DecimalFormat;
 
-/**
- * Created by ran on 12/07/2017.
- */
 
 public class TouchListener implements View.OnTouchListener {
 
+    /**
+     * 拖拉照片模式
+     */
+    private static final int MODE_DRAG = 1;
+    /**
+     * 放大缩小照片模式
+     */
+    private static final int MODE_ZOOM = 2;
     private ImageView imageview;
-    public TouchListener(ImageView imageView){
+    /**
+     * 记录是拖拉照片模式还是放大缩小照片模式
+     */
+    private int mode = 0;// 初始状态
+    /**
+     * 用于记录开始时候的坐标位置
+     */
+    private PointF startPoint = new PointF();
+    /**
+     * 用于记录拖拉图片移动的坐标位置
+     */
+    private Matrix matrix = new Matrix();
+    /**
+     * 用于记录图片要进行拖拉时候的坐标位置
+     */
+    private Matrix currentMatrix = new Matrix();
+    /**
+     * 两个手指的开始距离
+     */
+    private float startDis;
+    /**
+     * 两个手指的中间点
+     */
+    private PointF midPoint;
+    public TouchListener(ImageView imageView) {
         this.imageview = imageView;
     }
-
-    /** 记录是拖拉照片模式还是放大缩小照片模式 */
-    private int mode = 0;// 初始状态
-    /** 拖拉照片模式 */
-    private static final int MODE_DRAG = 1;
-    /** 放大缩小照片模式 */
-    private static final int MODE_ZOOM = 2;
-
-    /** 用于记录开始时候的坐标位置 */
-    private PointF startPoint = new PointF();
-    /** 用于记录拖拉图片移动的坐标位置 */
-    private Matrix matrix = new Matrix();
-    /** 用于记录图片要进行拖拉时候的坐标位置 */
-    private Matrix currentMatrix = new Matrix();
-
-    /** 两个手指的开始距离 */
-    private float startDis;
-    /** 两个手指的中间点 */
-    private PointF midPoint;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -65,7 +75,7 @@ public class TouchListener implements View.OnTouchListener {
                     if (endDis > 10f) { // 两个手指并拢在一起的时候像素大于10
                         float scale = endDis / startDis;// 得到缩放倍数
                         matrix.set(currentMatrix);
-                        matrix.postScale(scale, scale,midPoint.x,midPoint.y);
+                        matrix.postScale(scale, scale, midPoint.x, midPoint.y);
                     }
                 }
                 break;
@@ -92,7 +102,9 @@ public class TouchListener implements View.OnTouchListener {
         return true;
     }
 
-    /** 计算两个手指间的距离 */
+    /**
+     * 计算两个手指间的距离
+     */
     private float distance(MotionEvent event) {
         float dx = event.getX(1) - event.getX(0);
         float dy = event.getY(1) - event.getY(0);
@@ -101,7 +113,9 @@ public class TouchListener implements View.OnTouchListener {
         return Float.valueOf(decimalFormat.format(Math.sqrt(dx * dx + dy * dy)));
     }
 
-    /** 计算两个手指间的中间点 */
+    /**
+     * 计算两个手指间的中间点
+     */
     private PointF mid(MotionEvent event) {
         float midX = (event.getX(1) + event.getX(0)) / 2;
         float midY = (event.getY(1) + event.getY(0)) / 2;

@@ -1,37 +1,41 @@
-package club.ranleng.psnine.activity.Post;
+package club.ranleng.psnine.activity.post;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Map;
+import com.blankj.utilcode.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import club.ranleng.psnine.Listener.ReplyPostListener;
-import club.ranleng.psnine.Listener.YetanotherListener;
+import butterknife.OnClick;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Assist.PickImgActivity;
+import club.ranleng.psnine.activity.ImageGalleryActivity;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.MakeToast;
-import club.ranleng.psnine.util.TextUtils;
-import club.ranleng.psnine.widget.ParseWebpage;
-import club.ranleng.psnine.widget.Requests.RequestGet;
-import club.ranleng.psnine.widget.Requests.RequestPost;
+import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.utils.TextUtils;
+import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.UserStatus;
 import okhttp3.FormBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
-public class NewTopicActivity extends BaseActivity
-        implements View.OnClickListener, DialogInterface.OnClickListener, ReplyPostListener, YetanotherListener{
+public class newTopicActivity extends BaseActivity implements DialogInterface.OnClickListener {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.swipelayout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.new_topic_content) EditText content;
     @BindView(R.id.new_topic_title) EditText title;
 
@@ -41,7 +45,6 @@ public class NewTopicActivity extends BaseActivity
     @BindView(R.id.new_topic_submit) Button submit;
     @BindView(R.id.new_topic_magic) Button magic;
 
-    @BindView(R.id.swipelayout) SwipeRefreshLayout swipeRefreshLayout;
 
     private Context context;
     /**
@@ -49,14 +52,15 @@ public class NewTopicActivity extends BaseActivity
      * 1 保存草稿（仅自己可见）(默认)
      */
     private int mode = 1;
-    private String[] mode_name ={"发布文章","保存草稿"};
-    private String[] magic_dialog ={"加粗","彩色字体","居中","链接","Flash","引用","图片","刮刮卡","删除线","分页"};
-    private String[] magic_font_color ={"red","orange","green","rown","blue","deeppink"};
-    private String[] magic_font_color_zh ={"红","橙","绿","棕","蓝","粉"};
-    private String[] magic_photo ={"图库","URL"};
+    private String[] mode_name = {"发布文章", "保存草稿"};
+    private String[] magic_dialog_value = {"[b]", "", "", "[url]", "[flash]", "[quote]", "", "[mark]", "[s]", "[title]"};
+    private String[] magic_dialog = {"加粗", "彩色字体", "居中", "链接", "Flash", "引用", "图片", "刮刮卡", "删除线", "分页"};
+    private String[] magic_font_color = {"red", "orange", "green", "rown", "blue", "deeppink"};
+    private String[] magic_font_color_zh = {"红", "橙", "绿", "棕", "蓝", "粉"};
+    private String[] magic_photo = {"图库", "URL"};
     private AlertDialog.Builder builder;
     private Boolean edit = false;
-    private String topid_id ;
+    private String topid_id;
     /**
      * 0 mode
      * 1 magic
@@ -64,167 +68,153 @@ public class NewTopicActivity extends BaseActivity
      * 3 Choose photo
      */
     private int type;
+    private Topic topic;
+    private String edit_id;
+
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_new_topic);
-        if(!UserStatus.isLogin()){
+        if (!UserStatus.isLogin()) {
             MakeToast.plzlogin();
             finish();
         }
+        setContentView(R.layout.activity_new_topic);
     }
 
     @Override
     public void findViews() {
-        context = this;
         ButterKnife.bind(this);
     }
 
     @Override
     public void setupViews() {
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        select_mode.setOnClickListener(this);
-        submit.setOnClickListener(this);
-        magic.setOnClickListener(this);
-        builder = new AlertDialog.Builder(context);
+        setTitle("发帖");
         swipeRefreshLayout.setEnabled(false);
+        builder = new AlertDialog.Builder(this);
         String waning_a = "提问题请发到「<font color='blue'>问答</font>」板块，闲聊请发到「<font color='blue'>机因</font>」，否则将被关闭+<font color='red'>扣分处理</font>";
         waning_top.setText(Html.fromHtml(waning_a));
+        context = this;
     }
 
     @Override
     public void getData() {
-        if(getIntent().hasExtra("editable") && getIntent().getBooleanExtra("editable",false)){
-            edit = getIntent().getBooleanExtra("editable",false);
-            topid_id = getIntent().getStringExtra("topic_id");
-            new RequestGet().execute(this,"edittopic",topid_id);
-            swipeRefreshLayout.setRefreshing(true);
-        }
+
+        edit = getIntent().getBooleanExtra("edit", false);
+        edit_id = getIntent().getStringExtra("id");
+
+        topic = Internet.retrofit.create(Topic.class);
+
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-        if(id == R.id.new_topic_mode){
-            showDialog(mode_name,0);
-        }else if(id == R.id.new_topic_submit){
-            swipeRefreshLayout.setRefreshing(true);
-            FormBody.Builder b = new FormBody.Builder();
-            b.add("open",String.valueOf(mode));
-            b.add("title", TextUtils.toS(title));
-            b.add("content",TextUtils.toS(content));
-            b.add("node","talk");
-            if(edit){
-                b.add("edittopic","");
-                b.add("topicid",topid_id);
-            }else{
-                b.add("addtopic","");
-
+    @OnClick(R.id.new_topic_mode)
+    public void set_topic_mode(final Button button) {
+        builder.setItems(mode_name, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mode = which;
+                button.setText(mode_name[mode]);
             }
-            new RequestPost(this,context,"newtopic",b.build());
-
-        }else if(id == R.id.new_topic_magic){
-            showDialog(magic_dialog,1);
-        }
+        }).create().show();
     }
 
-    private void showDialog(String[] s, int t){
-        builder.setItems(s,this);
+    @OnClick(R.id.new_topic_magic)
+    public void magic() {
+        builder.setItems(magic_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                content.requestFocus();
+                switch (which) {
+                    case 1:
+                        showDialog(magic_font_color_zh, 2);
+                        break;
+                    case 2:
+                        content.setText(content.getText() + "[align=center][/align]");
+                        content.setSelection(content.length() - 8);
+                        break;
+                    case 6:
+                        showDialog(magic_photo, 3);
+                        break;
+                    default:
+                        CAA(magic_dialog_value[which]);
+
+                }
+            }
+        }).create().show();
+    }
+
+    @OnClick(R.id.new_topic_submit)
+    public void submit() {
+        swipeRefreshLayout.setRefreshing(true);
+        FormBody.Builder body = new FormBody.Builder();
+        body.add("open", String.valueOf(mode))
+                .add("title", TextUtils.toS(title))
+                .add("content", TextUtils.toS(content))
+                .add("node", "talk");
+        if(edit){
+
+        }else{
+            body.add("addtopic","");
+        }
+        topic.newTopic(body.build()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                finish();
+                MakeToast.str("发送成功");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void showDialog(String[] s, int t) {
+        builder.setItems(s, this);
         type = t;
         builder.create().show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 10){
-            for(String i : data.getStringArrayListExtra("result")){
-                content.setText(content.getText() + "[img]http://ww4.sinaimg.cn/large/"+i+".jpg[/img]\n");
-            }
-            content.setSelection(content.length());
-        }
-    }
-
-    private void CAA(String params){
-        String param = params + params.replace("[","[/");
+    private void CAA(String params) {
+        String param = params + params.replace("[", "[/");
         content.setText(content.getText() + param);
         content.setSelection(content.length() - params.length() - 1);
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if(type == 0){
-            mode = which;
-            select_mode.setText(mode_name[which]);
-        }else if(type == 1){
+        if (type == 2) {
             content.requestFocus();
-            switch (which){
-                case 0:
-                    CAA("[b]");
-                    break;
-                case 1:
-                    showDialog(magic_font_color_zh,2);
-                    break;
-                case 2:
-                    content.setText(content.getText() + "[align=center][/align]");
-                    content.setSelection(content.length() - 8);
-                    break;
-                case 3:
-                    CAA("[url]");
-                    break;
-                case 4:
-                    CAA("[flash]");
-                    break;
-                case 5:
-                    CAA("[quote]");
-                    break;
-                case 6:
-                    showDialog(magic_photo,3);
-                    break;
-                case 7:
-                    CAA("[mark]");
-                    break;
-                case 8:
-                    CAA("[s]");
-                    break;
-                case 9:
-                    CAA("[title]");
-
-            }
-        }else if(type == 2){
-            content.requestFocus();
-            content.setText(content.getText() + String.format("[color=%s][/color]",magic_font_color[which]));
+            content.append(String.format("[color=%s][/color]", magic_font_color[which]));
             content.setSelection(content.length() - 8);
-        }else if(type == 3){
+        } else if (type == 3) {
             content.requestFocus();
-            if(which == 0){
-                startActivityForResult(new Intent(context, PickImgActivity.class),1);
-            }else{
+            if (which == 0) {
+                startActivityForResult(new Intent(context, ImageGalleryActivity.class), 1);
+            } else {
                 CAA("[img]");
             }
         }
-
     }
 
     @Override
-    public void ReplyPostFinish() {
-        swipeRefreshLayout.setRefreshing(false);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            for (String i : data.getStringArrayListExtra("result")) {
+                content.setText(content.getText() + "[img]http://ww4.sinaimg.cn/large/" + i + ".jpg[/img]\n");
+            }
+            content.setSelection(content.length());
+        }
     }
 
-    @Override
-    public void onPrepare() {
 
-    }
-
-    @Override
-    public void onSuccess(String result) {
-        Map<String, String> map = ParseWebpage.parseTopicEdit(result);
-        title.setText(map.get("title"));
-        content.setText(map.get("content"));
-        mode = Integer.valueOf(map.get("mode"));
-        select_mode.setText(mode_name[mode]);
-        swipeRefreshLayout.setRefreshing(false);
+    interface Topic {
+        @POST("set/topic/post")
+        Call<ResponseBody> newTopic(@Body FormBody body);
     }
 }

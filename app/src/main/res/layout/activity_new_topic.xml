@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5E9EF"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="club.ranleng.psnine.activity.Main.LoginActivity">
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/view_appbarlayout"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipelayout"
@@ -21,7 +18,11 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,6 +88,7 @@
                     android:ems="10"
                     android:gravity="left|top"
                     android:hint="内容"
+                    android:minHeight="100dp"
                     android:nestedScrollingEnabled="true"
                     android:paddingBottom="6dp"
                     android:paddingLeft="6dp"

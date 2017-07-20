@@ -63,7 +63,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.util.AndroidUtilCode.Utils;
 
 /**
  * 可以强行Handle所有标签.
@@ -587,11 +586,7 @@ class HtmlToSpannedConverter implements ContentHandler {
             d = img.getDrawable(src);
         }
         if (d == null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                d = Resources.getSystem().getDrawable(R.drawable.error_drawable, null);
-            }else{
-                d = Utils.getContext().getResources().getDrawable(R.drawable.error_drawable);
-            }
+            d = Resources.getSystem().getDrawable(android.R.drawable.stat_notify_error);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         }
         int len = text.length();

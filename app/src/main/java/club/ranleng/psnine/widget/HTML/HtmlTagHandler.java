@@ -12,13 +12,9 @@ import org.xml.sax.Attributes;
 
 import java.util.Locale;
 
-import club.ranleng.psnine.activity.Assist.FragActivity;
-import club.ranleng.psnine.model.KEY;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
+import club.ranleng.psnine.activity.FragActivity;
+import club.ranleng.psnine.widget.KEY;
 
-/**
- * Created by ran on 02/07/2017.
- */
 
 public class HtmlTagHandler implements mHtml.TagHandler {
     private Context ctx;
@@ -30,9 +26,7 @@ public class HtmlTagHandler implements mHtml.TagHandler {
 
     @Override
     public void handleTag(boolean opening, String tag, Editable output, Attributes attributes) {
-        if (tag.toLowerCase().equals("blockquote")) {
-            LogUtils.d("handle");
-        } else if (tag.toLowerCase(Locale.getDefault()).equals("img")) {
+        if (tag.toLowerCase(Locale.getDefault()).equals("img")) {
             // 获取长度
             int len = output.length();
             // 获取图片地址

@@ -2,10 +2,6 @@ package club.ranleng.psnine.model;
 
 import java.util.Map;
 
-/**
- * Created by ran on 03/07/2017.
- */
-
 public class GameList {
     public final String game_icon;
     public final String game_name;

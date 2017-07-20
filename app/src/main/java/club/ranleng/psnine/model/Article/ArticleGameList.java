@@ -2,7 +2,6 @@ package club.ranleng.psnine.model.Article;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -36,7 +35,7 @@ public class ArticleGameList {
                 .replace("<em class=\"text-gold\">", b)
                 .replace("<em class=\"text-silver\">", c)
                 .replace("<em class=\"text-bronze\">", d)
-                .replace("</em>","</font>");
+                .replace("</em>", "</font>");
 
         this.icon = (String) map.get("game_icon");
         this.is_comment = (Boolean) map.get("is_comment");

@@ -2,7 +2,6 @@ package club.ranleng.psnine.model.Article;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -18,12 +17,12 @@ public class ArticleReply {
     public final String title;
     public final String time;
 
-    public ArticleReply(@NonNull Map<String, Object> map){
+    public ArticleReply(@NonNull Map<String, Object> map) {
         this.title = (String) map.get("title");
-        this.comment_id =(String) map.get("id");
+        this.comment_id = (String) map.get("id");
         this.editable = (Boolean) map.get("editable");
         this.username = (String) map.get("username");
-        this.time  = (String) map.get("time");
+        this.time = (String) map.get("time");
         this.icon = map.get("icon");
     }
 }

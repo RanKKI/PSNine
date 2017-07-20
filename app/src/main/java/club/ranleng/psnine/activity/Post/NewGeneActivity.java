@@ -1,38 +1,50 @@
-package club.ranleng.psnine.activity.Post;
+package club.ranleng.psnine.activity.post;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import club.ranleng.psnine.Listener.ReplyPostListener;
-import club.ranleng.psnine.Listener.YetanotherListener;
+import butterknife.OnClick;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.Assist.PickImgActivity;
+import club.ranleng.psnine.activity.ImageGalleryActivity;
 import club.ranleng.psnine.base.BaseActivity;
-import club.ranleng.psnine.util.AndroidUtilCode.LogUtils;
-import club.ranleng.psnine.util.MakeToast;
-import club.ranleng.psnine.util.TextUtils;
-import club.ranleng.psnine.widget.ParseWebpage;
-import club.ranleng.psnine.widget.Requests.RequestGet;
-import club.ranleng.psnine.widget.Requests.RequestPost;
+import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.utils.TextUtils;
+import club.ranleng.psnine.widget.Internet;
+import club.ranleng.psnine.widget.KEY;
+import club.ranleng.psnine.widget.ParseWeb;
 import club.ranleng.psnine.widget.UserStatus;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
-public class NewGeneActivity extends BaseActivity implements View.OnClickListener, ReplyPostListener, YetanotherListener {
+public class newGeneActivity extends BaseActivity {
 
     @BindView(R.id.new_gene_waning) TextView waning;
     @BindView(R.id.new_gene_selected_img) TextView selected_img;
@@ -43,33 +55,28 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.new_gene_music_id) EditText music_id;
     @BindView(R.id.new_gene_url) EditText url;
 
-    @BindView(R.id.new_gene_select_img) Button select_img;
-    @BindView(R.id.new_gene_select_music_type) Button music_type;
-    @BindView(R.id.new_gene_submit) Button submit;
-
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipelayout) SwipeRefreshLayout swipeRefreshLayout;
 
-    private Context context;
-    private Boolean edit;
-    private String topid_id;
     private ArrayList<String> photo_list = new ArrayList<>();
-    private Map<String, Object> body = new HashMap<>();
+
+    private Boolean edit = false;
+    private String edit_id;
+    private Gene gene;
     private String[] music_type_list = {"单曲", "专辑", "电台", "歌单"};
     private String[] music_type_list_key = {"mu", "al", "dj", "pl"};
+    private String muparam = "";
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_new_gene);
-        if(!UserStatus.isLogin()){
-            MakeToast.plzlogin();
+        if (!UserStatus.isLogin()) {
             finish();
         }
+        setContentView(R.layout.activity_new_gene);
     }
 
     @Override
     public void findViews() {
-        context = this;
         ButterKnife.bind(this);
     }
 
@@ -79,9 +86,7 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        select_img.setOnClickListener(this);
-        music_type.setOnClickListener(this);
-        submit.setOnClickListener(this);
+        setTitle("发基因");
         String text = "提问题请发到「<font color='blue' >问答</font>」板块，否则将被<font color='red' >关闭处理</font>";
         waning.setText(Html.fromHtml(text));
         swipeRefreshLayout.setEnabled(false);
@@ -89,108 +94,128 @@ public class NewGeneActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getData() {
-        if(getIntent().hasExtra("editable") && getIntent().getBooleanExtra("editable",false)){
-            edit = getIntent().getBooleanExtra("editable",false);
-            topid_id = getIntent().getStringExtra("topic_id");
-            new RequestGet().execute(this,"editgene",topid_id);
+        edit = getIntent().getBooleanExtra("edit", false);
+        edit_id = getIntent().getStringExtra("id");
+
+        gene = Internet.retrofit.create(Gene.class);
+
+        if (edit) {
             swipeRefreshLayout.setRefreshing(true);
+            gene.GetEditGene(edit_id)
+                    .subscribeOn(Schedulers.io())
+                    .map(new Function<ResponseBody, Map<String, String>>() {
+                        @Override
+                        public Map<String, String> apply(@NonNull ResponseBody responseBody) throws Exception {
+                            return ParseWeb.parseGeneEdit(responseBody.string());
+                        }
+                    })
+                    .subscribe(new Consumer<Map<String, String>>() {
+                        @Override
+                        public void accept(@NonNull Map<String, String> map) throws Exception {
+                            main_edit.setText(map.get("content"));
+                            ele.setText(map.get("element"));
+                            String[] temp = map.get("photo").split(",");
+                            Collections.addAll(photo_list, temp);
+                            video_url.setText(map.get("video"));
+                            music_id.setText(map.get("muid"));
+                            url.setText(map.get("url"));
+                            String selected = photo_list.size() + " 张";
+                            selected_img.setText(selected);
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
         }
     }
 
-    private void putAllData(){
-        putData("content",TextUtils.toS(main_edit));
-        putData("element",TextUtils.toS(ele));
-        putData("video", TextUtils.toS(video_url));
-        putData("muid", TextUtils.toS(music_id));
-        putData("url", TextUtils.toS(url));
+    @OnClick(R.id.new_gene_select_img)
+    public void select_img() {
+        Intent intent = new Intent(this, ImageGalleryActivity.class);
+        intent.putExtra("list", photo_list);
+        startActivityForResult(intent, KEY.REQUEST_PICKIMG);
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.new_gene_select_img) {
-            Intent intent = new Intent(context, PickImgActivity.class);
-            intent.putExtra("list", photo_list);
-            startActivityForResult(intent, 1);
-        } else if (id == R.id.new_gene_select_music_type) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setItems(music_type_list, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    music_type.setText(music_type_list[which]);
-                    putData("muparam",music_type_list_key[which]);
-                }
-            });
-            builder.create().show();
-        } else if (id == R.id.new_gene_submit) {
-            swipeRefreshLayout.setRefreshing(true);
-            putAllData();
-            FormBody.Builder b = new FormBody.Builder();
-            for (Map.Entry entry : body.entrySet()) {
-                b.add((String) entry.getKey(),(String) entry.getValue());
-            }
-            String p = "";
-            for (String s : photo_list) {
-                p += s + ",";
-            }
-            if(!p.contentEquals("")){
-                p = p.substring(0, p.length() - 1);
-            }
-            b.add("photo",p);
-            if(edit){
-                b.add("geneid",topid_id);
-                b.add("editgene","");
+    @OnClick(R.id.new_gene_submit)
+    public void submit() {
 
-            }else{
-                b.add("addgene","");
-
-            }
-            new RequestPost(this,context,"newgene",b.build());
+        if(TextUtils.toS(main_edit).length() <= 8){
+            MakeToast.str("输入内容太少啦");
+            return;
         }
+
+        swipeRefreshLayout.setRefreshing(true);
+        FormBody.Builder body = new FormBody.Builder();
+
+        body.add("content", TextUtils.toS(main_edit))
+                .add("element", TextUtils.toS(ele))
+                .add("video", TextUtils.toS(video_url))
+                .add("muid", TextUtils.toS(music_id))
+                .add("url", TextUtils.toS(url))
+                .add("muparam", muparam);
+        String p = "";
+        for (String i : photo_list) {
+            p += i + ",";
+        }
+
+        if (!p.contentEquals("")) {
+            p = p.substring(0, p.length() - 1);
+        }
+
+        body.add("photo", p);
+
+
+        if (edit) {
+            body.add("geneid", edit_id)
+                    .add("editgene", "");
+        } else {
+            body.add("addgene", "");
+        }
+
+
+        gene.newGene(body.build()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                MakeToast.str("发送成功");
+                swipeRefreshLayout.setRefreshing(false);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                MakeToast.str("发送失败");
+                t.printStackTrace();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @OnClick(R.id.new_gene_select_music_type)
+    public void setMusic_type(final Button button) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(music_type_list, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                button.setText(music_type_list[which]);
+                muparam = music_type_list_key[which];
+            }
+        });
+        builder.create().show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 10){
+        if (resultCode == RESULT_OK && requestCode == KEY.REQUEST_PICKIMG) {
             photo_list = data.getExtras().getStringArrayList("result");
             String selected = photo_list.size() + " 张";
             selected_img.setText(selected);
         }
     }
 
-    private void putData(String key, Object data){
-        if(body.containsKey(key)){
-            body.remove(key);
-        }
+    interface Gene {
+        @GET("gene/{id}/edit")
+        Observable<ResponseBody> GetEditGene(@Path("id") String id);
 
-        body.put(key,data);
+        @POST("set/gene/post")
+        Call<ResponseBody> newGene(@Body FormBody body);
     }
 
-    @Override
-    public void ReplyPostFinish() {
-        swipeRefreshLayout.setRefreshing(false);
-        finish();
-    }
-
-    @Override
-    public void onPrepare() {
-
-    }
-
-    @Override
-    public void onSuccess(String result) {
-        Map<String, String> map = ParseWebpage.parseGeneEdit(result);
-        main_edit.setText(map.get("content"));
-        ele.setText(map.get("element"));
-        String[] temp = map.get("photo").split(",");
-        for (int i = 0; i < temp.length; i++) {
-            photo_list.add(temp[i]);
-        }
-        video_url.setText(map.get("video"));
-        music_id.setText(map.get("muid"));
-        url.setText(map.get("url"));
-        String selected = photo_list.size() + " 张";
-        selected_img.setText(selected);
-        swipeRefreshLayout.setRefreshing(false);
-    }
 }

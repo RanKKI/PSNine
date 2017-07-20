@@ -2,7 +2,6 @@ package club.ranleng.psnine.model.Article;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 

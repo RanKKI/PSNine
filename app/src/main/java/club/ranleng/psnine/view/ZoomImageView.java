@@ -1,4 +1,5 @@
 package club.ranleng.psnine.view;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Matrix;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.ImageView;
 
 @SuppressLint("NewApi")
 public class ZoomImageView extends android.support.v7.widget.AppCompatImageView implements OnGlobalLayoutListener,
@@ -22,13 +22,12 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
     /**
      * 自由的放大 和 缩小 放大 可以 自由的 移动 处理 和viewpager 事件冲突
-     *
-     *
+     * <p>
+     * <p>
      * 1.Matrix 2.ScaleGestureDetector 3.GestureDetector 4.事件分发机制
-     *
-     *
+     * <p>
+     * <p>
      * 1.实现
-     *
      */
 
     // 第一次运行 初始化
@@ -52,6 +51,13 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
     // 判断双击中
     private boolean isDoubletag = false;
+    // ---------------------------------------------------------自由移动
+    // 存储最后的位置
+    private int lastPointCount;
+    private float Lx;
+    private float Ly;
+    private boolean isDrag;
+    private boolean isCheckLeftAndRight, isCheckTopAndBottom = false;
 
     /**
      * 重写 3个 构造方法
@@ -101,63 +107,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
                         return true;
                     }
                 });
-    }
-
-    /**
-     * 自动放大 缩小 缓慢的缩放
-     *
-     * @author yuan
-     *
-     */
-    private class AutoScaleRunnable implements Runnable {
-
-        private float mTargetScale;
-        private float x;
-        private float y;
-
-        private final float BIGGER = 1.07f;
-        private final float SMALL = 0.93f;
-        private float tmpScale;
-
-        /**
-         * 实现构造方法
-         *
-         * @param mTargetScale
-         * @param x
-         * @param y
-         */
-        public AutoScaleRunnable(float mTargetScale, float x, float y) {
-            this.mTargetScale = mTargetScale;
-            this.x = x;
-            this.y = y;
-            if (getScale() < mTargetScale) {
-                tmpScale = BIGGER;
-            }
-            if (getScale() > mTargetScale) {
-                tmpScale = SMALL;
-            }
-        }
-
-        @Override
-        public void run() {
-            //
-            matrix.postScale(tmpScale, tmpScale, x, y);
-            checkBorderAndCenterWhenScale();
-            setImageMatrix(matrix);
-
-            float currentScale = getScale();
-            if ((tmpScale > 1.0f && currentScale < mTargetScale)
-                    || (tmpScale < 1.0f && currentScale > mTargetScale)) {
-                postDelayed(this, 16);
-            } else {
-                float scale = mTargetScale / currentScale;
-                matrix.postScale(scale, scale, x, y);
-                checkBorderAndCenterWhenScale();
-                setImageMatrix(matrix);
-                isDoubletag = false;
-            }
-        }
-
     }
 
     public ZoomImageView(Context context, AttributeSet attrs) {
@@ -292,14 +241,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
     public void onScaleEnd(ScaleGestureDetector detector) {
 
     }
-
-    // ---------------------------------------------------------自由移动
-    // 存储最后的位置
-    private int lastPointCount;
-    private float Lx;
-    private float Ly;
-    private boolean isDrag;
-    private boolean isCheckLeftAndRight, isCheckTopAndBottom = false;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -440,7 +381,6 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         return Math.sqrt(dx * dx + dy * dy) > touchSlop;
     }
 
-    // ------------------------------------------------比例缩放
     /**
      * 获得 图片放大缩小 以后的宽和高
      *
@@ -458,6 +398,8 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         }
         return rectF;
     }
+
+    // ------------------------------------------------比例缩放
 
     /**
      * 防止缩放时，出现白边
@@ -497,6 +439,61 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         }
 
         matrix.postTranslate(dx, dy);
+    }
+
+    /**
+     * 自动放大 缩小 缓慢的缩放
+     *
+     * @author yuan
+     */
+    private class AutoScaleRunnable implements Runnable {
+
+        private final float BIGGER = 1.07f;
+        private final float SMALL = 0.93f;
+        private float mTargetScale;
+        private float x;
+        private float y;
+        private float tmpScale;
+
+        /**
+         * 实现构造方法
+         *
+         * @param mTargetScale
+         * @param x
+         * @param y
+         */
+        public AutoScaleRunnable(float mTargetScale, float x, float y) {
+            this.mTargetScale = mTargetScale;
+            this.x = x;
+            this.y = y;
+            if (getScale() < mTargetScale) {
+                tmpScale = BIGGER;
+            }
+            if (getScale() > mTargetScale) {
+                tmpScale = SMALL;
+            }
+        }
+
+        @Override
+        public void run() {
+            //
+            matrix.postScale(tmpScale, tmpScale, x, y);
+            checkBorderAndCenterWhenScale();
+            setImageMatrix(matrix);
+
+            float currentScale = getScale();
+            if ((tmpScale > 1.0f && currentScale < mTargetScale)
+                    || (tmpScale < 1.0f && currentScale > mTargetScale)) {
+                postDelayed(this, 16);
+            } else {
+                float scale = mTargetScale / currentScale;
+                matrix.postScale(scale, scale, x, y);
+                checkBorderAndCenterWhenScale();
+                setImageMatrix(matrix);
+                isDoubletag = false;
+            }
+        }
+
     }
 
 }
