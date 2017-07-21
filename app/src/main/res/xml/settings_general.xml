@@ -27,6 +27,12 @@
             android:summary="标题内容浓缩到一行"
             android:title="单行标题" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_images_quality"
+            android:summary="文章中图片加载高质量图片"
+            android:title="图片质量" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

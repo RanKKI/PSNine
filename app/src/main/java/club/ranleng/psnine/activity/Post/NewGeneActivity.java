@@ -30,6 +30,7 @@ import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
 import club.ranleng.psnine.widget.UserStatus;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -61,7 +62,7 @@ public class newGeneActivity extends BaseActivity {
     private ArrayList<String> photo_list = new ArrayList<>();
 
     private Boolean edit = false;
-    private String edit_id;
+    private int edit_id;
     private Gene gene;
     private String[] music_type_list = {"单曲", "专辑", "电台", "歌单"};
     private String[] music_type_list_key = {"mu", "al", "dj", "pl"};
@@ -95,7 +96,7 @@ public class newGeneActivity extends BaseActivity {
     @Override
     public void getData() {
         edit = getIntent().getBooleanExtra("edit", false);
-        edit_id = getIntent().getStringExtra("id");
+        edit_id = getIntent().getIntExtra("id", -1);
 
         gene = Internet.retrofit.create(Gene.class);
 
@@ -109,6 +110,7 @@ public class newGeneActivity extends BaseActivity {
                             return ParseWeb.parseGeneEdit(responseBody.string());
                         }
                     })
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<Map<String, String>>() {
                         @Override
                         public void accept(@NonNull Map<String, String> map) throws Exception {
@@ -164,7 +166,7 @@ public class newGeneActivity extends BaseActivity {
 
 
         if (edit) {
-            body.add("geneid", edit_id)
+            body.add("geneid", String.valueOf(edit_id))
                     .add("editgene", "");
         } else {
             body.add("addgene", "");
@@ -212,7 +214,7 @@ public class newGeneActivity extends BaseActivity {
 
     interface Gene {
         @GET("gene/{id}/edit")
-        Observable<ResponseBody> GetEditGene(@Path("id") String id);
+        Observable<ResponseBody> GetEditGene(@Path("id") int id);
 
         @POST("set/gene/post")
         Call<ResponseBody> newGene(@Body FormBody body);

@@ -66,10 +66,13 @@ public class KEY {
 
     public static final String KEY_PREF_SINGLELINE = "settings_single_line";
 
+    public static final String KEY_PREF_IMAGES_QUALITY = "settings_images_quality";
+
     public static Boolean PREF_PRELOAD = false;
     public static String PREF_OB = "obdate";
     public static Boolean PREF_EMOJI = true;
     public static Boolean PREF_SINGLELINE = true;
+    public static Boolean PREF_IMAGESQUALITY = true;
 
     public static void initSetting(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -77,6 +80,7 @@ public class KEY {
         PREF_OB = sharedPref.getString(KEY.KEY_PREF_OB, "obdate");
         PREF_EMOJI = sharedPref.getBoolean(KEY.KEY_PREF_EMOJI, true);
         PREF_SINGLELINE = sharedPref.getBoolean(KEY.KEY_PREF_SINGLELINE, true);
+        PREF_IMAGESQUALITY = sharedPref.getBoolean(KEY.KEY_PREF_IMAGES_QUALITY, true);
     }
 
 

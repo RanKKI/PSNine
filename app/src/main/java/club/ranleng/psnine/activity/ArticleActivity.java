@@ -3,6 +3,7 @@ package club.ranleng.psnine.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.model.Article.MutilPages;
 import club.ranleng.psnine.model.Image_Gene;
 import club.ranleng.psnine.model.TextSpannedItem;
+import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
@@ -52,6 +54,9 @@ import me.drakeet.support.about.LineViewBinder;
 import okhttp3.FormBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -63,7 +68,7 @@ public class ArticleActivity extends BaseActivity {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     private int type;
-    private int id;
+    private int article_id;
     private Boolean f_game = true;
     private Boolean f_reply = true;
     private Article article;
@@ -128,7 +133,7 @@ public class ArticleActivity extends BaseActivity {
     public void getData() {
         Intent intent = getIntent();
         this.type = intent.getIntExtra("type", -1);
-        this.id = intent.getIntExtra("id", -1);
+        this.article_id = intent.getIntExtra("id", -1);
         article = Internet.retrofit.create(Article.class);
         context = this;
         initData();
@@ -144,23 +149,41 @@ public class ArticleActivity extends BaseActivity {
         if (id == R.id.action_article_edit) {
 
             Intent intent;
-            if(type == KEY.TYPE_GENE){
+            if (type == KEY.TYPE_GENE) {
                 intent = new Intent(this, newGeneActivity.class);
-            }else{
+            } else {
                 intent = new Intent(this, newTopicActivity.class);
             }
-            intent.putExtra("edit",true);
-            intent.putExtra("id",id);
+            intent.putExtra("edit", true);
+            intent.putExtra("id", article_id);
             startActivity(intent);
 
         } else if (id == R.id.action_article_reply) {
             Replies();
         } else if (id == R.id.action_artivle_fav) {
+            FormBody.Builder body = new FormBody.Builder();
+            body.add("type", KEY.INT_TYPE(type))
+                    .add("param", String.valueOf(article_id))
+                    .add("updown", "up");
+            article.Fav(body.build()).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    MakeToast.str("成功");
+                }
 
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
         } else if (id == R.id.action_article_original) {
-
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri content_url = Uri.parse(original);
+            intent.setData(content_url);
+            startActivity(intent);
         } else if (id == R.id.action_artivle_up) {
-
+            up(KEY.INT_TYPE(type), String.valueOf(article_id));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,18 +199,7 @@ public class ArticleActivity extends BaseActivity {
                 Replies(articleReply.username);
                 return true;
             case R.id.adapter_article_menu_up:
-                AlertDialog alertDialog = new AlertDialog.Builder(context)
-                        .setMessage("要付出4铜币来顶一下吗？")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                FormBody body = new FormBody.Builder()
-                                        .add("type", "comment")
-                                        .add("param", articleReply.comment_id)
-                                        .add("updown", "up")
-                                        .build();
-                            }
-                        }).create();
-                alertDialog.show();
+                up("comment", articleReply.comment_id);
                 return true;
             case R.id.adapter_article_menu_user:
                 Intent intent = new Intent(context, PSNActivity.class);
@@ -204,7 +216,7 @@ public class ArticleActivity extends BaseActivity {
         menu.clear();
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_article, menu);
-        menu.findItem(R.id.action_artivle_up).setVisible(type == KEY.TYPE_GENE);
+        menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE);
         menu.findItem(R.id.action_article_edit).setVisible(editable);
         menu.findItem(R.id.action_article_original).setVisible(original != null);
 
@@ -216,9 +228,9 @@ public class ArticleActivity extends BaseActivity {
         swipeRefreshLayout.setRefreshing(true);
         Observable<ResponseBody> header;
         if (type == KEY.TYPE_GENE) {
-            header = article.getGene(id);
+            header = article.getGene(article_id);
         } else {
-            header = article.getArticle(id, current_page);
+            header = article.getArticle(article_id, current_page);
         }
 
         header.subscribeOn(Schedulers.io())
@@ -247,6 +259,7 @@ public class ArticleActivity extends BaseActivity {
                         if (map_type.equals("header")) {
 
                             max_pages = (int) map.get("page_size");
+
                             if (max_pages != 1) {
                                 ArrayList<String> l = new ArrayList<>();
                                 for (int i = 1; i < max_pages + 1; i++) {
@@ -255,6 +268,7 @@ public class ArticleActivity extends BaseActivity {
                                 items.add(new MutilPages(l));
                                 items.add(new Line());
                             }
+
                             editable = (Boolean) map.get("editable");
                             items.add(new ArticleHeader(map));
 
@@ -271,9 +285,8 @@ public class ArticleActivity extends BaseActivity {
                                 items.add(new Line());
                             }
 
-                            if (map.get("original") != null) {
+                            if (map.get("original") != null)
                                 original = (String) map.get("original");
-                            }
 
                         } else if (map_type.equals("game_list")) {
 
@@ -319,19 +332,45 @@ public class ArticleActivity extends BaseActivity {
     private void Replies(String username, String content, String comment_id) {
         Intent intent = new Intent(context, ReplyActivity.class);
         intent.putExtra("type", type);
-        intent.putExtra("id", id);
+        intent.putExtra("id", article_id);
 
-        if(username != null){
+        if (username != null) {
             intent.putExtra("username", username);
         }
 
         if (content != null) {
-            intent.putExtra("edit",true);
+            intent.putExtra("edit", true);
             intent.putExtra("content", content);
             intent.putExtra("comment_id", comment_id);
         }
 
         startActivity(intent);
+    }
+
+
+    private void up(final String type, final String param) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setMessage("要付出4铜币来顶一下吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        FormBody.Builder body = new FormBody.Builder();
+                        body.add("type", type)
+                                .add("param", param)
+                                .add("updown", "up");
+                        article.Up(body.build()).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                MakeToast.str("成功");
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
+                }).create();
+        alertDialog.show();
     }
 
     interface Article {
@@ -343,11 +382,11 @@ public class ArticleActivity extends BaseActivity {
         Observable<ResponseBody> getGene(@Path("id") int id);
 
 
-        @POST("my/fav")
-        Call<ResponseBody> Fav();
+        @POST("set/fav/ajax")
+        Call<ResponseBody> Fav(@Body FormBody body);
 
         @POST("set/updown/ajax")
-        Call<ResponseBody> Up();
+        Call<ResponseBody> Up(@Body FormBody body);
 
         //TODO
         //多页评论

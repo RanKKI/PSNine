@@ -126,6 +126,9 @@ public class ParseWeb {
 
     public static Map<String, Object> parseArticleHeader(String results, int type) {
         Map<String, Object> map = new HashMap<>();
+        if(!KEY.PREF_IMAGESQUALITY){
+            results = results.replace("sinaimg.cn/large","sinaimg.cn/small");
+        }
         Document doc = Jsoup.parse(results);
 
         String username;
@@ -184,7 +187,7 @@ public class ParseWeb {
                 }
             }
 
-            if (doc.select("div.alert-info.pd10").select("div.meta").select("span").select("a").size() != 2) {
+            if (doc.select("div.alert-info.pd10").select("div.meta").select("span").select("a").size() != 3) {
                 editable = true;
             }
 
@@ -215,7 +218,9 @@ public class ParseWeb {
     public static ArrayList<Map<String, Object>> parseAReplies(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         results = results.replace("<img src=\"http://ww4.sinaimg.cn", "<br/><img src=\"http://ww4.sinaimg.cn");
-
+        if(!KEY.PREF_IMAGESQUALITY){
+            results = results.replace("sinaimg.cn/large","sinaimg.cn/small");
+        }
         Document doc = Jsoup.parse(results);
         Elements post = doc.select("div.post");
         for (Element c : post) {
@@ -246,8 +251,8 @@ public class ParseWeb {
     public static ArrayList<Map<String, Object>> parseBReplies(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         results = results.replace("<img src=\"http://ww4.sinaimg.cn", "<br/><img src=\"http://ww4.sinaimg.cn");
-
         Document doc = Jsoup.parse(results);
+        listItems.add(ListInfo(doc));
         Elements post = doc.select("ul.list").select("li");
         for (Element c : post) {
             String content = c.select("div.content.pb10").html();
@@ -454,6 +459,15 @@ public class ParseWeb {
         map.put("video", doc.select("input[name=video]").attr("value"));
         map.put("muid", doc.select("input[name=muid]").attr("value"));
         map.put("url", doc.select("input[name=url]").attr("value"));
+        return map;
+    }
+
+    public static Map<String, String> parseTopicEdit(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        map.put("title", doc.select("input[name=title]").attr("value"));
+        map.put("content", doc.select("textarea[name=content]").text());
+        map.put("open", doc.select("select[name=open]").select("option[selected=selected]").attr("value"));
         return map;
     }
 

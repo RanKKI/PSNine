@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,14 +24,23 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.utils.TextUtils;
 import club.ranleng.psnine.widget.Internet;
+import club.ranleng.psnine.widget.ParseWeb;
 import club.ranleng.psnine.widget.UserStatus;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public class newTopicActivity extends BaseActivity implements DialogInterface.OnClickListener {
 
@@ -60,7 +70,6 @@ public class newTopicActivity extends BaseActivity implements DialogInterface.On
     private String[] magic_photo = {"图库", "URL"};
     private AlertDialog.Builder builder;
     private Boolean edit = false;
-    private String topid_id;
     /**
      * 0 mode
      * 1 magic
@@ -69,7 +78,7 @@ public class newTopicActivity extends BaseActivity implements DialogInterface.On
      */
     private int type;
     private Topic topic;
-    private String edit_id;
+    private int edit_id;
 
 
     @Override
@@ -102,11 +111,32 @@ public class newTopicActivity extends BaseActivity implements DialogInterface.On
 
     @Override
     public void getData() {
-
-        edit = getIntent().getBooleanExtra("edit", false);
-        edit_id = getIntent().getStringExtra("id");
-
         topic = Internet.retrofit.create(Topic.class);
+        edit = getIntent().getBooleanExtra("edit", false);
+        edit_id = getIntent().getIntExtra("id", -1);
+
+        if (edit) {
+            swipeRefreshLayout.setRefreshing(true);
+            topic.editTopic(edit_id)
+                    .subscribeOn(Schedulers.io())
+                    .map(new Function<ResponseBody, Map<String, String>>() {
+                        @Override
+                        public Map<String, String> apply(@NonNull ResponseBody responseBody) throws Exception {
+                            return ParseWeb.parseTopicEdit(responseBody.string());
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Map<String, String>>() {
+                        @Override
+                        public void accept(@NonNull Map<String, String> map) throws Exception {
+                            mode = Integer.valueOf(map.get("open"));
+                            title.setText(map.get("title"));
+                            content.setText(map.get("content"));
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+        }
+
 
     }
 
@@ -154,10 +184,11 @@ public class newTopicActivity extends BaseActivity implements DialogInterface.On
                 .add("title", TextUtils.toS(title))
                 .add("content", TextUtils.toS(content))
                 .add("node", "talk");
-        if(edit){
-
-        }else{
-            body.add("addtopic","");
+        if (edit) {
+            body.add("topicid", String.valueOf(edit_id))
+                    .add("edittopic", "");
+        } else {
+            body.add("addtopic", "");
         }
         topic.newTopic(body.build()).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -216,5 +247,9 @@ public class newTopicActivity extends BaseActivity implements DialogInterface.On
     interface Topic {
         @POST("set/topic/post")
         Call<ResponseBody> newTopic(@Body FormBody body);
+
+
+        @GET("topic/{id}/edit")
+        Observable<ResponseBody> editTopic(@Path("id") int topic_id);
     }
 }

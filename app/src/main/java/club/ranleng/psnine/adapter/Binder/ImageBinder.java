@@ -65,10 +65,8 @@ public class ImageBinder extends ItemViewBinder<Image_Gene, ImageBinder.ViewHold
         holder.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
         holder.recyclerView.setAdapter(adapter);
         int row = item.imgs.size() / 4;
-        LogUtils.d(item.imgs.size());
-        if (row != 0 && item.imgs.size() % 4 != 0) {
-            row += 1;
-        }
+        if(row == 0 || row * 4 < item.imgs.size()) row = 1;
+        if(item.imgs.size() == 0) row = 0;
         holder.swipeRefreshLayout.getLayoutParams().height = ViewGroupUtils.dpToPx(row * 105);
     }
 

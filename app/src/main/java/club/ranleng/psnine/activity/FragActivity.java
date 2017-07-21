@@ -16,6 +16,9 @@ import android.widget.FrameLayout;
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.Listener.TouchListener;
@@ -37,7 +40,6 @@ public class FragActivity extends BaseActivity {
 
     private String title;
     private int key;
-    private String url;
 
     @Override
     public void setContentView() {
@@ -99,7 +101,7 @@ public class FragActivity extends BaseActivity {
         key = getIntent().getIntExtra("key", -1);
         if (key == KEY.SEARCH) {
             title = getIntent().getStringExtra("query");
-            openFragment(new ListItemFragment().newInstance(getIntent().getIntExtra("type",-1), true, title));
+            openFragment(ListItemFragment.newInstance(getIntent().getIntExtra("type",-1), true, title));
         } else if (key == KEY.SETTING) {
             Fragment f = new SettingFragment();
             title = "设置";
@@ -110,7 +112,14 @@ public class FragActivity extends BaseActivity {
             imageView.setLayoutParams(layoutParams);
             imageView.setOnTouchListener(new TouchListener(imageView));
             ViewGroupUtils.replaceView(frameLayout, imageView);
-            url = getIntent().getStringExtra("url").replace("square","large");
+            String url = getIntent().getStringExtra("url").replace("square", "large").replace("small", "large");
+            String pattern = ".*sinaimg.cn/large/(.*)";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(url);
+            if(m.find()){
+                getSupportActionBar().setTitle(m.group(1));
+                getSupportActionBar().setSubtitle(url.replace(m.group(1),""));
+            }
             Glide.with(this).load(url).into(imageView);
         } else if (key == KEY.TYPE_NOTICE) {
             title = "短消息";
@@ -152,7 +161,7 @@ public class FragActivity extends BaseActivity {
     }
 
     private void openFragment(Fragment f) {
-        setTitle(title);
+        getSupportActionBar().setTitle(title);
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.framelayout, f)
