@@ -25,7 +25,7 @@ public class AboutActivity extends AbsAboutActivity {
     protected void onCreateHeader(ImageView icon, TextView slogan, TextView version) {
         setHeaderContentColor(getResources().getColor(R.color.primary));
         setNavigationIcon(R.drawable.back);
-        icon.setImageResource(R.mipmap.ic_launcher_round);
+        icon.setImageResource(R.mipmap.ic_launcher);
         slogan.setText(R.string.about_header);
         slogan.setTextColor(Color.parseColor("#000000"));
         version.setText(getVersion());
