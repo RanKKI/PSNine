@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primary"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -11,7 +12,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    app:itemTextColor="@color/primary_text"
+    android:theme="@style/AppTheme">
 
     <ImageView
         android:id="@+id/nav_header_icon"

@@ -38,6 +38,7 @@ import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
+import club.ranleng.psnine.widget.UserStatus;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -214,11 +215,20 @@ public class ArticleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_article, menu);
+        if(!UserStatus.isLogin()){
+            menu.findItem(R.id.action_artivle_up).setVisible(false);
+            menu.findItem(R.id.action_article_edit).setVisible(false);
+            menu.findItem(R.id.action_article_original).setVisible(false);
+            menu.findItem(R.id.action_artivle_fav).setVisible(false);
+        }
+        // Inflate the menu; this adds items to the action bar if it is present.
+
         menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE);
         menu.findItem(R.id.action_article_edit).setVisible(editable);
         menu.findItem(R.id.action_article_original).setVisible(original != null);
+
+
 
         return true;
     }

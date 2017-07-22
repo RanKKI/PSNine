@@ -66,7 +66,14 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.LoginButton)
     public void LoginBtn() {
-        LogUtils.d("do login btu click");
+        if(TextUtils.isEmpty(username)){
+            username.setError("不能为空");
+            return;
+        }
+        if(TextUtils.isEmpty(pass)){
+            pass.setError("不能为空");
+            return;
+        }
         startAnim();
         switchUI();
         FormBody body = new FormBody.Builder()

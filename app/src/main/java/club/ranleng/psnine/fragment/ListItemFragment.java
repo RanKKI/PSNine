@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -22,9 +20,9 @@ import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.event.LoadEvent;
 import club.ranleng.psnine.model.ArticleListModel;
 import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
-import club.ranleng.psnine.widget.Internet;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,6 +54,7 @@ public class ListItemFragment extends BaseFragment {
     private int itemCount;
     private int lastPosition;
     private int lastItemCount;
+    private ArrayList<Map<String, Object>> olds = new ArrayList<>();
 
     public static ListItemFragment newInstance(int type, Boolean search, String query) {
         ListItemFragment listItemFragment = new ListItemFragment();
@@ -110,12 +109,8 @@ public class ListItemFragment extends BaseFragment {
         adapter.register(ArticleListModel.class, new ArticleListBinder());
         adapter.register(Line.class, new LineViewBinder());
         items = new Items();
-
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
-//        if(type == KEY.TYPE_NOTICE){
-//            initData();
-//        }
         return view;
     }
 
@@ -128,7 +123,7 @@ public class ListItemFragment extends BaseFragment {
             observable = articleList.getTopic(KEY.TYPE_NAME.get(type), "obdate", search_word, current_page);
         } else if (type == KEY.TYPE_GUIDE || type == KEY.TYPE_PLUS || type == KEY.TYPE_OPENBOX) {
             observable = articleList.getNode(KEY.TYPE_NAME.get(type), "obdate", search_word, current_page);
-        } else if( type == KEY.TYPE_NOTICE){
+        } else if (type == KEY.TYPE_NOTICE) {
             observable = articleList.getNotice();
         }
 

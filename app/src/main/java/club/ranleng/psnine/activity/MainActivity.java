@@ -244,6 +244,10 @@ public class MainActivity extends BaseActivity
     @Subscribe
     public void onLoadEvent(LoadEvent loadEvent) {
         if (loadEvent.Load_Finish()) {
+
+            if(!UserStatus.isLogin()){
+                return;
+            }
             if (!UserStatus.getdao()) {
                 User user = Internet.retrofit.create(User.class);
                 user.Dao().enqueue(new Callback<ResponseBody>() {
