@@ -14,6 +14,7 @@ public class ArticleHeader {
     public final String replies;
     public final String original;
     public final Boolean editable;
+    public final String title;
 
     public ArticleHeader(@NonNull Map<String, Object> map) {
         this.content = (String) map.get("content");
@@ -23,6 +24,7 @@ public class ArticleHeader {
         this.replies = (String) map.get("replies");
         this.editable = (Boolean) map.get("editable");
         this.original = (String) map.get("original");
+        this.title = (String) map.get("title");
     }
 
 }

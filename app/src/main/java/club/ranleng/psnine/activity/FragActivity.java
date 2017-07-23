@@ -101,7 +101,7 @@ public class FragActivity extends BaseActivity {
         key = getIntent().getIntExtra("key", -1);
         if (key == KEY.SEARCH) {
             title = getIntent().getStringExtra("query");
-            openFragment(ListItemFragment.newInstance(getIntent().getIntExtra("type",-1), true, title));
+            openFragment(ListItemFragment.newInstance(getIntent().getIntExtra("type",-1),title));
         } else if (key == KEY.SETTING) {
             Fragment f = new SettingFragment();
             title = "设置";

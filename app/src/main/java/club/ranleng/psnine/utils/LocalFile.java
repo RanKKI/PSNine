@@ -32,9 +32,7 @@ public class LocalFile {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (file.delete()) {
-                LogUtils.d("已删除" + filename);
-            }
+            del(filename);
         }
         return null;
     }

@@ -13,6 +13,7 @@
 
     <string name="nav_personal_header">个人</string>
     <string name="nav_login">登陆</string>
+    <string name="nav_logout">登出</string>
     <string name="nav_personal">个人中心</string>
     <string name="nav_notice">短消息</string>
     <string name="nav_photo">图库</string>
@@ -28,9 +29,9 @@
         PSNine 第三方原生安卓应用.\n
         如果你有任何建议或者意见请联系作者\n
         Github项目链接: https://github.com/RanKKI/PSNine\n
-        也可以在帖子中回复(点击下面的按钮)\n\n
         更多:\n
-        Github: https://github.com/RanKKI\n\n
+        Github: https://github.com/RanKKI\n
+        Email : youloveonlymeh@gmail.com\n\n
         使用此软件即您默认新垣结衣是作者的女朋友.
     </string>
 

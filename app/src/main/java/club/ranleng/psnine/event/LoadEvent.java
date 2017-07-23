@@ -5,15 +5,7 @@ package club.ranleng.psnine.event;
  */
 
 public class LoadEvent {
+    public LoadEvent(){
 
-    private Boolean Load_Finish = false;
-
-    public LoadEvent(Boolean t){
-        Load_Finish = t;
     }
-
-    public Boolean Load_Finish(){
-        return Load_Finish;
-    }
-
 }

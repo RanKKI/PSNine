@@ -19,9 +19,6 @@ import club.ranleng.psnine.model.Article.ArticleReply;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
-/**
- * Created by ran on 01/07/2017.
- */
 
 public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleReplyBinder.ViewHolder> {
 

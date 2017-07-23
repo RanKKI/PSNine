@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity
         add(R.id.nav_notice);
         add(R.id.nav_photo);
         add(R.id.nav_personal);
+        add(R.id.nav_logout);
     }};
     private ArrayList<Integer> when_logout = new ArrayList<Integer>() {{
         add(R.id.nav_login);
@@ -96,9 +97,13 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(tabs_keys[tabLayout.getSelectedTabPosition()] == KEY.TYPE_GENE){
+                if (!UserStatus.isLogin()) {
+                    MakeToast.plzlogin();
+                    return;
+                }
+                if (tabs_keys[tabLayout.getSelectedTabPosition()] == KEY.TYPE_GENE) {
                     startActivity(new Intent(context, newGeneActivity.class));
-                }else{
+                } else {
                     startActivity(new Intent(context, newTopicActivity.class));
                 }
             }
@@ -207,14 +212,14 @@ public class MainActivity extends BaseActivity
             startActivity(intent);
         } else if (id == R.id.nav_personal) {
             Intent intent = new Intent(this, PSNActivity.class);
-            intent.putExtra("psnid",UserStatus.getusername());
+            intent.putExtra("psnid", UserStatus.getusername());
             startActivity(intent);
         } else if (id == R.id.nav_setting) {
             Intent intent = new Intent(this, FragActivity.class);
             intent.putExtra("key", KEY.SETTING);
             startActivity(intent);
         } else if (id == R.id.nav_cache) {
-            AlertDialog b = new AlertDialog.Builder(context)
+            new AlertDialog.Builder(context)
                     .setTitle("确定要清除缓存么")
                     .setMessage("清除缓存虽然可以减少手机空间的占用, 但下次加载的时候会耗费更多的流量")
                     .setPositiveButton("继续", new DialogInterface.OnClickListener() {
@@ -231,10 +236,26 @@ public class MainActivity extends BaseActivity
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
-                    }).create();
-            b.show();
+                    }).create().show();
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
+        } else if (id == R.id.nav_logout) {
+            new AlertDialog.Builder(context)
+                    .setTitle("登出")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            intent.putExtra("logout", true);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -243,60 +264,58 @@ public class MainActivity extends BaseActivity
 
     @Subscribe
     public void onLoadEvent(LoadEvent loadEvent) {
-        if (loadEvent.Load_Finish()) {
 
-            if(!UserStatus.isLogin()){
-                return;
-            }
-            if (!UserStatus.getdao()) {
-                User user = Internet.retrofit.create(User.class);
-                user.Dao().enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()){
-                            try {
-                                LogUtils.d(response.body().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            MakeToast.str("签到成功");
+        Menu menu = navigationView.getMenu();
+
+        for (Integer i : when_login) {
+            menu.findItem(i).setVisible(UserStatus.isLogin());
+        }
+        for (Integer i : when_logout) {
+            menu.findItem(i).setVisible(!UserStatus.isLogin());
+        }
+
+        if(!UserStatus.isLogin()){
+            nav_icon.setBackgroundResource(R.mipmap.psnine);
+            nav_username.setText("PSNINE");
+            return;
+        }
+
+        if (!UserStatus.getdao()) {
+            User user = Internet.retrofit.create(User.class);
+            user.Dao().enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            LogUtils.d(response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                        MakeToast.str("签到成功");
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                UserStatus.setdao(true);
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+            UserStatus.setdao(true);
+        }
 
-            if(UserStatus.getNotice()){
-                Snackbar.make(root,"有新消息", Snackbar.LENGTH_LONG).setAction("确定", null).show();
-                UserStatus.setNotice(false);
-            }
-            Menu menu = navigationView.getMenu();
-            if (UserStatus.isLogin()) {
-                for (Integer i : when_login) {
-                    menu.findItem(i).setVisible(true);
-                }
-                for (Integer i : when_logout) {
-                    menu.findItem(i).setVisible(false);
-                }
-                nav_username.setText(UserStatus.getusername());
-                Glide.with(this).load(UserStatus.getusericonurl()).into(nav_icon);
-            } else {
-                for (Integer i : when_logout) {
-                    menu.findItem(i).setVisible(true);
-                }
-                for (Integer i : when_login) {
-                    menu.findItem(i).setVisible(false);
-                }
-            }
+        if (UserStatus.getNotice()) {
+            Snackbar.make(root, "有新消息", Snackbar.LENGTH_LONG).setAction("确定", null).show();
+            UserStatus.setNotice(false);
+        }
+
+        if (UserStatus.isLogin()) {
+            nav_username.setText(UserStatus.getusername());
+            Glide.with(this).load(UserStatus.getusericonurl()).into(nav_icon);
         }
     }
 
-    interface User{
-        @GET("set/qidao/ajax") Call<ResponseBody> Dao();
+    interface User {
+        @GET("set/qidao/ajax")
+        Call<ResponseBody> Dao();
     }
 }

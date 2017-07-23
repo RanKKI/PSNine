@@ -21,7 +21,7 @@
         android:layout_height="50dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:scaleType="center"
-        app:srcCompat="@android:drawable/sym_def_app_icon"/>
+        app:srcCompat="@mipmap/psnine"/>
 
     <TextView
         android:id="@+id/nav_header_username"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
+        android:text="PSNINE"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/primary_text"
         android:textSize="15sp"

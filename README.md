@@ -9,6 +9,8 @@ Unofficial native android application for PSNine
 
 [Download Link (Github) ](https://github.com/RanKKI/PSNine/blob/master/app/app-release.apk?raw=true "Download Link (Github)")
 
+[Download Link (Play store)] (https://play.google.com/apps/testing/club.ranleng.psnine "Download Link (Play store)")
+
 ### TODO
 - [ ] 浏览
     - [ ] 获取回复

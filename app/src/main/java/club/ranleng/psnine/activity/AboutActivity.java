@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.widget.KEY;
 import me.drakeet.multitype.Items;
 import me.drakeet.support.about.AbsAboutActivity;
@@ -25,7 +26,7 @@ public class AboutActivity extends AbsAboutActivity {
     protected void onCreateHeader(ImageView icon, TextView slogan, TextView version) {
         setHeaderContentColor(getResources().getColor(R.color.primary));
         setNavigationIcon(R.drawable.back);
-        icon.setImageResource(R.mipmap.ic_launcher);
+        icon.setImageResource(R.mipmap.ic_laucher_hi_res_512);
         slogan.setText(R.string.about_header);
         slogan.setTextColor(Color.parseColor("#000000"));
         version.setText(getVersion());
@@ -35,7 +36,7 @@ public class AboutActivity extends AbsAboutActivity {
     @Override
     protected void onItemsCreated(@NonNull Items items) {
         items.add(new Category("介绍与帮助"));
-        items.add(new Card(getString(R.string.about_content), "站内贴"));
+        items.add(new Card(getString(R.string.about_content), "嘻嘻"));
 
         items.add(new Line());
 
@@ -79,10 +80,7 @@ public class AboutActivity extends AbsAboutActivity {
 
     @Override
     protected void onActionClick(View action) {
-        Intent intent = new Intent(this, ArticleActivity.class);
-        intent.putExtra("type", KEY.TYPE_GENE);
-        intent.putExtra("id", "21233");
-        startActivity(intent);
+        MakeToast.str("爱你哟");
     }
 
     /**

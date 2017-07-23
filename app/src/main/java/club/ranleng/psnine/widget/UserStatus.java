@@ -75,6 +75,8 @@ public class UserStatus {
                 setusername(m.group().replace("\">个人主页</a>", "").replace("<li><a href=\"http://psnine.com/psnid/", ""), url);
             }
             return true;
+        }else{
+            isLogin(false);
         }
         return false;
     }

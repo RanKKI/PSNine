@@ -43,6 +43,6 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     }
 
     Fragment newListItem(int type) {
-        return ListItemFragment.newInstance(type, false, null);
+        return ListItemFragment.newInstance(type, null);
     }
 }

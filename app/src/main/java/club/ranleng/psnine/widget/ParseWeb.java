@@ -138,6 +138,7 @@ public class ParseWeb {
         String content;
         String original = null;
         String video;
+        String title;
         Boolean editable = false;
         int img_size = 0;
         int page_size = 1;
@@ -167,16 +168,20 @@ public class ParseWeb {
             for (int i = 0; i < img.size(); i++) {
                 map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
             }
-            if (doc.select("div.meta").get(1).select("span").select("a").size() != 2) {
-                editable = true;
+            if(doc.select("div.pd10").select("div.meta").size() == 2){
+                if (doc.select("div.meta").get(1).select("span").select("a").size() != 2) {
+                    editable = true;
+                }
             }
 
             icon = doc.select("div.side").select("div.box").select("p").select("a").select("img").attr("src");
             String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
             time = temp[0] + "前";
             replies = temp[1];
+            title = "";
 
         } else {
+            title = doc.select("div.pd10").select("h1").text();
             content = doc.select("div.content.pd10").html();
             username = doc.select("a.title2").text();
             Elements page = doc.select("div.page").select("ul").select("li");
@@ -207,7 +212,7 @@ public class ParseWeb {
         map.put("username", username);
         map.put("editable", editable);
         map.put("video", video);
-
+        map.put("title", title);
         map.put("icon", icon);
         map.put("original", original);
         map.put("time", time);
@@ -227,6 +232,7 @@ public class ParseWeb {
             if (!c.select("a").hasClass("btn")) {
                 String content = c.select("div.content.pb10").first().html();
                 String username = c.select("div.meta").select("a.psnnode").text();
+                String time = c.select("div.meta").first().ownText();
                 String icon = c.select("a.l").select("img").attr("src");
                 String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
                 Map<String, Object> map = new HashMap<>();
@@ -240,7 +246,7 @@ public class ParseWeb {
                 map.put("username", username);
                 map.put("id", comment_id);
                 map.put("icon", icon);
-                map.put("time", "");
+                map.put("time", time);
                 map.put("type", "reply");
                 listItems.add(map);
             }

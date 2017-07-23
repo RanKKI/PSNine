@@ -46,7 +46,6 @@ public class ListItemFragment extends BaseFragment {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
     private Items items;
-    private Boolean search;
     private String search_word;
     private int type;
     private int current_page = 1;
@@ -54,13 +53,11 @@ public class ListItemFragment extends BaseFragment {
     private int itemCount;
     private int lastPosition;
     private int lastItemCount;
-    private ArrayList<Map<String, Object>> olds = new ArrayList<>();
 
-    public static ListItemFragment newInstance(int type, Boolean search, String query) {
+    public static ListItemFragment newInstance(int type, String query) {
         ListItemFragment listItemFragment = new ListItemFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
-        bundle.putBoolean("search", search);
         bundle.putString("search_word", query);
         listItemFragment.setArguments(bundle);
         return listItemFragment;
@@ -100,7 +97,6 @@ public class ListItemFragment extends BaseFragment {
             }
         });
         this.type = getArguments().getInt("type");
-        this.search = getArguments().getBoolean("search");
         this.search_word = getArguments().getString("search_word");
 
         if (search_word == null) search_word = "";
@@ -167,7 +163,7 @@ public class ListItemFragment extends BaseFragment {
 
                     @Override
                     public void onComplete() {
-                        EventBus.getDefault().post(new LoadEvent(true));
+                        EventBus.getDefault().post(new LoadEvent());
                         adapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }

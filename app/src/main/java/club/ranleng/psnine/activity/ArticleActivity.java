@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -216,20 +218,14 @@ public class ArticleActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.activity_article, menu);
-        if(!UserStatus.isLogin()){
-            menu.findItem(R.id.action_artivle_up).setVisible(false);
-            menu.findItem(R.id.action_article_edit).setVisible(false);
-            menu.findItem(R.id.action_article_original).setVisible(false);
-            menu.findItem(R.id.action_artivle_fav).setVisible(false);
+        if(UserStatus.isLogin()){
+            menu.findItem(R.id.action_article_reply).setVisible(true);
+            menu.findItem(R.id.action_artivle_fav).setVisible(true);
+            menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE);
+            menu.findItem(R.id.action_article_edit).setVisible(editable);
+            menu.findItem(R.id.action_article_original).setVisible(original != null);
+
         }
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-        menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE);
-        menu.findItem(R.id.action_article_edit).setVisible(editable);
-        menu.findItem(R.id.action_article_original).setVisible(original != null);
-
-
-
         return true;
     }
 

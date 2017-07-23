@@ -44,6 +44,12 @@
                 android:id="@+id/nav_cache"
                 android:icon="@drawable/cache"
                 android:title="@string/nav_cache" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/login"
+                android:visible="false"
+                android:title="@string/nav_logout" />
         </menu>
     </item>
 

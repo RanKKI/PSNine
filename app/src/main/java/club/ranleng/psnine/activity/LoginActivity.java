@@ -27,6 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -62,6 +63,29 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void getData() {
         user = Internet.retrofit.create(User.class);
+        if(getIntent().getBooleanExtra("logout",false) && UserStatus.isLogin()){
+            switchUI();
+            startAnim();
+            user.Logout().enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    MakeToast.str("登出成功");
+                    stopAnim();
+                    try {
+                        UserStatus.Check(response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    EventBus.getDefault().post(new LoadEvent());
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     @OnClick(R.id.LoginButton)
@@ -86,24 +110,28 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                try {
+                if(response.isSuccessful()){
                     stopAnim();
-                    if (UserStatus.Check(response.body().string())) {
-                        EventBus.getDefault().post(new LoadEvent(true));
-                        finish();
-                    } else {
-                        MakeToast.str("登陆失败");
-                        switchUI();
+                    try {
+                        if (UserStatus.Check(response.body().string())) {
+                            EventBus.getDefault().post(new LoadEvent());
+                            MakeToast.str("成功");
+                            finish();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }else{
+                    MakeToast.str("登陆失败");
+                    switchUI();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                MakeToast.str("登陆失败");
+                switchUI();
             }
         });
     }
@@ -128,6 +156,10 @@ public class LoginActivity extends BaseActivity {
         @Headers("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36")
         @POST("sign/in")
         Call<ResponseBody> Login(@Body FormBody body);
+
+        @Headers("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36")
+        @GET("sign/out")
+        Call<ResponseBody> Logout();
 
     }
 

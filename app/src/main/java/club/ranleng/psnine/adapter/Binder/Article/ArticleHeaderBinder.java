@@ -32,7 +32,13 @@ public class ArticleHeaderBinder extends ItemViewBinder<ArticleHeader, ArticleHe
 
         if (holder.itemView.getTag() == null) {
             final Context context = holder.itemView.getContext();
-            CmHtml.convert(context, holder.content, item.content);
+            String content;
+            if(item.title.equals("")){
+                content = item.content;
+            }else{
+                content = "<h5>"+item.title+"</h5></br>" +  item.content;
+            }
+            CmHtml.convert(context, holder.content, content);
             holder.time.setText(item.time);
             holder.replies.setText(item.replies);
             holder.username.setText(item.username);

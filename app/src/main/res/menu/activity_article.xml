@@ -10,13 +10,16 @@
 
     <item
         android:id="@+id/action_artivle_up"
+        android:visible="false"
         android:title="顶"/>
     <item
         android:id="@+id/action_artivle_fav"
+        android:visible="false"
         android:title="收藏"/>
 
     <item
         android:id="@+id/action_article_reply"
+        android:visible="false"
         android:title="回复" />
 
     <item
