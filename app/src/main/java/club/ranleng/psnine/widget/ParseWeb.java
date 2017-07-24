@@ -522,10 +522,6 @@ public class ParseWeb {
         String percent = psninfo.get(3).ownText();
         String watched = psninfo.get(4).ownText();
 
-        String upgame = doc.select("div.psnbtn.psnbtnright").select("a").first().text();
-        upgame = String.valueOf(!upgame.contains("冷却"));
-        String upbase = String.valueOf(doc.select("div.psnbtn.psnbtnright").select("a").size() != 1);
-
 
         Map<String, String> map = new HashMap<>();
         map.put("icon", icon);
@@ -542,8 +538,6 @@ public class ParseWeb {
         map.put("percent", percent);
         map.put("watched", watched);
 
-        map.put("upbase", upbase);
-        map.put("upgame", upgame);
         map.put("type", "header");
 
         String pattern = "http://ww4.sinaimg.cn/large/(.*).jpg";

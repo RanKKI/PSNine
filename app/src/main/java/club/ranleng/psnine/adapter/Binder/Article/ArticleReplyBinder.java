@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Article.ArticleReply;
+import club.ranleng.psnine.utils.FeedBackUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import me.drakeet.multitype.ItemViewBinder;
 
@@ -47,7 +48,7 @@ public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleRepl
         holder.name.setText(item.username);
         holder.time.setText(item.time);
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
-
+        FeedBackUtils.setOnclickfeedBack(0xFFFAFAFA,0xFFE2E2E2,holder.itemView);
     }
 
 

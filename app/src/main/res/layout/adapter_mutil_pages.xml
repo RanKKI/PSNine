@@ -16,4 +16,5 @@
         android:text="Button"
         android:textAlignment="center"
         android:textColor="@color/about_page_background"/>
+
 </LinearLayout>

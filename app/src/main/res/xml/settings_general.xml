@@ -27,6 +27,12 @@
             android:summary="标题内容浓缩到一行"
             android:title="单行标题" />
 
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="UI设置">
+
+
         <SwitchPreference
             android:defaultValue="true"
             android:key="settings_images_quality"

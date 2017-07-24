@@ -68,6 +68,7 @@ public class KEY {
 
     public static final String KEY_PREF_IMAGES_QUALITY = "settings_images_quality";
 
+
     public static Boolean PREF_PRELOAD = false;
     public static String PREF_OB = "obdate";
     public static Boolean PREF_EMOJI = true;

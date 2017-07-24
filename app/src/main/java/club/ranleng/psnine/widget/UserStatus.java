@@ -50,6 +50,7 @@ public class UserStatus {
     public static void setNotice(Boolean a){
         notice = a;
     }
+
     public static Boolean getNotice(){
         return notice;
     }

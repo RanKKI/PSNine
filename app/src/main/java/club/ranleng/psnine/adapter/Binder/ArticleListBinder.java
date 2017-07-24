@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.ArticleActivity;
 import club.ranleng.psnine.model.ArticleListModel;
+import club.ranleng.psnine.utils.FeedBackUtils;
 import club.ranleng.psnine.widget.HTML.CmHtml;
 import club.ranleng.psnine.widget.KEY;
 import me.drakeet.multitype.ItemViewBinder;
@@ -40,6 +41,7 @@ public class ArticleListBinder extends ItemViewBinder<ArticleListModel, ArticleL
         holder.time.setText(item.time);
         holder.reply.setText(item.reply);
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
+        FeedBackUtils.setOnclickfeedBack(0xFFFAFAFA,0xFFE2E2E2,holder.itemView);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

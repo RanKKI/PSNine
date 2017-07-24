@@ -305,6 +305,7 @@ public class ArticleActivity extends BaseActivity {
                             if (f_reply) {
                                 f_reply = false;
                                 items.add(new Category("回复"));
+                                items.add(new Line());
                             }
                             items.add(new ArticleReply(map));
                         }

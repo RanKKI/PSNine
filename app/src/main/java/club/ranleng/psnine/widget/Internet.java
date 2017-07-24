@@ -16,11 +16,11 @@ import retrofit2.Retrofit;
 public class Internet {
 
     public static Retrofit retrofit;
+    public static ClearableCookieJar cookieJar;
 
     public static void init(){
-        ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(),
+        cookieJar = new PersistentCookieJar(new SetCookieCache(),
                 new SharedPrefsCookiePersistor(Utils.getContext()));
-
 
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         builder.readTimeout(30, TimeUnit.SECONDS);
@@ -35,4 +35,11 @@ public class Internet {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
+
+    public static void clear(){
+        cookieJar.clear();
+        cookieJar.clearSession();
+        init();
+    }
+
 }

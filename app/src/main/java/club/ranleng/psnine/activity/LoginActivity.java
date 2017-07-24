@@ -71,6 +71,7 @@ public class LoginActivity extends BaseActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     MakeToast.str("登出成功");
                     stopAnim();
+                    Internet.clear();
                     try {
                         UserStatus.Check(response.body().string());
                     } catch (IOException e) {
@@ -82,12 +83,13 @@ public class LoginActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                    Internet.clear();
+                    finish();
                 }
             });
         }
     }
-
+    
     @OnClick(R.id.LoginButton)
     public void LoginBtn() {
         if(TextUtils.isEmpty(username)){
@@ -113,7 +115,12 @@ public class LoginActivity extends BaseActivity {
                 if(response.isSuccessful()){
                     stopAnim();
                     try {
-                        if (UserStatus.Check(response.body().string())) {
+                        String results = response.body().string();
+                        if(results == null){
+                            Fail();
+                            return;
+                        }
+                        if (UserStatus.Check(results)) {
                             EventBus.getDefault().post(new LoadEvent());
                             MakeToast.str("成功");
                             finish();
@@ -122,18 +129,21 @@ public class LoginActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }else{
-                    MakeToast.str("登陆失败");
-                    switchUI();
+                    Fail();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-                MakeToast.str("登陆失败");
-                switchUI();
+                Fail();
             }
         });
+    }
+
+    void Fail(){
+        MakeToast.str("登陆失败");
+        switchUI();
     }
 
     void switchUI(){

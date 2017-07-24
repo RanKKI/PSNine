@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity
         }
 
         if(!UserStatus.isLogin()){
-            nav_icon.setBackgroundResource(R.mipmap.psnine);
+            nav_icon.setImageResource(R.mipmap.psnine);
             nav_username.setText("PSNINE");
             return;
         }
