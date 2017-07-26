@@ -39,6 +39,12 @@
             android:summary="文章中图片加载高质量图片"
             android:title="图片质量" />
 
+
+        <Preference
+            android:key="settings_tabs"
+            android:summary=""
+            android:title="自定义主页面标签" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

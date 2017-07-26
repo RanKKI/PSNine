@@ -115,10 +115,10 @@ public class ListItemFragment extends BaseFragment {
         swipeRefreshLayout.setRefreshing(true);
         ArticleList articleList = Internet.retrofit.create(ArticleList.class);
         Observable<ResponseBody> observable = null;
-        if (type == KEY.TYPE_TOPIC || type == KEY.TYPE_GENE) {
-            observable = articleList.getTopic(KEY.TYPE_NAME.get(type), "obdate", search_word, current_page);
+        if (type == KEY.TYPE_TOPIC || type == KEY.TYPE_GENE || type == KEY.TYPE_QA) {
+            observable = articleList.getTopic(KEY.TYPE_NAME.get(type), KEY.PREF_OB, search_word, current_page);
         } else if (type == KEY.TYPE_GUIDE || type == KEY.TYPE_PLUS || type == KEY.TYPE_OPENBOX) {
-            observable = articleList.getNode(KEY.TYPE_NAME.get(type), "obdate", search_word, current_page);
+            observable = articleList.getNode(KEY.TYPE_NAME.get(type), KEY.PREF_OB, search_word, current_page);
         } else if (type == KEY.TYPE_NOTICE) {
             observable = articleList.getNotice();
         }
@@ -157,6 +157,7 @@ public class ListItemFragment extends BaseFragment {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
                         MakeToast.notfound();
                         swipeRefreshLayout.setRefreshing(false);
                     }

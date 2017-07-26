@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,9 +123,13 @@ public class MainActivity extends BaseActivity
         KEY.initSetting(this);
         EventBus.getDefault().register(this);
 
+        bindViewPager();
+        refresh_cache();
+    }
+
+    private void bindViewPager(){
         viewPager.setAdapter(new MainActivityPagerAdapter(getFragmentManager()));  //設定Adapter給viewPager
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
-        refresh_cache();
     }
 
     @Override

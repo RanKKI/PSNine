@@ -235,7 +235,9 @@ public class ArticleActivity extends BaseActivity {
         Observable<ResponseBody> header;
         if (type == KEY.TYPE_GENE) {
             header = article.getGene(article_id);
-        } else {
+        } else if(type ==KEY.TYPE_QA){
+            header = article.getQA(article_id);
+        }else {
             header = article.getArticle(article_id, current_page);
         }
 
@@ -261,6 +263,9 @@ public class ArticleActivity extends BaseActivity {
 
                     @Override
                     public void onNext(@NonNull Map<String, Object> map) {
+                        if(map.containsKey("max_page")){
+                            return;
+                        }
                         Object map_type = map.get("type");
                         if (map_type.equals("header")) {
 
@@ -387,6 +392,9 @@ public class ArticleActivity extends BaseActivity {
 
         @GET("gene/{id}")
         Observable<ResponseBody> getGene(@Path("id") int id);
+
+        @GET("qa/{id}")
+        Observable<ResponseBody> getQA(@Path("id") int id);
 
 
         @POST("set/fav/ajax")

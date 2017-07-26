@@ -5,7 +5,11 @@ package club.ranleng.psnine.event;
  */
 
 public class LoadEvent {
+
+    private Boolean f = false;
+
     public LoadEvent(){
 
     }
+
 }

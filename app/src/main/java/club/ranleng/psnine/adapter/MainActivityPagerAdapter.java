@@ -14,17 +14,14 @@ import club.ranleng.psnine.widget.KEY;
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments = new ArrayList<>(); //切換頁面的Fragments
-    private String[] titles = {
-            "基因", "首页", "开箱", "攻略", "PLUS", "PSN游戏"
-    };
+    private List<Integer> list;
 
     public MainActivityPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragments.add(newListItem(KEY.TYPE_GENE));
-        fragments.add(newListItem(KEY.TYPE_TOPIC));
-        fragments.add(newListItem(KEY.TYPE_OPENBOX));
-        fragments.add(newListItem(KEY.TYPE_GUIDE));
-        fragments.add(newListItem(KEY.TYPE_PLUS));
+        list = KEY.getTabs();
+        for(Integer i : list){
+            fragments.add(newListItem(i));
+        }
     }
 
     @Override
@@ -39,7 +36,7 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return KEY.TYPE_NAME_CN.get(list.get(position));
     }
 
     Fragment newListItem(int type) {

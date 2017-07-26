@@ -5,9 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import club.ranleng.psnine.utils.SharedPerferenceUtils;
 
 
 public class KEY {
@@ -19,6 +24,7 @@ public class KEY {
     public static final int TYPE_GUIDE = 9820;
     public static final int TYPE_NOTICE = 7775;
     public static final int TYPE_COMMENT = 1238;
+    public static final int TYPE_QA = 1218;
 
     public static final Map<Integer, String> TYPE_NAME = new HashMap<Integer, String>() {{
         put(TYPE_GENE, "gene");
@@ -28,7 +34,7 @@ public class KEY {
         put(TYPE_GUIDE, "guide");
         put(TYPE_NOTICE,"notice");
         put(TYPE_COMMENT, "comment");
-
+        put(TYPE_QA, "qa");
     }};
 
     public static String INT_TYPE(int type){
@@ -67,7 +73,7 @@ public class KEY {
     public static final String KEY_PREF_SINGLELINE = "settings_single_line";
 
     public static final String KEY_PREF_IMAGES_QUALITY = "settings_images_quality";
-
+    public static final String KEY_PREF_TABS = "settings_tabs";
 
     public static Boolean PREF_PRELOAD = false;
     public static String PREF_OB = "obdate";
@@ -82,6 +88,38 @@ public class KEY {
         PREF_EMOJI = sharedPref.getBoolean(KEY.KEY_PREF_EMOJI, true);
         PREF_SINGLELINE = sharedPref.getBoolean(KEY.KEY_PREF_SINGLELINE, true);
         PREF_IMAGESQUALITY = sharedPref.getBoolean(KEY.KEY_PREF_IMAGES_QUALITY, true);
+        if(getTabs() == null){
+            List<Integer> list = new ArrayList<Integer>(){{
+                add(TYPE_GENE);
+                add(TYPE_TOPIC);
+                add(TYPE_OPENBOX);
+                add(TYPE_GUIDE);
+                add(TYPE_PLUS);
+                add(TYPE_QA);
+            }};
+            setTabs(list);
+        }
+    }
+
+    public static final Map<Integer, String> TYPE_NAME_CN = new HashMap<Integer, String>() {{
+        put(TYPE_GENE, "基因");
+        put(TYPE_TOPIC, "首页");
+        put(TYPE_OPENBOX, "开箱");
+        put(TYPE_PLUS, "PLUS");
+        put(TYPE_GUIDE, "教程");
+        put(TYPE_QA, "问答");
+    }};
+
+    public static List<Integer> getTabs(){
+        Object object = SharedPerferenceUtils.get("tabs","tabs");
+        if(object != null){
+            return (List<Integer>) object;
+        }
+        return null;
+    }
+
+    public static void setTabs(List<Integer> list){
+        SharedPerferenceUtils.save("tabs","tabs",list);
     }
 
 

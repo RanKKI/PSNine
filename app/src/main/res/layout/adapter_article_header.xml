@@ -35,19 +35,20 @@
 
         <TextView
             android:id="@+id/header_time"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="4"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="3"
             android:textColor="#CCCCCE"/>
 
         <TextView
             android:id="@+id/header_replies"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="4"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="6"
+            android:maxLines="1"
             android:textColor="#CCCCCE"/>
 
     </LinearLayout>

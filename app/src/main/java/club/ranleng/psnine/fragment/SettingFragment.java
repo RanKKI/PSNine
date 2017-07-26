@@ -24,6 +24,14 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings_general);
         findPreference(KEY.KEY_PREF_OB).setSummary(ob.get(KEY.PREF_OB));
+        findPreference(KEY.KEY_PREF_TABS).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                EditTabsDialogFragment dialogFragment = new EditTabsDialogFragment();
+                dialogFragment.show(getFragmentManager(),"edit tabs");
+                return true;
+            }
+        });
         findPreference(KEY.KEY_PREF_OB).setOnPreferenceChangeListener(this);
     }
 

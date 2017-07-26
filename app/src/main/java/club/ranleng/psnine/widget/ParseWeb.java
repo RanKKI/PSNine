@@ -48,6 +48,7 @@ public class ParseWeb {
                 for (Element i : a) {
                     if (i.attr("href").contains("http://psnine.com/gene/")) {
                         id = i.attr("href").replace("http://psnine.com/gene/", "");
+                        break;
                     }
                 }
                 String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
@@ -100,6 +101,26 @@ public class ParseWeb {
                     listItems.add(map);
                 }
             }
+        } else if (type == KEY.TYPE_QA) {
+            Elements elements = doc.select("ul.list").select("li");
+            for (Element e : elements) {
+                String icon = e.select("a.l").select("img").attr("src");
+                String content = e.select("p.title").select("a").text();
+                String id = e.select("p.title").select("a").attr("href").replace("http://psnine.com/qa/", "");
+                String username = e.select("a.psnnode").text();
+                String[] tr = e.select("div.meta").first().ownText().replace(" ", "").split("前");
+                String reply = e.select("div.meta").select("span.r").text().split("铜")[1].replace(" ", "");
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("title", content);
+                map.put("username", username);
+                map.put("id", Integer.valueOf(id));
+                map.put("icon", icon);
+                map.put("time", tr[0] + "前");
+                map.put("reply", reply);
+                map.put("type", type);
+                listItems.add(map);
+            }
         } else {
             Elements elements = doc.select("ul.list").select("li");
             for (Element e : elements) {
@@ -126,8 +147,8 @@ public class ParseWeb {
 
     public static Map<String, Object> parseArticleHeader(String results, int type) {
         Map<String, Object> map = new HashMap<>();
-        if(!KEY.PREF_IMAGESQUALITY){
-            results = results.replace("sinaimg.cn/large","sinaimg.cn/small");
+        if (!KEY.PREF_IMAGESQUALITY) {
+            results = results.replace("sinaimg.cn/large", "sinaimg.cn/small");
         }
         Document doc = Jsoup.parse(results);
 
@@ -138,7 +159,7 @@ public class ParseWeb {
         String content;
         String original = null;
         String video;
-        String title;
+        String title = "";
         Boolean editable = false;
         int img_size = 0;
         int page_size = 1;
@@ -168,7 +189,7 @@ public class ParseWeb {
             for (int i = 0; i < img.size(); i++) {
                 map.put("img_" + String.valueOf(i), img.get(i).attr("src"));
             }
-            if(doc.select("div.pd10").select("div.meta").size() == 2){
+            if (doc.select("div.pd10").select("div.meta").size() == 2) {
                 if (doc.select("div.meta").get(1).select("span").select("a").size() != 2) {
                     editable = true;
                 }
@@ -178,8 +199,21 @@ public class ParseWeb {
             String[] temp = doc.select("div.meta").first().ownText().replace(" ", "").split("前");
             time = temp[0] + "前";
             replies = temp[1];
-            title = "";
 
+        } else if (type == KEY.TYPE_QA) {
+            content = doc.select("div.content.pd10").text();
+            username = doc.select("a.title2").text();
+            Elements icon_e = doc.select("div.side").select("div.box").select("p");
+            if (!icon_e.isEmpty()) {
+                icon = icon_e.get(0).select("a").select("img").attr("src");
+            }
+            time = doc.select("div.meta").select("span").get(1).text();
+            Elements s = doc.select("div.alert-warning.pd10.font12").select("span");
+            replies = s.get(s.size() - 1).text();
+            if (replies.contains("已采纳")) {
+                replies = "已采纳";
+            }
+//            replies = doc.select("div.meta").select("span").get(2).text();
         } else {
             title = doc.select("div.pd10").select("h1").text();
             content = doc.select("div.content.pd10").html();
@@ -223,8 +257,8 @@ public class ParseWeb {
     public static ArrayList<Map<String, Object>> parseAReplies(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         results = results.replace("<img src=\"http://ww4.sinaimg.cn", "<br/><img src=\"http://ww4.sinaimg.cn");
-        if(!KEY.PREF_IMAGESQUALITY){
-            results = results.replace("sinaimg.cn/large","sinaimg.cn/small");
+        if (!KEY.PREF_IMAGESQUALITY) {
+            results = results.replace("sinaimg.cn/large", "sinaimg.cn/small");
         }
         Document doc = Jsoup.parse(results);
         Elements post = doc.select("div.post");
@@ -261,26 +295,30 @@ public class ParseWeb {
         listItems.add(ListInfo(doc));
         Elements post = doc.select("ul.list").select("li");
         for (Element c : post) {
-            String content = c.select("div.content.pb10").html();
-            String username = c.select("div.meta").select("a.psnnode").text();
-            String icon = c.select("a.l").select("img").attr("src");
-            String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
-            Map<String, Object> map = new HashMap<>();
+            if (c.attr("id").contains("comment")) {
+                String content = c.select("div.content.pb10").html();
+                String username = c.select("div.meta").select("a.psnnode").text();
+                String icon = c.select("a.l").select("img").attr("src");
+                String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
+                String time = c.select("div.meta").select("span").first().ownText();
 
-            if (!c.select("span.r").select("a.text-info").isEmpty()) {
-                map.put("editable", true);
-            } else {
-                map.put("editable", false);
-            }
-            map.put("title", content);
-            map.put("username", username);
-            map.put("id", comment_id);
-            map.put("icon", icon);
-            map.put("time", "");
-            if (!map.toString().equals("{icon=, title=, time=, username=, id=, editable=false}")) {
-                listItems.add(map);
-            }
+                Map<String, Object> map = new HashMap<>();
 
+                if (!c.select("span.r").select("a.text-info").isEmpty()) {
+                    map.put("editable", true);
+                } else {
+                    map.put("editable", false);
+                }
+                map.put("title", content);
+                map.put("username", username);
+                map.put("id", comment_id);
+                map.put("icon", icon);
+                map.put("time", time);
+                map.put("type", "reply");
+                if (!map.toString().equals("{icon=, title=, time=, username=, id=, editable=false}")) {
+                    listItems.add(map);
+                }
+            }
         }
         return listItems;
     }
@@ -317,11 +355,19 @@ public class ParseWeb {
 
     public static ArrayList<Map<String, Object>> parseArticle(String results, int type) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
-        Document doc = Jsoup.parse(results);
         listItems.add(parseArticleHeader(results, type));
 
-        for (Map<String, Object> i : parseArticleGameList(results)) listItems.add(i);
-        for (Map<String, Object> i : parseAReplies(results)) listItems.add(i);
+        for (Map<String, Object> i : parseArticleGameList(results)) {
+            listItems.add(i);
+        }
+        for (Map<String, Object> i : parseAReplies(results)) {
+            listItems.add(i);
+        }
+        if (type == KEY.TYPE_QA) {
+            for (Map<String, Object> i : parseBReplies(results)) {
+                listItems.add(i);
+            }
+        }
 
         return listItems;
     }

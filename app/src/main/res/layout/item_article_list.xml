@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/adapter_list_reply"
-        android:layout_width="60dp"
+        android:layout_width="1000dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/adapter_list_name"
         android:layout_marginLeft="5dp"

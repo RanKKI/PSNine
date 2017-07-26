@@ -21,9 +21,6 @@ import club.ranleng.psnine.event.EmojiEvent;
 import club.ranleng.psnine.event.LoadEvent;
 import club.ranleng.psnine.widget.KEY;
 
-/**
- * Created by ran on 08/07/2017.
- */
 
 public class EmojiDialogFragment extends DialogFragment {
 
