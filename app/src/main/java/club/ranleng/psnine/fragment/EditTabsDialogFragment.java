@@ -13,6 +13,8 @@ import com.blankj.utilcode.util.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import club.ranleng.psnine.Listener.EditTabsItemsCallback;
 import club.ranleng.psnine.adapter.EditTabsAdapter;
 import club.ranleng.psnine.event.LoadEvent;
@@ -36,11 +38,16 @@ public class EditTabsDialogFragment extends DialogFragment {
         ItemTouchHelper.Callback callback = new EditTabsItemsCallback(adapter);
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
 
+        final List<Integer> list = KEY.getTabs();
         builder.setView(recyclerView)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        KEY.setTabs(adapter.getDatas());
+                        if(!list.equals(adapter.getDatas())){
+                            KEY.setTabs(adapter.getDatas());
+                            MakeToast.str("更新tabs后需要重启应用.....（暂时的");
+                        }
+
                     }
                 })
                 .setNegativeButton("取消", null);

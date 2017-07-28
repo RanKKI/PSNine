@@ -106,7 +106,7 @@ public class KEY {
         put(TYPE_TOPIC, "首页");
         put(TYPE_OPENBOX, "开箱");
         put(TYPE_PLUS, "PLUS");
-        put(TYPE_GUIDE, "教程");
+        put(TYPE_GUIDE, "攻略");
         put(TYPE_QA, "问答");
     }};
 

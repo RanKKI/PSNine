@@ -3,6 +3,7 @@ package club.ranleng.psnine.adapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.database.DataSetObserver;
 import android.support.v13.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
@@ -13,12 +14,13 @@ import club.ranleng.psnine.widget.KEY;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> fragments = new ArrayList<>(); //切換頁面的Fragments
+    private List<Fragment> fragments; //切換頁面的Fragments
     private List<Integer> list;
 
     public MainActivityPagerAdapter(FragmentManager fm) {
         super(fm);
         list = KEY.getTabs();
+        fragments = new ArrayList<>();
         for(Integer i : list){
             fragments.add(newListItem(i));
         }
@@ -39,7 +41,16 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
         return KEY.TYPE_NAME_CN.get(list.get(position));
     }
 
-    Fragment newListItem(int type) {
+    @Override
+    public void notifyDataSetChanged(){
+        fragments.clear();
+        list = KEY.getTabs();
+        for(Integer i : list){
+            fragments.add(newListItem(i));
+        }
+    }
+
+    private Fragment newListItem(int type) {
         return ListItemFragment.newInstance(type, null);
     }
 }

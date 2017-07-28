@@ -201,7 +201,7 @@ public class ParseWeb {
             replies = temp[1];
 
         } else if (type == KEY.TYPE_QA) {
-            content = doc.select("div.content.pd10").text();
+            content = "<h5>"+doc.select("div.pd10").select("h1").text()+"</h5><br/>"+doc.select("div.content.pd10").text();
             username = doc.select("a.title2").text();
             Elements icon_e = doc.select("div.side").select("div.box").select("p");
             if (!icon_e.isEmpty()) {
@@ -326,7 +326,7 @@ public class ParseWeb {
     public static ArrayList<Map<String, Object>> parseArticleGameList(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
-        Elements c = doc.select("table>tbody>tr");
+        Elements c = doc.select("table").select("tbody").select("tr");
         for (Element i : c) {
             Map<String, Object> map = new HashMap<>();
             String game_icon = i.select("img.imgbgnb").attr("src");

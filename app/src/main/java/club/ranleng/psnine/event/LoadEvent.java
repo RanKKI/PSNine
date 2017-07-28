@@ -12,4 +12,15 @@ public class LoadEvent {
 
     }
 
+    public LoadEvent(Boolean f){
+        this.f = f;
+    }
+
+    public boolean getF(){
+        return f;
+    }
+
+    public void setF(){
+        this.f = false;
+    }
 }

@@ -96,6 +96,7 @@ public class ListItemFragment extends BaseFragment {
                 initData();
             }
         });
+        swipeRefreshLayout.setDistanceToTriggerSync(500);
         this.type = getArguments().getInt("type");
         this.search_word = getArguments().getString("search_word");
 
@@ -153,6 +154,7 @@ public class ListItemFragment extends BaseFragment {
                         }
                         items.add(new ArticleListModel(map));
                         items.add(new Line());
+                        adapter.notifyItemInserted(items.size());
                     }
 
                     @Override
@@ -165,7 +167,8 @@ public class ListItemFragment extends BaseFragment {
                     @Override
                     public void onComplete() {
                         EventBus.getDefault().post(new LoadEvent());
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
+
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

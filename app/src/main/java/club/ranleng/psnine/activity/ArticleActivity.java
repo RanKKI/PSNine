@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -106,7 +104,7 @@ public class ArticleActivity extends BaseActivity {
                 initData();
             }
         });
-
+        swipeRefreshLayout.setDistanceToTriggerSync(500);
         adapter = new MultiTypeAdapter();
         items = new Items();
 
@@ -218,26 +216,25 @@ public class ArticleActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.activity_article, menu);
-        if(UserStatus.isLogin()){
-            menu.findItem(R.id.action_article_reply).setVisible(true);
-            menu.findItem(R.id.action_artivle_fav).setVisible(true);
-            menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE);
-            menu.findItem(R.id.action_article_edit).setVisible(editable);
-            menu.findItem(R.id.action_article_original).setVisible(original != null);
-
-        }
+        menu.findItem(R.id.action_article_reply).setVisible(UserStatus.isLogin());
+        menu.findItem(R.id.action_artivle_fav).setVisible(UserStatus.isLogin());
+        menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE && UserStatus.isLogin());
+        menu.findItem(R.id.action_article_edit).setVisible(editable && UserStatus.isLogin());
+        menu.findItem(R.id.action_article_original).setVisible(original != null && UserStatus.isLogin());
         return true;
     }
 
     private void initData() {
-        items = new Items();
+        f_game = true;
+        f_reply = true;
+        items.clear();
         swipeRefreshLayout.setRefreshing(true);
         Observable<ResponseBody> header;
         if (type == KEY.TYPE_GENE) {
             header = article.getGene(article_id);
-        } else if(type ==KEY.TYPE_QA){
+        } else if (type == KEY.TYPE_QA) {
             header = article.getQA(article_id);
-        }else {
+        } else {
             header = article.getArticle(article_id, current_page);
         }
 
@@ -263,7 +260,7 @@ public class ArticleActivity extends BaseActivity {
 
                     @Override
                     public void onNext(@NonNull Map<String, Object> map) {
-                        if(map.containsKey("max_page")){
+                        if (map.containsKey("max_page")) {
                             return;
                         }
                         Object map_type = map.get("type");
@@ -306,6 +303,7 @@ public class ArticleActivity extends BaseActivity {
                                 items.add(new Category("游戏列表"));
                             }
                             items.add(new ArticleGameList(map));
+
                         } else if (map_type.equals("reply")) {
                             if (f_reply) {
                                 f_reply = false;
