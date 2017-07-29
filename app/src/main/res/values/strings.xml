@@ -12,6 +12,7 @@
     <string name="error_field_required">不能为空</string>
 
     <string name="nav_personal_header">个人</string>
+    <string name="nav_index">主页</string>
     <string name="nav_login">登陆</string>
     <string name="nav_logout">登出</string>
     <string name="nav_personal">个人中心</string>
@@ -41,5 +42,7 @@
                             「攻略」发布说明：\n
                             攻略请尽量保证原创，如果转载请务必保证得到了原作者的
                             许可且必须加以注明。图文并茂攻略将被加亮。</string>
+
+    <string name="scrollingfabhideandshow">club.ranleng.psnine.adapter.behavior.ScrollingWithFabHideOrShow</string>
 
 </resources>

@@ -121,15 +121,6 @@ public class FragActivity extends BaseActivity {
                 getSupportActionBar().setSubtitle(url.replace(m.group(1),""));
             }
             Glide.with(this).load(url).into(imageView);
-        } else if (key == KEY.TYPE_NOTICE) {
-            title = "短消息";
-            ListItemFragment listItemFragment = new ListItemFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("type", KEY.TYPE_NOTICE);
-            bundle.putBoolean("search", false);
-            bundle.putString("query", null);
-            listItemFragment.setArguments(bundle);
-            openFragment(listItemFragment);
         } else if (key == KEY.TROPHYTIPS) {
             title = getIntent().getStringExtra("trophy_id");
             Fragment f = new TrophyTipsFragment();

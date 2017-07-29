@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_index"
+            android:checked="true"
+            android:icon="@drawable/index"
+            android:title="@string/nav_index"/>
+
+        <item
+            android:id="@+id/nav_personal"
+            android:icon="@drawable/personal"
+            android:title="@string/nav_personal"
+            android:visible="false"/>
+
+        <item
+            android:id="@+id/nav_notice"
+            android:icon="@drawable/notice"
+            android:title="@string/nav_notice"
+            android:visible="false"/>
+
+
+    </group>
+
     <item android:title="@string/nav_personal_header">
         <menu>
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/login"
-                android:title="@string/nav_login" />
+                android:title="@string/nav_login"/>
 
-            <item
-                android:id="@+id/nav_personal"
-                android:visible="false"
-                android:icon="@drawable/personal"
-                android:title="@string/nav_personal" />
-
-            <item
-                android:id="@+id/nav_notice"
-                android:visible="false"
-                android:icon="@drawable/notice"
-                android:title="@string/nav_notice" />
 
             <item
                 android:id="@+id/nav_photo"
-                android:visible="false"
                 android:icon="@drawable/image"
-                android:title="@string/nav_photo" />
+                android:title="@string/nav_photo"
+                android:visible="false"/>
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/login"
+                android:title="@string/nav_logout"
+                android:visible="false"/>
 
         </menu>
     </item>
@@ -32,24 +50,20 @@
     <item android:title="@string/nav_more_header">
         <menu>
 
+
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/setting"
-                android:title="@string/nav_setting" />
+                android:title="@string/nav_setting"/>
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/about"
-                android:title="@string/nav_about" />
+                android:title="@string/nav_about"/>
             <item
                 android:id="@+id/nav_cache"
                 android:icon="@drawable/cache"
-                android:title="@string/nav_cache" />
+                android:title="@string/nav_cache"/>
 
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/login"
-                android:visible="false"
-                android:title="@string/nav_logout" />
         </menu>
     </item>
 

@@ -17,9 +17,11 @@ public class PSNActivityPagerAdapter extends FragmentPagerAdapter {
     private String[] titles = {
             "PSN游戏", "留言板", "主题", "基因"
     };
+    private String name;
 
     public PSNActivityPagerAdapter(FragmentManager fm, String name) {
         super(fm);
+        this.name = name;
         fragments.add(PSNFragment.newInstance(KEY.PSN_GAME,name));
         fragments.add(PSNFragment.newInstance(KEY.PSN_MSG,name));
         fragments.add(PSNFragment.newInstance(KEY.TYPE_TOPIC,name));
@@ -39,5 +41,14 @@ public class PSNActivityPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];
+    }
+
+    @Override
+    public void notifyDataSetChanged(){
+        fragments.clear();
+        fragments.add(PSNFragment.newInstance(KEY.PSN_GAME,name));
+        fragments.add(PSNFragment.newInstance(KEY.PSN_MSG,name));
+        fragments.add(PSNFragment.newInstance(KEY.TYPE_TOPIC,name));
+        fragments.add(PSNFragment.newInstance(KEY.TYPE_GENE,name));
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
 
@@ -68,8 +69,8 @@ public class PSNFragment extends BaseFragment {
     }
 
     @Override
-    public View initView(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.view_recycler, null, false);
+    public View initView(LayoutInflater inflater,ViewGroup container) {
+        View view = inflater.inflate(R.layout.view_recycler, container, false);
         ButterKnife.bind(this, view);
         context = inflater.getContext();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(context,
@@ -85,8 +86,6 @@ public class PSNFragment extends BaseFragment {
 
         psnid = getArguments().getString("psnid");
         type = getArguments().getInt("type");
-
-
         adapter = new MultiTypeAdapter();
         items = new Items();
         adapter.register(Line.class,new LineViewBinder());
@@ -97,7 +96,6 @@ public class PSNFragment extends BaseFragment {
 
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
-
         return view;
     }
 

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.fragment.widget.EditTabsDialogFragment;
 import club.ranleng.psnine.widget.KEY;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {

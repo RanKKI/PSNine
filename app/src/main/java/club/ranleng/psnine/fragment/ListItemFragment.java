@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -64,8 +65,8 @@ public class ListItemFragment extends BaseFragment {
     }
 
     @Override
-    public View initView(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.view_recycler, null);
+    public View initView(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.view_recycler, container,false);
         ButterKnife.bind(this, view);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(inflater.getContext(),

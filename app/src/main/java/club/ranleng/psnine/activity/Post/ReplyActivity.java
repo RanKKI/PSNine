@@ -24,7 +24,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.ImageGalleryActivity;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.event.EmojiEvent;
-import club.ranleng.psnine.fragment.EmojiDialogFragment;
+import club.ranleng.psnine.fragment.widget.EmojiDialogFragment;
 import club.ranleng.psnine.utils.LocalFile;
 import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.utils.TextUtils;
@@ -36,7 +36,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Body;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public class ReplyActivity extends BaseActivity {

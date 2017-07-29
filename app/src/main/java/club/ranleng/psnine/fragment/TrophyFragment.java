@@ -6,8 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import com.blankj.utilcode.util.LogUtils;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,8 +51,8 @@ public class TrophyFragment extends BaseFragment {
     private Items items;
 
     @Override
-    public View initView(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.view_recycler, null);
+    public View initView(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.view_recycler, container, false);
         ButterKnife.bind(this, view);
         context = inflater.getContext();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

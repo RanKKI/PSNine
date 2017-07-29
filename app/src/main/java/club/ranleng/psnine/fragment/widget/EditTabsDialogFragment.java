@@ -1,4 +1,4 @@
-package club.ranleng.psnine.fragment;
+package club.ranleng.psnine.fragment.widget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

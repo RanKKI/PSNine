@@ -52,7 +52,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (mRootView == null) {
-            mRootView = initView(inflater);
+            mRootView = initView(inflater,container);
         }
         return mRootView;
     }
@@ -95,7 +95,7 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
-    public abstract View initView(LayoutInflater inflater);
+    public abstract View initView(LayoutInflater inflater, ViewGroup container);
 
     public abstract void initData();
 }

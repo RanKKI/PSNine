@@ -5,7 +5,15 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/serach"
-        app:showAsAction="always|collapseActionView"
+        android:title="搜索"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="搜索"/>
+        app:showAsAction="always|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_new_gene"
+        android:title="新基因"/>
+    <item
+        android:id="@+id/action_new_topic"
+        android:title="新主题"/>
+
 </menu>

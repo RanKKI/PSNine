@@ -1,6 +1,5 @@
-package club.ranleng.psnine.fragment;
+package club.ranleng.psnine.fragment.widget;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -18,7 +17,6 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.EmojiDialogAdapter;
 import club.ranleng.psnine.event.EmojiEvent;
-import club.ranleng.psnine.event.LoadEvent;
 import club.ranleng.psnine.widget.KEY;
 
 
