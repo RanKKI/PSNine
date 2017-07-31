@@ -26,7 +26,7 @@ import club.ranleng.psnine.adapter.Binder.Article.ArticleHeaderBinder;
 import club.ranleng.psnine.adapter.Binder.Article.ArticleReplyBinder;
 import club.ranleng.psnine.adapter.Binder.ImageBinder;
 import club.ranleng.psnine.adapter.Binder.MutilPagesBinder;
-import club.ranleng.psnine.adapter.Binder.TextEditableItemBinder;
+import club.ranleng.psnine.adapter.Binder.Common.TextEditableItemBinder;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
@@ -186,6 +186,7 @@ public class ArticleActivity extends BaseActivity {
         } else if (id == R.id.action_artivle_up) {
             up(KEY.INT_TYPE(type), String.valueOf(article_id));
         }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -19,12 +19,18 @@ public class KEY {
 
     public static final int TYPE_TOPIC = 1448;
     public static final int TYPE_GENE = 6107;
+    public static final int TYPE_GENE_ELE = 6108;
     public static final int TYPE_PLUS = 7890;
     public static final int TYPE_OPENBOX = 5427;
     public static final int TYPE_GUIDE = 9820;
     public static final int TYPE_NOTICE = 7775;
     public static final int TYPE_COMMENT = 1238;
     public static final int TYPE_QA = 1218;
+
+    public static final int TYPE_FAV_GENE = 999;
+    public static final int TYPE_FAV_TOPIC = 998;
+
+
 
     public static final Map<Integer, String> TYPE_NAME = new HashMap<Integer, String>() {{
         put(TYPE_GENE, "gene");
@@ -38,7 +44,7 @@ public class KEY {
     }};
 
     public static String INT_TYPE(int type){
-        if(type == TYPE_GENE){
+        if(type == TYPE_GENE || type == TYPE_FAV_GENE){
             return "gene";
         }else {
             return "topic";

@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,18 +38,23 @@ public class ParseWeb {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
         listItems.add(ListInfo(doc));
-        if (type == KEY.TYPE_GENE) {
+        if (type == KEY.TYPE_GENE || type == KEY.TYPE_FAV_GENE) {
             Elements elements = doc.select("ul.list.genelist").select("li");
             for (Element e : elements) {
                 String icon = e.select("a.l").select("img").attr("src");
                 String content = e.select("div.content.pb10").text();
                 String username = e.select("div.meta").select("a").text();
                 String id = "";
-                Elements a = e.select("a");
-                for (Element i : a) {
-                    if (i.attr("href").contains("http://psnine.com/gene/")) {
-                        id = i.attr("href").replace("http://psnine.com/gene/", "");
-                        break;
+
+                if(type == KEY.TYPE_FAV_GENE){
+                    id = e.select("input[name=param]").attr("value");
+                }else{
+                    Elements a = e.select("a");
+                    for (Element i : a) {
+                        if (i.attr("href").contains("http://psnine.com/gene/")) {
+                            id = i.attr("href").replace("http://psnine.com/gene/", "");
+                            break;
+                        }
                     }
                 }
                 String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
@@ -127,9 +133,19 @@ public class ParseWeb {
                 String icon = e.select("a.l").select("img").attr("src");
                 String title = e.select("div.ml64").select("div.title").select("a").text();
                 String username = e.select("div.meta").select("a").first().ownText();
-                String time = e.select("div.meta").first().ownText();
-                String id = e.select("div.ml64").select("div.title").select("a").attr("href").replace("http://psnine.com/topic/", "");
-                String reply = e.select("a.rep.r").text();
+                String id;
+                String time;
+                String reply;
+                if(type == KEY.TYPE_FAV_TOPIC){
+                    id = e.select("input[name=param]").attr("value");
+                    String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
+                    time = tr[0] + "前";
+                    reply = tr[1];
+                }else{
+                    id = e.select("div.ml64").select("div.title").select("a").attr("href").replace("http://psnine.com/topic/", "");
+                    time = e.select("div.meta").first().ownText();
+                    reply = e.select("a.rep.r").text()  + "评论";
+                }
 
                 Map<String, Object> map = new HashMap<>();
                 map.put("title", title);
@@ -137,7 +153,7 @@ public class ParseWeb {
                 map.put("id", Integer.valueOf(id));
                 map.put("icon", icon);
                 map.put("time", time);
-                map.put("reply", reply + "评论");
+                map.put("reply", reply);
                 map.put("type", type);
                 listItems.add(map);
             }
@@ -635,4 +651,15 @@ public class ParseWeb {
         }
         return listItems;
     }
+
+    public static List<String> parseElement(String results){
+        List<String> elements = new ArrayList<>();
+        Document doc = Jsoup.parse(results);
+        Elements list = doc.select("ul.list").select("li");
+        for(Element i : list){
+            elements.add(i.select("a").text());
+        }
+        return elements;
+    }
+
 }

@@ -20,7 +20,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.activity.FragActivity;
 import club.ranleng.psnine.activity.post.newGeneActivity;
 import club.ranleng.psnine.activity.post.newTopicActivity;
-import club.ranleng.psnine.adapter.MainActivityPagerAdapter;
+import club.ranleng.psnine.adapter.ViewPager.MainActivityPagerAdapter;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.UserStatus;
 
@@ -32,11 +32,6 @@ public class MainTabsFragment extends Fragment {
     private int[] tabs_keys = {KEY.TYPE_GENE, KEY.TYPE_TOPIC, KEY.TYPE_OPENBOX, KEY.TYPE_GUIDE, KEY.TYPE_PLUS};
     private Context context;
     private View view;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +47,7 @@ public class MainTabsFragment extends Fragment {
         context = inflater.getContext();
         viewPager.setAdapter(new MainActivityPagerAdapter(getFragmentManager()));  //設定Adapter給viewPager
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
+        setHasOptionsMenu(true);
 
         return view;
     }

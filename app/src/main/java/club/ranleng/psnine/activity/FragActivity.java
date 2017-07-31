@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import club.ranleng.psnine.Listener.TouchListener;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.fragment.ListItemFragment;
-import club.ranleng.psnine.fragment.SettingFragment;
 import club.ranleng.psnine.fragment.TrophyFragment;
 import club.ranleng.psnine.fragment.TrophyTipsFragment;
 import club.ranleng.psnine.utils.MakeToast;
@@ -101,12 +99,12 @@ public class FragActivity extends BaseActivity {
         key = getIntent().getIntExtra("key", -1);
         if (key == KEY.SEARCH) {
             title = getIntent().getStringExtra("query");
-            openFragment(ListItemFragment.newInstance(getIntent().getIntExtra("type",-1),title));
-        } else if (key == KEY.SETTING) {
-            Fragment f = new SettingFragment();
-            title = "设置";
-            openFragment(f);
-        } else if (key == KEY.IMAGE) {
+            openFragment(ListItemFragment.newInstance(getIntent().getIntExtra("type", -1), title, null));
+        } else if(key == KEY.TYPE_GENE_ELE){
+            String ele = getIntent().getStringExtra("ele");
+            title = ele;
+            openFragment(ListItemFragment.newInstance(KEY.TYPE_GENE, null, ele));
+        }else if (key == KEY.IMAGE) {
             ZoomImageView imageView = new ZoomImageView(this);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             imageView.setLayoutParams(layoutParams);
@@ -116,9 +114,9 @@ public class FragActivity extends BaseActivity {
             String pattern = ".*sinaimg.cn/large/(.*)";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(url);
-            if(m.find()){
+            if (m.find()) {
                 getSupportActionBar().setTitle(m.group(1));
-                getSupportActionBar().setSubtitle(url.replace(m.group(1),""));
+                getSupportActionBar().setSubtitle(url.replace(m.group(1), ""));
             }
             Glide.with(this).load(url).into(imageView);
         } else if (key == KEY.TROPHYTIPS) {

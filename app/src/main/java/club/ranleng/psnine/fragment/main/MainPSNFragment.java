@@ -20,7 +20,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.adapter.PSNActivityPagerAdapter;
+import club.ranleng.psnine.adapter.ViewPager.PSNActivityPagerAdapter;
 import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.UserStatus;
@@ -75,24 +75,6 @@ public class MainPSNFragment extends Fragment {
         psnid = getArguments().getString("psnid");
         viewPager.setAdapter(new PSNActivityPagerAdapter(getChildFragmentManager(), psnid));  //設定Adapter給viewPager
         tabLayout.setupWithViewPager(viewPager); //绑定viewPager
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                setTitle(viewPager.getAdapter().getPageTitle(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        setTitle(viewPager.getAdapter().getPageTitle(0));
         return view;
     }
 
@@ -137,10 +119,6 @@ public class MainPSNFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    void setTitle(CharSequence k) {
-        activity.setTitle(psnid.toUpperCase() + "-" + k);
     }
 
     void confirm_action(final Call<ResponseBody> call, String message) {

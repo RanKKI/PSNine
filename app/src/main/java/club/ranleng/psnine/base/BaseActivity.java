@@ -6,11 +6,13 @@ import android.view.MenuItem;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

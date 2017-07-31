@@ -9,6 +9,7 @@
     tools:context="club.ranleng.psnine.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,12 +20,6 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"/>
 
-        <!--<android.support.design.widget.TabLayout-->
-            <!--android:id="@+id/tabs"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:tabMode="scrollable"/>-->
-
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -32,21 +27,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>
-
-    <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@id/tabs"-->
-        <!--app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:srcCompat="@drawable/add"-->
-        <!--tools:ignore="VectorDrawableCompat"/>-->
-
 </android.support.design.widget.CoordinatorLayout>

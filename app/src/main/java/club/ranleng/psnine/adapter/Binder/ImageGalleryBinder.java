@@ -53,7 +53,7 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
         String p_url = item.url.replace("http://ww4.sinaimg.cn/thumb150/","").replace(".jpg","");
         holder.root.setTag(R.id.TAG_IMAGE_GALLERY_URL,p_url);
         holder.root.setTag(R.id.TAG_IMAGE_GALLERY_ID,item.id);
-        if(data.contains(p_url)){
+        if(data != null && data.contains(p_url)){
             holder.click.setVisibility(View.VISIBLE);
         }
         Glide.with(context)

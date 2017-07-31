@@ -21,16 +21,20 @@ import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.adapter.Binder.ImageGalleryBinder;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.model.Image;
+import club.ranleng.psnine.utils.ImageUtils;
 import club.ranleng.psnine.utils.MakeToast;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
@@ -74,6 +78,13 @@ public class ImageGalleryActivity extends BaseActivity implements ImageGalleryBi
     private Photo photo;
     private MultiTypeAdapter adapter;
     private Items items;
+    private Unbinder unbinder;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 
     @Override
     public void setContentView() {
@@ -82,7 +93,7 @@ public class ImageGalleryActivity extends BaseActivity implements ImageGalleryBi
 
     @Override
     public void findViews() {
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
     }
 
     @Override
@@ -200,7 +211,7 @@ public class ImageGalleryActivity extends BaseActivity implements ImageGalleryBi
             if (requestCode == KEY.FORM_CARAMA) {
                 file = tmpFile;
             } else if (requestCode == KEY.FORM_LOCAL) {
-                file = getImageFile(data.getData());
+                file = ImageUtils.getImageFile(this,data.getData());
             }
 
             assert file != null;
@@ -224,15 +235,6 @@ public class ImageGalleryActivity extends BaseActivity implements ImageGalleryBi
         }
     }
 
-    private File getImageFile(Uri selectedImage) {
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String imagePath = cursor.getString(columnIndex);
-        cursor.close();
-        return new File(imagePath);
-    }
 
     @Override
     public void onClick(View v, String url) {

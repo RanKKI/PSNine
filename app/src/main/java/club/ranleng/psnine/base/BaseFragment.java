@@ -25,11 +25,11 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isVisible;
     private boolean isPrepared;
     private boolean isLoadData = false;
+    private boolean isResume = false;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         if (getUserVisibleHint()) {
             isVisible = true;
             lazyLoad();
@@ -62,6 +62,16 @@ public abstract class BaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         isPrepared = true;
         lazyLoad();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
     }
 
     /**

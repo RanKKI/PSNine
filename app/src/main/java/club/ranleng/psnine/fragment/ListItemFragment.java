@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class ListItemFragment extends BaseFragment {
     private MultiTypeAdapter adapter;
     private Items items;
     private String search_word;
+    private String ele;
+
     private int type;
     private int current_page = 1;
     private int max_page = 1;
@@ -55,11 +59,12 @@ public class ListItemFragment extends BaseFragment {
     private int lastPosition;
     private int lastItemCount;
 
-    public static ListItemFragment newInstance(int type, String query) {
+    public static ListItemFragment newInstance(int type, String query, String ele) {
         ListItemFragment listItemFragment = new ListItemFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         bundle.putString("search_word", query);
+        bundle.putString("ele", ele);
         listItemFragment.setArguments(bundle);
         return listItemFragment;
     }
@@ -100,8 +105,10 @@ public class ListItemFragment extends BaseFragment {
         swipeRefreshLayout.setDistanceToTriggerSync(500);
         this.type = getArguments().getInt("type");
         this.search_word = getArguments().getString("search_word");
+        this.ele = getArguments().getString("ele");
 
         if (search_word == null) search_word = "";
+        if (ele == null) ele = "";
 
         adapter = new MultiTypeAdapter();
         adapter.register(ArticleListModel.class, new ArticleListBinder());
@@ -114,15 +121,18 @@ public class ListItemFragment extends BaseFragment {
 
     @Override
     public void initData() {
+
         swipeRefreshLayout.setRefreshing(true);
         ArticleList articleList = Internet.retrofit.create(ArticleList.class);
         Observable<ResponseBody> observable = null;
         if (type == KEY.TYPE_TOPIC || type == KEY.TYPE_GENE || type == KEY.TYPE_QA) {
-            observable = articleList.getTopic(KEY.TYPE_NAME.get(type), KEY.PREF_OB, search_word, current_page);
+            observable = articleList.getTopic(KEY.TYPE_NAME.get(type), KEY.PREF_OB, search_word, ele, current_page);
         } else if (type == KEY.TYPE_GUIDE || type == KEY.TYPE_PLUS || type == KEY.TYPE_OPENBOX) {
             observable = articleList.getNode(KEY.TYPE_NAME.get(type), KEY.PREF_OB, search_word, current_page);
         } else if (type == KEY.TYPE_NOTICE) {
             observable = articleList.getNotice();
+        } else if( type == KEY.TYPE_FAV_GENE || type == KEY.TYPE_FAV_TOPIC){
+            observable = articleList.getFav(KEY.INT_TYPE(type));
         }
 
         assert observable != null;
@@ -168,8 +178,6 @@ public class ListItemFragment extends BaseFragment {
                     @Override
                     public void onComplete() {
                         EventBus.getDefault().post(new LoadEvent());
-//                        adapter.notifyDataSetChanged();
-
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -177,7 +185,7 @@ public class ListItemFragment extends BaseFragment {
 
     interface ArticleList {
         @GET("{type}")
-        Observable<ResponseBody> getTopic(@Path("type") String type, @Query("ob") String ob, @Query("title") String search_word, @Query("page") int page);
+        Observable<ResponseBody> getTopic(@Path("type") String type, @Query("ob") String ob, @Query("title") String search_word, @Query("ele") String ele, @Query("page") int page);
 
 
         @GET("node/{node}")
@@ -185,5 +193,8 @@ public class ListItemFragment extends BaseFragment {
 
         @GET("my/notice")
         Observable<ResponseBody> getNotice();
+
+        @GET("my/fav")
+        Observable<ResponseBody> getFav(@Query("channel") String channel);
     }
 }

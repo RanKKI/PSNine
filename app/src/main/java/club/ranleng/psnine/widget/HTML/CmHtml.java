@@ -13,7 +13,7 @@ import org.jsoup.nodes.Element;
 
 import club.ranleng.psnine.adapter.Binder.Article.ArticleTrophyBinder;
 import club.ranleng.psnine.adapter.Binder.TableBinder;
-import club.ranleng.psnine.adapter.Binder.TextEditableItemBinder;
+import club.ranleng.psnine.adapter.Binder.Common.TextEditableItemBinder;
 import club.ranleng.psnine.model.Article.ArticleTrophy;
 import club.ranleng.psnine.model.Table;
 import club.ranleng.psnine.model.TextSpannedItem;
