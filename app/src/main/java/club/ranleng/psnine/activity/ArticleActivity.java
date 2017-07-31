@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewStub;
+
+import com.blankj.utilcode.util.LogUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,16 +25,18 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.activity.post.ReplyActivity;
 import club.ranleng.psnine.activity.post.newGeneActivity;
 import club.ranleng.psnine.activity.post.newTopicActivity;
 import club.ranleng.psnine.adapter.Binder.Article.ArticleGameListBinder;
 import club.ranleng.psnine.adapter.Binder.Article.ArticleHeaderBinder;
 import club.ranleng.psnine.adapter.Binder.Article.ArticleReplyBinder;
+import club.ranleng.psnine.adapter.Binder.Common.TextEditableItemBinder;
 import club.ranleng.psnine.adapter.Binder.ImageBinder;
 import club.ranleng.psnine.adapter.Binder.MutilPagesBinder;
-import club.ranleng.psnine.adapter.Binder.Common.TextEditableItemBinder;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.event.EmojiEvent;
+import club.ranleng.psnine.fragment.widget.EmojiDialogFragment;
+import club.ranleng.psnine.helper.ReplyFormHelper;
 import club.ranleng.psnine.model.Article.ArticleGameList;
 import club.ranleng.psnine.model.Article.ArticleHeader;
 import club.ranleng.psnine.model.Article.ArticleReply;
@@ -35,6 +44,7 @@ import club.ranleng.psnine.model.Article.MutilPages;
 import club.ranleng.psnine.model.Image_Gene;
 import club.ranleng.psnine.model.TextSpannedItem;
 import club.ranleng.psnine.utils.MakeToast;
+import club.ranleng.psnine.utils.TextUtils;
 import club.ranleng.psnine.widget.Internet;
 import club.ranleng.psnine.widget.KEY;
 import club.ranleng.psnine.widget.ParseWeb;
@@ -63,11 +73,13 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public class ArticleActivity extends BaseActivity {
+public class ArticleActivity extends BaseActivity implements ReplyFormHelper.OnReplyListener {
 
     @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.app_bar) AppBarLayout appbar;
+
     private int type;
     private int article_id;
     private Boolean f_game = true;
@@ -77,13 +89,24 @@ public class ArticleActivity extends BaseActivity {
     private MultiTypeAdapter adapter;
     private int max_pages = 1;
     private Boolean editable = false;
+    private Boolean editreply = false;
+    private String editreply_id;
     private String original = null;
     private int current_page = 1;
     private Context context;
 
+    private ReplyFormHelper mReplyForm;
+    private EmojiDialogFragment emojiDialogFragment;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void setContentView() {
-        setContentView(R.layout.view_toolbar_recycler);
+        setContentView(R.layout.activity_article);
     }
 
     @Override
@@ -97,7 +120,7 @@ public class ArticleActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        EventBus.getDefault().register(this);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -119,7 +142,7 @@ public class ArticleActivity extends BaseActivity {
             @Override
             public void onpagechage(int page) {
                 current_page = page;
-                getData();
+                initData();
             }
         }));
         adapter.setItems(items);
@@ -160,7 +183,8 @@ public class ArticleActivity extends BaseActivity {
             startActivity(intent);
 
         } else if (id == R.id.action_article_reply) {
-            Replies();
+            editreply = false;
+            toggleReplyForm();
         } else if (id == R.id.action_artivle_fav) {
             FormBody.Builder body = new FormBody.Builder();
             body.add("type", KEY.INT_TYPE(type))
@@ -193,12 +217,18 @@ public class ArticleActivity extends BaseActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         final ArticleReply articleReply = (ArticleReply) items.get(item.getGroupId());
+
         switch (item.getItemId()) {
             case R.id.adapter_article_menu_edit:
-                Replies(null, articleReply.title, articleReply.comment_id);
+                editreply = true;
+                editreply_id = articleReply.comment_id;
+                showReplyForm();
+                mReplyForm.setContent(TextUtils.editReply(articleReply.title));
                 return true;
             case R.id.adapter_article_menu_reply:
-                Replies(articleReply.username);
+                editreply = false;
+                showReplyForm();
+                mReplyForm.at(articleReply.username);
                 return true;
             case R.id.adapter_article_menu_up:
                 up("comment", articleReply.comment_id);
@@ -222,7 +252,34 @@ public class ArticleActivity extends BaseActivity {
         menu.findItem(R.id.action_artivle_up).setVisible(type != KEY.TYPE_GENE && UserStatus.isLogin());
         menu.findItem(R.id.action_article_edit).setVisible(editable && UserStatus.isLogin());
         menu.findItem(R.id.action_article_original).setVisible(original != null && UserStatus.isLogin());
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void showReplyForm(){
+        toggleReplyForm();
+        if(!mReplyForm.getVisibility()){
+            toggleReplyForm();
+            mReplyForm.requestFocus();
+        }
+    }
+
+    private void toggleReplyForm() {
+        boolean isShow;
+
+        if (mReplyForm == null && UserStatus.isLogin()) {
+            final ViewStub viewStub = (ViewStub) findViewById(R.id.reply_form);
+            mReplyForm = new ReplyFormHelper(this, viewStub, this);
+            emojiDialogFragment = new EmojiDialogFragment();
+            isShow = true;
+        } else {
+            mReplyForm.toggle();
+            isShow = mReplyForm.getVisibility();
+        }
+
+        if (isShow) {
+            appbar.setExpanded(false);
+        }
+
     }
 
     private void initData() {
@@ -332,33 +389,6 @@ public class ArticleActivity extends BaseActivity {
                 });
     }
 
-    private void Replies() {
-        Replies(null);
-    }
-
-    private void Replies(String username) {
-        Replies(username, null, null);
-    }
-
-    private void Replies(String username, String content, String comment_id) {
-        Intent intent = new Intent(context, ReplyActivity.class);
-        intent.putExtra("type", type);
-        intent.putExtra("id", article_id);
-
-        if (username != null) {
-            intent.putExtra("username", username);
-        }
-
-        if (content != null) {
-            intent.putExtra("edit", true);
-            intent.putExtra("content", content);
-            intent.putExtra("comment_id", comment_id);
-        }
-
-        startActivity(intent);
-    }
-
-
     private void up(final String type, final String param) {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setMessage("要付出4铜币来顶一下吗？")
@@ -382,6 +412,68 @@ public class ArticleActivity extends BaseActivity {
                     }
                 }).create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onReply(CharSequence content) {
+        Call<ResponseBody> call;
+        FormBody.Builder body = new FormBody.Builder();
+        final String str;
+
+        if (editreply) {
+            body.add("type", "comment")
+                    .add("id", editreply_id)
+                    .add("content", content.toString());
+            call = article.editReply(body.build());
+            str = "修改成功";
+        } else {
+            body.add("type", KEY.INT_TYPE(type))
+                    .add("param", String.valueOf(article_id))
+                    .add("old", "yes")
+                    .add("com","")
+                    .add("content",content.toString());
+            call = article.Reply(body.build());
+            str = "回复成功";
+        }
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                mReplyForm.toggle();
+                mReplyForm.setContent("");
+                MakeToast.str(str);
+                initData();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onEmojiClick() {
+        emojiDialogFragment.show(getFragmentManager(),"emoji tag");
+    }
+
+    @Override
+    public void onImageClick() {
+        startActivityForResult(new Intent(this, ImageGalleryActivity.class), KEY.REQUEST_PICKIMG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == KEY.REQUEST_PICKIMG) {
+            for (String i : data.getExtras().getStringArrayList("result")) {
+                mReplyForm.appContent(String.format("[img]%s[/img]\n", i));
+            }
+        }
+    }
+
+    @Subscribe
+    public void onEmojiSelect(EmojiEvent emojiEvent) {
+        mReplyForm.addContent(String.format("[%s]", emojiEvent.getEmoji()));
     }
 
     interface Article {
@@ -409,5 +501,12 @@ public class ArticleActivity extends BaseActivity {
 
         @GET("gene/{id}/comment")
         Observable<ResponseBody> getGeneComment(@Path("id") int id);
+
+        @POST("set/comment/post")
+        Call<ResponseBody> Reply(@Body FormBody body);
+
+        @POST("set/edit/ajax")
+        Call<ResponseBody> editReply(@Body FormBody body);
+
     }
 }

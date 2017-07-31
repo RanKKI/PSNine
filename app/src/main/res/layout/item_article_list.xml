@@ -46,6 +46,7 @@
     <TextView
         android:id="@+id/adapter_list_time"
         android:layout_width="60dp"
+        android:maxLines="1"
         android:layout_height="wrap_content"
         android:layout_below="@+id/adapter_list_name"
         android:layout_centerVertical="false"

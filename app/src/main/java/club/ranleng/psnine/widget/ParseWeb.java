@@ -58,14 +58,23 @@ public class ParseWeb {
                     }
                 }
                 String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
+                String time;
+                String reply;
 
+                if(tr.length != 2){
+                    time = tr[0];
+                    reply = "unknown";
+                }else{
+                    time = tr[0] + "前";
+                    reply = tr[1];
+                }
                 Map<String, Object> map = new HashMap<>();
                 map.put("title", content);
                 map.put("username", username);
                 map.put("id", Integer.valueOf(id));
                 map.put("icon", icon);
-                map.put("time", tr[0] + "前");
-                map.put("reply", tr[1]);
+                map.put("time", time);
+                map.put("reply",reply );
                 map.put("type", type);
                 listItems.add(map);
             }
