@@ -8,11 +8,17 @@ import android.graphics.drawable.StateListDrawable;
 import android.view.View;
 
 public class FeedBackUtils {
+
+    public static void setOnclickfeedBack(View view) {
+        setOnclickfeedBack(0xFFFAFAFA, 0xFFE2E2E2, view);
+    }
+
     /**
-     *为单个view设置点击效果，高版本带涟漪反馈
+     * 为单个view设置点击效果，高版本带涟漪反馈
+     *
      * @param normalColor 未点击的颜色
      * @param pressColor  按下的颜色
-     * @param view  目标view
+     * @param view        目标view
      */
     public static void setOnclickfeedBack(int normalColor, int pressColor, View view) {
         Drawable bgDrawble;
@@ -31,10 +37,11 @@ public class FeedBackUtils {
     }
 
     /**
-     *支持同时设置多个view
+     * 支持同时设置多个view
+     *
      * @param normalColor
      * @param pressColor
-     * @param views 目标view群
+     * @param views       目标view群
      */
     public static void setOnclickfeedBack(int normalColor, int pressColor, View... views) {
         for (int i = 0, size = views.length; i < size; i++) {

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="visible" type="id"/>
-    <item name="masked" type="id"/>
 
-    <item name="adapter_article_menu_reply" type="id"/>
-    <item name="adapter_article_menu_up" type="id"/>
-    <item name="adapter_article_menu_edit" type="id"/>
-    <item name="adapter_article_menu_user" type="id"/>
-    
-    <item name="TAG_ARTICLE_LIST_BINDER_ID" type="id" />
-    <item name="TAG_ARTICLE_LIST_BINDER_TYPE" type="id" />
-    <item name="TAG_ARTICLE_LIST_TROPHY_ID" type="id" />
+    <item name="TAG_TOPIC_TYPE" type="id" />
+    <item name="TAG_TOPIC_ID" type="id" />
+
+    <item name="TAG_GAME_TROPHY_ID" type="id" />
+
     <item name="TAG_IMAGE_GALLERY_URL" type="id" />
     <item name="TAG_IMAGE_GALLERY_ID" type="id" />
 
-    <item name="TAG_IMAGE_URL" type="id" />
-
-    <item name="TAG_GAME_ID" type="id" />
 </resources>

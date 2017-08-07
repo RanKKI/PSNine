@@ -11,8 +11,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-    }
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -26,20 +29,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void init() {
-
         setContentView();
-        findViews();
-        setupViews();
+        find_setup_Views();
         getData();
-
     }
 
     public abstract void setContentView();
 
-    public abstract void findViews();
-
-    public abstract void setupViews();
+    public abstract void find_setup_Views();
 
     public abstract void getData();
+
 
 }

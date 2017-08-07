@@ -8,17 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.NetworkUtils;
-
-import club.ranleng.psnine.utils.MakeToast;
-import club.ranleng.psnine.widget.KEY;
-
-/**
- * Created by ran .
- */
+import club.ranleng.psnine.common.KEY;
 
 public abstract class BaseFragment extends Fragment {
+
 
     public Context mContext;
     protected View mRootView;
@@ -52,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (mRootView == null) {
-            mRootView = initView(inflater,container);
+            mRootView = initView(inflater, container);
         }
         return mRootView;
     }
@@ -64,24 +57,14 @@ public abstract class BaseFragment extends Fragment {
         lazyLoad();
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-    }
-
     /**
      * 懒加载
      */
     protected void lazyLoad() {
-        if(!NetworkUtils.isConnected()){
-            MakeToast.str("无网络连接");
-            return;
-        }
+//        if(!NetworkUtils.isConnected()){
+//            MakeToast.str("无网络连接");
+//            return;
+//        }
 
         if (isPrepared && KEY.PREF_PRELOAD && !isLoadData) {
             isLoadData = true;
@@ -108,4 +91,5 @@ public abstract class BaseFragment extends Fragment {
     public abstract View initView(LayoutInflater inflater, ViewGroup container);
 
     public abstract void initData();
+
 }

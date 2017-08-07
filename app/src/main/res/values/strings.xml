@@ -1,12 +1,18 @@
 <resources>
-    <string name="app_name">PSNine</string>
+    <string name="app_name">Psnine</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+
+    <string name="long_press_to_move">长按移动</string>
     <string name="prompt_username">PSN ID（不是邮箱）</string>
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登陆</string>
+
+    <string name="empty">不能为空</string>
 
     <string name="nav_personal_header">个人</string>
     <string name="nav_index">主页</string>
@@ -22,6 +28,9 @@
     <string name="nav_about">关于</string>
     <string name="nav_cache">缓存</string>
 
+    <string name="newMsg">您有新消息～</string>
+    <string name="Signin">签到成功</string>
+
 
     <string name="about_content">
         第三方原生安卓应用 for PSNine .\n
@@ -31,7 +40,7 @@
         Github: https://github.com/RanKKI\n
         Email : youloveonlymeh@gmail.com\n\n
 
-        出于安全考虑和各种愿意起见,软件内不支持各种形式的付款\n\n
+        出于安全考虑和各种原因起见(比如play商店条款),软件内不支持各种形式的付款\n\n
         使用此软件即您默认新垣结衣是作者的女朋友.
     </string>
 
@@ -39,13 +48,4 @@
         P9是一个提供PSN专属服务的平台，其中包括PSNID查询，奖杯资料（翻译），奖杯攻略tips，ID卡片等主要功能，及其相关的关注，讨论，交友，约战等附属功能。\n\n
         在P9，希望大家能够多多分享、交流，在这里找到朋友，与他们一起玩乐。最重要的是，在这一切的过程中，请保持对他人的友善和尊重。
     </string>
-
-    <string name="warning_b">「新闻」发布说明：\n
-                            新闻必须保证真实，来源可靠，必须标注来源，翻译要写明作者，
-                            请不要转载国内友站的新闻，新闻组成员有权整理会员发布的新闻。\n
-                            「攻略」发布说明：\n
-                            攻略请尽量保证原创，如果转载请务必保证得到了原作者的
-                            许可且必须加以注明。图文并茂攻略将被加亮。</string>
-
-
 </resources>
