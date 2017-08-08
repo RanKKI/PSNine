@@ -61,13 +61,12 @@ public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleRepl
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//            LogUtils.d(getAdapterPosition() + ":" + getLayoutPosition());
-//            if (((Boolean) itemView.getTag())) {
-//                menu.add(getAdapterPosition(), R.id.adapter_article_menu_edit, 0, "修改");//groupId, itemId, order, title
-//            }
-//            menu.add(getAdapterPosition(), R.id.adapter_article_menu_reply, 0, "回复");
-//            menu.add(getAdapterPosition(), R.id.adapter_article_menu_up, 0, "顶");
-//            menu.add(getAdapterPosition(), R.id.adapter_article_menu_user, 0, "查看用户");
+            if (((Boolean) itemView.getTag())) {
+                menu.add(getAdapterPosition(), R.id.adapter_reply_menu_edit, 0, "修改");//groupId, itemId, order, title
+            }
+            menu.add(getAdapterPosition(), R.id.adapter_reply_menu_reply, 0, "回复");
+            menu.add(getAdapterPosition(), R.id.adapter_reply_menu_up, 0, "顶");
+            menu.add(getAdapterPosition(), R.id.adapter_reply_menu_user, 0, "查看用户");
         }
     }
 }

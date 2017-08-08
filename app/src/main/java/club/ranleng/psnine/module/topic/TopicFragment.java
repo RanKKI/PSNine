@@ -12,6 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.blankj.utilcode.util.KeyboardUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,12 +24,19 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.bean.Topic;
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.UserState;
+import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil;
+import cn.dreamtobe.kpswitch.util.KeyboardUtil;
+import cn.dreamtobe.kpswitch.widget.KPSwitchPanelFrameLayout;
 import me.drakeet.multitype.MultiTypeAdapter;
 
 public class TopicFragment extends Fragment implements TopicContract.View {
 
     @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.panel_root) KPSwitchPanelFrameLayout mPanelRoot;
+    @BindView(R.id.emoji) ImageButton emoji;
+    @BindView(R.id.send) ImageButton send;
+    @BindView(R.id.panel_edittext) EditText mPanelEdittext;
 
     private TopicContract.Presenter mPresenter;
     private Topic topic;
@@ -47,7 +59,6 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        new TopicPresenter(this);
         topic = new Topic();
         topic.setTopic_id(getArguments().getInt("topic_id"));
         topic.setType(getArguments().getInt("type"));
@@ -56,7 +67,7 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_recycler, container, false);
+        View view = inflater.inflate(R.layout.fragment_topic, container, false);
         ButterKnife.bind(this, view);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -65,6 +76,8 @@ public class TopicFragment extends Fragment implements TopicContract.View {
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        KeyboardUtil.attach(getActivity(), mPanelRoot);
+        KPSwitchConflictUtil.attach(mPanelRoot, emoji, mPanelEdittext);
         mPresenter.start();
         return view;
     }
@@ -85,6 +98,12 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     public boolean onOptionsItemSelected(MenuItem item) {
         mPresenter.MenuSelected(item.getItemId());
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        mPresenter.onContextMenu(item.getItemId(), item.getGroupId());
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -115,7 +134,39 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     }
 
     @Override
+    public void hidePanel() {
+        if (mPanelRoot.getVisibility() == View.VISIBLE) {
+            KPSwitchConflictUtil.hidePanelAndKeyboard(mPanelRoot);
+        }
+    }
+
+    @Override
+    public void cleanReply() {
+        mPanelEdittext.setText("");
+    }
+
+    @Override
+    public void setReply(String content) {
+        mPanelEdittext.setText(content);
+        mPanelEdittext.setSelection(mPanelEdittext.length());
+        requestFocus();
+    }
+
+    @Override
+    public void addReply(String content) {
+        mPanelEdittext.append(content);
+        mPanelEdittext.setSelection(mPanelEdittext.length());
+        requestFocus();
+    }
+
+
+    @Override
     public Topic getTopic() {
         return topic;
+    }
+
+    private void requestFocus() {
+        mPanelEdittext.requestFocus();
+        KeyboardUtils.showSoftInput(mPanelEdittext);
     }
 }

@@ -2,9 +2,12 @@ package club.ranleng.psnine.module.topic;
 
 import android.view.Menu;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.util.ArrayList;
 import java.util.Map;
 
+import club.ranleng.psnine.R;
 import club.ranleng.psnine.bean.Topic;
 import club.ranleng.psnine.common.multitype.binder.ArticleGameListBinder;
 import club.ranleng.psnine.common.multitype.binder.ArticleHeaderBinder;
@@ -90,6 +93,33 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
     @Override
     public void MenuSelected(int id) {
 
+    }
+
+    @Override
+    public void hidePanel() {
+        mTopicView.hidePanel();
+    }
+
+    @Override
+    public void onContextMenu(int id, int position) {
+        ArticleReply articleReply = (ArticleReply) items.get(position);
+        switch (id){
+            case R.id.adapter_reply_menu_edit:
+                break;
+            case R.id.adapter_reply_menu_reply:
+                at(articleReply.username);
+                break;
+            case R.id.adapter_reply_menu_up:
+                break;
+            case R.id.adapter_reply_menu_user:
+                break;
+        }
+        articleReply = null;
+    }
+
+    @Override
+    public void at(String username) {
+        mTopicView.addReply(String.format("@%s ",username));
     }
 
     @Override

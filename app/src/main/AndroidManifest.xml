@@ -34,7 +34,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".module.topic.TopicActivity"/>
+        <activity android:name=".module.topic.TopicActivity"
+                  android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".module.topics.TopicsActivity"/>
 

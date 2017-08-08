@@ -18,6 +18,15 @@ public interface TopicContract {
 
         void setMenu(Topic topic);
 
+        void hidePanel();
+
+        void cleanReply();
+
+        void setReply(String content);
+
+        void addReply(String content);
+
+
         Topic getTopic();
 
     }
@@ -33,6 +42,12 @@ public interface TopicContract {
         void setMenu(Menu menu);
 
         void MenuSelected(int id);
+
+        void hidePanel();
+
+        void onContextMenu(int id, int position);
+
+        void at(String username);
 
     }
 

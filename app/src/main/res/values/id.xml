@@ -9,4 +9,9 @@
     <item name="TAG_IMAGE_GALLERY_URL" type="id" />
     <item name="TAG_IMAGE_GALLERY_ID" type="id" />
 
+    <item name="adapter_reply_menu_edit" type="id" />
+    <item name="adapter_reply_menu_reply" type="id" />
+    <item name="adapter_reply_menu_up" type="id" />
+    <item name="adapter_reply_menu_user" type="id" />
+
 </resources>
