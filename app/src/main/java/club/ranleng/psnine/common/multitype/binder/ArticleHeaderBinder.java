@@ -29,22 +29,19 @@ public class ArticleHeaderBinder extends ItemViewBinder<ArticleHeader, ArticleHe
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
-
-        if (holder.itemView.getTag() == null) {
-            final Context context = holder.itemView.getContext();
-            String content;
-            if(item.title.equals("")){
-                content = item.content;
-            }else{
-                content = "<h5>"+item.title+"</h5></br>" +  item.content;
-            }
-            cHtml.convert(context, holder.content, content);
-            holder.time.setText(item.time);
-            holder.replies.setText(item.replies);
-            holder.username.setText(item.username);
-            Glide.with(context).load(item.icon).into(holder.icon);
-            holder.itemView.setTag("");
+        final Context context = holder.itemView.getContext();
+        String content;
+        if (item.title.equals("")) {
+            content = item.content;
+        } else {
+            content = "<h5>" + item.title + "</h5></br>" + item.content;
         }
+        cHtml.convert(context, holder.content, content);
+        holder.time.setText(item.time);
+        holder.replies.setText(item.replies);
+        holder.username.setText(item.username);
+        Glide.with(context).load(item.icon).into(holder.icon);
+        holder.itemView.setTag("");
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

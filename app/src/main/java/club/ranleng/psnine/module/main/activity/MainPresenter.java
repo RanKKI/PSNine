@@ -9,6 +9,7 @@ import club.ranleng.psnine.common.event.TabsChange;
 import club.ranleng.psnine.common.event.UserInfoLoad;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.module.element.ElementFragment;
+import club.ranleng.psnine.module.psn.PSNFragment;
 import club.ranleng.psnine.module.setting.SettingFragment;
 import club.ranleng.psnine.module.topics.TopicsTabsFragment;
 import club.ranleng.psnine.module.about.AboutFragment;
@@ -96,7 +97,10 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void openPSN() {
-
+        if(psn == null){
+            psn = PSNFragment.newInstance(UserState.getUsername());
+        }
+        mMainView.openFragment(psn, UserState.getUsername());
     }
 
     @Override

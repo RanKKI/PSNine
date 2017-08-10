@@ -39,6 +39,7 @@
             android:title="@string/nav_element"/>
         <item
             android:id="@+id/nav_fav"
+            android:checkable="false"
             android:icon="@drawable/fav"
             android:title="@string/nav_fav"/>
     </group>

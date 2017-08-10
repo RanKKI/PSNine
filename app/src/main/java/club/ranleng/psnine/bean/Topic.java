@@ -1,11 +1,16 @@
 package club.ranleng.psnine.bean;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import club.ranleng.psnine.common.KEY;
+
 public class Topic {
 
     private int topic_id;
     private int type;
     private int page = 1;
-
+    private String title;
     private String original = "";
     private Boolean editable = false;
 
@@ -40,6 +45,10 @@ public class Topic {
         this.type = type;
     }
 
+    public String getTypeStr(){
+        return KEY.TopicOrGene(type);
+    }
+
     public int getPage() {
         return page;
     }
@@ -62,5 +71,19 @@ public class Topic {
 
     public void setOriginal(String original) {
         this.original = original;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        String pattern = "<.*>";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(title);
+        while (m.find()){
+            title = title.replace(m.group(), "");
+        }
+        this.title = title;
     }
 }

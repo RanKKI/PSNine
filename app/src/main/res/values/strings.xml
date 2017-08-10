@@ -6,13 +6,18 @@
 
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
+    <string name="success">成功</string>
 
     <string name="long_press_to_move">长按移动</string>
+    <string name="select_topic">选择章节</string>
+
     <string name="prompt_username">PSN ID（不是邮箱）</string>
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登陆</string>
 
     <string name="empty">不能为空</string>
+    <string name="tooshort">请认真回复</string>
+
 
     <string name="nav_personal_header">个人</string>
     <string name="nav_index">主页</string>
@@ -31,6 +36,11 @@
     <string name="newMsg">您有新消息～</string>
     <string name="Signin">签到成功</string>
 
+
+    <string name="edit">修改</string>
+    <string name="up">顶</string>
+    <string name="reply">回复</string>
+    <string name="original">出处</string>
 
     <string name="about_content">
         第三方原生安卓应用 for PSNine .\n

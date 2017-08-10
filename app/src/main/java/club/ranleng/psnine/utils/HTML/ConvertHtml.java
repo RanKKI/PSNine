@@ -44,7 +44,6 @@ public class ConvertHtml {
             results = results.replace("sinaimg.cn/large", "sinaimg.cn/small");
         }
         Document doc = Jsoup.parse(results);
-
         String username;
         String icon = "https://static-resource.np.community.playstation.net/avatar/3RD/UP10631304010_B041E9E7D6C08ADC46E7_L.png";
         String time;
@@ -116,6 +115,9 @@ public class ConvertHtml {
                 page_size = page.size();
                 for (int i = 0; i < page.size(); i++) {
                     map.put("page_" + String.valueOf(i + 1), page.get(i).select("a").text());
+                    if(page.get(i).hasAttr("class") && page.get(i).attr("class").equals("current")){
+                        map.put("current_page",i);
+                    }
                 }
             }
 
@@ -458,5 +460,68 @@ public class ConvertHtml {
             elements.add(i.select("a").text());
         }
         return elements;
+    }
+
+    public static ArrayList<Map<String, Object>> parsePsnGame(String results) {
+        ArrayList<Map<String, Object>> listItems = new ArrayList<>();
+
+        Document doc = Jsoup.parse(results);
+        listItems.add(ListInfo(doc));
+        Elements game_list = doc.select("table.list").select("tbody").select("tr");
+        for (Element c : game_list) {
+            String game_icon = c.select("img.imgbgnb").attr("src");
+            String progress = c.select("div.mb10.progress").text().replace("%", "");
+            String game_name = c.select("td").select("p").select("a").text();
+            String last_time = c.select("td").get(1).select("small").text();
+            String difficulty = c.select("td").get(3).select("span").text();
+            String perfection = c.select("td").get(3).select("em").text();
+            String trophy = c.select("small.h-p").html();
+            String pattern = "/psngame/(\\d+)";
+            // 创建 Pattern 对象
+            Pattern r = Pattern.compile(pattern);
+            // 现在创建 matcher 对象
+            Matcher m = r.matcher(c.select("td").select("p").select("a").attr("href"));
+
+            Map<String, Object> map = new HashMap<>();
+            if (m.find()) {
+                map.put("trophy_id", m.group(1));
+            }
+            map.put("game_icon", game_icon);
+            map.put("type", "game");
+            map.put("progress", Integer.valueOf(progress));
+            map.put("game_name", game_name);
+            map.put("spent_time", last_time);
+            map.put("difficulty", difficulty);
+            map.put("perfection", perfection);
+            map.put("trophy", trophy);
+            listItems.add(map);
+        }
+        return listItems;
+    }
+
+    public static ArrayList<Map<String, Object>> parsePSN(String results, int type) {
+        if (type == KEY.PSN_GAME) {
+            return parsePsnGame(results);
+        } else if (type == KEY.PSN_MSG) {
+            return parseBReplies(results);
+        } else {
+            return getTopics(results, type);
+        }
+    }
+
+
+    public static Map<String, String> parsePSNINFO(String results) {
+        Map<String, String> map = new HashMap<>();
+        Document doc = Jsoup.parse(results);
+        String pattern = "http://ww4.sinaimg.cn/large/(.*).jpg";
+        // 创建 Pattern 对象
+        Pattern r = Pattern.compile(pattern);
+
+        // 现在创建 matcher 对象
+        Matcher m = r.matcher(results);
+        if (m.find()) {
+            map.put("bg", m.group());
+        }
+        return map;
     }
 }

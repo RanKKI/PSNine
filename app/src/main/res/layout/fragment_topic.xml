@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
-    tools:context=".module.topic.TopicActivity">
+    android:weightSum="1">
 
 
     <include
@@ -20,7 +19,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000" />
+        android:background="#000000"/>
 
     <LinearLayout
         android:id="@+id/replyLayout"
@@ -29,29 +28,30 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_weight="1"
-        android:weightSum="17"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="17">
 
         <EditText
             android:id="@+id/panel_edittext"
             android:layout_width="0dp"
-            android:maxLines="5"
             android:layout_height="wrap_content"
+            android:layout_weight="15"
             android:inputType="textMultiLine"
-            android:layout_weight="15"/>
+            android:maxLines="5"/>
 
         <ImageButton
             android:id="@+id/emoji"
-            android:layout_weight="1"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:srcCompat="@drawable/emoji"/>
 
         <ImageButton
             android:id="@+id/send"
-            android:layout_weight="1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/send_black"/>
 
     </LinearLayout>
@@ -69,5 +69,5 @@
 
     </cn.dreamtobe.kpswitch.widget.KPSwitchPanelFrameLayout>
 
-
 </cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout>
+

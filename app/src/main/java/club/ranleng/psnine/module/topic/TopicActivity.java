@@ -38,13 +38,7 @@ public class TopicActivity extends BaseActivity {
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event){
-        if (event.getAction() == KeyEvent.ACTION_UP &&
-                event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            mPresenter.hidePanel();
-            return true;
-
-        }
-        return super.dispatchKeyEvent(event);
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return mPresenter.onBackPress(event) || super.dispatchKeyEvent(event);
     }
 }

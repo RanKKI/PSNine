@@ -1,5 +1,6 @@
 package club.ranleng.psnine.module.topic;
 
+import android.view.KeyEvent;
 import android.view.Menu;
 
 import club.ranleng.psnine.base.BasePresenter;
@@ -14,20 +15,37 @@ public interface TopicContract {
 
         void showTopic(MultiTypeAdapter adapter);
 
+        void scrollTo(int pos);
+
         void showLoading(boolean loading);
 
         void setMenu(Topic topic);
 
+        void showTopicsSelect(String[] topics);
+
         void hidePanel();
 
-        void cleanReply();
+        Boolean getPanel();
+
+        void showReplyLayout(Boolean b);
+
+        Boolean getReplyLayout();
 
         void setReply(String content);
 
         void addReply(String content);
 
+        String getReply();
+
+        void cantEmpty();
+
+        void tooShort();
+
+        void openPSN(String username);
 
         Topic getTopic();
+
+        void setSubtitle(String subtitle);
 
     }
 
@@ -39,15 +57,15 @@ public interface TopicContract {
 
         void loadTopic(int page);
 
-        void setMenu(Menu menu);
-
         void MenuSelected(int id);
-
-        void hidePanel();
 
         void onContextMenu(int id, int position);
 
         void at(String username);
+
+        void reply();
+
+        Boolean onBackPress(KeyEvent event);
 
     }
 

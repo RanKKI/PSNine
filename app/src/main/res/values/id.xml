@@ -14,4 +14,6 @@
     <item name="adapter_reply_menu_up" type="id" />
     <item name="adapter_reply_menu_user" type="id" />
 
+    <item name="TAG_GAME_ID" type="id" />
+
 </resources>

@@ -6,25 +6,25 @@
     <item
         android:id="@+id/action_article_edit"
         android:visible="false"
-        android:title="修改" />
+        android:title="@string/edit" />
 
     <item
         android:id="@+id/action_artivle_up"
         android:visible="false"
-        android:title="顶"/>
+        android:title="@string/up"/>
     <item
         android:id="@+id/action_artivle_fav"
         android:visible="false"
-        android:title="收藏"/>
+        android:title="@string/nav_fav"/>
 
     <item
         android:id="@+id/action_article_reply"
         android:visible="false"
-        android:title="回复" />
+        android:title="@string/reply" />
 
     <item
         android:id="@+id/action_article_original"
         android:visible="false"
-        android:title="出处" />
+        android:title="@string/original" />
 
 </menu>

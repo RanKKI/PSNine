@@ -1,5 +1,6 @@
 package club.ranleng.psnine.module.topic;
 
+import android.view.KeyEvent;
 import android.view.Menu;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -21,6 +22,7 @@ import club.ranleng.psnine.common.multitype.model.ArticleReply;
 import club.ranleng.psnine.common.multitype.model.Image_Gene;
 import club.ranleng.psnine.common.multitype.model.MutilPages;
 import club.ranleng.psnine.common.multitype.model.TextSpannedItem;
+import club.ranleng.psnine.data.moudle.SimpleCallBack;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
 import me.drakeet.multitype.Items;
@@ -51,10 +53,10 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
         adapter.register(ArticleHeader.class, new ArticleHeaderBinder());
         adapter.register(TextSpannedItem.class, new TextEditableItemBinder());
         adapter.register(ArticleGameList.class, new ArticleGameListBinder());
-        adapter.register(MutilPages.class, new MutilPagesBinder(new MutilPagesBinder.OnPageChange() {
+        adapter.register(MutilPages.class, new MutilPagesBinder(new MutilPagesBinder.OnClickListener() {
             @Override
-            public void onpagechage(int page) {
-
+            public void OnClick(String[] topics) {
+                mTopicView.showTopicsSelect(topics);
             }
         }));
         items = new Items();
@@ -69,7 +71,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void reFresh() {
-
+        loadTopic();
     }
 
     @Override
@@ -80,24 +82,19 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void loadTopic(int page) {
+        if(page == topic.getPage()){
+            return;
+        }
         items.clear();
         topic.setPage(page);
         loadTopic();
     }
 
     @Override
-    public void setMenu(Menu menu) {
-
-    }
-
-    @Override
     public void MenuSelected(int id) {
-
-    }
-
-    @Override
-    public void hidePanel() {
-        mTopicView.hidePanel();
+        if(id == R.id.action_article_reply){
+            mTopicView.showReplyLayout(!mTopicView.getReplyLayout());
+        }
     }
 
     @Override
@@ -112,6 +109,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             case R.id.adapter_reply_menu_up:
                 break;
             case R.id.adapter_reply_menu_user:
+                mTopicView.openPSN(articleReply.username);
                 break;
         }
         articleReply = null;
@@ -123,8 +121,47 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
     }
 
     @Override
+    public void reply() {
+        if(mTopicView.getReply().isEmpty() || mTopicView.getReply().contentEquals("")){
+            mTopicView.cantEmpty();
+            return;
+        }else if(mTopicView.getReply().length() < 5){
+            mTopicView.tooShort();
+            return;
+        }
+        ApiManager.getDefault().Reply(new SimpleCallBack() {
+            @Override
+            public void Success() {
+                mTopicView.hidePanel();
+                mTopicView.showReplyLayout(false);
+                mTopicView.setReply("");
+            }
+
+            @Override
+            public void Failed() {
+
+            }
+        },mTopicView.getReply(),String.valueOf(topic.getTopic_id()),topic.getTypeStr());
+    }
+
+    @Override
+    public Boolean onBackPress(KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_UP &&
+                event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (mTopicView.getPanel()) {
+                mTopicView.hidePanel();
+                return true;
+            }else if(mTopicView.getReplyLayout()){
+                mTopicView.showReplyLayout(false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void onStart() {
-        mTopicView.showLoading(true);
+//        mTopicView.showLoading(true);
     }
 
     @Override
@@ -142,11 +179,21 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
                 for (int i = 1; i < max_pages + 1; i++) {
                     l.add((String) map.get("page_" + String.valueOf(i)));
                 }
-                items.add(new MutilPages(l));
-                items.add(new Line());
+                items.add(new MutilPages(l, (int) map.get("current_page")));
             }
 
             topic.setEditable((Boolean) map.get("editable"));
+            String temp = (String) map.get("title");
+            if(!temp.contentEquals("")){
+                topic.setTitle(temp);
+            }else{
+                temp = (String) map.get("content");
+                int end_index = temp.length();
+                if(end_index > 20){
+                    end_index = 20;
+                }
+                topic.setTitle(temp.substring(0,end_index));
+            }
             items.add(new ArticleHeader(map));
 
             ArrayList<String> imgs = new ArrayList<String>();
@@ -169,6 +216,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             if (f_game) {
                 f_game = false;
                 items.add(new Category("游戏列表"));
+                items.add(new Line());
             }
             items.add(new ArticleGameList(map));
 
@@ -179,8 +227,8 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
                 items.add(new Line());
             }
             items.add(new ArticleReply(map));
+            items.add(new Line());
         }
-        items.add(new Line());
     }
 
     @Override
@@ -188,5 +236,9 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
         mTopicView.showLoading(false);
         mTopicView.showTopic(adapter);
         mTopicView.setMenu(topic);
+        if(items.size() != 0 && items.get(0).getClass() == MutilPages.class){
+            mTopicView.scrollTo(1);
+        }
+        mTopicView.setSubtitle(topic.getTitle());
     }
 }

@@ -84,4 +84,29 @@ public interface ApiService {
 
     @GET("my/photo")
     Observable<ResponseBody> getPhoto();
+
+    @GET("psnid/{id}")
+    Observable<ResponseBody> getPSNINFO(@Path("id") String psnid);
+
+    @GET("psnid/{id}/psngame")
+    Observable<ResponseBody> getGame(@Path("id") String psnid);
+
+    @GET("psnid/{id}/comment")
+    Observable<ResponseBody> getMsg(@Path("id") String psnid);
+
+    @GET("psnid/{id}/topic")
+    Observable<ResponseBody> getTopic(@Path("id") String psnid);
+
+    @GET("psnid/{id}/gene")
+    Observable<ResponseBody> getGene(@Path("id") String psnid);
+
+    @GET("psnid/{id}/upbase")
+    Call<ResponseBody> upBase(@Path("id") String psnid);
+
+    @GET("psnid/{id}/upgame")
+    Call<ResponseBody> upGame(@Path("id") String psnid);
+
+    @POST("set/blocked/ajax")
+    Call<ResponseBody> Block(@Body FormBody body);
+
 }

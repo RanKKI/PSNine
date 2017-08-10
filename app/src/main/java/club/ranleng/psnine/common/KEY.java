@@ -23,6 +23,9 @@ public class KEY {
     public static final int COMMENT = 1238;
     public static final int QA = 1218;
 
+    public static final int PSN_GAME = 3743;
+    public static final int PSN_MSG = 3744;
+
     public static final int PHOTO_LOCAL = 123;
     public static final int PHOTO_CAMERA = 124;
     public static final int REQUEST_PERMISSION_READ_EXTERNAL = 21;

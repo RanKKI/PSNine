@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="club.ranleng.psnine.provider"
@@ -33,16 +32,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".module.topic.TopicActivity"
-                  android:windowSoftInputMode="adjustResize"/>
-
+        <activity
+            android:name=".module.topic.TopicActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".module.topics.TopicsActivity"/>
-
         <activity android:name=".module.login.LoginActivity"/>
-
         <activity android:name=".module.photo.PhotoGalleryActivity"/>
-
+        <activity android:name=".module.psn.PSNActivity">
+        </activity>
+        <activity android:name=".module.trophy.TrophyActivity">
+        </activity>
     </application>
 
 </manifest>

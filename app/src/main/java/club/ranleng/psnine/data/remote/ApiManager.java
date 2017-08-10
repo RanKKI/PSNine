@@ -15,16 +15,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.moudle.SimpleCallBack;
+import club.ranleng.psnine.data.moudle.SimpleReturn;
 import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
 import club.ranleng.psnine.data.moudle.SimpleSubscriber;
 import club.ranleng.psnine.utils.HTML.ConvertHtml;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
@@ -72,8 +75,8 @@ public class ApiManager {
         OkHttpClient okHttpClient = builder.build();
 
         retrofit = new Retrofit.Builder()
-//                .baseUrl("http://psnine.com/")
-                .baseUrl("http://192.168.0.4:5000/")
+                .baseUrl("http://psnine.com/")
+//                .baseUrl("http://192.168.0.4:5000/")
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -130,6 +133,7 @@ public class ApiManager {
                 .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
                     @Override
                     public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
+
                         return ConvertHtml.parseArticle(responseBody.string(), type);
                     }
                 })
@@ -155,9 +159,9 @@ public class ApiManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     UserState.Check(response.body().string());
-                    if(UserState.isLogin()){
+                    if (UserState.isLogin()) {
                         callBack.Success();
-                    }else{
+                    } else {
                         callBack.Failed();
                     }
                 } catch (IOException e) {
@@ -229,7 +233,7 @@ public class ApiManager {
                 .subscribe(new SimpleSubscriber<>(callBack));
     }
 
-    public void uploadPhoto(final SimpleCallBack callBack, File file){
+    public void uploadPhoto(final SimpleCallBack callBack, File file) {
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("upimg", file.getName(), requestFile);
         apiService.upload(body).enqueue(new Callback<ResponseBody>() {
@@ -245,6 +249,7 @@ public class ApiManager {
             }
         });
     }
+
     public void delPhoto(String id) {
         FormBody body = new FormBody.Builder()
                 .add("delimg", id).build();
@@ -257,6 +262,124 @@ public class ApiManager {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });
+    }
+
+    public void getPSN(SimpleSubCallBack<Map<String, Object>> callBack, String psnid, final int type) {
+        Observable<ResponseBody> call = null;
+        if (type == KEY.PSN_GAME) {
+            call = apiService.getGame(psnid);
+        } else if (type == KEY.PSN_MSG) {
+            call = apiService.getMsg(psnid);
+        } else if (type == KEY.TOPIC) {
+            call = apiService.getTopic(psnid);
+        } else if (type == KEY.GENE) {
+            call = apiService.getGene(psnid);
+        }
+        assert call != null;
+        call.subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
+                    @Override
+                    public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
+                        return ConvertHtml.parsePSN(responseBody.string(), type);
+                    }
+                })
+                .flatMapIterable(new Function<ArrayList<Map<String, Object>>, Iterable<Map<String, Object>>>() {
+                    @Override
+                    public Iterable<Map<String, Object>> apply(@NonNull ArrayList<Map<String, Object>> maps) throws Exception {
+                        return maps;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleSubscriber<>(callBack));
+    }
+
+    public void getPSNINFO(final SimpleReturn<Map<String, String>> simpleReturn, String psnid){
+        apiService.getPSNINFO(psnid)
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, Map<String,String>>() {
+                    @Override
+                    public Map<String, String> apply(@NonNull ResponseBody responseBody) throws Exception {
+                        return ConvertHtml.parsePSNINFO(responseBody.string());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Map<String, String>>() {
+                    @Override
+                    public void accept(@NonNull Map<String, String> map) throws Exception {
+                        simpleReturn.accept(map);
+                    }
+                });
+
+    }
+
+    public void psnAction(final SimpleCallBack callBack, int type, String psnid){
+        Call<ResponseBody> call = null;
+        FormBody.Builder body = new FormBody.Builder();
+
+        switch (type) {
+            case R.id.activity_psn_block:
+                body.add("type", "psnid")
+                        .add("param", psnid);
+                call = apiService.Block(body.build());
+                break;
+            case R.id.activity_psn_fav:
+                body.add("type", "psnid")
+                        .add("param", psnid)
+                        .add("updown", "up");
+                call = apiService.Fav(body.build());
+                break;
+            case R.id.activity_psn_up:
+                body.add("type", "psnid")
+                        .add("param", psnid)
+                        .add("updown", "up");
+                call = apiService.Up(body.build());
+                break;
+            case R.id.activity_psn_upbase:
+                call = apiService.upBase(psnid);
+                break;
+            case R.id.activity_psn_upgame:
+                call = apiService.upGame(psnid);
+                break;
+        }
+        assert call != null;
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    callBack.Success();
+                }else{
+                    callBack.Failed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                callBack.Failed();
+            }
+        });
+    }
+
+    public void Reply(final SimpleCallBack callBack, String content, String id, String type){
+        FormBody.Builder body = new FormBody.Builder();
+        body.add("type", type)
+                .add("param", id)
+                .add("old", "yes")
+                .add("com","")
+                .add("content",content);
+        apiService.Reply(body.build()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    callBack.Success();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
             }
         });
     }
