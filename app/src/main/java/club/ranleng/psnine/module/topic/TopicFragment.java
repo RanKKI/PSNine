@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.blankj.utilcode.util.KeyboardUtils;
+import com.blankj.utilcode.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -188,7 +190,7 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     public void showReplyLayout(Boolean b) {
         replyLayout.setVisibility(b ? View.VISIBLE : View.GONE);
         hidePanel();
-        if(!b){
+        if (!b) {
             KeyboardUtils.hideSoftInput(replyLayout);
         }
     }
@@ -196,13 +198,6 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @Override
     public Boolean getReplyLayout() {
         return replyLayout.getVisibility() == View.VISIBLE;
-    }
-
-    @Override
-    public void setReply(String content) {
-        mPanelEdittext.setText(content);
-        mPanelEdittext.setSelection(mPanelEdittext.length());
-        requestFocus();
     }
 
     @Override
@@ -215,6 +210,13 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @Override
     public String getReply() {
         return mPanelEdittext.getText().toString();
+    }
+
+    @Override
+    public void setReply(String content) {
+        mPanelEdittext.setText(content);
+        mPanelEdittext.setSelection(mPanelEdittext.length());
+        requestFocus();
     }
 
     @Override
@@ -242,7 +244,13 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void setSubtitle(String subtitle) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(subtitle);
+        if(getActivity() == null){
+            return;
+        }
+        ActionBar bar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (bar != null) {
+            bar.setSubtitle(subtitle);
+        }
     }
 
     private void requestFocus() {

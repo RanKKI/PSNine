@@ -50,21 +50,6 @@ public class ApiManager {
     private static volatile ApiManager defaultInstance;
 
     public ApiManager() {
-
-    }
-
-    public static ApiManager getDefault() {
-        if (defaultInstance == null) {
-            synchronized (RxBus.class) {
-                if (defaultInstance == null) {
-                    defaultInstance = new ApiManager();
-                }
-            }
-        }
-        return defaultInstance;
-    }
-
-    public static void init() {
         cookieJar = new PersistentCookieJar(new SetCookieCache(),
                 new SharedPrefsCookiePersistor(Utils.getContext()));
 
@@ -84,10 +69,21 @@ public class ApiManager {
         apiService = retrofit.create(ApiService.class);
     }
 
+    public static ApiManager getDefault() {
+        if (defaultInstance == null) {
+            synchronized (RxBus.class) {
+                if (defaultInstance == null) {
+                    defaultInstance = new ApiManager();
+                }
+            }
+        }
+        return defaultInstance;
+    }
+
     public static void clear() {
         cookieJar.clear();
         cookieJar.clearSession();
-        init();
+        defaultInstance = null;
     }
 
     public void getTopics(SimpleSubCallBack<Map<String, Object>> callBack, final int type, String search, String ele, int page) {
@@ -295,10 +291,10 @@ public class ApiManager {
                 .subscribe(new SimpleSubscriber<>(callBack));
     }
 
-    public void getPSNINFO(final SimpleReturn<Map<String, String>> simpleReturn, String psnid){
+    public void getPSNINFO(final SimpleReturn<Map<String, String>> simpleReturn, String psnid) {
         apiService.getPSNINFO(psnid)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, Map<String,String>>() {
+                .map(new Function<ResponseBody, Map<String, String>>() {
                     @Override
                     public Map<String, String> apply(@NonNull ResponseBody responseBody) throws Exception {
                         return ConvertHtml.parsePSNINFO(responseBody.string());
@@ -314,7 +310,7 @@ public class ApiManager {
 
     }
 
-    public void psnAction(final SimpleCallBack callBack, int type, String psnid){
+    public void psnAction(final SimpleCallBack callBack, int type, String psnid) {
         Call<ResponseBody> call = null;
         FormBody.Builder body = new FormBody.Builder();
 
@@ -347,9 +343,9 @@ public class ApiManager {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callBack.Success();
-                }else{
+                } else {
                     callBack.Failed();
                 }
             }
@@ -362,17 +358,17 @@ public class ApiManager {
         });
     }
 
-    public void Reply(final SimpleCallBack callBack, String content, String id, String type){
+    public void Reply(final SimpleCallBack callBack, String content, String id, String type) {
         FormBody.Builder body = new FormBody.Builder();
         body.add("type", type)
                 .add("param", id)
                 .add("old", "yes")
-                .add("com","")
-                .add("content",content);
+                .add("com", "")
+                .add("content", content);
         apiService.Reply(body.build()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callBack.Success();
                 }
             }

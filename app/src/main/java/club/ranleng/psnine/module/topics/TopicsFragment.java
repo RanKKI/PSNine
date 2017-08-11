@@ -67,7 +67,7 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View,
         recyclerView.addOnScrollListener(recViewLoadMoreL);
 
         if(getActivity().getClass() == TopicsActivity.class || getArguments().getInt("type") == KEY.NOTICE){
-            mPresenter.start();
+//            mPresenter.start();
         }
         return view;
     }

@@ -37,11 +37,15 @@ public class TopicsActivity extends BaseActivity {
         int type = getIntent().getIntExtra("type", -1);
         String query = getIntent().getStringExtra("query");
         if(query != null){
-            setTitle(query);
+            if(getSupportActionBar()!=null){
+                getSupportActionBar().setTitle(query);
+            }
         }
         String ele = getIntent().getStringExtra("ele");
         if(ele != null){
-            setTitle(ele);
+            if(getSupportActionBar()!=null){
+                getSupportActionBar().setTitle(ele);
+            }
         }
         getFragmentManager().beginTransaction()
                 .replace(R.id.frameLayout, TopicsFragment.newInstance(type, query, ele))

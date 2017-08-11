@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         nav_menu = navigationView.getMenu();
 
         Utils.init(this);
-        ApiManager.init();
+        ApiManager.getDefault();
         KEY.initSetting();
         new MainPresenter(this);
 

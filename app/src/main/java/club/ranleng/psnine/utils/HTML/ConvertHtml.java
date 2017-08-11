@@ -99,7 +99,7 @@ public class ConvertHtml {
             if (!icon_e.isEmpty()) {
                 icon = icon_e.get(0).select("a").select("img").attr("src");
             }
-            time = doc.select("div.meta").select("span").get(1).text();
+            time = doc.select("div.ml64").select("div.meta").get(1).select("span").get(1).text();
             Elements s = doc.select("div.alert-warning.pd10.font12").select("span");
             replies = s.get(s.size() - 1).text();
             if (replies.contains("已采纳")) {
@@ -511,6 +511,7 @@ public class ConvertHtml {
 
 
     public static Map<String, String> parsePSNINFO(String results) {
+        UserState.Check(results);
         Map<String, String> map = new HashMap<>();
         Document doc = Jsoup.parse(results);
         String pattern = "http://ww4.sinaimg.cn/large/(.*).jpg";

@@ -58,7 +58,7 @@ public class TopicsTabsFragment extends BaseTabsFragment implements SearchView.O
         intent.putExtra("query", query);
         intent.putExtra("type", type);
         startActivity(intent);
-        return false;
+        return true;
     }
 
     @Override
