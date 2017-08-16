@@ -1,9 +1,7 @@
 package club.ranleng.psnine.module.topic;
 
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.KeyEvent;
-import android.view.Menu;
-
-import com.blankj.utilcode.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,8 +21,8 @@ import club.ranleng.psnine.common.multitype.model.Image_Gene;
 import club.ranleng.psnine.common.multitype.model.MutilPages;
 import club.ranleng.psnine.common.multitype.model.TextSpannedItem;
 import club.ranleng.psnine.data.moudle.SimpleCallBack;
-import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
+import club.ranleng.psnine.data.remote.ApiManager;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import me.drakeet.support.about.Category;
@@ -66,6 +64,13 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
     @Override
     public void start() {
         topic = mTopicView.getTopic();
+        EmojiViewAdapter adapter = new EmojiViewAdapter(new EmojiViewAdapter.onClick() {
+            @Override
+            public void click(String emoji_name) {
+                mTopicView.addReply(String.format("[%s]",emoji_name));
+            }
+        });
+        mTopicView.setEmojiAdapter(new StaggeredGridLayoutManager(6, StaggeredGridLayoutManager.HORIZONTAL), adapter);
         loadTopic();
     }
 
@@ -77,22 +82,24 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
     @Override
     public void loadTopic() {
         mTopicView.showLoading(true);
+        items.clear();
+        f_game = true;
+        f_reply = true;
         ApiManager.getDefault().getTopic(this, topic.getType(), topic.getTopic_id(), topic.getPage());
     }
 
     @Override
     public void loadTopic(int page) {
-        if(page == topic.getPage()){
+        if (page == topic.getPage()) {
             return;
         }
-        items.clear();
         topic.setPage(page);
         loadTopic();
     }
 
     @Override
     public void MenuSelected(int id) {
-        if(id == R.id.action_article_reply){
+        if (id == R.id.action_article_reply) {
             mTopicView.showReplyLayout(!mTopicView.getReplyLayout());
         }
     }
@@ -100,7 +107,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
     @Override
     public void onContextMenu(int id, int position) {
         ArticleReply articleReply = (ArticleReply) items.get(position);
-        switch (id){
+        switch (id) {
             case R.id.adapter_reply_menu_edit:
                 break;
             case R.id.adapter_reply_menu_reply:
@@ -117,15 +124,15 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void at(String username) {
-        mTopicView.addReply(String.format("@%s ",username));
+        mTopicView.addReply(String.format("@%s ", username));
     }
 
     @Override
     public void reply() {
-        if(mTopicView.getReply().isEmpty() || mTopicView.getReply().contentEquals("")){
+        if (mTopicView.getReply().isEmpty() || mTopicView.getReply().contentEquals("")) {
             mTopicView.cantEmpty();
             return;
-        }else if(mTopicView.getReply().length() < 5){
+        } else if (mTopicView.getReply().length() < 5) {
             mTopicView.tooShort();
             return;
         }
@@ -141,17 +148,17 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             public void Failed() {
 
             }
-        },mTopicView.getReply(),String.valueOf(topic.getTopic_id()),topic.getTypeStr());
+        }, mTopicView.getReply(), String.valueOf(topic.getTopic_id()), topic.getTypeStr());
     }
 
     @Override
     public Boolean onBackPress(KeyEvent event) {
-        if(event.getAction() == KeyEvent.ACTION_UP &&
+        if (event.getAction() == KeyEvent.ACTION_UP &&
                 event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             if (mTopicView.getPanel()) {
                 mTopicView.hidePanel();
                 return true;
-            }else if(mTopicView.getReplyLayout()){
+            } else if (mTopicView.getReplyLayout()) {
                 mTopicView.showReplyLayout(false);
                 return true;
             }
@@ -184,15 +191,15 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
             topic.setEditable((Boolean) map.get("editable"));
             String temp = (String) map.get("title");
-            if(!temp.contentEquals("")){
+            if (!temp.contentEquals("")) {
                 topic.setTitle(temp);
-            }else{
+            } else {
                 temp = (String) map.get("content");
                 int end_index = temp.length();
-                if(end_index > 20){
+                if (end_index > 20) {
                     end_index = 20;
                 }
-                topic.setTitle(temp.substring(0,end_index));
+                topic.setTitle(temp.substring(0, end_index));
             }
             items.add(new ArticleHeader(map));
 
@@ -236,7 +243,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
         mTopicView.showLoading(false);
         mTopicView.showTopic(adapter);
         mTopicView.setMenu(topic);
-        if(items.size() != 0 && items.get(0).getClass() == MutilPages.class){
+        if (items.size() != 0 && items.get(0).getClass() == MutilPages.class) {
             mTopicView.scrollTo(1);
         }
         mTopicView.setSubtitle(topic.getTitle());

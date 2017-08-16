@@ -28,6 +28,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.module.login.LoginActivity;
+import club.ranleng.psnine.utils.EmojiUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         Utils.init(this);
         ApiManager.getDefault();
         KEY.initSetting();
+        EmojiUtils.init();
         new MainPresenter(this);
 
         mPresenter.start();

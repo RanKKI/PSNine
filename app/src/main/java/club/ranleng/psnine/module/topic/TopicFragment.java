@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,7 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @BindView(R.id.send) ImageButton send;
     @BindView(R.id.panel_edittext) EditText mPanelEdittext;
     @BindView(R.id.replyLayout) LinearLayout replyLayout;
+    @BindView(R.id.emoji_view) RecyclerView emoji_recycler;
 
     private TopicContract.Presenter mPresenter;
     private Topic topic;
@@ -95,7 +97,6 @@ public class TopicFragment extends Fragment implements TopicContract.View {
         KeyboardUtil.attach(getActivity(), mPanelRoot);
         KPSwitchConflictUtil.attach(mPanelRoot, emoji, mPanelEdittext);
         mPresenter.start();
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,6 +252,12 @@ public class TopicFragment extends Fragment implements TopicContract.View {
         if (bar != null) {
             bar.setSubtitle(subtitle);
         }
+    }
+
+    @Override
+    public void setEmojiAdapter(RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter) {
+        emoji_recycler.setLayoutManager(layoutManager);
+        emoji_recycler.setAdapter(adapter);
     }
 
     private void requestFocus() {

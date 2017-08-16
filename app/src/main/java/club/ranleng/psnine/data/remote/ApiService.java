@@ -58,7 +58,7 @@ public interface ApiService {
     Observable<ResponseBody> getGeneComment(@Path("id") int id);
 
     //comment
-    @POST("set/comment/post")
+    @POST("set/comment/ajax")
     Call<ResponseBody> Reply(@Body FormBody body);
 
     @POST("set/edit/ajax")

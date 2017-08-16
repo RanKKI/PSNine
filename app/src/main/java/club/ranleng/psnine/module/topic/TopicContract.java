@@ -1,5 +1,6 @@
 package club.ranleng.psnine.module.topic;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.Menu;
 
@@ -46,6 +47,8 @@ public interface TopicContract {
         Topic getTopic();
 
         void setSubtitle(String subtitle);
+
+        void setEmojiAdapter(RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter);
 
     }
 

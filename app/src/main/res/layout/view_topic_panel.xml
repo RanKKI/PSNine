@@ -5,7 +5,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#d5d3d5" />
+        android:background="#d5d3d5"/>
 
     <LinearLayout
         android:id="@+id/panel_content"
@@ -14,13 +14,12 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/send_img_tv"
-            style="@style/PanelItem"
-            android:text="cce" />
 
-        <TextView
-            style="@style/PanelItem"
-            android:text="123e" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/emoji_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal"/>
+
     </LinearLayout>
 </merge>
