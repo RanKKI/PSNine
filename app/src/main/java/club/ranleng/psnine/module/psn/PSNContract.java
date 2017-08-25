@@ -2,10 +2,10 @@ package club.ranleng.psnine.module.psn;
 
 import android.app.Fragment;
 
+import java.util.Map;
+
 import club.ranleng.psnine.base.BasePresenter;
 import club.ranleng.psnine.base.BaseView;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public interface PSNContract {
 
@@ -17,11 +17,9 @@ public interface PSNContract {
 
         void confirm(int type, String message, PSNFragment.DialogClickListener listener);
 
-        void setBackground(String url);
+        void setIcon(Map<String, String> map);
 
         String getPSNID();
-
-
 
     }
 

@@ -31,9 +31,8 @@ public class TopicsTabsFragment extends BaseTabsFragment implements SearchView.O
         return new PagerAdapter(manager);
     }
 
-    @Override
-    protected void onItemClick(int id) {
-
+    public int getType(){
+        return type;
     }
 
     @Override

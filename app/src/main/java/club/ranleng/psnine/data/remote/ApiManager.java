@@ -25,12 +25,15 @@ import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
 import club.ranleng.psnine.data.moudle.SimpleSubscriber;
 import club.ranleng.psnine.utils.HTML.ConvertHtml;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -43,7 +46,6 @@ import retrofit2.Retrofit;
 
 public class ApiManager {
 
-    private static Retrofit retrofit;
     private static ClearableCookieJar cookieJar;
     private static ApiService apiService;
 
@@ -59,7 +61,7 @@ public class ApiManager {
         builder.cookieJar(cookieJar);
         OkHttpClient okHttpClient = builder.build();
 
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://psnine.com/")
 //                .baseUrl("http://192.168.0.4:5000/")
                 .client(okHttpClient)
@@ -67,6 +69,10 @@ public class ApiManager {
                 .build();
 
         apiService = retrofit.create(ApiService.class);
+    }
+
+    public static void init(){
+        getDefault();
     }
 
     public static ApiManager getDefault() {
@@ -129,7 +135,6 @@ public class ApiManager {
                 .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
                     @Override
                     public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
-
                         return ConvertHtml.parseArticle(responseBody.string(), type);
                     }
                 })
@@ -147,28 +152,37 @@ public class ApiManager {
         FormBody body = new FormBody.Builder()
                 .add("psnid", username)
                 .add("pass", password)
-                .add("signin", "")
+                .add("jump", "http://psnine.com/")
                 .build();
 
         apiService.Login(body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    UserState.Check(response.body().string());
-                    if (UserState.isLogin()) {
-                        callBack.Success();
-                    } else {
-                        callBack.Failed();
+                apiService.getIndex().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            UserState.Check(response.body().string());
+                            if(UserState.isLogin()){
+                                callBack.Success();
+                            }else{
+                                callBack.Failed();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-                callBack.Failed();
             }
         });
     }
@@ -291,7 +305,7 @@ public class ApiManager {
                 .subscribe(new SimpleSubscriber<>(callBack));
     }
 
-    public void getPSNINFO(final SimpleReturn<Map<String, String>> simpleReturn, String psnid) {
+    public void getPSNINFO(SimpleSubCallBack<Map<String, String>> callBack, String psnid) {
         apiService.getPSNINFO(psnid)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, Map<String, String>>() {
@@ -301,12 +315,7 @@ public class ApiManager {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Map<String, String>>() {
-                    @Override
-                    public void accept(@NonNull Map<String, String> map) throws Exception {
-                        simpleReturn.accept(map);
-                    }
-                });
+                .subscribe(new SimpleSubscriber<>(callBack));
 
     }
 
@@ -353,6 +362,42 @@ public class ApiManager {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                callBack.Failed();
+            }
+        });
+    }
+
+    public void newGene(final SimpleCallBack callBack,FormBody body){
+        apiService.newGene(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    callBack.Success();
+                }else{
+                    callBack.Failed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.Failed();
+            }
+        });
+    }
+
+    public void newTopic(final SimpleCallBack callBack,FormBody body){
+        apiService.newTopic(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    callBack.Success();
+                }else{
+                    callBack.Failed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 callBack.Failed();
             }
         });

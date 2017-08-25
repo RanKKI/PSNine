@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,18 +23,12 @@ import me.drakeet.multitype.ItemViewBinder;
 public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder.ViewHolder> {
 
     private OnClick onClick;
-    private List<String> data;
+    private ArrayList<String> data;
 
-    public ImageGalleryBinder(OnClick onClick, List<String> data){
+    public ImageGalleryBinder(OnClick onClick, ArrayList<String> data) {
         this.onClick = onClick;
         this.data = data;
     }
-
-    public interface OnClick{
-        void onClick(View v, String url);
-        void onLongClick(View v, String id, int pos);
-    }
-
 
     @NonNull
     @Override
@@ -47,10 +40,10 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Image item) {
         Context context = holder.itemView.getContext();
-        String p_url = item.url.replace("http://ww4.sinaimg.cn/thumb150/","").replace(".jpg","");
-        holder.root.setTag(R.id.TAG_IMAGE_GALLERY_URL,p_url);
-        holder.root.setTag(R.id.TAG_IMAGE_GALLERY_ID,item.id);
-        if(data != null && data.contains(p_url)){
+        String p_url = item.url.replace("http://ww4.sinaimg.cn/thumb150/", "").replace(".jpg", "");
+        holder.root.setTag(R.id.TAG_IMAGE_GALLERY_URL, p_url);
+        holder.root.setTag(R.id.TAG_IMAGE_GALLERY_ID, item.id);
+        if (data != null && data.contains(p_url)) {
             holder.click.setVisibility(View.VISIBLE);
         }
         Glide.with(context)
@@ -60,7 +53,13 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
                 .into(holder.root);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
+    public interface OnClick {
+        void onClick(View v, String url);
+
+        void onLongClick(View v, String id, int pos);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.view_image_root) ImageView root;
         @BindView(R.id.view_image_click_green) ImageView click;
@@ -74,15 +73,15 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
 
         @Override
         public void onClick(View v) {
-            if(onClick != null){
-                onClick.onClick(click,(String) v.getTag(R.id.TAG_IMAGE_GALLERY_URL));
+            if (onClick != null) {
+                onClick.onClick(click, (String) v.getTag(R.id.TAG_IMAGE_GALLERY_URL));
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            if(onClick != null){
-                onClick.onLongClick(v,(String) v.getTag(R.id.TAG_IMAGE_GALLERY_ID), getAdapterPosition());
+            if (onClick != null) {
+                onClick.onLongClick(v, (String) v.getTag(R.id.TAG_IMAGE_GALLERY_ID), getAdapterPosition());
             }
             return false;
         }

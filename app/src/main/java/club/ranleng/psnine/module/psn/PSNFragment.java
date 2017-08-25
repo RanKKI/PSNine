@@ -17,15 +17,24 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.UserState;
+import club.ranleng.psnine.view.RoundImageView;
 
 public class PSNFragment extends Fragment implements PSNContract.View {
 
     @BindView(R.id.psn_root) CoordinatorLayout root;
     @BindView(R.id.app_bar_image) ImageView app_bar_image;
+    @BindView(R.id.icon) RoundImageView icon;
+    @BindView(R.id.region) RoundImageView region;
+    @BindView(R.id.plus) RoundImageView plus;
+    @BindView(R.id.auth) RoundImageView auth;
+
+
 
     private PSNContract.Presenter mPresenter;
     private String psnid;
@@ -102,8 +111,13 @@ public class PSNFragment extends Fragment implements PSNContract.View {
     }
 
     @Override
-    public void setBackground(String url) {
-        Glide.with(this).load(url).asBitmap().into(app_bar_image);
+    public void setIcon(Map<String, String> map) {
+        Glide.with(this).load(map.get("bg")).asBitmap().into(app_bar_image);
+        Glide.with(this).load(map.get("icon")).asBitmap().into(icon);
+        Glide.with(this).load(map.get("region")).asBitmap().into(region);
+        Glide.with(this).load(map.get("auth")).asBitmap().into(auth);
+        Glide.with(this).load(map.get("plus")).asBitmap().into(plus);
+
     }
 
     @Override

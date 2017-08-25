@@ -1,5 +1,7 @@
 package club.ranleng.psnine.common;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -38,7 +40,7 @@ public class UserState {
     }
 
     public static String getUserIcon() {
-        return userIcon;
+        return userIcon.replace("@50w.png","");
     }
 
     public static void setUserIcon(String userIcon) {

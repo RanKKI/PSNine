@@ -40,7 +40,7 @@
         <activity android:name=".module.photo.PhotoGalleryActivity"/>
         <activity android:name=".module.psn.PSNActivity"/>
         <activity android:name=".module.trophy.TrophyActivity"/>
-        <activity android:name=".common.LineHandlerActivity">
+        <activity android:name=".common.LinkHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -52,6 +52,7 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
+        <activity android:name=".module.newtopic.NewTopicActivity"/>
     </application>
 
 </manifest>

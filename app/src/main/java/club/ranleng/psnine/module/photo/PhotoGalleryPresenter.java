@@ -3,6 +3,8 @@ package club.ranleng.psnine.module.photo;
 import android.content.pm.PackageManager;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.File;
 import java.util.Map;
 
@@ -11,8 +13,8 @@ import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.multitype.binder.ImageGalleryBinder;
 import club.ranleng.psnine.common.multitype.model.Image;
 import club.ranleng.psnine.data.moudle.SimpleCallBack;
-import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
+import club.ranleng.psnine.data.remote.ApiManager;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
@@ -27,12 +29,12 @@ public class PhotoGalleryPresenter implements PhotoGalleryContract.Presenter,
         this.mPhotoView = view;
         this.mPhotoView.setPresenter(this);
 
-        adapter.register(Image.class, new ImageGalleryBinder(this, mPhotoView.getPhotos()));
-        adapter.setItems(items);
     }
 
     @Override
     public void start() {
+        adapter.register(Image.class, new ImageGalleryBinder(this, mPhotoView.getPhotos()));
+        adapter.setItems(items);
         load();
     }
 
@@ -48,17 +50,19 @@ public class PhotoGalleryPresenter implements PhotoGalleryContract.Presenter,
             public void Failed() {
 
             }
-        },file);
+        }, file);
     }
 
     @Override
     public void menuSelected(int id) {
         if (id == R.id.action_upload_local) {
-            if(mPhotoView.getPermissions()){
+            if (mPhotoView.getPermissions()) {
                 mPhotoView.openGallery();
             }
         } else if (id == R.id.action_upload_camera) {
             mPhotoView.openCamera();
+        } else if (id == R.id.action_finish) {
+            mPhotoView.finish();
         }
     }
 
@@ -78,7 +82,7 @@ public class PhotoGalleryPresenter implements PhotoGalleryContract.Presenter,
 
     @Override
     public void requestPermissions(int requestCode, int[] grantResults) {
-        if(requestCode == KEY.REQUEST_PERMISSION_READ_EXTERNAL){
+        if (requestCode == KEY.REQUEST_PERMISSION_READ_EXTERNAL) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mPhotoView.openGallery();
             }

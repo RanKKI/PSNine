@@ -30,6 +30,8 @@ public class KEY {
     public static final int PHOTO_CAMERA = 124;
     public static final int REQUEST_PERMISSION_READ_EXTERNAL = 21;
 
+    public static final int REQUEST_PICKIMG = 976;
+
     public static final String KEY_PREF_PRELOAD = "settings_preload";
     public static final String KEY_PREF_OB = "settings_ob";
     public static final String KEY_PREF_EMOJI = "settings_emoji_dialog";

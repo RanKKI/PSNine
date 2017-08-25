@@ -87,6 +87,7 @@ public class AboutFragment extends Fragment {
         items.add(new Line());
 
         items.add(new Category("Open Source Licenses"));
+        items.add(new License("JKeyboardPanelSwitch", "Jacksgong", License.APACHE_2, "https://github.com/Jacksgong/JKeyboardPanelSwitch"));
         items.add(new License("Retrofit", "Square", License.APACHE_2, "https://github.com/square/retrofit"));
         items.add(new License("Glide", "SamJudd", "BSD, part MIT and Apache 2.0", "https://github.com/bumptech/glide"));
         items.add(new License("RxJava", "ReactiveX", License.APACHE_2, "https://github.com/ReactiveX/RxJava"));

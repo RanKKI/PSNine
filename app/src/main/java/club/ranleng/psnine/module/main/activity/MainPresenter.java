@@ -8,13 +8,13 @@ import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.common.event.TabsChange;
 import club.ranleng.psnine.common.event.UserInfoLoad;
 import club.ranleng.psnine.data.remote.ApiManager;
+import club.ranleng.psnine.module.about.AboutFragment;
 import club.ranleng.psnine.module.element.ElementFragment;
+import club.ranleng.psnine.module.photo.PhotoGalleryFragment;
 import club.ranleng.psnine.module.psn.PSNFragment;
 import club.ranleng.psnine.module.setting.SettingFragment;
-import club.ranleng.psnine.module.topics.TopicsTabsFragment;
-import club.ranleng.psnine.module.about.AboutFragment;
-import club.ranleng.psnine.module.photo.PhotoGalleryFragment;
 import club.ranleng.psnine.module.topics.TopicsFragment;
+import club.ranleng.psnine.module.topics.TopicsTabsFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -27,7 +27,7 @@ public class MainPresenter implements MainContract.Presenter {
     private Disposable login_event;
     private Disposable tabs_change_event;
 
-    private Fragment main;
+    private TopicsTabsFragment main;
     private Fragment psn;
     private Fragment notice;
     private Fragment photos;
@@ -48,7 +48,7 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribe(new Consumer<UserInfoLoad>() {
                     @Override
                     public void accept(@NonNull UserInfoLoad userInfoLoad) throws Exception {
-                        if(!UserState.isLogin()){
+                        if (!UserState.isLogin()) {
                             mMainView.setNotLogin();
                             return;
                         }
@@ -71,13 +71,12 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribe(new Consumer<TabsChange>() {
                     @Override
                     public void accept(@NonNull TabsChange tabsChange) throws Exception {
-                        if(tabsChange.getChange()){
+                        if (tabsChange.getChange()) {
                             main = null;
                             tabsChange.setChange(false);
                         }
                     }
                 });
-
         openMain();
     }
 
@@ -97,7 +96,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void openPSN() {
-        if(psn == null){
+        if (psn == null) {
             psn = PSNFragment.newInstance(UserState.getUsername());
         }
         mMainView.openFragment(psn, UserState.getUsername());
@@ -105,15 +104,15 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void openNotice() {
-        if(notice == null){
-            notice = TopicsFragment.newInstance(KEY.NOTICE,null,null);
+        if (notice == null) {
+            notice = TopicsFragment.newInstance(KEY.NOTICE, null, null);
         }
         mMainView.openFragment(notice, "短消息");
     }
 
     @Override
     public void openEle() {
-        if(element == null){
+        if (element == null) {
             element = ElementFragment.newInstance();
         }
         mMainView.openFragment(element, "元素");
@@ -126,15 +125,15 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void openPhoto() {
-        if(photos == null){
-            photos = PhotoGalleryFragment.newInstance();
+        if (photos == null) {
+            photos = PhotoGalleryFragment.newInstance(null);
         }
         mMainView.openFragment(photos, "图库");
     }
 
     @Override
     public void openSetting() {
-        if(setting == null){
+        if (setting == null) {
             setting = SettingFragment.newInstance();
         }
         mMainView.openFragment(setting, "设置");
@@ -150,6 +149,13 @@ public class MainPresenter implements MainContract.Presenter {
         UserState.setIsLogin(false);
         ApiManager.clear();
         RxBus.getDefault().send(new UserInfoLoad());
+    }
+
+    @Override
+    public void FabClick() {
+        if (UserState.isLogin()) {
+            mMainView.newTopic(main.getType());
+        }
     }
 
 

@@ -16,6 +16,8 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
+    @GET("topic")
+    Call<ResponseBody> getIndex();
     // get topics list
     @GET("{type}")
     Observable<ResponseBody> getTopic(@Path("type") String type, @Query("ob") String ob, @Query("title") String search_word, @Query("ele") String ele, @Query("page") int page);
@@ -68,7 +70,7 @@ public interface ApiService {
     Call<ResponseBody> signIn();
 
     @Headers("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36")
-    @POST("sign/in")
+    @POST("sign/signin/ajax")
     Call<ResponseBody> Login(@Body FormBody body);
 
     @Headers("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36")
@@ -108,5 +110,18 @@ public interface ApiService {
 
     @POST("set/blocked/ajax")
     Call<ResponseBody> Block(@Body FormBody body);
+
+    @GET("gene/{id}/edit")
+    Observable<ResponseBody> GetEditGene(@Path("id") int id);
+
+    @POST("set/gene/post")
+    Call<ResponseBody> newGene(@Body FormBody body);
+
+    @POST("set/topic/post")
+    Call<ResponseBody> newTopic(@Body FormBody body);
+
+
+    @GET("topic/{id}/edit")
+    Observable<ResponseBody> editTopic(@Path("id") int topic_id);
 
 }

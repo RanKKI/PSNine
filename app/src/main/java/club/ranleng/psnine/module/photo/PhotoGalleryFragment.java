@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,12 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryContra
     private Boolean selectable = false;
     private ArrayList<String> photo_list = new ArrayList<>();
 
-    public static PhotoGalleryFragment newInstance() {
-        return new PhotoGalleryFragment();
+    public static PhotoGalleryFragment newInstance(ArrayList<String> photo_list) {
+        PhotoGalleryFragment fragment = new PhotoGalleryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("photo_list", photo_list);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -65,6 +71,10 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryContra
         setHasOptionsMenu(true);
         new PhotoGalleryPresenter(this);
         selectable = !(getActivity().getClass() == MainActivity.class);
+        ArrayList<String> temp = getArguments().getStringArrayList("photo_list");
+        if (temp != null) {
+            photo_list = temp;
+        }
     }
 
     @Override
@@ -103,7 +113,7 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryContra
             if (requestCode == KEY.PHOTO_CAMERA) {
                 file = tmpFile;
             } else if (requestCode == KEY.PHOTO_LOCAL) {
-                file = FileUtils.getImageFile(context,data.getData());
+                file = FileUtils.getImageFile(context, data.getData());
             }
             mPresenter.upload(file);
         }
@@ -134,7 +144,15 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryContra
     }
 
     @Override
-    public List<String> getPhotos() {
+    public void finish() {
+        Intent intent = new Intent();
+        intent.putExtra("photo_list", photo_list);
+        getActivity().setResult(RESULT_OK, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public ArrayList<String> getPhotos() {
         return photo_list;
     }
 

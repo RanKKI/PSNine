@@ -59,13 +59,10 @@ public abstract class BaseTabsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onItemClick(item.getItemId());
         return super.onOptionsItemSelected(item);
     }
 
     protected abstract FragmentPagerAdapter getAdapter(FragmentManager manager);
-
-    protected abstract void onItemClick(int id);
 
     protected abstract void CreateMenu(Menu menu, MenuInflater inflater);
 

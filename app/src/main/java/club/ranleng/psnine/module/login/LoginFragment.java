@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
@@ -60,7 +62,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
 
     @Override
     public void Failure() {
-
+        LogUtils.d("login failed");
+        ToastUtils.showShort("login failed");
     }
 
     @Override

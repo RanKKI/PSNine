@@ -8,6 +8,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.DialogConfirmHelper;
 import club.ranleng.psnine.data.moudle.SimpleCallBack;
 import club.ranleng.psnine.data.moudle.SimpleReturn;
+import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
 import club.ranleng.psnine.data.remote.ApiManager;
 
 public class PSNPresenter implements PSNContract.Presenter, PSNFragment.DialogClickListener {
@@ -27,10 +28,20 @@ public class PSNPresenter implements PSNContract.Presenter, PSNFragment.DialogCl
 
     @Override
     public void load() {
-        ApiManager.getDefault().getPSNINFO(new SimpleReturn<Map<String, String>>() {
+        ApiManager.getDefault().getPSNINFO(new SimpleSubCallBack<Map<String, String>>() {
             @Override
-            public void accept(Map<String, String> map) {
-                mPSNView.setBackground(map.get("bg"));
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onNext(Map<String, String> map) {
+                mPSNView.setIcon(map);
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         },mPSNView.getPSNID());
     }

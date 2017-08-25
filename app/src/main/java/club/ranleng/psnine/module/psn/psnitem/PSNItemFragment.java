@@ -28,6 +28,7 @@ public class PSNItemFragment extends Fragment implements PSNItemContract.View {
     private Context context;
     private String psnid;
     private int type;
+    private View view;
 
     private PSNItemContract.Presenter mPresenter;
 
@@ -56,7 +57,10 @@ public class PSNItemFragment extends Fragment implements PSNItemContract.View {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_recycler, container, false);
+        if(view != null){
+            return view;
+        }
+        view = inflater.inflate(R.layout.view_recycler, container, false);
         ButterKnife.bind(this, view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         swipeRefreshLayout.setEnabled(false);

@@ -42,6 +42,13 @@
     <string name="reply">回复</string>
     <string name="original">出处</string>
 
+    <string name="warning_b">「新闻」发布说明：\n
+                            新闻必须保证真实，来源可靠，必须标注来源，翻译要写明作者，
+                            请不要转载国内友站的新闻，新闻组成员有权整理会员发布的新闻。\n
+                            「攻略」发布说明：\n
+                            攻略请尽量保证原创，如果转载请务必保证得到了原作者的
+                            许可且必须加以注明。图文并茂攻略将被加亮。</string>
+
     <string name="about_content">
         第三方原生安卓应用 for PSNine .\n
         如果你有任何建议或者意见请联系作者\n
@@ -58,4 +65,6 @@
         P9是一个提供PSN专属服务的平台，其中包括PSNID查询，奖杯资料（翻译），奖杯攻略tips，ID卡片等主要功能，及其相关的关注，讨论，交友，约战等附属功能。\n\n
         在P9，希望大家能够多多分享、交流，在这里找到朋友，与他们一起玩乐。最重要的是，在这一切的过程中，请保持对他人的友善和尊重。
     </string>
+
+    <string name="fab_behavior">club.ranleng.psnine.view.FabBehavior</string>
 </resources>

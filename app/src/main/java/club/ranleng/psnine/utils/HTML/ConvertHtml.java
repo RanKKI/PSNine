@@ -514,6 +514,12 @@ public class ConvertHtml {
         UserState.Check(results);
         Map<String, String> map = new HashMap<>();
         Document doc = Jsoup.parse(results);
+
+        map.put("icon", doc.select("img.avabig").attr("src"));
+        map.put("region", doc.select("img.icon-region").attr("src"));
+        map.put("auth", doc.select("img.icon-auth").attr("src"));
+        map.put("plus", doc.select("img.icon-plus").attr("src"));
+        //backgound image
         String pattern = "http://ww4.sinaimg.cn/large/(.*).jpg";
         // 创建 Pattern 对象
         Pattern r = Pattern.compile(pattern);

@@ -1,5 +1,7 @@
 package club.ranleng.psnine.common.event;
 
+import com.blankj.utilcode.util.LogUtils;
+
 public class UserInfoLoad {
 
     private String name;

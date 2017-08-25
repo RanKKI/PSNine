@@ -30,11 +30,6 @@ public class PSNTabsFragment extends BaseTabsFragment {
     }
 
     @Override
-    protected void onItemClick(int id) {
-
-    }
-
-    @Override
     protected void CreateMenu(Menu menu, MenuInflater inflater) {
 
     }
@@ -55,8 +50,8 @@ class PagerAdapter extends FragmentPagerAdapter {
         super(fm);
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.PSN_GAME));
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.PSN_MSG));
-        fragments.add(PSNItemFragment.newInstance(psnid, KEY.GENE));
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.TOPIC));
+        fragments.add(PSNItemFragment.newInstance(psnid, KEY.GENE));
 
     }
 

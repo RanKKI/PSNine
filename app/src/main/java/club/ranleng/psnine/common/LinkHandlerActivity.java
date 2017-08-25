@@ -10,7 +10,7 @@ import com.blankj.utilcode.util.Utils;
 import club.ranleng.psnine.module.psn.PSNActivity;
 import club.ranleng.psnine.module.topic.TopicActivity;
 
-public class LineHandlerActivity extends AppCompatActivity {
+public class LinkHandlerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

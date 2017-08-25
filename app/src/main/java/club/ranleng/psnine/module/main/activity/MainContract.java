@@ -25,6 +25,11 @@ public interface MainContract {
 
         void openFragment(Fragment fragment, String title);
 
+        void newTopic(int type);
+
+        void fabControl(Boolean visible);
+
+
     }
 
     interface Presenter extends BasePresenter {
@@ -48,6 +53,8 @@ public interface MainContract {
         void openAbout();
 
         void Logout();
+
+        void FabClick();
 
         Boolean isMain(Fragment fragment);
     }

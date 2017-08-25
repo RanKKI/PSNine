@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -16,9 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -26,9 +27,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.KEY;
+import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.module.login.LoginActivity;
+import club.ranleng.psnine.module.newtopic.NewTopicActivity;
 import club.ranleng.psnine.utils.EmojiUtils;
+import club.ranleng.psnine.view.RoundImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
@@ -39,11 +43,12 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.main_root) CoordinatorLayout root;
     @BindView(R.id.app_bar) AppBarLayout appbar;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
 
     private MainContract.Presenter mPresenter;
     private TextView nav_username;
-    private ImageView nav_icon;
+    private RoundImageView nav_icon;
     private Menu nav_menu;
 
     private Fragment current;
@@ -69,11 +74,18 @@ public class MainActivity extends AppCompatActivity
 
         View headerLayout = navigationView.getHeaderView(0);
         nav_username = (TextView) headerLayout.findViewById(R.id.nav_header_username);
-        nav_icon = (ImageView) headerLayout.findViewById(R.id.nav_header_icon);
+        nav_icon = (RoundImageView) headerLayout.findViewById(R.id.nav_header_icon);
         nav_menu = navigationView.getMenu();
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.FabClick();
+            }
+        });
+
         Utils.init(this);
-        ApiManager.getDefault();
+        ApiManager.init();
         KEY.initSetting();
         EmojiUtils.init();
         new MainPresenter(this);
@@ -92,23 +104,11 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else if(mPresenter.isMain(current)){
+        } else if (mPresenter.isMain(current)) {
             mPresenter.openMain();
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void setUserIcon(String icon_src) {
-        Glide.with(this).load(icon_src).into(nav_icon);
+        Glide.with(this).load(icon_src).asBitmap().into(nav_icon);
     }
 
     @Override
@@ -197,6 +197,7 @@ public class MainActivity extends AppCompatActivity
     public void openFragment(Fragment fragment, String title) {
         setTitle(title);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
         if (current == null) {
             current = fragment;
             transaction.replace(R.id.frameLayout, fragment);
@@ -211,5 +212,22 @@ public class MainActivity extends AppCompatActivity
             current = fragment;
         }
         transaction.commit();
+        if(!UserState.isLogin()){
+            fabControl(false);
+            return;
+        }
+        fabControl(!mPresenter.isMain(current));
+    }
+
+    @Override
+    public void newTopic(int type) {
+        Intent intent = new Intent(this, NewTopicActivity.class);
+        intent.putExtra("type", type);
+        startActivity(intent);
+    }
+
+    @Override
+    public void fabControl(Boolean visible) {
+        fab.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 }

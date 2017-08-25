@@ -1,6 +1,8 @@
 package club.ranleng.psnine.module.photo;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import club.ranleng.psnine.base.BasePresenter;
@@ -16,7 +18,9 @@ public interface PhotoGalleryContract {
 
         void setLoading(Boolean b);
 
-        List<String> getPhotos();
+        void finish();
+
+        ArrayList<String> getPhotos();
 
         Boolean getPermissions();
 
