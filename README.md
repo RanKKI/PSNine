@@ -3,11 +3,11 @@ Unofficial native android application for PSNine
 
 ### Screen captures
 
-![1d309577820c8d6d9d7f3f7777514cab](https://raw.githubusercontent.com/RanKKI/PSNine/master/res/1d309577820c8d6d9d7f3f7777514cab.gif)![e9035ef0f741ea913e244f580b2a4789](https://raw.githubusercontent.com/RanKKI/PSNine/master/res/e9035ef0f741ea913e244f580b2a4789.gif)
+![252a874060ce465da8732cf529f5bc00](https://raw.githubusercontent.com/RanKKI/PSNine/master/res/252a874060ce465da8732cf529f5bc00.png)
 
 ### Download
 
-[Download Link (Play store)](https://play.google.com/apps/testing/club.ranleng.psnine "Download Link (Play store)")
+<a href='https://play.google.com/store/apps/details?id=club.ranleng.psnine&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 License
 -------
