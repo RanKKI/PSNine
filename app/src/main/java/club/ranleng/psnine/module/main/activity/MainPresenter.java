@@ -152,6 +152,11 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void Cache() {
+        mMainView.showCacheDialog();
+    }
+
+    @Override
     public void FabClick() {
         if (UserState.isLogin()) {
             mMainView.newTopic(main.getType());
@@ -161,6 +166,6 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public Boolean isMain(Fragment fragment) {
-        return fragment != main;
+        return fragment == main;
     }
 }

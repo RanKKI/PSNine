@@ -8,6 +8,7 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.KEY;
+import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.module.newtopic.Gene.newGeneFragment;
 import club.ranleng.psnine.module.newtopic.Topic.newTopicFragment;
 
@@ -17,6 +18,10 @@ public class NewTopicActivity extends BaseActivity {
 
     @Override
     public void setContentView() {
+        if(!UserState.isLogin()){
+            finish();
+            return;
+        }
         setContentView(R.layout.view_toolbar_frame);
     }
 

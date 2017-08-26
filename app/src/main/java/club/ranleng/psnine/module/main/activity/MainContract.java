@@ -29,6 +29,8 @@ public interface MainContract {
 
         void fabControl(Boolean visible);
 
+        void showCacheDialog();
+
 
     }
 
@@ -53,6 +55,8 @@ public interface MainContract {
         void openAbout();
 
         void Logout();
+
+        void Cache();
 
         void FabClick();
 

@@ -1,7 +1,9 @@
 package club.ranleng.psnine.module.main.activity;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -19,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -32,6 +33,7 @@ import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.module.login.LoginActivity;
 import club.ranleng.psnine.module.newtopic.NewTopicActivity;
 import club.ranleng.psnine.utils.EmojiUtils;
+import club.ranleng.psnine.utils.LocalFile;
 import club.ranleng.psnine.view.RoundImageView;
 
 public class MainActivity extends AppCompatActivity
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         new MainPresenter(this);
 
         mPresenter.start();
-
+        refresh_cache();
     }
 
     @Override
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (mPresenter.isMain(current)) {
+        } else if (!mPresenter.isMain(current)) {
             mPresenter.openMain();
         } else {
             super.onBackPressed();
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_setting) {
             mPresenter.openSetting();
         } else if (id == R.id.nav_cache) {
-
+            mPresenter.Cache();
         } else if (id == R.id.nav_about) {
             mPresenter.openAbout();
         } else if (id == R.id.nav_fav) {
@@ -198,9 +201,12 @@ public class MainActivity extends AppCompatActivity
         setTitle(title);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+        fabControl(mPresenter.isMain(current));
         if (current == null) {
             current = fragment;
             transaction.replace(R.id.frameLayout, fragment);
+            transaction.commit();
+            return;
         }
 
         if (current != fragment) {
@@ -212,11 +218,6 @@ public class MainActivity extends AppCompatActivity
             current = fragment;
         }
         transaction.commit();
-        if(!UserState.isLogin()){
-            fabControl(false);
-            return;
-        }
-        fabControl(!mPresenter.isMain(current));
     }
 
     @Override
@@ -228,6 +229,34 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void fabControl(Boolean visible) {
+        if (!UserState.isLogin()) {
+            visible = false;
+        }
         fab.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void showCacheDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("确定要清除缓存么")
+                .setMessage("清除缓存虽然可以减少手机空间的占用, 但下次加载的时候会耗费更多的流量")
+                .setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (LocalFile.deleteDir(getCacheDir())) {
+                            show_snackBar("成功清除缓存");
+                            refresh_cache();
+                        }
+                    }
+                })
+                .setNegativeButton("取消", null).create().show();
+    }
+
+    private void refresh_cache() {
+        try {
+            nav_menu.findItem(R.id.nav_cache).setTitle("缓存 " + LocalFile.getFormatSize(LocalFile.getFolderSize(getCacheDir().getAbsoluteFile())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
