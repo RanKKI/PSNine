@@ -84,52 +84,181 @@ class HtmlToSpannedConverter implements ContentHandler {
     private static final float[] HEADING_SIZES = {
             1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f,
     };
+    /**
+     * Name-value mapping of HTML/CSS colors which have different values in {@link Color}.
+     */
+    private static final Map<String, Integer> sColorMap;
+    private static Pattern sTextAlignPattern;
+    private static Pattern sForegroundColorPattern;
+    private static Pattern sBackgroundColorPattern;
+    private static Pattern sTextDecorationPattern;
+
+    static {
+        sColorMap = new HashMap<>();
+        sColorMap.put("black", 0xFF000000);
+        sColorMap.put("silver", 0xFFc0c0c0);
+        sColorMap.put("gray", 0xFF808080);
+        sColorMap.put("white", 0xFFffffff);
+        sColorMap.put("maroon", 0xFF800000);
+        sColorMap.put("red", 0xFFff0000);
+        sColorMap.put("purple", 0xFF800080);
+        sColorMap.put("fuchsia", 0xFFff00ff);
+        sColorMap.put("green", 0xFF008000);
+        sColorMap.put("lime", 0xFF00ff00);
+        sColorMap.put("olive", 0xFF808000);
+        sColorMap.put("yellow", 0xFFffff00);
+        sColorMap.put("navy", 0xFF000080);
+        sColorMap.put("blue", 0xFF0000ff);
+        sColorMap.put("teal", 0xFF008080);
+        sColorMap.put("aqua", 0xFF00ffff);
+        sColorMap.put("orange", 0xFFffa500);
+        sColorMap.put("aliceblue", 0xFFf0f8ff);
+        sColorMap.put("antiquewhite", 0xFFfaebd7);
+        sColorMap.put("aquamarine", 0xFF7fffd4);
+        sColorMap.put("azure", 0xFFf0ffff);
+        sColorMap.put("beige", 0xFFf5f5dc);
+        sColorMap.put("bisque", 0xFFffe4c4);
+        sColorMap.put("blanchedalmond", 0xFFffebcd);
+        sColorMap.put("blueviolet", 0xFF8a2be2);
+        sColorMap.put("brown", 0xFFa52a2a);
+        sColorMap.put("burlywood", 0xFFdeb887);
+        sColorMap.put("cadetblue", 0xFF5f9ea0);
+        sColorMap.put("chartreuse", 0xFF7fff00);
+        sColorMap.put("chocolate", 0xFFd2691e);
+        sColorMap.put("coral", 0xFFff7f50);
+        sColorMap.put("cornflowerblue", 0xFF6495ed);
+        sColorMap.put("cornsilk", 0xFFfff8dc);
+        sColorMap.put("crimson", 0xFFdc143c);
+        sColorMap.put("cyan", 0xFF00ffff);
+        sColorMap.put("darkblue", 0xFF00008b);
+        sColorMap.put("darkcyan", 0xFF008b8b);
+        sColorMap.put("darkgoldenrod", 0xFFb8860b);
+        sColorMap.put("darkgray", 0xFFa9a9a9);
+        sColorMap.put("darkgreen", 0xFF006400);
+        sColorMap.put("darkgrey", 0xFFa9a9a9);
+        sColorMap.put("darkkhaki", 0xFFbdb76b);
+        sColorMap.put("darkmagenta", 0xFF8b008b);
+        sColorMap.put("darkolivegreen", 0xFF556b2f);
+        sColorMap.put("darkorange", 0xFFff8c00);
+        sColorMap.put("darkorchid", 0xFF9932cc);
+        sColorMap.put("darkred", 0xFF8b0000);
+        sColorMap.put("darksalmon", 0xFFe9967a);
+        sColorMap.put("darkseagreen", 0xFF8fbc8f);
+        sColorMap.put("darkslateblue", 0xFF483d8b);
+        sColorMap.put("darkslategray", 0xFF2f4f4f);
+        sColorMap.put("darkslategrey", 0xFF2f4f4f);
+        sColorMap.put("darkturquoise", 0xFF00ced1);
+        sColorMap.put("darkviolet", 0xFF9400d3);
+        sColorMap.put("deeppink", 0xFFff1493);
+        sColorMap.put("deepskyblue", 0xFF00bfff);
+        sColorMap.put("dimgray", 0xFF696969);
+        sColorMap.put("dimgrey", 0xFF696969);
+        sColorMap.put("dodgerblue", 0xFF1e90ff);
+        sColorMap.put("firebrick", 0xFFb22222);
+        sColorMap.put("floralwhite", 0xFFfffaf0);
+        sColorMap.put("forestgreen", 0xFF228b22);
+        sColorMap.put("gainsboro", 0xFFdcdcdc);
+        sColorMap.put("ghostwhite", 0xFFf8f8ff);
+        sColorMap.put("gold", 0xFFffd700);
+        sColorMap.put("goldenrod", 0xFFdaa520);
+        sColorMap.put("greenyellow", 0xFFadff2f);
+        sColorMap.put("grey", 0xFF808080);
+        sColorMap.put("honeydew", 0xFFf0fff0);
+        sColorMap.put("hotpink", 0xFFff69b4);
+        sColorMap.put("indianred", 0xFFcd5c5c);
+        sColorMap.put("indigo", 0xFF4b0082);
+        sColorMap.put("ivory", 0xFFfffff0);
+        sColorMap.put("khaki", 0xFFf0e68c);
+        sColorMap.put("lavender", 0xFFe6e6fa);
+        sColorMap.put("lavenderblush", 0xFFfff0f5);
+        sColorMap.put("lawngreen", 0xFF7cfc00);
+        sColorMap.put("lemonchiffon", 0xFFfffacd);
+        sColorMap.put("lightblue", 0xFFadd8e6);
+        sColorMap.put("lightcoral", 0xFFf08080);
+        sColorMap.put("lightcyan", 0xFFe0ffff);
+        sColorMap.put("lightgoldenrodyellow", 0xFFfafad2);
+        sColorMap.put("lightgray", 0xFFd3d3d3);
+        sColorMap.put("lightgreen", 0xFF90ee90);
+        sColorMap.put("lightgrey", 0xFFd3d3d3);
+        sColorMap.put("lightpink", 0xFFffb6c1);
+        sColorMap.put("lightsalmon", 0xFFffa07a);
+        sColorMap.put("lightseagreen", 0xFF20b2aa);
+        sColorMap.put("lightskyblue", 0xFF87cefa);
+        sColorMap.put("lightslategray", 0xFF778899);
+        sColorMap.put("lightslategrey", 0xFF778899);
+        sColorMap.put("lightsteelblue", 0xFFb0c4de);
+        sColorMap.put("lightyellow", 0xFFffffe0);
+        sColorMap.put("limegreen", 0xFF32cd32);
+        sColorMap.put("linen", 0xFFfaf0e6);
+        sColorMap.put("magenta", 0xFFff00ff);
+        sColorMap.put("mediumaquamarine", 0xFF66cdaa);
+        sColorMap.put("mediumblue", 0xFF0000cd);
+        sColorMap.put("mediumorchid", 0xFFba55d3);
+        sColorMap.put("mediumpurple", 0xFF9370db);
+        sColorMap.put("mediumseagreen", 0xFF3cb371);
+        sColorMap.put("mediumslateblue", 0xFF7b68ee);
+        sColorMap.put("mediumspringgreen", 0xFF00fa9a);
+        sColorMap.put("mediumturquoise", 0xFF48d1cc);
+        sColorMap.put("mediumvioletred", 0xFFc71585);
+        sColorMap.put("midnightblue", 0xFF191970);
+        sColorMap.put("mintcream", 0xFFf5fffa);
+        sColorMap.put("mistyrose", 0xFFffe4e1);
+        sColorMap.put("moccasin", 0xFFffe4b5);
+        sColorMap.put("navajowhite", 0xFFffdead);
+        sColorMap.put("oldlace", 0xFFfdf5e6);
+        sColorMap.put("olivedrab", 0xFF6b8e23);
+        sColorMap.put("orangered", 0xFFff4500);
+        sColorMap.put("orchid", 0xFFda70d6);
+        sColorMap.put("palegoldenrod", 0xFFeee8aa);
+        sColorMap.put("palegreen", 0xFF98fb98);
+        sColorMap.put("paleturquoise", 0xFFafeeee);
+        sColorMap.put("palevioletred", 0xFFdb7093);
+        sColorMap.put("papayawhip", 0xFFffefd5);
+        sColorMap.put("peachpuff", 0xFFffdab9);
+        sColorMap.put("peru", 0xFFcd853f);
+        sColorMap.put("pink", 0xFFffc0cb);
+        sColorMap.put("plum", 0xFFdda0dd);
+        sColorMap.put("powderblue", 0xFFb0e0e6);
+        sColorMap.put("rosybrown", 0xFFbc8f8f);
+        sColorMap.put("royalblue", 0xFF4169e1);
+        sColorMap.put("saddlebrown", 0xFF8b4513);
+        sColorMap.put("salmon", 0xFFfa8072);
+        sColorMap.put("sandybrown", 0xFFf4a460);
+        sColorMap.put("seagreen", 0xFF2e8b57);
+        sColorMap.put("seashell", 0xFFfff5ee);
+        sColorMap.put("sienna", 0xFFa0522d);
+        sColorMap.put("skyblue", 0xFF87ceeb);
+        sColorMap.put("slateblue", 0xFF6a5acd);
+        sColorMap.put("slategray", 0xFF708090);
+        sColorMap.put("slategrey", 0xFF708090);
+        sColorMap.put("snow", 0xFFfffafa);
+        sColorMap.put("springgreen", 0xFF00ff7f);
+        sColorMap.put("steelblue", 0xFF4682b4);
+        sColorMap.put("tan", 0xFFd2b48c);
+        sColorMap.put("thistle", 0xFFd8bfd8);
+        sColorMap.put("tomato", 0xFFff6347);
+        sColorMap.put("turquoise", 0xFF40e0d0);
+        sColorMap.put("violet", 0xFFee82ee);
+        sColorMap.put("wheat", 0xFFf5deb3);
+        sColorMap.put("whitesmoke", 0xFFf5f5f5);
+        sColorMap.put("yellowgreen", 0xFF9acd32);
+        sColorMap.put("rebeccapurple", 0xFF663399);
+    }
 
     private String mSource;
     private XMLReader mReader;
     private SpannableStringBuilder mSpannableStringBuilder;
     private Html.ImageGetter mImageGetter;
     private mHtml.TagHandler mTagHandler;
-    private static Pattern sTextAlignPattern;
-    private static Pattern sForegroundColorPattern;
-    private static Pattern sBackgroundColorPattern;
-    private static Pattern sTextDecorationPattern;
     private Attributes attr;
-    /**
-     * Name-value mapping of HTML/CSS colors which have different values in {@link Color}.
-     */
-    private static final Map<String, Integer> sColorMap;
 
-    static {
-        sColorMap = new HashMap<>();
-        sColorMap.put("black", 0xFF000000);
-        sColorMap.put("darkgray", 0xFF444444);
-        sColorMap.put("gray", 0xFF888888);
-        sColorMap.put("lightgray", 0xFFCCCCCC);
-        sColorMap.put("white", 0xFFFFFFFF);
-        sColorMap.put("red", 0xFFFF0000);
-        sColorMap.put("green", 0xFF00FF00);
-        sColorMap.put("blue", 0xFF0000FF);
-        sColorMap.put("yellow", 0xFFFFFF00);
-        sColorMap.put("cyan", 0xFF00FFFF);
-        sColorMap.put("aqua", 0xFF00FFFF);
-        sColorMap.put("fuchsia", 0xFFFF00FF);
-        sColorMap.put("darkgrey", 0xFFFF00FF);
-        sColorMap.put("lime", 0xFF00FF00);
-        sColorMap.put("maroon", 0xFF800000);
-        sColorMap.put("navy", 0xFF000080);
-        sColorMap.put("olive", 0xFF808000);
-        sColorMap.put("purple", 0xFF800080);
-        sColorMap.put("silver", 0xFFC0C0C0);
-        sColorMap.put("teal", 0xFF008080);
-        sColorMap.put("darkgrey", 0xFFA9A9A9);
-        sColorMap.put("grey", 0xFF808080);
-        sColorMap.put("lightgrey", 0xFFD3D3D3);
-        sColorMap.put("green", 0xFF008000);
-        sColorMap.put("deeppink",0xFFFF1493);
-        sColorMap.put("orange",0xFFFFAB00);
-        sColorMap.put("lightblue",0xFFADD8E6);
-        sColorMap.put("brown",0xFFBC5C75);
+    public HtmlToSpannedConverter(String source, Html.ImageGetter imageGetter,
+                                  mHtml.TagHandler tagHandler, Parser parser) {
+        mSource = source;
+        mSpannableStringBuilder = new SpannableStringBuilder();
+        mImageGetter = imageGetter;
+        mTagHandler = tagHandler;
+        mReader = parser;
     }
 
     private static Pattern getTextAlignPattern() {
@@ -163,13 +292,174 @@ class HtmlToSpannedConverter implements ContentHandler {
         return sTextDecorationPattern;
     }
 
-    public HtmlToSpannedConverter(String source, Html.ImageGetter imageGetter,
-                                  mHtml.TagHandler tagHandler, Parser parser) {
-        mSource = source;
-        mSpannableStringBuilder = new SpannableStringBuilder();
-        mImageGetter = imageGetter;
-        mTagHandler = tagHandler;
-        mReader = parser;
+    private static void appendNewlines(Editable text, int minNewline) {
+        final int len = text.length();
+        if (len == 0) {
+            return;
+        }
+        int existingNewlines = 0;
+        for (int i = len - 1; i >= 0 && text.charAt(i) == '\n'; i--) {
+            existingNewlines++;
+        }
+        for (int j = existingNewlines; j < minNewline; j++) {
+            text.append("\n");
+        }
+    }
+
+    private static void startBlockElement(Editable text, Attributes attributes, int margin) {
+        final int len = text.length();
+        if (margin > 0) {
+            appendNewlines(text, margin);
+            start(text, new Newline(margin));
+        }
+        String style = attributes.getValue("", "style");
+        if (style != null) {
+            Matcher m = getTextAlignPattern().matcher(style);
+            if (m.find()) {
+                String alignment = m.group(1);
+                if (alignment.equalsIgnoreCase("start")) {
+                    start(text, new Alignment(Layout.Alignment.ALIGN_NORMAL));
+                } else if (alignment.equalsIgnoreCase("center")) {
+                    start(text, new Alignment(Layout.Alignment.ALIGN_CENTER));
+                } else if (alignment.equalsIgnoreCase("end")) {
+                    start(text, new Alignment(Layout.Alignment.ALIGN_OPPOSITE));
+                }
+            }
+        }
+    }
+
+    private static void endBlockElement(Editable text) {
+        Newline n = getLast(text, Newline.class);
+        if (n != null) {
+            appendNewlines(text, n.mNumNewlines);
+            text.removeSpan(n);
+        }
+        Alignment a = getLast(text, Alignment.class);
+        if (a != null) {
+            setSpanFromMark(text, a, new AlignmentSpan.Standard(a.mAlignment));
+        }
+    }
+
+    private static void handleBr(Editable text) {
+        text.append('\n');
+    }
+
+    private static void endLi(Editable text) {
+        endCssStyle(text);
+        endBlockElement(text);
+        end(text, Bullet.class, new BulletSpan());
+    }
+
+    private static void endBlockquote(Editable text) {
+        endBlockElement(text);
+        end(text, Blockquote.class, new QuoteSpan());
+    }
+
+    private static void endHeading(Editable text) {
+        // RelativeSizeSpan and StyleSpan are CharacterStyles
+        // Their ranges should not include the newlines at the end
+        Heading h = getLast(text, Heading.class);
+        if (h != null) {
+            setSpanFromMark(text, h, new RelativeSizeSpan(HEADING_SIZES[h.mLevel]),
+                    new StyleSpan(Typeface.BOLD));
+        }
+        endBlockElement(text);
+    }
+
+    private static <T> T getLast(Spanned text, Class<T> kind) {
+        /*
+         * This knows that the last returned object from getSpans()
+         * will be the most recently added.
+         */
+        T[] objs = text.getSpans(0, text.length(), kind);
+        if (objs.length == 0) {
+            return null;
+        } else {
+            return objs[objs.length - 1];
+        }
+    }
+
+    private static void setSpanFromMark(Spannable text, Object mark, Object... spans) {
+        int where = text.getSpanStart(mark);
+        text.removeSpan(mark);
+        int len = text.length();
+        if (where != len) {
+            for (Object span : spans) {
+                text.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+    }
+
+    private static void start(Editable text, Object mark) {
+        int len = text.length();
+        text.setSpan(mark, len, len, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void end(Editable text, Class kind, Object repl) {
+        int len = text.length();
+        Object obj = getLast(text, kind);
+        if (obj != null) {
+            setSpanFromMark(text, obj, repl);
+        }
+    }
+
+    private static void endCssStyle(Editable text) {
+        Strikethrough s = getLast(text, Strikethrough.class);
+        if (s != null) {
+            setSpanFromMark(text, s, new StrikethroughSpan());
+        }
+        Background b = getLast(text, Background.class);
+        if (b != null) {
+            setSpanFromMark(text, b, new BackgroundColorSpan(b.mBackgroundColor));
+        }
+
+        Foreground f = getLast(text, Foreground.class);
+        if (f != null) {
+            setSpanFromMark(text, f, new ForegroundColorSpan(f.mForegroundColor));
+        }
+
+    }
+
+    private static void startImg(Editable text, Attributes attributes, Html.ImageGetter img) {
+        String src = attributes.getValue("", "src");
+        Drawable d = null;
+        if (img != null) {
+            d = img.getDrawable(src);
+        }
+        if (d == null) {
+            d = Resources.getSystem().getDrawable(android.R.drawable.stat_notify_error);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        }
+        int len = text.length();
+        text.append("\uFFFC");
+        text.setSpan(new ImageSpan(d, src), len, text.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void endFont(Editable text) {
+        Font font = getLast(text, Font.class);
+        if (font != null) {
+            setSpanFromMark(text, font, new TypefaceSpan(font.mFace));
+        }
+        Foreground foreground = getLast(text, Foreground.class);
+        if (foreground != null) {
+            setSpanFromMark(text, foreground,
+                    new ForegroundColorSpan(foreground.mForegroundColor));
+        }
+    }
+
+    private static void startA(Editable text, Attributes attributes) {
+        String href = attributes.getValue("", "href");
+        start(text, new Href(href));
+    }
+
+    private static void endA(Editable text) {
+        Href h = getLast(text, Href.class);
+        if (h != null) {
+            if (h.mHref != null) {
+                setSpanFromMark(text, h, new URLSpan((h.mHref)));
+            }
+        }
     }
 
     public Spanned convert() {
@@ -259,9 +549,9 @@ class HtmlToSpannedConverter implements ContentHandler {
             startHeading(mSpannableStringBuilder, attributes, tag.charAt(1) - '1');
         } else if (tag.equalsIgnoreCase("img")) {
             startImg(mSpannableStringBuilder, attributes, mImageGetter);
-        }else if(tag.equalsIgnoreCase("tbody")){
-            startTbody(mSpannableStringBuilder,attributes);
-        }else{
+        } else if (tag.equalsIgnoreCase("tbody")) {
+            startTbody(mSpannableStringBuilder, attributes);
+        } else {
             mTagHandler.handleTag(true, tag, mSpannableStringBuilder, attr);
         }
     }
@@ -320,9 +610,9 @@ class HtmlToSpannedConverter implements ContentHandler {
                 Character.toLowerCase(tag.charAt(0)) == 'h' &&
                 tag.charAt(1) >= '1' && tag.charAt(1) <= '6') {
             endHeading(mSpannableStringBuilder);
-        }else if(tag.equalsIgnoreCase("tbody")){
+        } else if (tag.equalsIgnoreCase("tbody")) {
             endTbody(mSpannableStringBuilder);
-        }else{
+        } else {
             mTagHandler.handleTag(false, tag, mSpannableStringBuilder, attr);
         }
     }
@@ -364,65 +654,13 @@ class HtmlToSpannedConverter implements ContentHandler {
         return 2;
     }
 
-    private static void appendNewlines(Editable text, int minNewline) {
-        final int len = text.length();
-        if (len == 0) {
-            return;
-        }
-        int existingNewlines = 0;
-        for (int i = len - 1; i >= 0 && text.charAt(i) == '\n'; i--) {
-            existingNewlines++;
-        }
-        for (int j = existingNewlines; j < minNewline; j++) {
-            text.append("\n");
-        }
-    }
-
-    private static void startBlockElement(Editable text, Attributes attributes, int margin) {
-        final int len = text.length();
-        if (margin > 0) {
-            appendNewlines(text, margin);
-            start(text, new Newline(margin));
-        }
-        String style = attributes.getValue("", "style");
-        if (style != null) {
-            Matcher m = getTextAlignPattern().matcher(style);
-            if (m.find()) {
-                String alignment = m.group(1);
-                if (alignment.equalsIgnoreCase("start")) {
-                    start(text, new Alignment(Layout.Alignment.ALIGN_NORMAL));
-                } else if (alignment.equalsIgnoreCase("center")) {
-                    start(text, new Alignment(Layout.Alignment.ALIGN_CENTER));
-                } else if (alignment.equalsIgnoreCase("end")) {
-                    start(text, new Alignment(Layout.Alignment.ALIGN_OPPOSITE));
-                }
-            }
-        }
-    }
-
-    private static void endBlockElement(Editable text) {
-        Newline n = getLast(text, Newline.class);
-        if (n != null) {
-            appendNewlines(text, n.mNumNewlines);
-            text.removeSpan(n);
-        }
-        Alignment a = getLast(text, Alignment.class);
-        if (a != null) {
-            setSpanFromMark(text, a, new AlignmentSpan.Standard(a.mAlignment));
-        }
-    }
-
-    private static void handleBr(Editable text) {
-        text.append('\n');
-    }
-
-    private void startTbody(Editable text, Attributes attributes){
+    private void startTbody(Editable text, Attributes attributes) {
         start(text, new Background(0xFF008000));
     }
 
-    private void endTbody(Editable text){
+    private void endTbody(Editable text) {
         Background b = getLast(text, Background.class);
-        if(b != null){
+        if (b != null) {
             setSpanFromMark(text, b, new BackgroundColorSpan(b.mBackgroundColor));
         }
     }
@@ -433,20 +671,9 @@ class HtmlToSpannedConverter implements ContentHandler {
         startCssStyle(text, attributes);
     }
 
-    private static void endLi(Editable text) {
-        endCssStyle(text);
-        endBlockElement(text);
-        end(text, Bullet.class, new BulletSpan());
-    }
-
     private void startBlockquote(Editable text, Attributes attributes) {
         startBlockElement(text, attributes, getMarginBlockquote());
         start(text, new Blockquote());
-    }
-
-    private static void endBlockquote(Editable text) {
-        endBlockElement(text);
-        end(text, Blockquote.class, new QuoteSpan());
     }
 
     private void startHeading(Editable text, Attributes attributes, int level) {
@@ -454,57 +681,9 @@ class HtmlToSpannedConverter implements ContentHandler {
         start(text, new Heading(level));
     }
 
-    private static void endHeading(Editable text) {
-        // RelativeSizeSpan and StyleSpan are CharacterStyles
-        // Their ranges should not include the newlines at the end
-        Heading h = getLast(text, Heading.class);
-        if (h != null) {
-            setSpanFromMark(text, h, new RelativeSizeSpan(HEADING_SIZES[h.mLevel]),
-                    new StyleSpan(Typeface.BOLD));
-        }
-        endBlockElement(text);
-    }
-
-    private static <T> T getLast(Spanned text, Class<T> kind) {
-        /*
-         * This knows that the last returned object from getSpans()
-         * will be the most recently added.
-         */
-        T[] objs = text.getSpans(0, text.length(), kind);
-        if (objs.length == 0) {
-            return null;
-        } else {
-            return objs[objs.length - 1];
-        }
-    }
-
-    private static void setSpanFromMark(Spannable text, Object mark, Object... spans) {
-        int where = text.getSpanStart(mark);
-        text.removeSpan(mark);
-        int len = text.length();
-        if (where != len) {
-            for (Object span : spans) {
-                text.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
-    }
-
-    private static void start(Editable text, Object mark) {
-        int len = text.length();
-        text.setSpan(mark, len, len, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-    }
-
-    private static void end(Editable text, Class kind, Object repl) {
-        int len = text.length();
-        Object obj = getLast(text, kind);
-        if (obj != null) {
-            setSpanFromMark(text, obj, repl);
-        }
-    }
-
     private void startCssStyle(Editable text, Attributes attributes) {
         String style = attributes.getValue("", "style");
-        String classs = attributes.getValue("","class");
+        String classs = attributes.getValue("", "class");
         if (style != null) {
             Matcher m = getForegroundColorPattern().matcher(style);
             if (m.find()) {
@@ -529,50 +708,17 @@ class HtmlToSpannedConverter implements ContentHandler {
             }
         }
 
-        if(classs != null){
-            if(classs.equals("mark")){
+        if (classs != null) {
+            if (classs.equals("mark")) {
                 start(text, new Background(0xFF999999));
-            }else if(classs.equals("pf_ps3")){
+            } else if (classs.equals("pf_ps3")) {
                 start(text, new Background(0xFF0AAAE9));
-            }else if(classs.equals("pf_ps4")){
+            } else if (classs.equals("pf_ps4")) {
                 start(text, new Background(0xFF8662DD));
-            }else if(classs.equals("pf_psv")){
+            } else if (classs.equals("pf_psv")) {
                 start(text, new Background(0xFFF05561));
             }
         }
-    }
-
-    private static void endCssStyle(Editable text) {
-        Strikethrough s = getLast(text, Strikethrough.class);
-        if (s != null) {
-            setSpanFromMark(text, s, new StrikethroughSpan());
-        }
-        Background b = getLast(text, Background.class);
-        if (b != null) {
-            setSpanFromMark(text, b, new BackgroundColorSpan(b.mBackgroundColor));
-        }
-
-        Foreground f = getLast(text, Foreground.class);
-        if (f != null) {
-            setSpanFromMark(text, f, new ForegroundColorSpan(f.mForegroundColor));
-        }
-
-    }
-
-    private static void startImg(Editable text, Attributes attributes, Html.ImageGetter img) {
-        String src = attributes.getValue("", "src");
-        Drawable d = null;
-        if (img != null) {
-            d = img.getDrawable(src);
-        }
-        if (d == null) {
-            d = Resources.getSystem().getDrawable(android.R.drawable.stat_notify_error);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        }
-        int len = text.length();
-        text.append("\uFFFC");
-        text.setSpan(new ImageSpan(d, src), len, text.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private void startFont(Editable text, Attributes attributes) {
@@ -589,39 +735,13 @@ class HtmlToSpannedConverter implements ContentHandler {
         }
     }
 
-    private static void endFont(Editable text) {
-        Font font = getLast(text, Font.class);
-        if (font != null) {
-            setSpanFromMark(text, font, new TypefaceSpan(font.mFace));
-        }
-        Foreground foreground = getLast(text, Foreground.class);
-        if (foreground != null) {
-            setSpanFromMark(text, foreground,
-                    new ForegroundColorSpan(foreground.mForegroundColor));
-        }
-    }
-
-    private static void startA(Editable text, Attributes attributes) {
-        String href = attributes.getValue("", "href");
-        start(text, new Href(href));
-    }
-
-    private static void endA(Editable text) {
-        Href h = getLast(text, Href.class);
-        if (h != null) {
-            if (h.mHref != null) {
-                setSpanFromMark(text, h, new URLSpan((h.mHref)));
-            }
-        }
-    }
-
     private int getHtmlColor(final String color) {
         Integer i = sColorMap.get(color.toLowerCase(Locale.US));
         if (i != null) {
             return i;
         }
-        if(color.contains("#")){
-            String new_color = color.replace("#","#FF");
+        if (color.contains("#")) {
+            String new_color = color.replace("#", "#FF");
             return Color.parseColor(new_color);
         }
         throw new IllegalArgumentException("Unknown color: " + color);

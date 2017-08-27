@@ -152,7 +152,11 @@ public class ConvertHtml {
     public static ArrayList<Map<String, Object>> parseArticleGameList(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
-        Elements c = doc.select("table").select("tbody").select("tr");
+        if(!results.contains("游戏列表")){
+            return listItems;
+        }
+
+        Elements c = doc.select("div.box").get(1).select("table").select("tbody").select("tr");
         for (Element i : c) {
             Map<String, Object> map = new HashMap<>();
             String game_icon = i.select("img.imgbgnb").attr("src");

@@ -2,6 +2,8 @@ package club.ranleng.psnine.module.about;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.blankj.utilcode.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,11 +84,22 @@ public class AboutFragment extends Fragment {
         items.add(new Category("关于本软件"));
         items.add(new CardBean(getString(R.string.about_content)));
 
+        try {
+            PackageInfo pInfo = Utils.getContext().getPackageManager().getPackageInfo(Utils.getContext().getPackageName(), 0);
+            String version = pInfo.versionName;
+            int code = pInfo.versionCode;
+            String full = "version: "+version + "(" + String.valueOf(code) + ")";
+            items.add(new CardBean(full));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         items.add(new Line());
 
         items.add(new Category("Developers"));
         items.add(new Contributor(R.drawable.icon, "RanKKI", "Developer & designer", "https://github.com/RanKKI"));
         items.add(new Line());
+
 
         items.add(new Category("Open Source Licenses"));
         items.add(new License("JKeyboardPanelSwitch", "Jacksgong", License.APACHE_2, "https://github.com/Jacksgong/JKeyboardPanelSwitch"));
