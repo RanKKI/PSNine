@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity
     private Menu nav_menu;
 
     private Fragment current;
+
+    public static boolean isMain = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +204,6 @@ public class MainActivity extends AppCompatActivity
         setTitle(title);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        fabControl(mPresenter.isMain(current));
         if (current == null) {
             current = fragment;
             transaction.replace(R.id.frameLayout, fragment);
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity
             current = fragment;
         }
         transaction.commit();
+        fabControl(mPresenter.isMain(current));
     }
 
     @Override
@@ -227,11 +230,8 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    @Override
-    public void fabControl(Boolean visible) {
-        if (!UserState.isLogin()) {
-            visible = false;
-        }
+    private void fabControl(Boolean visible) {
+        isMain = visible;
         fab.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
@@ -258,5 +258,9 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isMain() {
+        return isMain;
     }
 }

@@ -190,17 +190,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             }
 
             topic.setEditable((Boolean) map.get("editable"));
-            String temp = (String) map.get("title");
-            if (!temp.contentEquals("")) {
-                topic.setTitle(temp);
-            } else {
-                temp = (String) map.get("content");
-                int end_index = temp.length();
-                if (end_index > 20) {
-                    end_index = 20;
-                }
-                topic.setTitle(temp.substring(0, end_index));
-            }
+            topic.setTitle((String) map.get("title"));
             items.add(new ArticleHeader(map));
 
             ArrayList<String> imgs = new ArrayList<String>();

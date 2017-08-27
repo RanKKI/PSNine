@@ -84,15 +84,17 @@ public class AboutFragment extends Fragment {
         items.add(new Category("关于本软件"));
         items.add(new CardBean(getString(R.string.about_content)));
 
+        String full;
         try {
-            PackageInfo pInfo = Utils.getContext().getPackageManager().getPackageInfo(Utils.getContext().getPackageName(), 0);
+            PackageInfo pInfo = Utils.getContext().getApplicationContext().getPackageManager().getPackageInfo(Utils.getContext().getApplicationContext().getPackageName(), 0);
             String version = pInfo.versionName;
             int code = pInfo.versionCode;
-            String full = "version: "+version + "(" + String.valueOf(code) + ")";
-            items.add(new CardBean(full));
+            full = "version: "+version + "(" + String.valueOf(code) + ")";
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+            full = "Error";
         }
+        items.add(new CardBean(full));
 
         items.add(new Line());
 

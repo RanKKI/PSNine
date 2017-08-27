@@ -22,6 +22,7 @@
 
 
     <style name="AppTheme.Launcher">
+        <item name="colorPrimaryDark">@color/logo_blue</item>
         <item name="android:windowBackground">@drawable/launch_screens</item>
     </style>
 

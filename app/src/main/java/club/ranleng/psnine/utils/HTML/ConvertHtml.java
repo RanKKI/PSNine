@@ -1,7 +1,5 @@
 package club.ranleng.psnine.utils.HTML;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -115,8 +113,8 @@ public class ConvertHtml {
                 page_size = page.size();
                 for (int i = 0; i < page.size(); i++) {
                     map.put("page_" + String.valueOf(i + 1), page.get(i).select("a").text());
-                    if(page.get(i).hasAttr("class") && page.get(i).attr("class").equals("current")){
-                        map.put("current_page",i);
+                    if (page.get(i).hasAttr("class") && page.get(i).attr("class").equals("current")) {
+                        map.put("current_page", i);
                     }
                 }
             }
@@ -152,7 +150,7 @@ public class ConvertHtml {
     public static ArrayList<Map<String, Object>> parseArticleGameList(String results) {
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
-        if(!results.contains("游戏列表")){
+        if (!results.contains("游戏列表")) {
             return listItems;
         }
 
@@ -225,29 +223,27 @@ public class ConvertHtml {
         listItems.add(ListInfo(doc));
         Elements post = doc.select("ul.list").select("li");
         for (Element c : post) {
-            if (c.attr("id").contains("comment")) {
-                String content = c.select("div.content.pb10").html();
-                String username = c.select("div.meta").select("a.psnnode").text();
-                String icon = c.select("a.l").select("img").attr("src");
-                String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
-                String time = c.select("div.meta").select("span").first().ownText();
+            String content = c.select("div.content.pb10").html();
+            String username = c.select("div.meta").select("a.psnnode").text();
+            String icon = c.select("a.l").select("img").attr("src");
+            String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
+            String time = c.select("div.meta").select("span").get(1).ownText();
 
-                Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
 
-                if (!c.select("span.r").select("a.text-info").isEmpty()) {
-                    map.put("editable", true);
-                } else {
-                    map.put("editable", false);
-                }
-                map.put("title", content);
-                map.put("username", username);
-                map.put("id", comment_id);
-                map.put("icon", icon);
-                map.put("time", time);
-                map.put("type", "reply");
-                if (!map.toString().equals("{icon=, title=, time=, username=, id=, editable=false}")) {
-                    listItems.add(map);
-                }
+            if (!c.select("span.r").select("a.text-info").isEmpty()) {
+                map.put("editable", true);
+            } else {
+                map.put("editable", false);
+            }
+            map.put("title", content);
+            map.put("username", username);
+            map.put("id", comment_id);
+            map.put("icon", icon);
+            map.put("time", time);
+            map.put("type", "reply");
+            if (!map.toString().equals("{icon=, title=, time=, username=, id=, editable=false}")) {
+                listItems.add(map);
             }
         }
         return listItems;
@@ -280,9 +276,9 @@ public class ConvertHtml {
                 String username = e.select("div.meta").select("a").text();
                 String id = "";
 
-                if(type == KEY.GENE_FAV){
+                if (type == KEY.GENE_FAV) {
                     id = e.select("input[name=param]").attr("value");
-                }else{
+                } else {
                     Elements a = e.select("a");
                     for (Element i : a) {
                         if (i.attr("href").contains("http://psnine.com/gene/")) {
@@ -295,10 +291,10 @@ public class ConvertHtml {
                 String time;
                 String reply;
 
-                if(tr.length != 2){
+                if (tr.length != 2) {
                     time = tr[0];
                     reply = "unknown";
-                }else{
+                } else {
                     time = tr[0] + "前";
                     reply = tr[1];
                 }
@@ -308,7 +304,7 @@ public class ConvertHtml {
                 map.put("id", Integer.valueOf(id));
                 map.put("icon", icon);
                 map.put("time", time);
-                map.put("reply",reply);
+                map.put("reply", reply);
                 map.put("type", type);
                 listItems.add(map);
             }
@@ -379,15 +375,15 @@ public class ConvertHtml {
                 String id;
                 String time;
                 String reply;
-                if(type == KEY.TOPIC_FAV){
+                if (type == KEY.TOPIC_FAV) {
                     id = e.select("input[name=param]").attr("value");
                     String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
                     time = tr[0] + "前";
                     reply = tr[1];
-                }else{
+                } else {
                     id = e.select("div.ml64").select("div.title").select("a").attr("href").replace("http://psnine.com/topic/", "");
                     time = e.select("div.meta").first().ownText();
-                    reply = e.select("a.rep.r").text()  + "评论";
+                    reply = e.select("a.rep.r").text() + "评论";
                 }
 
                 Map<String, Object> map = new HashMap<>();
@@ -456,11 +452,11 @@ public class ConvertHtml {
         return listItems;
     }
 
-    public static List<String> parseElement(String results){
+    public static List<String> parseElement(String results) {
         List<String> elements = new ArrayList<>();
         Document doc = Jsoup.parse(results);
         Elements list = doc.select("ul.list").select("li");
-        for(Element i : list){
+        for (Element i : list) {
             elements.add(i.select("a").text());
         }
         return elements;

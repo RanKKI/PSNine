@@ -27,8 +27,6 @@ public interface MainContract {
 
         void newTopic(int type);
 
-        void fabControl(Boolean visible);
-
         void showCacheDialog();
 
 

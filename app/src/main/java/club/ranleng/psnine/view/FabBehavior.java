@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import club.ranleng.psnine.common.UserState;
+import club.ranleng.psnine.module.main.activity.MainActivity;
 
 public class FabBehavior extends FloatingActionButton.Behavior {
 
@@ -37,7 +38,7 @@ public class FabBehavior extends FloatingActionButton.Behavior {
     }
 
     private void HideOrShow(FloatingActionButton child, int y) {
-        if (!UserState.isLogin()) {
+        if (!UserState.isLogin() || !MainActivity.isMain()) {
             child.hide(new FloatingActionButton.OnVisibilityChangedListener() {
                 @Override
                 public void onHidden(FloatingActionButton fab) {
