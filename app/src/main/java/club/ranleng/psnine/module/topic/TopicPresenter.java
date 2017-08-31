@@ -67,7 +67,7 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
         EmojiViewAdapter adapter = new EmojiViewAdapter(new EmojiViewAdapter.onClick() {
             @Override
             public void click(String emoji_name) {
-                mTopicView.addReply(String.format("[%s]",emoji_name));
+                mTopicView.addReply(String.format("[%s]", emoji_name));
             }
         });
         mTopicView.setEmojiAdapter(new StaggeredGridLayoutManager(6, StaggeredGridLayoutManager.HORIZONTAL), adapter);
@@ -81,10 +81,6 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void loadTopic() {
-        mTopicView.showLoading(true);
-        items.clear();
-        f_game = true;
-        f_reply = true;
         ApiManager.getDefault().getTopic(this, topic.getType(), topic.getTopic_id(), topic.getPage());
     }
 
@@ -136,12 +132,13 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             mTopicView.tooShort();
             return;
         }
+
         ApiManager.getDefault().Reply(new SimpleCallBack() {
             @Override
             public void Success() {
                 mTopicView.hidePanel();
-                mTopicView.showReplyLayout(false);
                 mTopicView.setReply("");
+                reFresh();
             }
 
             @Override
@@ -168,7 +165,10 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void onStart() {
-//        mTopicView.showLoading(true);
+        mTopicView.showLoading(true);
+        items.clear();
+        f_game = true;
+        f_reply = true;
     }
 
     @Override
@@ -190,7 +190,13 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             }
 
             topic.setEditable((Boolean) map.get("editable"));
-            topic.setTitle((String) map.get("title"));
+
+            String temp = (String) map.get("title");
+            if (!temp.contentEquals("")) {
+                topic.setTitle(temp);
+            } else {
+                topic.setTitle((String) map.get("content"));
+            }
             items.add(new ArticleHeader(map));
 
             ArrayList<String> imgs = new ArrayList<String>();

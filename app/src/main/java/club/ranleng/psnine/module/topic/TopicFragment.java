@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +22,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-
-import com.blankj.utilcode.util.KeyboardUtils;
-import com.blankj.utilcode.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -177,8 +174,14 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void hidePanel() {
+        if(getReplyLayout()){
+            showReplyLayout(false);
+        }
+
         if (mPanelRoot.getVisibility() == View.VISIBLE) {
             KPSwitchConflictUtil.hidePanelAndKeyboard(mPanelRoot);
+            KeyboardUtil.hideKeyboard(mPanelEdittext);
+            KeyboardUtil.hideKeyboard(mPanelRoot);
         }
     }
 
@@ -190,10 +193,6 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @Override
     public void showReplyLayout(Boolean b) {
         replyLayout.setVisibility(b ? View.VISIBLE : View.GONE);
-        hidePanel();
-        if (!b) {
-            KeyboardUtils.hideSoftInput(replyLayout);
-        }
     }
 
     @Override
@@ -203,9 +202,13 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void addReply(String content) {
+        if (!getReplyLayout()) {
+            showReplyLayout(true);
+        }
         mPanelEdittext.append(content);
         mPanelEdittext.setSelection(mPanelEdittext.length());
-        requestFocus();
+        mPanelEdittext.requestFocus();
+        KeyboardUtil.showKeyboard(mPanelEdittext);
     }
 
     @Override
@@ -215,9 +218,11 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void setReply(String content) {
+        if (!getReplyLayout()) {
+            showReplyLayout(true);
+        }
         mPanelEdittext.setText(content);
         mPanelEdittext.setSelection(mPanelEdittext.length());
-        requestFocus();
     }
 
     @Override
@@ -245,7 +250,7 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void setSubtitle(String subtitle) {
-        if(getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
         ActionBar bar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -260,8 +265,4 @@ public class TopicFragment extends Fragment implements TopicContract.View {
         emoji_recycler.setAdapter(adapter);
     }
 
-    private void requestFocus() {
-        mPanelEdittext.requestFocus();
-        KeyboardUtils.showSoftInput(mPanelEdittext);
-    }
 }
