@@ -1,6 +1,7 @@
 package club.ranleng.psnine.utils.HTML;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
@@ -10,6 +11,8 @@ import android.view.View;
 import org.xml.sax.Attributes;
 
 import java.util.Locale;
+
+import club.ranleng.psnine.module.photo.ViewImageActivity;
 
 
 public class HtmlTagHandler implements mHtml.TagHandler {
@@ -52,10 +55,9 @@ public class HtmlTagHandler implements mHtml.TagHandler {
 
         @Override
         public void onClick(View widget) {
-//            Intent intent = new Intent(context, FragActivity.class);
-//            intent.putExtra("key", KEY.IMAGE);
-//            intent.putExtra("url", url);
-//            context.startActivity(intent);
+            Intent intent = new Intent(context, ViewImageActivity.class);
+            intent.putExtra("url", url);
+            context.startActivity(intent);
         }
     }
 }

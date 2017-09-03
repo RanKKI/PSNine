@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="club.ranleng.psnine.provider"
@@ -54,6 +53,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.newtopic.NewTopicActivity"/>
+        <activity android:name=".module.photo.ViewImageActivity">
+        </activity>
     </application>
 
 </manifest>

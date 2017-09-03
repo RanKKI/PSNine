@@ -9,13 +9,13 @@
         android:title="@string/edit" />
 
     <item
-        android:id="@+id/action_artivle_up"
-        android:visible="false"
-        android:title="@string/up"/>
+        android:id="@+id/action_article_up"
+        android:title="@string/up"
+        android:visible="false"/>
     <item
-        android:id="@+id/action_artivle_fav"
-        android:visible="false"
-        android:title="@string/nav_fav"/>
+        android:id="@+id/action_article_fav"
+        android:title="@string/nav_fav"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_article_reply"

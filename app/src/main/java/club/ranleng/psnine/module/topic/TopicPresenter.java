@@ -236,12 +236,12 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void onComplete() {
-        mTopicView.showLoading(false);
         mTopicView.showTopic(adapter);
         mTopicView.setMenu(topic);
         if (items.size() != 0 && items.get(0).getClass() == MutilPages.class) {
             mTopicView.scrollTo(1);
         }
         mTopicView.setSubtitle(topic.getTitle());
+        mTopicView.showLoading(false);
     }
 }

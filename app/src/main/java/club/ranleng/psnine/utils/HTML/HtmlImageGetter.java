@@ -8,8 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -77,5 +80,6 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 canvas.drawBitmap(bitmap, 0, 0, getPaint());
             }
         }
+
     }
 }

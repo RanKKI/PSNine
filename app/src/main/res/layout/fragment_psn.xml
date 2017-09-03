@@ -14,10 +14,10 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:toolbarId="@+id/toolbar"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
-            app:contentScrim="?attr/colorPrimary">
+            app:toolbarId="@+id/toolbar">
 
             <ImageView
                 android:id="@+id/app_bar_image"
@@ -46,17 +46,17 @@
 
                 <club.ranleng.psnine.view.RoundImageView
                     android:id="@+id/auth"
-                    android:layout_toRightOf="@id/region"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_below="@id/icon"/>
+                    android:layout_below="@id/icon"
+                    android:layout_toRightOf="@id/region"/>
 
                 <club.ranleng.psnine.view.RoundImageView
                     android:id="@+id/plus"
-                    android:layout_toRightOf="@id/auth"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_below="@id/icon"/>
+                    android:layout_below="@id/icon"
+                    android:layout_toRightOf="@id/auth"/>
 
             </RelativeLayout>
 

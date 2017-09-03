@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
@@ -38,7 +37,7 @@ public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleRepl
         holder.name.setText(item.username);
         holder.time.setText(item.time);
         Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
-        FeedBackUtils.setOnclickfeedBack(0xFFFAFAFA,0xFFE2E2E2,holder.itemView);
+        FeedBackUtils.setOnclickfeedBack(0xFFFAFAFA, 0xFFE2E2E2, holder.itemView);
 
     }
 

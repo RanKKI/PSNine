@@ -80,7 +80,7 @@ public class PSNItemPresenter implements PSNItemContract.Presenter, SimpleSubCal
 
     @Override
     public void onComplete() {
-        mPSNView.Loading(false);
         mPSNView.setAdapter(adapter);
+        mPSNView.Loading(false);
     }
 }

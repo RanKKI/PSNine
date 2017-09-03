@@ -153,8 +153,8 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     @Override
     public void setMenu(Topic topic) {
         menu.findItem(R.id.action_article_reply).setVisible(UserState.isLogin());
-        menu.findItem(R.id.action_artivle_fav).setVisible(UserState.isLogin());
-        menu.findItem(R.id.action_artivle_up).setVisible(topic.getType() != KEY.GENE && UserState.isLogin());
+        menu.findItem(R.id.action_article_fav).setVisible(UserState.isLogin());
+        menu.findItem(R.id.action_article_up).setVisible(topic.getType() != KEY.GENE && UserState.isLogin());
         menu.findItem(R.id.action_article_edit).setVisible(topic.getEditable() && UserState.isLogin());
         menu.findItem(R.id.action_article_original).setVisible(topic.getOriginal() != null);
     }

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -29,12 +30,11 @@ public class PSNFragment extends Fragment implements PSNContract.View {
 
     @BindView(R.id.psn_root) CoordinatorLayout root;
     @BindView(R.id.app_bar_image) ImageView app_bar_image;
+    @BindView(R.id.appbar) AppBarLayout appBarLayout;
     @BindView(R.id.icon) RoundImageView icon;
     @BindView(R.id.region) RoundImageView region;
     @BindView(R.id.plus) RoundImageView plus;
     @BindView(R.id.auth) RoundImageView auth;
-
-
 
     private PSNContract.Presenter mPresenter;
     private String psnid;
@@ -60,6 +60,7 @@ public class PSNFragment extends Fragment implements PSNContract.View {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_psn, container, false);
         ButterKnife.bind(this, view);
+        appBarLayout.setExpanded(false);
         mPresenter.start();
         return view;
     }
@@ -117,7 +118,6 @@ public class PSNFragment extends Fragment implements PSNContract.View {
         Glide.with(this).load(map.get("region")).asBitmap().into(region);
         Glide.with(this).load(map.get("auth")).asBitmap().into(auth);
         Glide.with(this).load(map.get("plus")).asBitmap().into(plus);
-
     }
 
     @Override

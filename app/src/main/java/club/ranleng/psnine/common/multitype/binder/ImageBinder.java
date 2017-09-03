@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.multitype.model.Image;
 import club.ranleng.psnine.common.multitype.model.Image_Gene;
+import club.ranleng.psnine.module.photo.ViewImageActivity;
 import club.ranleng.psnine.utils.ViewUtils;
 import me.drakeet.multitype.ItemViewBinder;
 import me.drakeet.multitype.Items;
@@ -42,10 +42,9 @@ public class ImageBinder extends ItemViewBinder<Image_Gene, ImageBinder.ViewHold
         adapter.register(Image.class, new ImageGalleryBinder(new ImageGalleryBinder.OnClick() {
             @Override
             public void onClick(View v, String url) {
-//                Intent intent = new Intent(v.getContext(), FragActivity.class);
-//                intent.putExtra("key", KEY.IMAGE);
-//                intent.putExtra("url", url);
-//                v.getContext().startActivity(intent);
+                Intent intent = new Intent(v.getContext().getApplicationContext(), ViewImageActivity.class);
+                intent.putExtra("url", url);
+                v.getContext().startActivity(intent);
             }
 
             @Override

@@ -41,6 +41,8 @@
     <string name="up">顶</string>
     <string name="reply">回复</string>
     <string name="original">出处</string>
+    <string name="share">分享</string>
+
 
     <string name="warning_b">「新闻」发布说明：\n
                             新闻必须保证真实，来源可靠，必须标注来源，翻译要写明作者，
