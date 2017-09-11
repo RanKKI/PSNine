@@ -7,6 +7,7 @@
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="success">成功</string>
+    <string name="fail">失败</string>
 
     <string name="long_press_to_move">长按移动</string>
     <string name="select_topic">选择章节</string>
@@ -42,6 +43,14 @@
     <string name="reply">回复</string>
     <string name="original">出处</string>
     <string name="share">分享</string>
+
+    <!--transition animation name start-->
+    <string name="trans_user_icon">trans_user_icon</string>
+    <string name="trans_img">trans_img</string>
+
+    <!--transition animation name end-->
+
+
 
 
     <string name="warning_b">「新闻」发布说明：\n

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 
 import club.ranleng.psnine.module.psn.PSNActivity;
@@ -19,7 +20,7 @@ public class LinkHandlerActivity extends AppCompatActivity {
         try {
             Utils.getContext();
         } catch (NullPointerException e) {
-            Utils.init(this.getApplicationContext());
+            Utils.init(this);
         }
 
         Uri data = getIntent().getData();
@@ -39,13 +40,11 @@ public class LinkHandlerActivity extends AppCompatActivity {
             intent = new Intent(this, TopicActivity.class);
             intent.putExtra("type", KEY.QA);
             intent.putExtra("topic_id", path.replace("qa/", ""));
-        } else if (path.contains("qa/")) {
-            intent = new Intent(this, TopicActivity.class);
-            intent.putExtra("type", KEY.QA);
-            intent.putExtra("topic_id", path.replace("qa/", ""));
         } else if (path.contains("psnid/")) {
             intent = new Intent(this, PSNActivity.class);
             intent.putExtra("psnid", path.replace("psnid/", ""));
+        } else{
+            ToastUtils.showShort("not support this path");
         }
 
         if (intent != null) {

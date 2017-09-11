@@ -2,6 +2,7 @@ package club.ranleng.psnine.module.topic;
 
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.KeyEvent;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,6 +13,7 @@ import club.ranleng.psnine.common.multitype.binder.ArticleGameListBinder;
 import club.ranleng.psnine.common.multitype.binder.ArticleHeaderBinder;
 import club.ranleng.psnine.common.multitype.binder.ArticleReplyBinder;
 import club.ranleng.psnine.common.multitype.binder.ImageBinder;
+import club.ranleng.psnine.common.multitype.binder.ImageGalleryBinder;
 import club.ranleng.psnine.common.multitype.binder.MutilPagesBinder;
 import club.ranleng.psnine.common.multitype.binder.TextEditableItemBinder;
 import club.ranleng.psnine.common.multitype.model.ArticleGameList;
@@ -45,7 +47,17 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
         adapter = new MultiTypeAdapter();
         adapter.register(Line.class, new LineViewBinder());
-        adapter.register(Image_Gene.class, new ImageBinder());
+        adapter.register(Image_Gene.class, new ImageBinder(new ImageGalleryBinder.OnClick() {
+            @Override
+            public void onClick(View v, View root, String url) {
+                mTopicView.openImage(v,root,url);
+            }
+
+            @Override
+            public void onLongClick(View v, String id, int pos) {
+
+            }
+        }));
         adapter.register(Category.class, new CategoryViewBinder());
         adapter.register(ArticleReply.class, new ArticleReplyBinder());
         adapter.register(ArticleHeader.class, new ArticleHeaderBinder());
@@ -107,15 +119,14 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             case R.id.adapter_reply_menu_edit:
                 break;
             case R.id.adapter_reply_menu_reply:
-                at(articleReply.username);
+                at(articleReply.getUsername());
                 break;
             case R.id.adapter_reply_menu_up:
                 break;
             case R.id.adapter_reply_menu_user:
-                mTopicView.openPSN(articleReply.username);
+                mTopicView.openPSN(articleReply.getUsername());
                 break;
         }
-        articleReply = null;
     }
 
     @Override
@@ -132,7 +143,6 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             mTopicView.tooShort();
             return;
         }
-
         ApiManager.getDefault().Reply(new SimpleCallBack() {
             @Override
             public void Success() {
@@ -208,7 +218,8 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
             items.add(new Image_Gene(imgs));
 
             if (map.get("video") != null) {
-                items.add(new TextSpannedItem(String.format("<a href=\"%s\">打开视频链接</a>", map.get("video"))));
+                String url_video_click = String.format("<a href=\"%s\">打开视频链接</a>", map.get("video"));
+                items.add(new TextSpannedItem(url_video_click, true));
                 items.add(new Line());
             }
 
@@ -236,6 +247,12 @@ public class TopicPresenter implements TopicContract.Presenter, SimpleSubCallBac
 
     @Override
     public void onComplete() {
+        TextSpannedItem item = new TextSpannedItem();
+        item.setText("全部加载完毕");
+        item.setMid(true);
+        item.setPadding(26);
+        items.add(item);
+
         mTopicView.showTopic(adapter);
         mTopicView.setMenu(topic);
         if (items.size() != 0 && items.get(0).getClass() == MutilPages.class) {

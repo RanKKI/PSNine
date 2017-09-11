@@ -105,9 +105,11 @@ public class PhotoGalleryPresenter implements PhotoGalleryContract.Presenter,
         mPhotoView.setPhotoGallery(adapter);
     }
 
+
     @Override
-    public void onClick(View v, String url) {
+    public void onClick(View v, View root, String url) {
         mPhotoView.onClick(v, url);
+
     }
 
     @Override

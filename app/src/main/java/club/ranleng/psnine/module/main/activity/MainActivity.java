@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import club.ranleng.psnine.BuildConfig;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.UserState;
@@ -41,22 +42,22 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
 
 
+    public static boolean isMain = true;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.main_root) CoordinatorLayout root;
     @BindView(R.id.app_bar) AppBarLayout appbar;
     @BindView(R.id.fab) FloatingActionButton fab;
-
-
     private MainContract.Presenter mPresenter;
     private TextView nav_username;
     private RoundImageView nav_icon;
     private Menu nav_menu;
-
     private Fragment current;
 
-    public static boolean isMain = true;
+    public static boolean isMain() {
+        return isMain;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         KEY.initSetting();
         EmojiUtils.init();
         new MainPresenter(this);
+        new LogUtils.Builder().setLogSwitch(BuildConfig.DEBUG);
 
         mPresenter.start();
         refresh_cache();
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (!mPresenter.isMain(current)) {
+            nav_menu.findItem(R.id.nav_index).setChecked(true);
             mPresenter.openMain();
         } else {
             super.onBackPressed();
@@ -220,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             current = fragment;
         }
         transaction.commit();
-        fabControl(mPresenter.isMain(current));
+        fabControl(mPresenter.isMain(current) && UserState.isLogin());
     }
 
     @Override
@@ -258,9 +261,5 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean isMain() {
-        return isMain;
     }
 }

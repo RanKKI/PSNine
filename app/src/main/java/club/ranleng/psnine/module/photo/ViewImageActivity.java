@@ -61,8 +61,6 @@ public class ViewImageActivity extends BaseActivity {
         }
         Glide.with(this)
                 .load(large_url)
-                .asBitmap()
-                .thumbnail(0.1f)
                 .into(photoView);
     }
 }

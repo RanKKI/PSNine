@@ -1,8 +1,10 @@
 package club.ranleng.psnine.module.psn.psnitem;
 
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,7 +59,7 @@ public class PSNItemFragment extends Fragment implements PSNItemContract.View {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(view != null){
+        if (view != null) {
             return view;
         }
         view = inflater.inflate(R.layout.view_recycler, container, false);
@@ -79,11 +81,15 @@ public class PSNItemFragment extends Fragment implements PSNItemContract.View {
     }
 
     @Override
-    public void openTopic(Topic topic) {
+    public void openTopic(Topic topic, View icon) {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
         intent.putExtra("type", topic.getType());
         intent.putExtra("topic_id", topic.getTopic_id());
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(), icon, getString(R.string.trans_user_icon)).toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

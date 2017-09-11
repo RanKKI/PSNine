@@ -1,6 +1,8 @@
 package club.ranleng.psnine.module.topics;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.bean.Topic;
 import club.ranleng.psnine.bean.Topics;
-import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.listener.RecViewLoadMoreL;
 import club.ranleng.psnine.module.topic.TopicActivity;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -49,7 +48,6 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View,
         mPresenter = presenter;
     }
 
-
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.view_recycler, container, false);
@@ -65,10 +63,9 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View,
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recViewLoadMoreL = new RecViewLoadMoreL(this);
         recyclerView.addOnScrollListener(recViewLoadMoreL);
-
-        if(getActivity().getClass() == TopicsActivity.class || getArguments().getInt("type") == KEY.NOTICE){
+//        if (getActivity().getClass() == TopicsActivity.class || getArguments().getInt("type") == KEY.NOTICE) {
 //            mPresenter.start();
-        }
+//        }
         return view;
     }
 
@@ -79,11 +76,12 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View,
 
     @Override
     public void showTopics(MultiTypeAdapter adapter) {
-        if (recyclerView.getAdapter() == null) {
-            recyclerView.setAdapter(adapter);
-        } else {
-            recyclerView.getAdapter().notifyDataSetChanged();
-        }
+        recyclerView.setAdapter(adapter);
+//        if (recyclerView.getAdapter() == null) {
+//            recyclerView.setAdapter(adapter);
+//        } else {
+//            recyclerView.getAdapter().notifyDataSetChanged();
+//        }
     }
 
     @Override
@@ -102,11 +100,15 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View,
     }
 
     @Override
-    public void openTopic(Topic topic) {
+    public void openTopic(Topic topic, View icon) {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
         intent.putExtra("type", topic.getType());
         intent.putExtra("topic_id", topic.getTopic_id());
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(), icon, getString(R.string.trans_user_icon)).toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

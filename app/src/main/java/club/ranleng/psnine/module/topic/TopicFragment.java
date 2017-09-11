@@ -1,11 +1,12 @@
 package club.ranleng.psnine.module.topic;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -29,6 +30,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.bean.Topic;
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.UserState;
+import club.ranleng.psnine.module.photo.ViewImageActivity;
 import club.ranleng.psnine.module.psn.PSNActivity;
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil;
 import cn.dreamtobe.kpswitch.util.KeyboardUtil;
@@ -174,7 +176,7 @@ public class TopicFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void hidePanel() {
-        if(getReplyLayout()){
+        if (getReplyLayout()) {
             showReplyLayout(false);
         }
 
@@ -263,6 +265,17 @@ public class TopicFragment extends Fragment implements TopicContract.View {
     public void setEmojiAdapter(RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter) {
         emoji_recycler.setLayoutManager(layoutManager);
         emoji_recycler.setAdapter(adapter);
+    }
+
+    @Override
+    public void openImage(View v, View root, String url) {
+        Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+        intent.putExtra("url", url);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(), root, getString(R.string.trans_img)).toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
 }

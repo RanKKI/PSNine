@@ -1,5 +1,7 @@
 package club.ranleng.psnine.module.topics;
 
+import android.view.View;
+
 import club.ranleng.psnine.base.BasePresenter;
 import club.ranleng.psnine.base.BaseView;
 import club.ranleng.psnine.bean.Topic;
@@ -18,7 +20,7 @@ public interface TopicsContract {
 
         void setCurrent_page(int current_page);
 
-        void openTopic(Topic topic);
+        void openTopic(Topic topic, android.view.View icon);
 
         Topics getTopicsInfo();
 

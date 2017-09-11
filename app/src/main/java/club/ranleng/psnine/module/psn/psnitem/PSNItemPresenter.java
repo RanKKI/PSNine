@@ -1,5 +1,7 @@
 package club.ranleng.psnine.module.psn.psnitem;
 
+import android.view.View;
+
 import java.util.Map;
 
 import club.ranleng.psnine.bean.Topic;
@@ -36,9 +38,9 @@ public class PSNItemPresenter implements PSNItemContract.Presenter, SimpleSubCal
         adapter.register(Line.class, new LineViewBinder());
         adapter.register(TopicsBean.class, new TopicsListBinder(new TopicsListBinder.TopicsListListener() {
             @Override
-            public void onClick(int type, int topic_id) {
+            public void onClick(int type, int topic_id, View icon) {
                 Topic topic = new Topic(topic_id, type);
-                mPSNView.openTopic(topic);
+                mPSNView.openTopic(topic,icon);
             }
         }));
         adapter.register(ArticleReply.class, new ArticleReplyBinder());

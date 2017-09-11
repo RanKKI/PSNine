@@ -31,16 +31,13 @@ public class ArticleReplyBinder extends ItemViewBinder<ArticleReply, ArticleRepl
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleReply item) {
-
-        cHtml.convert(holder.itemView.getContext(), holder.title, item.title);
-        holder.itemView.setTag(item.editable);
-        holder.name.setText(item.username);
-        holder.time.setText(item.time);
-        Glide.with(holder.itemView.getContext()).load(item.icon).into(holder.icon);
+        cHtml.convert(holder.itemView.getContext(), holder.title, item.getTitle());
+        holder.itemView.setTag(item.getEditable());
+        holder.name.setText(item.getUsername());
+        holder.time.setText(item.getTime());
+        Glide.with(holder.itemView.getContext()).load(item.getIcon()).into(holder.icon);
         FeedBackUtils.setOnclickfeedBack(0xFFFAFAFA, 0xFFE2E2E2, holder.itemView);
-
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnCreateContextMenuListener {

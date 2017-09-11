@@ -11,11 +11,11 @@ public interface PSNContract {
 
     interface View extends BaseView<Presenter> {
 
-        void replaceFragment(Fragment fragment);
+        void Snack_Success();
 
-        void Sncak_Success();
+        void Snack_Fail();
 
-        void confirm(int type, String message, PSNFragment.DialogClickListener listener);
+        void confirm(int type, String message);
 
         void setIcon(Map<String, String> map);
 
@@ -27,8 +27,9 @@ public interface PSNContract {
 
         void load();
 
-        Boolean MenuSelect(int id);
+        void call(int type);
 
+        Boolean MenuSelect(int id);
 
     }
 

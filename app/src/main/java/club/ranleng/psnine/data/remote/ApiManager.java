@@ -25,15 +25,13 @@ import club.ranleng.psnine.data.moudle.SimpleSubCallBack;
 import club.ranleng.psnine.data.moudle.SimpleSubscriber;
 import club.ranleng.psnine.utils.HTML.ConvertHtml;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import me.drakeet.multitype.Items;
 import okhttp3.FormBody;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -71,7 +69,7 @@ public class ApiManager {
         apiService = retrofit.create(ApiService.class);
     }
 
-    public static void init(){
+    public static void init() {
         getDefault();
     }
 
@@ -92,7 +90,7 @@ public class ApiManager {
         defaultInstance = null;
     }
 
-    public void getTopics(SimpleSubCallBack<Map<String, Object>> callBack, final int type, String search, String ele, int page) {
+    public void getTopics(final SimpleReturn<Items> simpleReturn, final int type, String search, String ele, int page) {
         Observable<ResponseBody> observable = null;
         if (type == KEY.TOPIC || type == KEY.GENE || type == KEY.QA) {
             observable = apiService.getTopic(KEY.getTypeName(type), KEY.PREF_OB, search, ele, page);
@@ -106,20 +104,21 @@ public class ApiManager {
 
         assert observable != null;
         observable.subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
-                    @Override
-                    public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.getTopics(responseBody.string(), type);
-                    }
-                })
-                .flatMapIterable(new Function<ArrayList<Map<String, Object>>, Iterable<Map<String, Object>>>() {
-                    @Override
-                    public Iterable<Map<String, Object>> apply(@NonNull ArrayList<Map<String, Object>> maps) throws Exception {
-                        return maps;
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleSubscriber<>(callBack));
+                .map(new Function<ResponseBody, Items>() {
+                    @Override
+                    public Items apply(@NonNull ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.getTopicsItems(result, type);
+                    }
+                })
+                .subscribe(new Consumer<Items>() {
+                    @Override
+                    public void accept(@NonNull Items objects) throws Exception {
+                        simpleReturn.accept(objects);
+                    }
+                });
     }
 
     public void getTopic(SimpleSubCallBack<Map<String, Object>> callBack, final int type, int topic_id, int page) {
@@ -135,7 +134,9 @@ public class ApiManager {
                 .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
                     @Override
                     public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.parseArticle(responseBody.string(), type);
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.parseArticle(result, type);
                     }
                 })
                 .flatMapIterable(new Function<ArrayList<Map<String, Object>>, Iterable<Map<String, Object>>>() {
@@ -163,9 +164,9 @@ public class ApiManager {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
                             UserState.Check(response.body().string());
-                            if(UserState.isLogin()){
+                            if (UserState.isLogin()) {
                                 callBack.Success();
-                            }else{
+                            } else {
                                 callBack.Failed();
                             }
                         } catch (IOException e) {
@@ -196,6 +197,7 @@ public class ApiManager {
                 } else {
                     LogUtils.d("签到失败");
                 }
+                response.body().close();
             }
 
             @Override
@@ -211,7 +213,9 @@ public class ApiManager {
                 .map(new Function<ResponseBody, List<String>>() {
                     @Override
                     public List<String> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.parseElement(responseBody.string());
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.parseElement(result);
                     }
                 })
                 .flatMapIterable(new Function<List<String>, Iterable<String>>() {
@@ -230,7 +234,9 @@ public class ApiManager {
                 .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
                     @Override
                     public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.parsePhoto(responseBody.string());
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.parsePhoto(result);
                     }
                 })
                 .flatMapIterable(new Function<ArrayList<Map<String, Object>>, Iterable<Map<String, Object>>>() {
@@ -292,7 +298,9 @@ public class ApiManager {
                 .map(new Function<ResponseBody, ArrayList<Map<String, Object>>>() {
                     @Override
                     public ArrayList<Map<String, Object>> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.parsePSN(responseBody.string(), type);
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.parsePSN(result, type);
                     }
                 })
                 .flatMapIterable(new Function<ArrayList<Map<String, Object>>, Iterable<Map<String, Object>>>() {
@@ -305,17 +313,24 @@ public class ApiManager {
                 .subscribe(new SimpleSubscriber<>(callBack));
     }
 
-    public void getPSNINFO(SimpleSubCallBack<Map<String, String>> callBack, String psnid) {
+    public void getPSNINFO(final SimpleReturn<Map<String, String>> callBack, String psnid) {
         apiService.getPSNINFO(psnid)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, Map<String, String>>() {
                     @Override
                     public Map<String, String> apply(@NonNull ResponseBody responseBody) throws Exception {
-                        return ConvertHtml.parsePSNINFO(responseBody.string());
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return ConvertHtml.parsePSNINFO(result);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleSubscriber<>(callBack));
+                .subscribe(new Consumer<Map<String, String>>() {
+                    @Override
+                    public void accept(@NonNull Map<String, String> map) throws Exception {
+                        callBack.accept(map);
+                    }
+                });
 
     }
 
@@ -357,6 +372,7 @@ public class ApiManager {
                 } else {
                     callBack.Failed();
                 }
+                response.body().close();
             }
 
             @Override
@@ -367,15 +383,16 @@ public class ApiManager {
         });
     }
 
-    public void newGene(final SimpleCallBack callBack,FormBody body){
+    public void newGene(final SimpleCallBack callBack, FormBody body) {
         apiService.newGene(body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callBack.Success();
-                }else{
+                } else {
                     callBack.Failed();
                 }
+                response.body().close();
             }
 
             @Override
@@ -385,15 +402,16 @@ public class ApiManager {
         });
     }
 
-    public void newTopic(final SimpleCallBack callBack,FormBody body){
+    public void newTopic(final SimpleCallBack callBack, FormBody body) {
         apiService.newTopic(body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callBack.Success();
-                }else{
+                } else {
                     callBack.Failed();
                 }
+                response.body().close();
             }
 
             @Override
@@ -416,6 +434,7 @@ public class ApiManager {
                 if (response.isSuccessful()) {
                     callBack.Success();
                 }
+                response.body().close();
             }
 
             @Override

@@ -1,6 +1,6 @@
 package club.ranleng.psnine.data.moudle;
 
-import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -35,11 +35,11 @@ public class SimpleSubscriber<T> implements Observer<T> {
     public void onError(Throwable e) {
         e.printStackTrace();
         if (e instanceof SocketTimeoutException) {
-//            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            ToastUtils.showShort("网络中断，请检查您的网络状态");
         } else if (e instanceof ConnectException) {
-//            Toast.makeText(application, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            ToastUtils.showShort("网络中断，请检查您的网络状态");
         } else {
-//            Toast.makeText(application, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastUtils.showShort("error:" + e.getMessage());
         }
         if (simpleSubCallback != null) {
             simpleSubCallback.onComplete();

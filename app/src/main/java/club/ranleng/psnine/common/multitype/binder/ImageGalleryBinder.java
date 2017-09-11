@@ -2,6 +2,7 @@ package club.ranleng.psnine.common.multitype.binder;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,10 +52,13 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
                 .crossFade()
                 .thumbnail(0.1f)
                 .into(holder.root);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.root.setTransitionName(context.getString(R.string.trans_img));
+        }
     }
 
     public interface OnClick {
-        void onClick(View v, String url);
+        void onClick(View v, View root, String url);
 
         void onLongClick(View v, String id, int pos);
     }
@@ -74,7 +78,7 @@ public class ImageGalleryBinder extends ItemViewBinder<Image, ImageGalleryBinder
         @Override
         public void onClick(View v) {
             if (onClick != null) {
-                onClick.onClick(click, (String) v.getTag(R.id.TAG_IMAGE_GALLERY_URL));
+                onClick.onClick(click, root, (String) v.getTag(R.id.TAG_IMAGE_GALLERY_URL));
             }
         }
 

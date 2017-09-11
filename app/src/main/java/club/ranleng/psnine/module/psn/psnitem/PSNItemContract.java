@@ -1,5 +1,7 @@
 package club.ranleng.psnine.module.psn.psnitem;
 
+import android.view.View;
+
 import club.ranleng.psnine.base.BasePresenter;
 import club.ranleng.psnine.base.BaseView;
 import club.ranleng.psnine.bean.Topic;
@@ -11,7 +13,7 @@ public interface PSNItemContract {
 
         void setAdapter(MultiTypeAdapter adapter);
 
-        void openTopic(Topic topic);
+        void openTopic(Topic topic, android.view.View icon);
 
         void Loading(Boolean b);
 

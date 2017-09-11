@@ -26,7 +26,7 @@ public class TableBinder extends ItemViewBinder<Table, TableBinder.ViewHolder> {
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        View view = inflater.inflate(R.layout.adapter_table, null);
+        View view = inflater.inflate(R.layout.adapter_table, parent, false);
         return new ViewHolder(view);
     }
 
@@ -35,7 +35,7 @@ public class TableBinder extends ItemViewBinder<Table, TableBinder.ViewHolder> {
         Context ctx = holder.itemView.getContext();
         for (ArrayList<String> data : item.data) {
             TableRow tableRow = (TableRow) LayoutInflater
-                    .from(holder.itemView.getContext()).inflate(R.layout.adapter_table_row_item, null)
+                    .from(ctx).inflate(R.layout.adapter_table_row_item, holder.root, false)
                     .findViewById(R.id.adapter_table_row);
             TableLayout.LayoutParams param = new TableLayout.LayoutParams();
             param.setMargins(1, 1, 1, 1);
@@ -45,7 +45,7 @@ public class TableBinder extends ItemViewBinder<Table, TableBinder.ViewHolder> {
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
                 TextView textView = (TextView) LayoutInflater
-                        .from(holder.itemView.getContext()).inflate(R.layout.adapter_table_item, null)
+                        .from(ctx).inflate(R.layout.adapter_table_item, tableRow, false)
                         .findViewById(R.id.adapter_table_item);
                 textView.setLayoutParams(params);
                 textView.setText(cHtml.returnHtml(ctx, textView, str_data));

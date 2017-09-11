@@ -10,14 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.multitype.binder.ArticleTrophyBinder;
 import club.ranleng.psnine.common.multitype.binder.TableBinder;
 import club.ranleng.psnine.common.multitype.binder.TextEditableItemBinder;
 import club.ranleng.psnine.common.multitype.model.ArticleTrophy;
 import club.ranleng.psnine.common.multitype.model.Table;
 import club.ranleng.psnine.common.multitype.model.TextSpannedItem;
-import io.reactivex.subjects.PublishSubject;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 

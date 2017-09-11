@@ -1,5 +1,7 @@
 package club.ranleng.psnine.utils.HTML;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,6 +16,10 @@ import java.util.regex.Pattern;
 
 import club.ranleng.psnine.common.KEY;
 import club.ranleng.psnine.common.UserState;
+import club.ranleng.psnine.common.multitype.model.MaxPages;
+import club.ranleng.psnine.common.multitype.model.TopicsBean;
+import me.drakeet.multitype.Items;
+import me.drakeet.support.about.Line;
 
 public class ConvertHtml {
 
@@ -35,6 +41,7 @@ public class ConvertHtml {
 
         return listItems;
     }
+
 
     public static Map<String, Object> parseArticleHeader(String results, int type) {
         Map<String, Object> map = new HashMap<>();
@@ -97,7 +104,7 @@ public class ConvertHtml {
             if (!icon_e.isEmpty()) {
                 icon = icon_e.get(0).select("a").select("img").attr("src");
             }
-            time = doc.select("div.ml64").select("div.meta").get(1).select("span").get(1).text();
+            time = doc.select("div.pd10").select("div.meta").get(0).select("span").get(1).text();
             Elements s = doc.select("div.alert-warning.pd10.font12").select("span");
             replies = s.get(s.size() - 1).text();
             if (replies.contains("已采纳")) {
@@ -227,7 +234,8 @@ public class ConvertHtml {
             String username = c.select("div.meta").select("a.psnnode").text();
             String icon = c.select("a.l").select("img").attr("src");
             String comment_id = c.select("div.content.pb10").attr("id").replace("comment-content-", "");
-            String time = c.select("div.meta").select("span").get(1).ownText();
+            LogUtils.d(c.select("div.ml64").select("div.meta").select("span").html());
+            String time = c.select("div.ml64").select("div.meta").select("span").first().ownText();
 
             Map<String, Object> map = new HashMap<>();
 
@@ -263,19 +271,36 @@ public class ConvertHtml {
         return map;
     }
 
+    public static Items getTopicsItems(String results, int type) {
+        Items items = new Items();
+        ArrayList<Map<String, Object>> list = getTopics(results, type);
+        items.add(new MaxPages((int) list.get(0).get("max_page")));
+        list.remove(0);
+        for (Map<String, Object> map : list) {
+            items.add(new TopicsBean(map));
+            items.add(new Line());
+        }
+        return items;
+    }
+
     public static ArrayList<Map<String, Object>> getTopics(String results, int type) {
         UserState.Check(results);
         ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         Document doc = Jsoup.parse(results);
         listItems.add(ListInfo(doc));
+        Elements elements;
         if (type == KEY.GENE || type == KEY.GENE_FAV) {
-            Elements elements = doc.select("ul.list.genelist").select("li");
-            for (Element e : elements) {
+            elements = doc.select("ul.list.genelist").select("li");
+        } else {
+            elements = doc.select("ul.list").select("li");
+        }
+        for (Element e : elements) {
+            Map<String, Object> map = new HashMap<>();
+            if (type == KEY.GENE || type == KEY.GENE_FAV) {
                 String icon = e.select("a.l").select("img").attr("src");
                 String content = e.select("div.content.pb10").text();
                 String username = e.select("div.meta").select("a").text();
                 String id = "";
-
                 if (type == KEY.GENE_FAV) {
                     id = e.select("input[name=param]").attr("value");
                 } else {
@@ -290,7 +315,6 @@ public class ConvertHtml {
                 String[] tr = e.select("div.meta").text().replace(username, "").replace(" ", "").split("前");
                 String time;
                 String reply;
-
                 if (tr.length != 2) {
                     time = tr[0];
                     reply = "unknown";
@@ -298,7 +322,6 @@ public class ConvertHtml {
                     time = tr[0] + "前";
                     reply = tr[1];
                 }
-                Map<String, Object> map = new HashMap<>();
                 map.put("title", content);
                 map.put("username", username);
                 map.put("id", Integer.valueOf(id));
@@ -306,30 +329,36 @@ public class ConvertHtml {
                 map.put("time", time);
                 map.put("reply", reply);
                 map.put("type", type);
-                listItems.add(map);
-            }
-        } else if (type == KEY.NOTICE) {
-            Elements elements = doc.select("ul.list").select("li");
-            for (Element c : elements) {
-                Elements qa = c.select("div.content.pb10");
+            } else if (type == KEY.NOTICE) {
+                Elements qa = e.select("div.content.pb10");
                 if (!qa.isEmpty()) {
-                    Map<String, Object> map = new HashMap<>();
-                    String icon = c.select("a").select("img").attr("src");
-                    String title = c.select("div.content.pb10").html();
-
-                    String pattern = "<img src=\"http://ww4.sinaimg.cn/.*\">";
-                    Pattern r = Pattern.compile(pattern);
+                    String icon = e.select("a").select("img").attr("src");
+                    String title = e.select("div.content.pb10").html().replace("&nbsp;"," ");
+                    String imgs_pattern = "<img src=\".*sinaimg.cn/.*\">";
+                    String emoji_pattern = "<img src=\"http://photo.psnine.com/face/.*\">";
+                    String psn_pattern = "<a href=\"http://psnine.com/psnid/.*\">(@.*)</a>";
+                    //清理图片
+                    Pattern r = Pattern.compile(imgs_pattern);
                     Matcher m = r.matcher(title);
-
                     while (m.find()) {
                         title = title.replace(m.group(0), "[图片]");
                     }
+                    //清理表情
+                    r = Pattern.compile(emoji_pattern);
+                    m = r.matcher(title);
+                    while (m.find()) {
+                        title = title.replace(m.group(0), "[表情]");
+                    }
+                    //清理链接
+                    r = Pattern.compile(psn_pattern);
+                    m = r.matcher(title);
+                    while (m.find()) {
+                        title = title.replace(m.group(0), m.group(1));
+                    }
 
-                    String username = c.select("a.psnnode").text();
-                    String time = c.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
-                    String url = c.select("a.r").attr("href");
-
-
+                    String username = e.select("a.psnnode").text();
+                    String time = e.select("div.meta").text().replace(" ", "").replace("查看出处", "").replace(username, "");
+                    String url = e.select("a.r").attr("href");
                     map.put("title", title);
                     map.put("username", username);
                     map.put("icon", icon);
@@ -342,21 +371,14 @@ public class ConvertHtml {
                         map.put("type", KEY.TOPIC);
                         map.put("id", Integer.valueOf(url.replace("http://psnine.com/topic/", "")));
                     }
-
-                    listItems.add(map);
                 }
-            }
-        } else if (type == KEY.QA) {
-            Elements elements = doc.select("ul.list").select("li");
-            for (Element e : elements) {
+            } else if (type == KEY.QA) {
                 String icon = e.select("a.l").select("img").attr("src");
                 String content = e.select("p.title").select("a").text();
                 String id = e.select("p.title").select("a").attr("href").replace("http://psnine.com/qa/", "");
                 String username = e.select("a.psnnode").text();
                 String[] tr = e.select("div.meta").first().ownText().replace(" ", "").split("前");
                 String reply = e.select("div.meta").select("span.r").text().split("铜")[1].replace(" ", "");
-
-                Map<String, Object> map = new HashMap<>();
                 map.put("title", content);
                 map.put("username", username);
                 map.put("id", Integer.valueOf(id));
@@ -364,11 +386,7 @@ public class ConvertHtml {
                 map.put("time", tr[0] + "前");
                 map.put("reply", reply);
                 map.put("type", type);
-                listItems.add(map);
-            }
-        } else {
-            Elements elements = doc.select("ul.list").select("li");
-            for (Element e : elements) {
+            } else {
                 String icon = e.select("a.l").select("img").attr("src");
                 String title = e.select("div.ml64").select("div.title").select("a").text();
                 String username = e.select("div.meta").select("a").first().ownText();
@@ -385,8 +403,6 @@ public class ConvertHtml {
                     time = e.select("div.meta").first().ownText();
                     reply = e.select("a.rep.r").text() + "评论";
                 }
-
-                Map<String, Object> map = new HashMap<>();
                 map.put("title", title);
                 map.put("username", username);
                 map.put("id", Integer.valueOf(id));
@@ -394,8 +410,8 @@ public class ConvertHtml {
                 map.put("time", time);
                 map.put("reply", reply);
                 map.put("type", type);
-                listItems.add(map);
             }
+            listItems.add(map);
         }
         return listItems;
     }
@@ -523,7 +539,6 @@ public class ConvertHtml {
         String pattern = "http://ww4.sinaimg.cn/large/(.*).jpg";
         // 创建 Pattern 对象
         Pattern r = Pattern.compile(pattern);
-
         // 现在创建 matcher 对象
         Matcher m = r.matcher(results);
         if (m.find()) {

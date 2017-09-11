@@ -3,6 +3,7 @@ package club.ranleng.psnine.module.topic;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
 
 import club.ranleng.psnine.base.BasePresenter;
 import club.ranleng.psnine.base.BaseView;
@@ -49,6 +50,8 @@ public interface TopicContract {
         void setSubtitle(String subtitle);
 
         void setEmojiAdapter(RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter);
+
+        void openImage(android.view.View v, android.view.View root, String url);
 
     }
 

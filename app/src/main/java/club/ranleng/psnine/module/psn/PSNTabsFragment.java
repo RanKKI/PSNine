@@ -52,7 +52,6 @@ class PagerAdapter extends FragmentPagerAdapter {
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.PSN_MSG));
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.TOPIC));
         fragments.add(PSNItemFragment.newInstance(psnid, KEY.GENE));
-
     }
 
     @Override

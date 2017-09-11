@@ -1,6 +1,7 @@
 package club.ranleng.psnine.common.multitype.binder;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,17 +32,19 @@ public class ArticleHeaderBinder extends ItemViewBinder<ArticleHeader, ArticleHe
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ArticleHeader item) {
         final Context context = holder.itemView.getContext();
         String content;
-        if (item.title.equals("")) {
-            content = item.content;
+        if (item.getTitle().equals("")) {
+            content = item.getContent();
         } else {
-            content = "<h5>" + item.title + "</h5></br>" + item.content;
+            content = "<h5>" + item.getTitle() + "</h5></br>" + item.getContent();
         }
         cHtml.convert(context, holder.content, content);
-        holder.time.setText(item.time);
-        holder.replies.setText(item.replies);
-        holder.username.setText(item.username);
-        Glide.with(context).load(item.icon).into(holder.icon);
-        holder.itemView.setTag("");
+        holder.time.setText(item.getTime());
+        holder.replies.setText(item.getReplies());
+        holder.username.setText(item.getUsername());
+        Glide.with(context).load(item.getIcon()).into(holder.icon);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.icon.setTransitionName(context.getString(R.string.trans_user_icon));
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

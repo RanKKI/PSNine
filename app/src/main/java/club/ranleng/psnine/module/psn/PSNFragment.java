@@ -62,6 +62,7 @@ public class PSNFragment extends Fragment implements PSNContract.View {
         ButterKnife.bind(this, view);
         appBarLayout.setExpanded(false);
         mPresenter.start();
+        getFragmentManager().beginTransaction().replace(R.id.inside_frame, PSNTabsFragment.newInstance(psnid)).commit();
         return view;
     }
 
@@ -90,25 +91,26 @@ public class PSNFragment extends Fragment implements PSNContract.View {
     }
 
     @Override
-    public void replaceFragment(Fragment fragment) {
-        getFragmentManager().beginTransaction().replace(R.id.inside_frame, fragment).commit();
-    }
-
-    @Override
-    public void Sncak_Success() {
+    public void Snack_Success() {
         show_snackBar(getString(R.string.success));
     }
 
     @Override
-    public void confirm(final int type, String message, final PSNFragment.DialogClickListener listener) {
+    public void Snack_Fail() {
+        show_snackBar(getString(R.string.fail));
+    }
+
+    @Override
+    public void confirm(final int type, String message) {
         new AlertDialog.Builder(getActivity())
                 .setMessage(message)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onCick(type, true);
+                        mPresenter.call(type);
                     }
                 })
-                .setNegativeButton("取消", null).create().show();
+                .setNegativeButton("取消", null)
+                .create().show();
     }
 
     @Override
@@ -123,10 +125,5 @@ public class PSNFragment extends Fragment implements PSNContract.View {
     @Override
     public String getPSNID() {
         return psnid;
-    }
-
-
-    public interface DialogClickListener {
-        void onCick(int type, Boolean b);
     }
 }
