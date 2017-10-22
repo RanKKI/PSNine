@@ -8,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import club.ranleng.psnine.common.KEY;
-
 public abstract class BaseFragment extends Fragment {
-
 
     public Context mContext;
     protected View mRootView;
@@ -66,11 +63,11 @@ public abstract class BaseFragment extends Fragment {
 //            return;
 //        }
 
-        if (isPrepared && KEY.PREF_PRELOAD && !isLoadData) {
-            isLoadData = true;
-            initData();
-            return;
-        }
+//        if (isPrepared && KEY.PREF_PRELOAD && !isLoadData) {
+//            isLoadData = true;
+//            initData();
+//            return;
+//        }
 
         if (!isPrepared || !isVisible) {
             return;

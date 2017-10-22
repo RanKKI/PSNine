@@ -1,4 +1,4 @@
-package club.ranleng.psnine.utils.HTML;
+package club.ranleng.psnine.utils.html;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,35 +8,28 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 public class HtmlImageGetter implements Html.ImageGetter {
 
     private Context context;
     private TextView tv;
 
-    public HtmlImageGetter(Context context) {
-        this.context = context.getApplicationContext();
-    }
-
-    public HtmlImageGetter(Context context, TextView tc) {
-        this.context = context.getApplicationContext();
-        this.tv = tc;
+    public HtmlImageGetter(Context context, TextView tv) {
+        this.context = context;
+        this.tv = tv;
     }
 
     @Override
     public Drawable getDrawable(String s) {
         final URLDrawable urlDrawable = new URLDrawable();
-        Glide.with(context).load(s).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).asBitmap().load(s).into(new SimpleTarget<Bitmap>() {
             @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                 int width = resource.getWidth();
                 int height = resource.getHeight();
                 DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -44,8 +37,8 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 int h_screen = dm.heightPixels;
                 float ratio = 1;
                 //max length each line 24
-                if (width > w_screen / 3 * 2|| height > h_screen / 3 * 2) {
-                    ratio = (float) w_screen / 3 * 2 / width ;
+                if (width > w_screen / 3 * 2 || height > h_screen / 3 * 2) {
+                    ratio = (float) w_screen / 3 * 2 / width;
                 }
                 if (width <= 50 || height <= 50) {
                     ratio = 2;
@@ -61,7 +54,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
                 height = resource.getHeight();
                 urlDrawable.bitmap = resource;
                 urlDrawable.setBounds(0, 0, width, height);
-                if(tv != null){
+                if (tv != null) {
                     tv.invalidate();
                     tv.setText(tv.getText()); // 解决图文重叠
                 }

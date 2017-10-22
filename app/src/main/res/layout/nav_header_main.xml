@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="?attr/colorPrimary"
+    android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,24 +13,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <club.ranleng.psnine.view.RoundImageView
-        android:id="@+id/nav_header_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/psnine"/>
+        app:srcCompat="@android:drawable/sym_def_app_icon"/>
 
     <TextView
-        android:id="@+id/nav_header_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="6dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="PSNINE"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/primary_text"
-        android:textSize="15sp"
-        android:textStyle="bold"/>
+        android:text="Android Studio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="android.studio@android.com"/>
 
 </LinearLayout>

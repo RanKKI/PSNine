@@ -1,4 +1,4 @@
-package club.ranleng.psnine.utils.HTML;
+package club.ranleng.psnine.utils.html;
 
 import android.content.res.Resources;
 import android.graphics.Color;
