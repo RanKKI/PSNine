@@ -30,6 +30,7 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
                     @Override
                     public void accept(Topic topic) throws Exception {
                         adapter.setHeaderView(topic);
+                        loadComment();
                     }
                 });
     }
@@ -40,7 +41,7 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
                 .subscribe(new Consumer<TopicComment>() {
                     @Override
                     public void accept(TopicComment topicComment) throws Exception {
-
+                        adapter.addComments(topicComment);
                     }
                 });
     }

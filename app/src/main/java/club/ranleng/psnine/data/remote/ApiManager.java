@@ -1,7 +1,5 @@
 package club.ranleng.psnine.data.remote;
 
-import android.text.Spanned;
-
 import com.blankj.utilcode.util.Utils;
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
@@ -12,12 +10,10 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import java.util.concurrent.TimeUnit;
 
 import club.ranleng.psnine.common.RxBus;
+import club.ranleng.psnine.data.interceptor.NetWorkInterceptor;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.model.TopicsNormal;
-import club.ranleng.psnine.utils.html.HtmlImageGetter;
-import club.ranleng.psnine.utils.html.HtmlTagHandler;
-import club.ranleng.psnine.utils.html.mHtml;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -42,6 +38,7 @@ public class ApiManager {
         builder.readTimeout(30, TimeUnit.SECONDS);
         builder.connectTimeout(10, TimeUnit.SECONDS);
         builder.cookieJar(cookieJar);
+        builder.addNetworkInterceptor(new NetWorkInterceptor());
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()

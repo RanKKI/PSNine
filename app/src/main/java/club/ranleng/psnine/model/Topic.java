@@ -1,5 +1,6 @@
 package club.ranleng.psnine.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.ghui.fruit.Attrs;
@@ -12,7 +13,7 @@ public class Topic {
     @Pick(value = "div.main > div.box > div.pd10 > div > a.psnnode")
     private String author;
     @Pick(value = "div.page > ul > li")
-    private List<Page> pages;
+    private List<Page> pages = new ArrayList<>();
     @Pick(value = "div.content.pd10", attr = Attrs.INNER_HTML)
     private String content;
     @Pick(value = "div.side > div.box > p > a >img", attr = Attrs.SRC)

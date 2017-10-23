@@ -1,5 +1,6 @@
 package club.ranleng.psnine.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.ghui.fruit.Attrs;
@@ -8,10 +9,10 @@ import me.ghui.fruit.annotations.Pick;
 public class TopicComment {
 
     @Pick(value = "div.post")
-    private List<Comment> replies;
+    private List<Comment> comments = new ArrayList<>();
 
-    public List<Comment> getReplies() {
-        return replies;
+    public List<Comment> getComments() {
+        return comments;
     }
 
     public static class Comment {

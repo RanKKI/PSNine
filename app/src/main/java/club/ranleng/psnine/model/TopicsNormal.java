@@ -1,5 +1,6 @@
 package club.ranleng.psnine.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.ghui.fruit.Attrs;
@@ -8,7 +9,7 @@ import me.ghui.fruit.annotations.Pick;
 public class TopicsNormal {
 
     @Pick(value = "ul.list > li")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     public List<Item> getItems() {
         return items;

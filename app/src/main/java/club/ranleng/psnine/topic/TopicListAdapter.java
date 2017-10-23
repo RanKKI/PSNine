@@ -8,14 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
@@ -26,19 +23,24 @@ import club.ranleng.psnine.utils.html.mHtml;
 public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.ViewHolder> {
 
     private static final int HeaderView = 1;
-    public LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
     private List<TopicComment.Comment> Comments = new ArrayList<>();
     private Topic topic;
     private Context context;
 
-    public TopicListAdapter(Context context) {
+    TopicListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
     }
 
-    public void setHeaderView(Topic topic) {
+    void setHeaderView(Topic topic) {
         this.topic = topic;
         notifyItemChanged(0);
+    }
+
+    void addComments(TopicComment topicComment) {
+        Comments.addAll(topicComment.getComments());
+        notifyItemRangeInserted(1, getItemCount());
     }
 
     @Override
@@ -47,18 +49,19 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             View header = layoutInflater.inflate(R.layout.adapter_topic_header, parent, false);
             return new HeaderViewHolder(header);
         }
-        View view = layoutInflater.inflate(R.layout.adapter_topic_header, parent, false);
+        View view = layoutInflater.inflate(R.layout.adapter_topic_comment, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position == 0) {
+        if (position == 0 && holder instanceof HeaderViewHolder) {
             ((HeaderViewHolder) holder).bind();
             return;
         }
-        //do something
-        LogUtils.d("normal holder");
+        if (holder != null) {
+            holder.bind(position - 1);
+        }
     }
 
     @Override
@@ -79,22 +82,43 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        ImageView avatar;
+        TextView username;
+        TextView content;
+        TextView time;
+
         ViewHolder(View itemView) {
             super(itemView);
+            avatar = itemView.findViewById(R.id.adapter_topic_comment_avatar);
+            username = itemView.findViewById(R.id.adapter_topic_comment_username);
+            content = itemView.findViewById(R.id.adapter_topic_comment_content);
+            time = itemView.findViewById(R.id.adapter_topic_comment_time);
+        }
+
+        void bind(int position) {
+            TopicComment.Comment comment = Comments.get(position);
+            time.setText(comment.getTime());
+            username.setText(comment.getUsername());
+            content.setText(mHtml.fromHtml(comment.getContent(), new HtmlImageGetter(context, content), new HtmlTagHandler()));
+            Glide.with(context).load(comment.getAvatar()).into(avatar);
         }
     }
 
     class HeaderViewHolder extends ViewHolder {
 
-        @BindView(R.id.header_content) TextView content;
-        @BindView(R.id.header_time) TextView time;
-        @BindView(R.id.header_replies) TextView replies;
-        @BindView(R.id.header_username) TextView username;
-        @BindView(R.id.header_icon) ImageView icon;
+        TextView content;
+        TextView time;
+        TextView replies;
+        TextView username;
+        ImageView icon;
 
         HeaderViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            content = itemView.findViewById(R.id.header_content);
+            time = itemView.findViewById(R.id.header_time);
+            replies = itemView.findViewById(R.id.header_replies);
+            username = itemView.findViewById(R.id.header_username);
+            icon = itemView.findViewById(R.id.header_icon);
         }
 
         void bind() {

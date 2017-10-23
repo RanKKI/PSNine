@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -15,12 +14,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.view.SmartRecyclerView;
 
 public class TopicActivity extends BaseActivity implements TopicActivityContract.View {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
     private TopicActivityContract.Presenter presenter;
 
@@ -60,6 +60,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             divider.setDrawable(d_divider);
             recyclerView.addItemDecoration(divider);
         }
+        recyclerView.setAutoLoadListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

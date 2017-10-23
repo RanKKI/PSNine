@@ -36,6 +36,11 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
 
     public void add(TopicsNormal topicsNormal) {
         List<TopicsNormal.Item> newItems = topicsNormal.getItems();
+//        if(newItems != null){
+//            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
+//            result.dispatchUpdatesTo(this);
+//            Items.addAll(newItems);
+//        }
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
         result.dispatchUpdatesTo(this);
         Items.addAll(newItems);
@@ -49,7 +54,7 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.adapater_topics_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.adapter_topics_item, parent, false);
         return new ViewHolder(view);
     }
 
