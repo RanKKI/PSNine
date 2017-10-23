@@ -7,16 +7,25 @@ import android.support.v13.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import club.ranleng.psnine.common.KEY;
+import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.topics.TopicsFragment;
 
 public class mViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments = new ArrayList<>(); //切換頁面的Fragments
+    private List<Integer> fragments_types = new ArrayList<Integer>() {{
+        add(KEY.TOPIC);
+        add(KEY.OPENBOX);
+        add(KEY.GUIDE);
+        add(KEY.PLUS);
+    }};
 
     public mViewPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragments.add((TopicsFragment.newInstance()));
-        fragments.add((TopicsFragment.newInstance()));
+        for (Integer type : fragments_types) {
+            fragments.add((TopicsFragment.newInstance(type)));
+        }
     }
 
     @Override
@@ -31,7 +40,7 @@ public class mViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "test-" + String.valueOf(position);
+        return KeyGetter.getKEYName(fragments_types.get(position));
     }
 
 }

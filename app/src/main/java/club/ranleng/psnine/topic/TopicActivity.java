@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +25,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
     private TopicActivityContract.Presenter presenter;
+    private String url;
 
     @Override
     public void setContentView() {
@@ -38,6 +41,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public void getData() {
+        url = getIntent().getStringExtra("url");
         presenter.start();
     }
 
@@ -66,7 +70,17 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     }
 
     @Override
+    public void loading(boolean loading) {
+        refreshLayout.setRefreshing(loading);
+    }
+
+    @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public String getURL() {
+        return url;
     }
 }

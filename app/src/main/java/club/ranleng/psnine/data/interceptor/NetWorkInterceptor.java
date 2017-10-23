@@ -1,5 +1,6 @@
 package club.ranleng.psnine.data.interceptor;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 
@@ -14,8 +15,7 @@ public class NetWorkInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
         int code = response.code();
-        int code_range = code / 100;
-        if (code_range == 4 || code_range == 5) {
+        if (code >= 400 && code <= 600) {
             ToastUtils.showShort(parseErrorCode(code));
             return new Response.Builder().request(chain.request())
                     .protocol(chain.connection().protocol())

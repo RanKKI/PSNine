@@ -25,7 +25,7 @@ public class TopicsFragmentPresenter implements TopicsFragmentContract.Presenter
     @Override
     public void load() {
         view.loading(true);
-        ApiManager.getDefault().getTopics(0, page)
+        ApiManager.getDefault().getTopics(view.getType(), page)
                 .subscribe(new Consumer<TopicsNormal>() {
                     @Override
                     public void accept(TopicsNormal topicsNormal) throws Exception {

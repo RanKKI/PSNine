@@ -43,6 +43,12 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         notifyItemRangeInserted(1, getItemCount());
     }
 
+    void clear() {
+        int end = Comments.size();
+        Comments.clear();
+        notifyItemRangeRemoved(1, end);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == HeaderView) {

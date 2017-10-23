@@ -9,6 +9,8 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import club.ranleng.psnine.common.KEY;
+import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.data.interceptor.NetWorkInterceptor;
 import club.ranleng.psnine.model.Topic;
@@ -42,8 +44,8 @@ public class ApiManager {
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://psnine.com/")
-                .baseUrl("http://192.168.0.4:5000/")
+                .baseUrl("http://psnine.com/")
+//                .baseUrl("http://192.168.0.4:5000/")
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -63,8 +65,13 @@ public class ApiManager {
     }
 
     public Observable<TopicsNormal> getTopics(int type, int page) {
-        return apiService.getTopics("topic", page)
-                .subscribeOn(Schedulers.io())
+        Observable<ResponseBody> observable;
+        if(type == KEY.TOPIC){
+            observable = apiService.getTopics(KeyGetter.getKEY(type), page);
+        }else{
+            observable = apiService.getTopicsWithNode(KeyGetter.getKEY(type), page);
+        }
+        return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, TopicsNormal>() {
                     @Override
                     public TopicsNormal apply(ResponseBody responseBody) throws Exception {

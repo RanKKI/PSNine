@@ -11,7 +11,11 @@ public interface TopicActivityContract {
 
         void setupList(TopicListAdapter adapter);
 
+        void loading(boolean loading);
+
         Context getContext();
+
+        String getURL();
     }
 
     interface Presenter extends BasePresenter {

@@ -2,6 +2,7 @@ package club.ranleng.psnine.topics;
 
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,9 +22,14 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
     private TopicsFragmentContract.Presenter presenter;
+    private int type;
 
-    public static TopicsFragment newInstance() {
-        return new TopicsFragment();
+    public static TopicsFragment newInstance(int type) {
+        Bundle args = new Bundle();
+        args.putInt("type", type);
+        TopicsFragment fragment = new TopicsFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -36,6 +42,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
 
     @Override
     public void initData() {
+        type = getArguments().getInt("type");
         presenter.start();
     }
 
@@ -59,7 +66,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
             }
         });
         Drawable d_divider = getActivity().getDrawable(R.drawable.recyclerview_divider);
-        if(d_divider != null){
+        if (d_divider != null) {
             DividerItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
             divider.setDrawable(d_divider);
             recyclerView.addItemDecoration(divider);
@@ -87,6 +94,6 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
 
     @Override
     public int getType() {
-        return 0;
+        return type;
     }
 }

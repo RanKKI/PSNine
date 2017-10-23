@@ -10,8 +10,9 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
     private TopicActivityContract.View view;
     private int comment_page = 1;
     private TopicListAdapter adapter;
+    private String id;
 
-    public TopicActivityPresenter(TopicActivityContract.View view) {
+    TopicActivityPresenter(TopicActivityContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }
@@ -20,16 +21,24 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
     public void start() {
         adapter = new TopicListAdapter(view.getContext());
         view.setupList(adapter);
+        String url = view.getURL();
+        if (url.startsWith("http://psnine.com/topic/")) {
+            id = url.replace("http://psnine.com/topic/", "");
+        } else {
+            id = url;
+        }
         loadTopic();
     }
 
     @Override
     public void loadTopic() {
-        ApiManager.getDefault().getTopic("32572")
+        view.loading(true);
+        ApiManager.getDefault().getTopic(id)
                 .subscribe(new Consumer<Topic>() {
                     @Override
                     public void accept(Topic topic) throws Exception {
                         adapter.setHeaderView(topic);
+                        view.loading(false);
                         loadComment();
                     }
                 });
@@ -37,11 +46,13 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
 
     @Override
     public void loadComment() {
-        ApiManager.getDefault().getTopicComment("32572", comment_page)
+        view.loading(true);
+        ApiManager.getDefault().getTopicComment(id, comment_page)
                 .subscribe(new Consumer<TopicComment>() {
                     @Override
                     public void accept(TopicComment topicComment) throws Exception {
                         adapter.addComments(topicComment);
+                        view.loading(false);
                     }
                 });
     }

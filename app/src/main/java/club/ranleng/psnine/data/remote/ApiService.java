@@ -11,6 +11,9 @@ public interface ApiService {
     @GET("{type}")
     Observable<ResponseBody> getTopics(@Path("type") String type, @Query("page") int page);
 
+    @GET("node/{type}")
+    Observable<ResponseBody> getTopicsWithNode(@Path("type") String type, @Query("page") int page);
+
     @GET("topic/{id}")
     Observable<ResponseBody> getTopic(@Path("id") String id);
 

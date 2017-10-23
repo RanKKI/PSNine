@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -29,24 +30,19 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
     private List<TopicsNormal.Item> Items = new ArrayList<>();
     private Fragment fragment;
 
-    public TopicsListAdapter(Fragment fragment) {
+    TopicsListAdapter(Fragment fragment) {
         this.fragment = fragment;
         mLayoutInflater = LayoutInflater.from(Utils.getApp());
     }
 
-    public void add(TopicsNormal topicsNormal) {
+    void add(TopicsNormal topicsNormal) {
         List<TopicsNormal.Item> newItems = topicsNormal.getItems();
-//        if(newItems != null){
-//            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
-//            result.dispatchUpdatesTo(this);
-//            Items.addAll(newItems);
-//        }
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
         result.dispatchUpdatesTo(this);
         Items.addAll(newItems);
     }
 
-    public void clear() {
+    void clear() {
         int end = getItemCount();
         Items.clear();
         this.notifyItemRangeRemoved(0, end);
@@ -67,6 +63,7 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
         holder.reply.setText(reply);
         holder.time.setText(item.getTime());
         Glide.with(fragment).load(item.getAvatar()).into(holder.icon);
+        holder.itemView.setTag(item.getUrl());
     }
 
     @Override
@@ -91,6 +88,7 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(fragment.getActivity(), TopicActivity.class);
+            intent.putExtra("url", (String) v.getTag());
             ActivityUtils.startActivity(intent);
         }
     }
