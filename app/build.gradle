@@ -36,13 +36,16 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.4'
     compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
-    compile 'com.github.bumptech.glide:glide:4.1.1'
-    compile 'com.blankj:utilcode:1.9.2'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1' // cookies saver
+    compile 'com.github.bumptech.glide:glide:4.2.0' // Image loader
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
+
+    compile 'com.blankj:utilcode:1.9.2' //Utils
+
+    compile 'com.jakewharton:butterknife:8.8.1' //Bind view
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    compile 'me.ghui:Fruit:1.0.4'
-
-    compile group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1'
+    compile 'me.ghui:Fruit:1.0.4' // Html 标签处理
+    compile group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1' // html tag
+    compile project(path: ':HtmlTextView')
 }

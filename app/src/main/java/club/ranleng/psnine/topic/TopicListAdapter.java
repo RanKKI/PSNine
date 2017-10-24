@@ -1,6 +1,7 @@
 package club.ranleng.psnine.topic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,17 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+import org.sufficientlysecure.htmltextview.UrlClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import club.ranleng.psnine.ImageViewActivity;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.utils.html.HtmlImageGetter;
-import club.ranleng.psnine.utils.html.HtmlTagHandler;
-import club.ranleng.psnine.utils.html.mHtml;
 
 public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.ViewHolder> {
 
@@ -27,10 +32,12 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
     private List<TopicComment.Comment> Comments = new ArrayList<>();
     private Topic topic;
     private Context context;
+    private UrlClick urlClick;
 
     TopicListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        urlClick = new UrlClick();
     }
 
     void setHeaderView(Topic topic) {
@@ -41,12 +48,6 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
     void addComments(TopicComment topicComment) {
         Comments.addAll(topicComment.getComments());
         notifyItemRangeInserted(1, getItemCount());
-    }
-
-    void clear() {
-        int end = Comments.size();
-        Comments.clear();
-        notifyItemRangeRemoved(1, end);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
         ImageView avatar;
         TextView username;
-        TextView content;
+        HtmlTextView content;
         TextView time;
 
         ViewHolder(View itemView) {
@@ -105,14 +106,17 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             TopicComment.Comment comment = Comments.get(position);
             time.setText(comment.getTime());
             username.setText(comment.getUsername());
-            content.setText(mHtml.fromHtml(comment.getContent(), new HtmlImageGetter(context, content), new HtmlTagHandler()));
+            content.setHtml(comment.getContent(), new HtmlImageGetter(context, content));
+            content.setUrlClickListener(urlClick);
             Glide.with(context).load(comment.getAvatar()).into(avatar);
+
         }
+
     }
 
     class HeaderViewHolder extends ViewHolder {
 
-        TextView content;
+        HtmlTextView content;
         TextView time;
         TextView replies;
         TextView username;
@@ -128,12 +132,24 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         }
 
         void bind() {
+            content.setUrlClickListener(urlClick);
             String con = "<p>" + topic.getTitle() + "</p><br>" + topic.getContent();
-            content.setText(mHtml.fromHtml(con, new HtmlImageGetter(context, content), new HtmlTagHandler()));
+            content.setHtml(con, new HtmlImageGetter(context, content));
             username.setText(topic.getAuthor());
             time.setText(topic.getTime());
             replies.setText(topic.getComments());
             Glide.with(context).load(topic.getAvatar()).into(icon);
         }
     }
+
+    class UrlClick implements UrlClickListener{
+
+        @Override
+        public void OnClick(String url) {
+            Intent intent = new Intent(context, ImageViewActivity.class);
+            intent.putExtra("url",url);
+            ActivityUtils.startActivity(intent);
+        }
+    }
+
 }

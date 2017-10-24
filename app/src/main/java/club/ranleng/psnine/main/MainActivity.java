@@ -1,4 +1,4 @@
-package club.ranleng.psnine;
+package club.ranleng.psnine.main;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,7 +15,8 @@ import com.blankj.utilcode.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import club.ranleng.psnine.adapter.mViewPagerAdapter;
+import club.ranleng.psnine.R;
+import club.ranleng.psnine.main.mViewPagerAdapter;
 import club.ranleng.psnine.data.remote.ApiManager;
 
 public class MainActivity extends AppCompatActivity

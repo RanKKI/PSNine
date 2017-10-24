@@ -35,7 +35,7 @@
         android:text="xxxx"
         android:textSize="12sp"/>
 
-    <TextView
+    <org.sufficientlysecure.htmltextview.HtmlTextView
         android:id="@+id/adapter_topic_comment_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

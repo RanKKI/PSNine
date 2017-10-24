@@ -1,4 +1,4 @@
-package club.ranleng.psnine.adapter;
+package club.ranleng.psnine.main;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
