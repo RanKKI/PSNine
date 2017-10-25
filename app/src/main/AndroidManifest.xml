@@ -32,6 +32,10 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="http"
+                      android:host="psnine.com" />
+
             </intent-filter>
         </activity>
         <activity android:name=".ImageViewActivity">

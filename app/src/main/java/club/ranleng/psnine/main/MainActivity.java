@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity
         mViewPagerAdapter mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        ApiManager.getDefault();
     }
 
     @Override

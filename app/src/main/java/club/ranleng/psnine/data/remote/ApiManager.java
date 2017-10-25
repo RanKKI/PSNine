@@ -9,10 +9,11 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import club.ranleng.psnine.common.KEY;
+import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
-import club.ranleng.psnine.data.interceptor.NetWorkInterceptor;
+import club.ranleng.psnine.data.interceptor.NetworkInterceptor;
+import club.ranleng.psnine.data.interceptor.RequestInterceptor;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.model.TopicsNormal;
@@ -40,7 +41,8 @@ public class ApiManager {
         builder.readTimeout(30, TimeUnit.SECONDS);
         builder.connectTimeout(10, TimeUnit.SECONDS);
         builder.cookieJar(cookieJar);
-        builder.addNetworkInterceptor(new NetWorkInterceptor());
+        builder.addInterceptor(new RequestInterceptor());
+        builder.addNetworkInterceptor(new NetworkInterceptor());
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -66,9 +68,12 @@ public class ApiManager {
 
     public Observable<TopicsNormal> getTopics(int type, int page) {
         Observable<ResponseBody> observable;
-        if(type == KEY.TOPIC){
+        if (type == Key.GENE || type == Key.QA) {
+            throw new IllegalArgumentException("not support Gene and QA for now");
+        }
+        if (type == Key.TOPIC) {
             observable = apiService.getTopics(KeyGetter.getKEY(type), page);
-        }else{
+        } else {
             observable = apiService.getTopicsWithNode(KeyGetter.getKEY(type), page);
         }
         return observable.subscribeOn(Schedulers.io())
@@ -80,7 +85,6 @@ public class ApiManager {
                         return topicsNormal;
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
-
     }
 
     public Observable<Topic> getTopic(String id) {

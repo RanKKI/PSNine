@@ -1,6 +1,5 @@
 package club.ranleng.psnine.data.interceptor;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 
@@ -10,7 +9,7 @@ import club.ranleng.psnine.R;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 
-public class NetWorkInterceptor implements Interceptor {
+public class NetworkInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());

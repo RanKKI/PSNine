@@ -4,17 +4,17 @@ public class KeyGetter {
 
     public static String getKEY(int key) {
         switch (key) {
-            case KEY.TOPIC:
+            case Key.TOPIC:
                 return "topic";
-            case KEY.GENE:
+            case Key.GENE:
                 return "gene";
-            case KEY.GUIDE:
+            case Key.GUIDE:
                 return "guide";
-            case KEY.OPENBOX:
+            case Key.OPENBOX:
                 return "openbox";
-            case KEY.PLUS:
+            case Key.PLUS:
                 return "plus";
-            case KEY.QA:
+            case Key.QA:
                 return "qa";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
@@ -22,17 +22,17 @@ public class KeyGetter {
 
     public static String getKEYName(int key) {
         switch (key) {
-            case KEY.TOPIC:
+            case Key.TOPIC:
                 return "主页";
-            case KEY.GENE:
+            case Key.GENE:
                 return "基因";
-            case KEY.GUIDE:
+            case Key.GUIDE:
                 return "攻略";
-            case KEY.OPENBOX:
+            case Key.OPENBOX:
                 return "开箱";
-            case KEY.PLUS:
+            case Key.PLUS:
                 return "PLUS";
-            case KEY.QA:
+            case Key.QA:
                 return "问与答";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");

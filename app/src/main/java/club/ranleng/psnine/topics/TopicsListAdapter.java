@@ -1,7 +1,7 @@
 package club.ranleng.psnine.topics;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -37,9 +36,15 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
 
     void add(TopicsNormal topicsNormal) {
         List<TopicsNormal.Item> newItems = topicsNormal.getItems();
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
-        result.dispatchUpdatesTo(this);
-        Items.addAll(newItems);
+        if (getItemCount() == 0) {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new TopicsDiffCallback(Items, newItems));
+            result.dispatchUpdatesTo(this);
+            Items.addAll(newItems);
+        } else {
+            int start = getItemCount();
+            Items.addAll(newItems);
+            notifyItemRangeInserted(start, getItemCount());
+        }
     }
 
     void clear() {
@@ -63,7 +68,6 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
         holder.reply.setText(reply);
         holder.time.setText(item.getTime());
         Glide.with(fragment).load(item.getAvatar()).into(holder.icon);
-        holder.itemView.setTag(item.getUrl());
     }
 
     @Override
@@ -87,9 +91,11 @@ public class TopicsListAdapter extends RecyclerView.Adapter<TopicsListAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(fragment.getActivity(), TopicActivity.class);
-            intent.putExtra("url", (String) v.getTag());
-            ActivityUtils.startActivity(intent);
+            TopicsNormal.Item item = Items.get(getAdapterPosition());
+            Bundle bundle = new Bundle();
+            bundle.putString("url", item.getUrl());
+            bundle.putString("content", item.getContent());
+            ActivityUtils.startActivity(bundle, TopicActivity.class);
         }
     }
 

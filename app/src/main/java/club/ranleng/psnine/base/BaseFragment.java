@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment {
 //            return;
 //        }
 
-//        if (isPrepared && KEY.PREF_PRELOAD && !isLoadData) {
+//        if (isPrepared && Key.PREF_PRELOAD && !isLoadData) {
 //            isLoadData = true;
 //            initData();
 //            return;

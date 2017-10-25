@@ -1,7 +1,7 @@
 package club.ranleng.psnine.topic;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -29,7 +28,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     private static final int HeaderView = 1;
     private LayoutInflater layoutInflater;
-    private List<TopicComment.Comment> Comments = new ArrayList<>();
+    private List<TopicComment.Comment> comments = new ArrayList<>();
     private Topic topic;
     private Context context;
     private UrlClick urlClick;
@@ -46,8 +45,15 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
     }
 
     void addComments(TopicComment topicComment) {
-        Comments.addAll(topicComment.getComments());
-        notifyItemRangeInserted(1, getItemCount());
+        int start = getItemCount();
+        comments.addAll(topicComment.getComments());
+        notifyItemRangeInserted(start, getItemCount());
+    }
+
+    void clearComments() {
+        int end = comments.size();
+        comments.clear();
+        notifyItemRangeRemoved(1, end);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         if (topic == null) {
             return 0;
         }
-        return Comments == null ? 1 : Comments.size() + 1;
+        return comments == null ? 1 : comments.size() + 1;
     }
 
     @Override
@@ -103,7 +109,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         }
 
         void bind(int position) {
-            TopicComment.Comment comment = Comments.get(position);
+            TopicComment.Comment comment = comments.get(position);
             time.setText(comment.getTime());
             username.setText(comment.getUsername());
             content.setHtml(comment.getContent(), new HtmlImageGetter(context, content));
@@ -133,7 +139,12 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
         void bind() {
             content.setUrlClickListener(urlClick);
-            String con = "<p>" + topic.getTitle() + "</p><br>" + topic.getContent();
+            String con;
+            if (topic.getTitle() != null) {
+                con = "<p>" + topic.getTitle() + "</p><br>" + topic.getContent();
+            } else {
+                con = topic.getContent();
+            }
             content.setHtml(con, new HtmlImageGetter(context, content));
             username.setText(topic.getAuthor());
             time.setText(topic.getTime());
@@ -142,13 +153,13 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         }
     }
 
-    class UrlClick implements UrlClickListener{
+    class UrlClick implements UrlClickListener {
 
         @Override
         public void OnClick(String url) {
-            Intent intent = new Intent(context, ImageViewActivity.class);
-            intent.putExtra("url",url);
-            ActivityUtils.startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putString("url", url);
+            ActivityUtils.startActivity(bundle, ImageViewActivity.class);
         }
     }
 

@@ -1,6 +1,6 @@
 package club.ranleng.psnine.common;
 
-public class KEY {
+public class Key {
 
     public static final int TOPIC = 1448;
     public static final int GENE = 1449;

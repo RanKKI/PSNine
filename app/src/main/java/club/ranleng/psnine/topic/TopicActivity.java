@@ -36,19 +36,16 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     public void find_setup_Views() {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        setTitle("主题");
         new TopicActivityPresenter(this);
     }
 
     @Override
     public void getData() {
         url = getIntent().getStringExtra("url");
+        String title = getIntent().getStringExtra("content");
+        if(title != null) toolbar.setSubtitle(title);
         presenter.start();
-    }
-
-    @OnClick(R.id.fab)
-    public void fabClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
     }
 
     @Override
@@ -65,6 +62,23 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             recyclerView.addItemDecoration(divider);
         }
         recyclerView.setAutoLoadListener(this);
+        recyclerView.setOnLoadMore(new SmartRecyclerView.onLoadMoreListener() {
+            @Override
+            public void loadMore() {
+                presenter.loadMoreComment();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return refreshLayout.isRefreshing();
+            }
+        });
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.refresh();
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

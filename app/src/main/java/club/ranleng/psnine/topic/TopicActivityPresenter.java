@@ -11,6 +11,7 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
     private int comment_page = 1;
     private TopicListAdapter adapter;
     private String id;
+    private int maxCommentPage = 1;
 
     TopicActivityPresenter(TopicActivityContract.View view) {
         this.view = view;
@@ -38,7 +39,6 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
                     @Override
                     public void accept(Topic topic) throws Exception {
                         adapter.setHeaderView(topic);
-                        view.loading(false);
                         loadComment();
                     }
                 });
@@ -52,9 +52,25 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
                     @Override
                     public void accept(TopicComment topicComment) throws Exception {
                         adapter.addComments(topicComment);
+                        maxCommentPage = topicComment.getMaxPage();
                         view.loading(false);
                     }
                 });
+    }
+
+    @Override
+    public void loadMoreComment() {
+        if (comment_page < maxCommentPage) {
+            comment_page++;
+            loadComment();
+        }
+    }
+
+    @Override
+    public void refresh() {
+        comment_page = 1;
+        adapter.clearComments();
+        loadTopic();
     }
 
 }

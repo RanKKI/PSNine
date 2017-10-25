@@ -23,6 +23,18 @@ public class Topic {
     @Pick(value = "div.main > div.box > div.pd10 > div.meta", attr = Attrs.OWN_TEXT)
     private String comments;
 
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", content='" + content + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", time='" + time + '\'' +
+                ", comments='" + comments + '\'' +
+                '}';
+    }
+
     public String getTitle() {
         return title;
     }

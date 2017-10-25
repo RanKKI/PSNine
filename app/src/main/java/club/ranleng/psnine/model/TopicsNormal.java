@@ -24,7 +24,7 @@ public class TopicsNormal {
         @Pick(value = "div.ml64 > div.meta", attr = Attrs.OWN_TEXT)
         private String time;
         @Pick(value = "a.rep.r")
-        private String reply;
+        private String reply = "0";
         @Pick(value = "div.ml64 > div.title > a")
         private String content;
         @Pick(value = "div.ml64 > div.title > a", attr = Attrs.HREF)

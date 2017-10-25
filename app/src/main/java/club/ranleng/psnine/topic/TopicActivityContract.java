@@ -24,5 +24,9 @@ public interface TopicActivityContract {
 
         void loadComment();
 
+        void loadMoreComment();
+
+        void refresh();
+
     }
 }
