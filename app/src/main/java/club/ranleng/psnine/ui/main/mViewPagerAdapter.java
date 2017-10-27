@@ -1,4 +1,4 @@
-package club.ranleng.psnine.main;
+package club.ranleng.psnine.ui.main;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,14 +9,16 @@ import java.util.List;
 
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
-import club.ranleng.psnine.topics.TopicsFragment;
+import club.ranleng.psnine.ui.topics.TopicsFragment;
 
 public class mViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments = new ArrayList<>(); //切換頁面的Fragments
     private List<Integer> fragments_types = new ArrayList<Integer>() {{
+        add(Key.GENE);
         add(Key.TOPIC);
         add(Key.OPENBOX);
+        add(Key.QA);
         add(Key.GUIDE);
         add(Key.PLUS);
     }};

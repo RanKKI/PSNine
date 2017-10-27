@@ -1,4 +1,4 @@
-package club.ranleng.psnine.topic;
+package club.ranleng.psnine.ui.topic;
 
 import android.content.Context;
 
@@ -16,6 +16,8 @@ public interface TopicActivityContract {
         Context getContext();
 
         String getURL();
+
+        void setSubtitle(String subtitle);
     }
 
     interface Presenter extends BasePresenter {

@@ -1,6 +1,7 @@
-package club.ranleng.psnine.topics;
+package club.ranleng.psnine.ui.topics;
 
 import android.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 
 import club.ranleng.psnine.base.BasePresenter;
 import club.ranleng.psnine.base.BaseView;
@@ -9,7 +10,7 @@ public interface TopicsFragmentContract {
 
     interface View extends BaseView<Presenter>{
 
-        void setupList(TopicsListAdapter adapter);
+        void setupList(RecyclerView.Adapter adapter);
 
         void loading(boolean loading);
 

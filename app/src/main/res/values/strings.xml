@@ -14,12 +14,36 @@
     <string name="http_code_not_found">404 Not Found</string>
     <string name="http_code_method_not_allowed">405 Method Not Allowed</string>
     <string name="http_code_not_acceptable">406 Not Acceptable</string>
-
     <string name="http_code_internal_server_error">500 Internal Server Error</string>
     <string name="http_code_not_implemented">501 Not Implemented</string>
     <string name="http_code_bad_gateway">502 Bad Gateway</string>
     <string name="http_code_service_unavailable">503 Service Unavailable</string>
     <string name="http_code_gateway_timeout">504 Gateway Timeout</string>
-
     <string name="http_code_unknown_error">Unknown Error Code</string>
+
+    <string name="username_hint">Username ( PSN ID )</string>
+    <string name="password_hint">Password</string>
+
+    <string name="nav_personal_header">个人</string>
+    <string name="nav_index">主页</string>
+    <string name="nav_login">登陆</string>
+    <string name="nav_logout">登出</string>
+    <string name="nav_personal">个人中心</string>
+    <string name="nav_notice">短消息</string>
+    <string name="nav_photo">图库</string>
+    <string name="nav_element">元素</string>
+    <string name="nav_fav">收藏</string>
+    <string name="nav_more_header">更多</string>
+    <string name="nav_setting">设置</string>
+    <string name="nav_about">关于</string>
+    <string name="nav_cache">缓存</string>
+
+    <string name="error">Error</string>
+
+    <string name="ask_to_logout">确定要登出么?</string>
+    <string name="ask_to_clean_cache">确定要清理缓存么?</string>
+    <string name="ask_to_clean_cache_message">清理缓存可以获得更多的储存空间, 但下次加载时消耗的流量更多.</string>
+
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
 </resources>

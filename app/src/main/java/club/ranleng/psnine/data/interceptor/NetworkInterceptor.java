@@ -18,7 +18,7 @@ public class NetworkInterceptor implements Interceptor {
             ToastUtils.showShort(parseErrorCode(code));
             return new Response.Builder().request(chain.request())
                     .protocol(chain.connection().protocol())
-                    .code(200)
+                    .code(211)
                     .body(response.body()).build();
         }
         return response;

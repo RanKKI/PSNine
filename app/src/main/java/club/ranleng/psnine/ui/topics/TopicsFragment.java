@@ -1,4 +1,4 @@
-package club.ranleng.psnine.topics;
+package club.ranleng.psnine.ui.topics;
 
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseFragment;
+import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.model.TopicsGene;
+import club.ranleng.psnine.model.TopicsNormal;
+import club.ranleng.psnine.model.TopicsQA;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
 public class TopicsFragment extends BaseFragment implements TopicsFragmentContract.View {
@@ -36,13 +41,19 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     public View initView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.recycler_view_with_swipe_refreash, container, false);
         ButterKnife.bind(this, view);
-        new TopicsFragmentPresenter(this);
         return view;
     }
 
     @Override
     public void initData() {
         type = getArguments().getInt("type");
+        if (type == Key.GENE) {
+            new TopicsFragmentPresenter<>(this, TopicsGene.class);
+        } else if (type == Key.QA) {
+            new TopicsFragmentPresenter<>(this, TopicsQA.class);
+        } else {
+            new TopicsFragmentPresenter<>(this, TopicsNormal.class);
+        }
         presenter.start();
     }
 
@@ -52,7 +63,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     }
 
     @Override
-    public void setupList(TopicsListAdapter adapter) {
+    public void setupList(RecyclerView.Adapter adapter) {
         recyclerView.setAutoLoadListener(this);
         recyclerView.setOnLoadMore(new SmartRecyclerView.onLoadMoreListener() {
             @Override

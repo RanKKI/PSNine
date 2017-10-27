@@ -1,5 +1,6 @@
 package club.ranleng.psnine.data.remote;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
@@ -12,16 +13,22 @@ import java.util.concurrent.TimeUnit;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
+import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.interceptor.NetworkInterceptor;
 import club.ranleng.psnine.data.interceptor.RequestInterceptor;
+import club.ranleng.psnine.data.module.Callback;
+import club.ranleng.psnine.model.HttpRequest;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.model.TopicsNormal;
+import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import me.ghui.fruit.Fruit;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -33,7 +40,7 @@ public class ApiManager {
 
     private static volatile ApiManager defaultInstance;
 
-    public ApiManager() {
+    private ApiManager() {
         cookieJar = new PersistentCookieJar(new SetCookieCache(),
                 new SharedPrefsCookiePersistor(Utils.getApp()));
 
@@ -66,6 +73,19 @@ public class ApiManager {
         return defaultInstance;
     }
 
+    public ApiService getApiService(){
+        return apiService;
+    }
+
+    public void logout() {
+        cookieJar.clear();
+        cookieJar.clearSession();
+        UserState.setLogin(false);
+        UserState.setUserInfo(null);
+        RxBus.getDefault().send(new UserInfo());
+    }
+
+
     public Observable<TopicsNormal> getTopics(int type, int page) {
         Observable<ResponseBody> observable;
         if (type == Key.GENE || type == Key.QA) {
@@ -76,13 +96,17 @@ public class ApiManager {
         } else {
             observable = apiService.getTopicsWithNode(KeyGetter.getKEY(type), page);
         }
+
         return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, TopicsNormal>() {
                     @Override
                     public TopicsNormal apply(ResponseBody responseBody) throws Exception {
-                        TopicsNormal topicsNormal = new Fruit().fromHtml(responseBody.string(), TopicsNormal.class);
+                        String result = responseBody.string();
                         responseBody.close();
-                        return topicsNormal;
+                        if (!UserState.isLogin()) {
+                            RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        }
+                        return new Fruit().fromHtml(result, TopicsNormal.class);
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
     }
@@ -111,5 +135,39 @@ public class ApiManager {
                         return comment;
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void Login(final Callback callback, String username, String password) {
+        FormBody body = new FormBody.Builder()
+                .add("psnid", username)
+                .add("pass", password)
+                .add("jump", "http://psnine.com/")
+                .build();
+        apiService.Login(body)
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, HttpRequest>() {
+                    @Override
+                    public HttpRequest apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        int code = 211;
+                        if (result.equals("success")) {
+                            code = 200;
+                        }
+                        return new HttpRequest(result, code);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<HttpRequest>() {
+                    @Override
+                    public void accept(HttpRequest httpRequest) throws Exception {
+                        if (httpRequest.getCode() == 200) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onFailure();
+                            ToastUtils.showShort(httpRequest.getMessage());
+                        }
+                    }
+                });
     }
 }

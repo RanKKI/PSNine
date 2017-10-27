@@ -2,35 +2,78 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:id="@+id/nav_index"
+            android:checked="true"
+            android:icon="@drawable/index"
+            android:title="@string/nav_index"/>
+
     </group>
 
-    <item android:title="Communicate">
+    <group
+        android:id="@+id/user_root"
+        android:visible="false">
+
+        <item
+            android:id="@+id/nav_personal"
+            android:icon="@drawable/personal"
+            android:title="@string/nav_personal"/>
+
+        <item
+            android:id="@+id/nav_notice"
+            android:icon="@drawable/notice"
+            android:title="@string/nav_notice"/>
+
+        <!--<item-->
+        <!--android:id="@+id/nav_photo"-->
+        <!--android:icon="@drawable/image"-->
+        <!--android:title="@string/nav_photo"/>-->
+        <!--<item-->
+        <!--android:id="@+id/nav_element"-->
+        <!--android:icon="@drawable/element"-->
+        <!--android:title="@string/nav_element"/>-->
+        <!--<item-->
+        <!--android:id="@+id/nav_fav"-->
+        <!--android:checkable="false"-->
+        <!--android:icon="@drawable/fav"-->
+        <!--android:title="@string/nav_fav"/>-->
+    </group>
+
+    <item android:title="@string/nav_more_header">
         <menu>
+
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
+                android:id="@+id/nav_login"
+                android:icon="@drawable/login"
+                android:title="@string/nav_login"/>
+
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/login"
+                android:title="@string/nav_logout"
+                android:visible="false"/>
+
+            <item
+                android:id="@+id/nav_cache"
+                android:icon="@drawable/cache"
+                android:title="@string/nav_cache"/>
+
         </menu>
     </item>
+
+    <group>
+
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/setting"
+            android:title="@string/nav_setting"/>
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/about"
+            android:title="@string/nav_about"/>
+
+    </group>
 
 </menu>

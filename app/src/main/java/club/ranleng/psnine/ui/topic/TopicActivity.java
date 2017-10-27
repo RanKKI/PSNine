@@ -1,19 +1,14 @@
-package club.ranleng.psnine.topic;
+package club.ranleng.psnine.ui.topic;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-
-import com.blankj.utilcode.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.view.SmartRecyclerView;
@@ -96,5 +91,12 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     @Override
     public String getURL() {
         return url;
+    }
+
+    @Override
+    public void setSubtitle(String subtitle) {
+        if(toolbar.getSubtitle() == null){
+            toolbar.setSubtitle(subtitle);
+        }
     }
 }

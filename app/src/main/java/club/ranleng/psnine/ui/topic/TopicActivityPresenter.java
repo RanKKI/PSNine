@@ -1,4 +1,4 @@
-package club.ranleng.psnine.topic;
+package club.ranleng.psnine.ui.topic;
 
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.Topic;
@@ -39,6 +39,7 @@ public class TopicActivityPresenter implements TopicActivityContract.Presenter {
                     @Override
                     public void accept(Topic topic) throws Exception {
                         adapter.setHeaderView(topic);
+                        view.setSubtitle(topic.getContent());
                         loadComment();
                     }
                 });

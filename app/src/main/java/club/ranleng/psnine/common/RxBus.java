@@ -1,6 +1,7 @@
 package club.ranleng.psnine.common;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.PublishSubject;
 
 public class RxBus {
@@ -23,7 +24,7 @@ public class RxBus {
     }
 
     public  <T> Observable<T> toObservable(Class<T> eventType) {
-        return bus.ofType(eventType);
+        return bus.ofType(eventType).observeOn(AndroidSchedulers.mainThread());
     }
 
     public boolean hasObservers() {

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.topic;
+package club.ranleng.psnine.ui.topic;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import org.sufficientlysecure.htmltextview.UrlClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import club.ranleng.psnine.ImageViewActivity;
+import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;

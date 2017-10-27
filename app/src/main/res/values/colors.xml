@@ -21,4 +21,6 @@
     <color name="logo_blue">#4F91FC</color>
     <color name="colorDivider">#bfbfbf</color>
 
+    <color name="colorIcon">#2c2c2c</color>
+
 </resources>
