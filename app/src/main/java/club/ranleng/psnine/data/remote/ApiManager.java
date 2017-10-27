@@ -6,11 +6,9 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
@@ -18,9 +16,7 @@ import club.ranleng.psnine.data.interceptor.NetworkInterceptor;
 import club.ranleng.psnine.data.interceptor.RequestInterceptor;
 import club.ranleng.psnine.data.module.Callback;
 import club.ranleng.psnine.model.HttpRequest;
-import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicComment;
-import club.ranleng.psnine.model.TopicsNormal;
 import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,6 +28,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class ApiManager {
 
@@ -73,7 +70,7 @@ public class ApiManager {
         return defaultInstance;
     }
 
-    public ApiService getApiService(){
+    public ApiService getApiService() {
         return apiService;
     }
 
@@ -85,47 +82,8 @@ public class ApiManager {
         RxBus.getDefault().send(new UserInfo());
     }
 
-
-    public Observable<TopicsNormal> getTopics(int type, int page) {
-        Observable<ResponseBody> observable;
-        if (type == Key.GENE || type == Key.QA) {
-            throw new IllegalArgumentException("not support Gene and QA for now");
-        }
-        if (type == Key.TOPIC) {
-            observable = apiService.getTopics(KeyGetter.getKEY(type), page);
-        } else {
-            observable = apiService.getTopicsWithNode(KeyGetter.getKEY(type), page);
-        }
-
-        return observable.subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, TopicsNormal>() {
-                    @Override
-                    public TopicsNormal apply(ResponseBody responseBody) throws Exception {
-                        String result = responseBody.string();
-                        responseBody.close();
-                        if (!UserState.isLogin()) {
-                            RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
-                        }
-                        return new Fruit().fromHtml(result, TopicsNormal.class);
-                    }
-                }).observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Observable<Topic> getTopic(String id) {
-        return apiService.getTopic(id)
-                .subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, Topic>() {
-                    @Override
-                    public Topic apply(ResponseBody responseBody) throws Exception {
-                        Topic topic = new Fruit().fromHtml(responseBody.string(), Topic.class);
-                        responseBody.close();
-                        return topic;
-                    }
-                }).observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Observable<TopicComment> getTopicComment(String id, int page) {
-        return apiService.getTopicComment(id, page)
+    public Observable<TopicComment> getTopicComment(int type, String id, int page) {
+        return apiService.getTopicComment(KeyGetter.getPath(type), id, page)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, TopicComment>() {
                     @Override

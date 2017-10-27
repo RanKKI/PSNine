@@ -29,7 +29,7 @@ public class TopicsQA extends BaseTopics<TopicsQA.Items> {
         private String reply = "";
         @Pick(value = "div.ml64 > p.title > a")
         private String content;
-        @Pick(value = "div.ml64 > div.title > a", attr = Attrs.HREF)
+        @Pick(value = "div.ml64 > p.title > a", attr = Attrs.HREF)
         private String url;
 
         @Override

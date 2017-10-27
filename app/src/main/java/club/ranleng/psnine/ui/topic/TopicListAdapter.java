@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -18,10 +19,10 @@ import org.sufficientlysecure.htmltextview.UrlClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.model.Topic;
+import club.ranleng.psnine.base.BaseTopic;
 import club.ranleng.psnine.model.TopicComment;
+import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.utils.html.HtmlImageGetter;
 
 public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.ViewHolder> {
@@ -29,7 +30,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
     private static final int HeaderView = 1;
     private LayoutInflater layoutInflater;
     private List<TopicComment.Comment> comments = new ArrayList<>();
-    private Topic topic;
+    private BaseTopic baseTopic;
     private Context context;
     private UrlClick urlClick;
 
@@ -39,8 +40,8 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         urlClick = new UrlClick();
     }
 
-    void setHeaderView(Topic topic) {
-        this.topic = topic;
+    void setHeaderView(BaseTopic baseTopic) {
+        this.baseTopic = baseTopic;
         notifyItemChanged(0);
     }
 
@@ -68,7 +69,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position == 0 && holder instanceof HeaderViewHolder) {
+        if (position == 0) {
             ((HeaderViewHolder) holder).bind();
             return;
         }
@@ -79,7 +80,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     @Override
     public int getItemCount() {
-        if (topic == null) {
+        if (baseTopic == null) {
             return 0;
         }
         return comments == null ? 1 : comments.size() + 1;
@@ -140,16 +141,16 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         void bind() {
             content.setUrlClickListener(urlClick);
             String con;
-            if (topic.getTitle() != null) {
-                con = "<p>" + topic.getTitle() + "</p><br>" + topic.getContent();
+            if (baseTopic.getTitle() != null) {
+                con = "<p>" + baseTopic.getTitle() + "</p><br>" + baseTopic.getContent();
             } else {
-                con = topic.getContent();
+                con = baseTopic.getContent();
             }
             content.setHtml(con, new HtmlImageGetter(context, content));
-            username.setText(topic.getAuthor());
-            time.setText(topic.getTime());
-            replies.setText(topic.getComments());
-            Glide.with(context).load(topic.getAvatar()).into(icon);
+            username.setText(baseTopic.getAuthor());
+            time.setText(baseTopic.getTime());
+            replies.setText(baseTopic.getComments());
+            Glide.with(context).load(baseTopic.getAvatar()).into(icon);
         }
     }
 

@@ -2,7 +2,6 @@ package club.ranleng.psnine.data.remote;
 
 import io.reactivex.Observable;
 import okhttp3.FormBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,11 +17,11 @@ public interface ApiService {
     @GET("node/{type}")
     Observable<ResponseBody> getTopicsWithNode(@Path("type") String type, @Query("page") int page);
 
-    @GET("topic/{id}")
-    Observable<ResponseBody> getTopic(@Path("id") String id);
+    @GET("{type}/{id}")
+    Observable<ResponseBody> getTopic(@Path("type") String type, @Path("id") String id);
 
-    @GET("topic/{id}/comment")
-    Observable<ResponseBody> getTopicComment(@Path("id") String id, @Query("page") int page);
+    @GET("{type}/{id}/comment")
+    Observable<ResponseBody> getTopicComment(@Path("type") String type, @Path("id") String id, @Query("page") int page);
 
     @POST("sign/signin/ajax")
     Observable<ResponseBody> Login(@Body FormBody body);

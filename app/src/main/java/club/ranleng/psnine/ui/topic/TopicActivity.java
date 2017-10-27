@@ -7,10 +7,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.model.Topic;
+import club.ranleng.psnine.model.TopicGene;
+import club.ranleng.psnine.model.TopicQA;
+import club.ranleng.psnine.utils.ParseUrl;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
 public class TopicActivity extends BaseActivity implements TopicActivityContract.View {
@@ -21,6 +28,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     private TopicActivityContract.Presenter presenter;
     private String url;
+    private int type;
 
     @Override
     public void setContentView() {
@@ -32,14 +40,25 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setTitle("主题");
-        new TopicActivityPresenter(this);
+        url = getIntent().getStringExtra("url");
+        type = ParseUrl.getType(url);
+        String title = getIntent().getStringExtra("content");
+        if (title != null) toolbar.setSubtitle(title);
     }
 
     @Override
     public void getData() {
-        url = getIntent().getStringExtra("url");
-        String title = getIntent().getStringExtra("content");
-        if(title != null) toolbar.setSubtitle(title);
+        if(type == Key.GENE){
+            new TopicActivityPresenter<>(this, TopicGene.class);
+        }else if(type == Key.QA){
+            //TODO
+            ToastUtils.showShort("暂不支持查看问与答.");
+            finish();
+            return;
+//            new TopicActivityPresenter<>(this, TopicQA.class);
+        }else {
+            new TopicActivityPresenter<>(this, Topic.class);
+        }
         presenter.start();
     }
 
@@ -94,8 +113,13 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     }
 
     @Override
+    public int getType() {
+        return type;
+    }
+
+    @Override
     public void setSubtitle(String subtitle) {
-        if(toolbar.getSubtitle() == null){
+        if (toolbar.getSubtitle() == null) {
             toolbar.setSubtitle(subtitle);
         }
     }

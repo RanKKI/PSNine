@@ -1,7 +1,7 @@
 package club.ranleng.psnine.ui.topics;
 
 import club.ranleng.psnine.base.BaseTopics;
-import club.ranleng.psnine.data.remote.getTopics;
+import club.ranleng.psnine.data.remote.ApiTopic;
 import io.reactivex.functions.Consumer;
 
 public class TopicsFragmentPresenter<T> implements TopicsFragmentContract.Presenter {
@@ -28,7 +28,7 @@ public class TopicsFragmentPresenter<T> implements TopicsFragmentContract.Presen
     @Override
     public void load() {
         view.loading(true);
-        new getTopics<T>().getTopics(view.getType(), page, tClass)
+        new ApiTopic<T>().getTopics(view.getType(), page, tClass)
                 .subscribe(new Consumer<T>() {
                     @Override
                     public void accept(T t) throws Exception {

@@ -13,7 +13,12 @@ Unofficial native android application for PSNine
 ### Third party
 
  - [HtmlTextView](https://github.com/PrivacyApps/html-textview)
-
+ - [Glide](https://github.com/bumptech/glide)
+ - [Fruit](https://github.com/ghuiii/Fruit)
+ - [AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
+ - [RxJava](https://github.com/ReactiveX/RxJava)
+ - [Retrofit](https://github.com/square/retrofit)
+ 
 License
 -------
 

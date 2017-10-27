@@ -12,7 +12,20 @@ import io.reactivex.schedulers.Schedulers;
 import me.ghui.fruit.Fruit;
 import okhttp3.ResponseBody;
 
-public class getTopics<T> {
+public class ApiTopic<T> {
+
+    public Observable<T> getTopic(int type, String id, final Class<T> tClass) {
+        return ApiManager.getDefault().getApiService().getTopic(KeyGetter.getPath(type), id)
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, T>() {
+                    @Override
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return new Fruit().fromHtml(result, tClass);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
+    }
 
     public Observable<T> getTopics(int type, int page, final Class<T> tClass) {
         Observable<ResponseBody> observable;
@@ -21,7 +34,6 @@ public class getTopics<T> {
         } else {
             observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page);
         }
-
         return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {
                     @Override

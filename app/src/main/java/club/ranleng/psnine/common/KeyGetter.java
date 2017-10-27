@@ -37,4 +37,12 @@ public class KeyGetter {
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
     }
+
+    public static String getPath(int key) {
+        if (key == Key.GENE || key == Key.QA) {
+            return getKEY(key);
+        } else {
+            return getKEY(Key.TOPIC);
+        }
+    }
 }

@@ -1,19 +1,15 @@
 package club.ranleng.psnine.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import club.ranleng.psnine.base.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
-public class Topic {
+public class Topic extends BaseTopic {
 
     @Pick(value = "div.main > div.box > div.pd10 > h1")
     private String title;
     @Pick(value = "div.main > div.box > div.pd10 > div > a.psnnode")
     private String author;
-    @Pick(value = "div.page > ul > li")
-    private List<Page> pages = new ArrayList<>();
     @Pick(value = "div.content.pd10", attr = Attrs.INNER_HTML)
     private String content;
     @Pick(value = "div.side > div.box > p > a >img", attr = Attrs.SRC)
@@ -23,9 +19,12 @@ public class Topic {
     @Pick(value = "div.main > div.box > div.pd10 > div.meta", attr = Attrs.OWN_TEXT)
     private String comments;
 
+    //    @Pick(value = "div.page > ul > li")
+//    private List<Page> pages = new ArrayList<>();
+
     @Override
     public String toString() {
-        return "Topic{" +
+        return "ApiTopic{" +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", content='" + content + '\'' +
@@ -35,41 +34,49 @@ public class Topic {
                 '}';
     }
 
-    public String getTitle() {
+    @Override
+    public String title() {
         return title;
     }
 
-    public String getAuthor() {
+    @Override
+    public String author() {
         return author;
     }
 
-    public List<Page> getPages() {
-        return pages;
-    }
-
-    public String getContent() {
+    @Override
+    public String content() {
         return content;
     }
 
-    public String getAvatar() {
+    @Override
+    public String avatar() {
         return avatar;
     }
 
-    public String getTime() {
+    @Override
+    public String time() {
         return time;
     }
 
-    public String getComments() {
+    @Override
+    public String comments() {
         return comments;
     }
 
-    public static class Page {
 
-        @Pick("a")
-        private String title;
+//    public List<Page> getPages() {
+//        return pages;
+//    }
+//
+//    public static class Page {
+//
+//        @Pick("a")
+//        private String title;
+//
+//        public String getTitle() {
+//            return title;
+//        }
+//    }
 
-        public String getTitle() {
-            return title;
-        }
-    }
 }

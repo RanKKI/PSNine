@@ -7,7 +7,7 @@ import club.ranleng.psnine.base.BaseTopics;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
-public class TopicsNormal extends BaseTopics<TopicsNormal.Items> {
+public class Topics extends BaseTopics<Topics.Items> {
 
     @Pick(value = "ul.list > li")
     private List<Items> Items = new ArrayList<>();

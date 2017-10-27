@@ -17,6 +17,8 @@ public interface TopicActivityContract {
 
         String getURL();
 
+        int getType();
+
         void setSubtitle(String subtitle);
     }
 

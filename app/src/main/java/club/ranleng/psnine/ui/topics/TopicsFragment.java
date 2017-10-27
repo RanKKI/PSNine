@@ -17,7 +17,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.model.TopicsGene;
-import club.ranleng.psnine.model.TopicsNormal;
+import club.ranleng.psnine.model.Topics;
 import club.ranleng.psnine.model.TopicsQA;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
@@ -52,7 +52,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
         } else if (type == Key.QA) {
             new TopicsFragmentPresenter<>(this, TopicsQA.class);
         } else {
-            new TopicsFragmentPresenter<>(this, TopicsNormal.class);
+            new TopicsFragmentPresenter<>(this, Topics.class);
         }
         presenter.start();
     }
