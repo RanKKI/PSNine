@@ -38,7 +38,10 @@
     <string name="nav_about">关于</string>
     <string name="nav_cache">缓存</string>
 
+    <string name="option">Option</string>
+
     <string name="error">Error</string>
+    <string name="permissionDenied">权限申请被拒绝</string>
 
     <string name="ask_to_logout">确定要登出么?</string>
     <string name="ask_to_clean_cache">确定要清理缓存么?</string>

@@ -2,6 +2,7 @@ package club.ranleng.psnine.common;
 
 public class Key {
 
+    //about type of topic
     public static final int TOPIC = 1448;
     public static final int GENE = 1449;
     public static final int PLUS = 1450;
@@ -10,4 +11,7 @@ public class Key {
     public static final int NOTICE = 1453;
     public static final int QA = 1454;
 
+
+    //about permission
+    public static int REQUEST_PERMISSION = 2450;
 }

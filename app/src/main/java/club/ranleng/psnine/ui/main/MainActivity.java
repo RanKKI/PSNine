@@ -3,6 +3,7 @@ package club.ranleng.psnine.ui.main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity
                     UserState.setUserInfo(userInfo);
                     Glide.with(context).load(userInfo.getAvatar()).into(nav_avatar);
                     nav_username.setText(userInfo.getUsername());
-                    if(!userInfo.getSign()){
+                    if (!userInfo.getSign()) {
                         ApiManager.getDefault().Signin();
                     }
                 }
