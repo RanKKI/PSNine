@@ -28,9 +28,10 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
-import club.ranleng.psnine.ui.LoginActivity;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.UserInfo;
+import club.ranleng.psnine.ui.LoginActivity;
+import club.ranleng.psnine.ui.topic.TopicActivity;
 import club.ranleng.psnine.utils.CacheUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -80,24 +81,24 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
         refreshCache();
         //注册RxBus.
-        userInfo = RxBus.getDefault()
-                .toObservable(UserInfo.class)
-                .subscribe(new Consumer<UserInfo>() {
-                    @Override
-                    public void accept(UserInfo userInfo) throws Exception {
-                        LogUtils.d("login state check");
-                        if (userInfo.getUsername() != null && !UserState.isLogin()) {
-                            UserState.setLogin(true);
-                            UserState.setUserInfo(userInfo);
-                            Glide.with(context).load(userInfo.getAvatar()).into(nav_avatar);
-                            nav_username.setText(userInfo.getUsername());
-                        }
-                        Menu menu = navigationView.getMenu();
-                        menu.setGroupVisible(R.id.user_root, UserState.isLogin());
-                        menu.findItem(R.id.nav_login).setVisible(!UserState.isLogin());
-                        menu.findItem(R.id.nav_logout).setVisible(UserState.isLogin());
+        userInfo = RxBus.getDefault().toObservable(UserInfo.class).subscribe(new Consumer<UserInfo>() {
+            @Override
+            public void accept(UserInfo userInfo) throws Exception {
+                if (userInfo.getUsername() != null && !UserState.isLogin()) {
+                    UserState.setLogin(true);
+                    UserState.setUserInfo(userInfo);
+                    Glide.with(context).load(userInfo.getAvatar()).into(nav_avatar);
+                    nav_username.setText(userInfo.getUsername());
+                    if(!userInfo.getSign()){
+                        ApiManager.getDefault().Signin();
                     }
-                });
+                }
+                Menu menu = navigationView.getMenu();
+                menu.setGroupVisible(R.id.user_root, UserState.isLogin());
+                menu.findItem(R.id.nav_login).setVisible(!UserState.isLogin());
+                menu.findItem(R.id.nav_logout).setVisible(UserState.isLogin());
+            }
+        });
     }
 
     @Override
@@ -142,6 +143,10 @@ public class MainActivity extends AppCompatActivity
                         }
                     })
                     .setNegativeButton(R.string.cancel, null).create().show();
+        } else if (id == R.id.nav_setting) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url", "http://psnine.com/topic/7552");
+            ActivityUtils.startActivity(bundle, TopicActivity.class);
         }
         return true;
     }

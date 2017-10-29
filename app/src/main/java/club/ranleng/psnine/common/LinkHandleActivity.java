@@ -16,9 +16,10 @@ public class LinkHandleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         Uri data = intent.getData();
-        if(data != null){
+        if (data != null) {
             String fullUrl = data.toString();
-            if(fullUrl.startsWith("http://psnine.com/topic/")){
+            String path = fullUrl.replace("http://psnine.com/", "");
+            if (path.startsWith("topic") || path.startsWith("gene") || path.startsWith("qa")) {
                 Bundle bundle = new Bundle();
                 bundle.putString("url", fullUrl);
                 ActivityUtils.startActivity(bundle, TopicActivity.class);

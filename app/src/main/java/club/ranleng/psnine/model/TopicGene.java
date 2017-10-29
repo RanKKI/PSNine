@@ -6,11 +6,11 @@ import me.ghui.fruit.annotations.Pick;
 
 public class TopicGene extends BaseTopic {
 
-    @Pick(value = "div.main > div.box > div.pd10 > h1")
+    @Pick(value = "div.main > div.box:not(.mt20):not(.oh) > div.pd10 > div.content.pb10", attr = Attrs.INNER_HTML)
     private String title;
     @Pick(value = "a.title2")
     private String author;
-    @Pick(value = "div.main > div.box:not(.mt20):not(.oh) > div.pd10 > div.content.pb10", attr = Attrs.INNER_HTML)
+    @Pick(value = "div.pd10.content", attr = Attrs.INNER_HTML)
     private String content;
     @Pick(value = "div.side > div > p > a > img", attr = Attrs.SRC)
     private String avatar;

@@ -20,15 +20,14 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     TopicActivityPresenter(TopicActivityContract.View view, Class<T> tClass) {
         this.view = view;
         this.tClass = tClass;
-        view.setPresenter(this);
+        this.view.setPresenter(this);
     }
 
     @Override
     public void start() {
         adapter = new TopicListAdapter(view.getContext());
         view.setupList(adapter);
-        String url = view.getURL();
-        id = ParseUrl.getID(url);
+        id = ParseUrl.getID(view.getURL());
         loadTopic();
     }
 
@@ -40,7 +39,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
             public void accept(T t) throws Exception {
                 BaseTopic baseTopic = (BaseTopic) t;
                 adapter.setHeaderView(baseTopic);
-                String sub = baseTopic.getContent();
+                String sub = baseTopic.getTitle();
                 view.setSubtitle(sub.length() > 20 ? sub.substring(0, 20) : sub);
                 loadComment();
             }
@@ -63,7 +62,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
 
     @Override
     public void loadMoreComment() {
-        if (comment_page < maxCommentPage) {
+        if (comment_page <= maxCommentPage) {
             comment_page++;
             loadComment();
         }

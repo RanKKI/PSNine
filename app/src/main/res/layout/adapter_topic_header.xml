@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,19 +9,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/header_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/colorCircleBorder"
         app:srcCompat="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:id="@+id/info_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/header_icon"
         android:orientation="horizontal"
-        android:layout_marginLeft="5dp"
         android:weightSum="20">
 
         <TextView

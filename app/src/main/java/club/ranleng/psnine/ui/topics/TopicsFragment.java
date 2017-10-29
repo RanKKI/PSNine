@@ -24,7 +24,7 @@ import club.ranleng.psnine.view.SmartRecyclerView;
 public class TopicsFragment extends BaseFragment implements TopicsFragmentContract.View {
 
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
+    @BindView(R.id.recyclerView) SmartRecyclerView<Fragment> recyclerView;
 
     private TopicsFragmentContract.Presenter presenter;
     private int type;
@@ -64,6 +64,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
 
     @Override
     public void setupList(RecyclerView.Adapter adapter) {
+        recyclerView.setDivider();
         recyclerView.setAutoLoadListener(this);
         recyclerView.setOnLoadMore(new SmartRecyclerView.onLoadMoreListener() {
             @Override
@@ -76,12 +77,6 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
                 return refreshLayout.isRefreshing();
             }
         });
-        Drawable d_divider = getActivity().getDrawable(R.drawable.recyclerview_divider);
-        if (d_divider != null) {
-            DividerItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-            divider.setDrawable(d_divider);
-            recyclerView.addItemDecoration(divider);
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -137,7 +137,7 @@ public class HtmlTagHandler implements Html.TagHandler {
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
         if (urlClickListener != null) {
-            if (tag.toLowerCase(Locale.getDefault()).equals("img")) {
+            if (tag.toLowerCase().equals("img")) {
                 // 获取长度
                 int len = output.length();
                 // 获取图片地址

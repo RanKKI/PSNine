@@ -1,15 +1,20 @@
 package club.ranleng.psnine.view;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.bumptech.glide.Glide;
 
-public class SmartRecyclerView extends RecyclerView {
+import club.ranleng.psnine.R;
+
+public class SmartRecyclerView<T> extends RecyclerView {
 
     private onLoadMoreListener onLoadMoreListener;
 
@@ -25,16 +30,21 @@ public class SmartRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void setAutoLoadListener(Fragment fragment) {
-        addOnScrollListener(new AutoLoadScrollListener(fragment));
-    }
-
-    public void setAutoLoadListener(Context context) {
-        addOnScrollListener(new AutoLoadScrollListenerActi(context));
+    public void setAutoLoadListener(T t) {
+        addOnScrollListener(new ScrollListener<>(t));
     }
 
     public void setOnLoadMore(onLoadMoreListener listener) {
         this.onLoadMoreListener = listener;
+    }
+
+    public void setDivider() {
+        Drawable d_divider = getContext().getDrawable(R.drawable.recyclerview_divider);
+        if (d_divider != null) {
+            DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            divider.setDrawable(d_divider);
+            addItemDecoration(divider);
+        }
     }
 
     public interface onLoadMoreListener {
@@ -43,62 +53,17 @@ public class SmartRecyclerView extends RecyclerView {
         boolean isLoading();
     }
 
-    class AutoLoadScrollListenerActi extends baseScrollListener {
-
-        private Context context;
-
-        AutoLoadScrollListenerActi(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            switch (newState) {
-                case 0:
-                    Glide.with(context).resumeRequests();
-                    break;
-                case 1:
-                    Glide.with(context).pauseRequests();
-                    break;
-                case 2:
-                    Glide.with(context).resumeRequests();
-                    break;
-            }
-        }
-
-    }
-
-    class AutoLoadScrollListener extends baseScrollListener {
+    class ScrollListener<K> extends OnScrollListener {
 
         private Fragment fragment;
+        private Activity activity;
 
-        AutoLoadScrollListener(Fragment fragment) {
-            this.fragment = fragment;
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            switch (newState) {
-                case 0:
-                    Glide.with(fragment).resumeRequests();
-                    break;
-                case 1:
-                    Glide.with(fragment).pauseRequests();
-                    break;
-                case 2:
-                    Glide.with(fragment).resumeRequests();
-                    break;
-
+        ScrollListener(K k) {
+            if (k instanceof Fragment) {
+                fragment = (Fragment) k;
+            } else if (k instanceof Activity) {
+                activity = (Activity) k;
             }
-        }
-    }
-
-    class baseScrollListener extends OnScrollListener {
-
-        baseScrollListener() {
-
         }
 
         @Override
@@ -116,6 +81,18 @@ public class SmartRecyclerView extends RecyclerView {
                 if (lastVisibleItem >= totalItemCount - 2 && dy > 0) {
                     onLoadMoreListener.loadMore();
                 }
+            }
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_SETTLING) {
+                if (activity != null) Glide.with(activity).resumeRequests();
+                if (fragment != null) Glide.with(fragment).resumeRequests();
+            } else if (newState == SCROLL_STATE_DRAGGING) {
+                if (activity != null) Glide.with(activity).pauseRequests();
+                if (fragment != null) Glide.with(fragment).pauseRequests();
             }
         }
     }

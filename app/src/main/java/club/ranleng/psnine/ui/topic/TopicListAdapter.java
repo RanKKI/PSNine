@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -23,7 +22,8 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseTopic;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.ui.ImageViewActivity;
-import club.ranleng.psnine.utils.html.HtmlImageGetter;
+import club.ranleng.psnine.utils.HtmlImageGetter;
+import club.ranleng.psnine.utils.ParseHtml;
 
 public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.ViewHolder> {
 
@@ -69,8 +69,8 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position == 0) {
-            ((HeaderViewHolder) holder).bind();
+        if (holder instanceof HeaderViewHolder && position == 0) {
+            ((HeaderViewHolder) holder).bindHeader();
             return;
         }
         if (holder != null) {
@@ -111,14 +111,12 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
         void bind(int position) {
             TopicComment.Comment comment = comments.get(position);
+            content.setUrlClickListener(urlClick);
             time.setText(comment.getTime());
             username.setText(comment.getUsername());
-            content.setHtml(comment.getContent(), new HtmlImageGetter(context, content));
-            content.setUrlClickListener(urlClick);
+            content.setHtml(ParseHtml.parse(comment.getContent()), new HtmlImageGetter(context, content));
             Glide.with(context).load(comment.getAvatar()).into(avatar);
-
         }
-
     }
 
     class HeaderViewHolder extends ViewHolder {
@@ -138,7 +136,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             icon = itemView.findViewById(R.id.header_icon);
         }
 
-        void bind() {
+        void bindHeader() {
             content.setUrlClickListener(urlClick);
             String con;
             if (baseTopic.getTitle() != null) {
@@ -146,7 +144,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             } else {
                 con = baseTopic.getContent();
             }
-            content.setHtml(con, new HtmlImageGetter(context, content));
+            content.setHtml(ParseHtml.parse(con), new HtmlImageGetter(context, content));
             username.setText(baseTopic.getAuthor());
             time.setText(baseTopic.getTime());
             replies.setText(baseTopic.getComments());

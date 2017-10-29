@@ -25,4 +25,7 @@ public interface ApiService {
 
     @POST("sign/signin/ajax")
     Observable<ResponseBody> Login(@Body FormBody body);
+
+    @GET("set/qidao/ajax")
+    Observable<ResponseBody> Signin();
 }

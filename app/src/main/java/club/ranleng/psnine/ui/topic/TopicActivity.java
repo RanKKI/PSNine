@@ -1,9 +1,8 @@
 package club.ranleng.psnine.ui.topic;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 
@@ -16,7 +15,6 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicGene;
-import club.ranleng.psnine.model.TopicQA;
 import club.ranleng.psnine.utils.ParseUrl;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
@@ -24,7 +22,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
+    @BindView(R.id.recyclerView) SmartRecyclerView<Activity> recyclerView;
 
     private TopicActivityContract.Presenter presenter;
     private String url;
@@ -48,15 +46,15 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public void getData() {
-        if(type == Key.GENE){
+        if (type == Key.GENE) {
             new TopicActivityPresenter<>(this, TopicGene.class);
-        }else if(type == Key.QA){
+        } else if (type == Key.QA) {
             //TODO
             ToastUtils.showShort("暂不支持查看问与答.");
             finish();
             return;
 //            new TopicActivityPresenter<>(this, TopicQA.class);
-        }else {
+        } else {
             new TopicActivityPresenter<>(this, Topic.class);
         }
         presenter.start();
@@ -69,12 +67,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public void setupList(TopicListAdapter adapter) {
-        Drawable d_divider = getDrawable(R.drawable.recyclerview_divider);
-        if (d_divider != null) {
-            DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-            divider.setDrawable(d_divider);
-            recyclerView.addItemDecoration(divider);
-        }
+        recyclerView.setDivider();
         recyclerView.setAutoLoadListener(this);
         recyclerView.setOnLoadMore(new SmartRecyclerView.onLoadMoreListener() {
             @Override
@@ -113,14 +106,14 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     }
 
     @Override
-    public int getType() {
-        return type;
-    }
-
-    @Override
     public void setSubtitle(String subtitle) {
         if (toolbar.getSubtitle() == null) {
             toolbar.setSubtitle(subtitle);
         }
+    }
+
+    @Override
+    public int getType() {
+        return type;
     }
 }

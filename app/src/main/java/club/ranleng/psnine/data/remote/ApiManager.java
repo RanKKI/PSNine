@@ -128,4 +128,16 @@ public class ApiManager {
                     }
                 });
     }
+
+    public void Signin(){
+        apiService.Signin()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        ToastUtils.showShort("签到成功");
+                    }
+                });
+    }
 }
