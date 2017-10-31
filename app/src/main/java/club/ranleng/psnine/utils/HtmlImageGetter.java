@@ -73,7 +73,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
         return urlDrawable;
     }
 
-
+    @SuppressWarnings("deprecation")
     private class URLDrawable extends BitmapDrawable {
 
         Bitmap bitmap;

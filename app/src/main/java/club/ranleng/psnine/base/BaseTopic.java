@@ -3,10 +3,15 @@ package club.ranleng.psnine.base;
 public abstract class BaseTopic {
 
     public abstract String title();
+
     public abstract String author();
+
     public abstract String content();
+
     public abstract String avatar();
+
     public abstract String time();
+
     public abstract String comments();
 
     public String getTitle() {
@@ -31,6 +36,20 @@ public abstract class BaseTopic {
 
     public String getComments() {
         return comments();
+    }
+
+    public String getFormattedContent() {
+        String title = getTitle();
+        String content = getContent();
+        String result = "";
+        if (title != null && content != null) {
+            result = String.format("<p>%s</p><br/>%s", title, content);
+        } else if (title != null) {
+            result = title;
+        } else if (content != null) {
+            result = content;
+        }
+        return result;
     }
 
 }

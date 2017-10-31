@@ -38,8 +38,9 @@ import android.view.View;
 
 import org.xml.sax.XMLReader;
 
-import java.util.Locale;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Some parts of this code are based on android.text.Html
@@ -84,13 +85,13 @@ public class HtmlTagHandler implements Html.TagHandler {
      * Tells us which level of table tag we're on; ultimately used to find the root table tag.
      */
     int tableTagLevel = 0;
-    @Nullable private UrlClickListener urlClickListener;
+    @Nullable private ImageClick imageClick;
     private ClickableTableSpan clickableTableSpan;
     private DrawTableLinkSpan drawTableLinkSpan;
 
-    public HtmlTagHandler(TextPaint textPaint, @Nullable UrlClickListener urlClickListener) {
+    public HtmlTagHandler(TextPaint textPaint, @Nullable ImageClick imageClick) {
         mTextPaint = textPaint;
-        this.urlClickListener = urlClickListener;
+        this.imageClick = imageClick;
     }
 
     /**
@@ -136,7 +137,7 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
-        if (urlClickListener != null) {
+        if (imageClick.getUrlClickListener() != null) {
             if (tag.toLowerCase().equals("img")) {
                 // 获取长度
                 int len = output.length();
@@ -144,10 +145,14 @@ public class HtmlTagHandler implements Html.TagHandler {
                 ImageSpan[] images = output.getSpans(len - 1, len, ImageSpan.class);
                 String imgURL = images[0].getSource();
 
-                // 使图片可点击并监听点击事件
-                if (!imgURL.contains("http://photo.psnine.com/face")) {
-                    output.setSpan(new ClickableImage(imgURL), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (imageClick.getPatter() != null) {
+                    Pattern r = Pattern.compile(imageClick.getPatter());
+                    Matcher m = r.matcher(imgURL);
+                    if (!m.find()) {
+                        return;
+                    }
                 }
+                output.setSpan(new ClickableImage(imgURL), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
         if (opening) {
@@ -407,8 +412,8 @@ public class HtmlTagHandler implements Html.TagHandler {
 
         @Override
         public void onClick(View widget) {
-            if(urlClickListener != null){
-                urlClickListener.OnClick(url);
+            if (imageClick.getUrlClickListener() != null) {
+                imageClick.getUrlClickListener().OnClick(url);
             }
         }
     }

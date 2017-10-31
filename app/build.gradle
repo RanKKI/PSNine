@@ -47,5 +47,5 @@ dependencies {
     compile group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1' // html tag
     compile 'de.hdodenhof:circleimageview:2.2.0' //CircleImageView
     compile 'com.alexvasilkov:gesture-views:2.3.2' // Gesture ImageView
-    compile project(path: ':HtmlTextView') // View.
+    implementation project(path: ':HtmlTextView') // View.
 }

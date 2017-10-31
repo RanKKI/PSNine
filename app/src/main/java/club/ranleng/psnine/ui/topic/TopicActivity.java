@@ -1,21 +1,31 @@
 package club.ranleng.psnine.ui.topic;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicGene;
-import club.ranleng.psnine.utils.ParseUrl;
+import club.ranleng.psnine.utils.Parse;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
 public class TopicActivity extends BaseActivity implements TopicActivityContract.View {
@@ -23,6 +33,8 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.recyclerView) SmartRecyclerView<Activity> recyclerView;
+    @BindView(R.id.reply_root) RelativeLayout reply_root;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
     private TopicActivityContract.Presenter presenter;
     private String url;
@@ -39,7 +51,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         setSupportActionBar(toolbar);
         setTitle("主题");
         url = getIntent().getStringExtra("url");
-        type = ParseUrl.getType(url);
+        type = Parse.getType(url);
         String title = getIntent().getStringExtra("content");
         if (title != null) toolbar.setSubtitle(title);
     }
@@ -58,6 +70,22 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             new TopicActivityPresenter<>(this, Topic.class);
         }
         presenter.start();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_topic, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_topic_menu_test:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -110,6 +138,51 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         if (toolbar.getSubtitle() == null) {
             toolbar.setSubtitle(subtitle);
         }
+    }
+
+    @OnClick(R.id.fab)
+    @Override
+    public void openReplyLayout() {
+        ani(reply_root, true, false);
+        ani(fab, false, true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (reply_root.getVisibility() == View.VISIBLE) {
+            ani(reply_root, false, false);
+            ani(fab, true, true);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void ani(final View view, boolean show, boolean center) {
+        int cx = view.getMeasuredWidth();
+        int cy = view.getMeasuredHeight();
+        int w = view.getWidth();
+        int h = view.getHeight();
+        float r = (float) Math.sqrt(w * w + h * h);
+        if (center) {
+            cx = cx / 2;
+            cy = cy / 2;
+            r = Math.max(w / 2, h / 2);
+        }
+        Animator anim;
+        if (show) {
+            anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, r);
+            view.setVisibility(View.VISIBLE);
+        } else {
+            anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, r, 0);
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
+        anim.start();
     }
 
     @Override

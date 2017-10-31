@@ -21,8 +21,8 @@
     <string name="http_code_gateway_timeout">504 Gateway Timeout</string>
     <string name="http_code_unknown_error">Unknown Error Code</string>
 
-    <string name="username_hint">Username ( PSN ID )</string>
-    <string name="password_hint">Password</string>
+    <string name="username_hint">PSN ID (不是本站邮箱)</string>
+    <string name="password_hint">密码</string>
 
     <string name="nav_personal_header">个人</string>
     <string name="nav_index">主页</string>
@@ -40,9 +40,13 @@
 
     <string name="option">Option</string>
 
-    <string name="error">Error</string>
+    <string name="error">错误</string>
+    <string name="success">成功</string>
     <string name="permissionDenied">权限申请被拒绝</string>
+    <string name="save">保存</string>
+    <string name="view_original_image">查看原始图片</string>
 
+    <string name="load_finish">没有更多的评论了.</string>
     <string name="ask_to_logout">确定要登出么?</string>
     <string name="ask_to_clean_cache">确定要清理缓存么?</string>
     <string name="ask_to_clean_cache_message">清理缓存可以获得更多的储存空间, 但下次加载时消耗的流量更多.</string>

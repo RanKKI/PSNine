@@ -88,11 +88,19 @@ public class SmartRecyclerView<T> extends RecyclerView {
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_SETTLING) {
-                if (activity != null) Glide.with(activity).resumeRequests();
-                if (fragment != null) Glide.with(fragment).resumeRequests();
+                if (activity != null && !activity.isDestroyed()) {
+                    Glide.with(activity).resumeRequests();
+                }
+                if (fragment != null && !fragment.isDetached()) {
+                    Glide.with(fragment).resumeRequests();
+                }
             } else if (newState == SCROLL_STATE_DRAGGING) {
-                if (activity != null) Glide.with(activity).pauseRequests();
-                if (fragment != null) Glide.with(fragment).pauseRequests();
+                if (activity != null && !activity.isDestroyed()) {
+                    Glide.with(activity).pauseRequests();
+                }
+                if (fragment != null && !fragment.isDetached()) {
+                    Glide.with(fragment).pauseRequests();
+                }
             }
         }
     }

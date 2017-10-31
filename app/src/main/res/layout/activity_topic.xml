@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,30 +11,52 @@
 
     <include layout="@layout/base_toolbar"/>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <club.ranleng.psnine.view.SmartRecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </club.ranleng.psnine.view.SmartRecyclerView>
+            <club.ranleng.psnine.view.SmartRecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            </club.ranleng.psnine.view.SmartRecyclerView>
 
-    <RelativeLayout
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
+        <RelativeLayout
+            android:visibility="invisible"
+            android:id="@+id/reply_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="aaaaaaaaaa"/>
+            android:layout_gravity="bottom"
+            android:background="@android:color/white">
 
-    </RelativeLayout>
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primary_light"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_input_add"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

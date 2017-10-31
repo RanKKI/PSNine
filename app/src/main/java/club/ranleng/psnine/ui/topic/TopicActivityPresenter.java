@@ -4,7 +4,7 @@ import club.ranleng.psnine.base.BaseTopic;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.TopicComment;
-import club.ranleng.psnine.utils.ParseUrl;
+import club.ranleng.psnine.utils.Parse;
 import io.reactivex.functions.Consumer;
 
 public class TopicActivityPresenter<T> implements TopicActivityContract.Presenter {
@@ -15,6 +15,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     private int maxCommentPage = 1;
     private String id;
     private Class<T> tClass;
+    private boolean loadComment = true;
 
 
     TopicActivityPresenter(TopicActivityContract.View view, Class<T> tClass) {
@@ -27,7 +28,8 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     public void start() {
         adapter = new TopicListAdapter(view.getContext());
         view.setupList(adapter);
-        id = ParseUrl.getID(view.getURL());
+        id = Parse.getID(view.getURL());
+        loadComment = true;
         loadTopic();
     }
 
@@ -41,7 +43,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
                 adapter.setHeaderView(baseTopic);
                 String sub = baseTopic.getTitle();
                 view.setSubtitle(sub.length() > 20 ? sub.substring(0, 20) : sub);
-                loadComment();
+                if (loadComment) loadComment();
             }
         });
     }

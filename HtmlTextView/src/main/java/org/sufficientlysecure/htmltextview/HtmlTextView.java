@@ -36,7 +36,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
     @Nullable
-    private UrlClickListener urlClickListener;
+    private ImageClick imageClick;
 
     private boolean removeFromHtmlSpace = true;
 
@@ -107,9 +107,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         setHtml(convertStreamToString(inputStreamText), imageGetter);
     }
 
-    public void setUrlClickListener(@Nullable UrlClickListener urlClickListener) {
-        this.urlClickListener = urlClickListener;
+
+    public void setImageClick(@Nullable ImageClick imageClick){
+        this.imageClick = imageClick;
     }
+
 
     /**
      * Parses String containing HTML to Android's Spannable format and displays it in this TextView.
@@ -120,7 +122,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler(getPaint(), urlClickListener);
+        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler(getPaint(), imageClick);
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
 

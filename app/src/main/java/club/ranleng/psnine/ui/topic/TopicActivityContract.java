@@ -20,6 +20,8 @@ public interface TopicActivityContract {
         int getType();
 
         void setSubtitle(String subtitle);
+
+        void openReplyLayout();
     }
 
     interface Presenter extends BasePresenter {

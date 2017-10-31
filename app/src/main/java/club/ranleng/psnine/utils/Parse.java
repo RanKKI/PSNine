@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import club.ranleng.psnine.common.Key;
 
-public class ParseUrl {
+public class Parse {
 
     public static int getType(String url) {
         url = url.replace("http://psnine.com/", "");
@@ -30,5 +30,33 @@ public class ParseUrl {
         } else {
             throw new IllegalArgumentException("unable to find topic id");
         }
+    }
+
+    /**
+     * Parse html with setting, like the size of image.
+     *
+     * @param text original html
+     * @return parsed html
+     */
+    public static String parseHtml(String text) {
+        return text;
+    }
+
+    /**
+     * Parse image form sinaimg
+     *
+     * @param url original image url
+     * @param quality 0:原图,1:中等尺寸,2:缩略图
+     * @return parsed url
+     */
+    public static String parseImageUrl(String url, int quality) {
+        String[] sizes = new String[]{"large", "mw690", "thumbnail"};
+        String pattern = "http://.+\\.sinaimg\\.cn/(.+)/.+\\.jpg";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(url);
+        if (m.find()) {
+            url = url.replace(m.group(1), sizes[quality]);
+        }
+        return url;
     }
 }
