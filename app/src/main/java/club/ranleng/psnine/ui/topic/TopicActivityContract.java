@@ -21,7 +21,9 @@ public interface TopicActivityContract {
 
         void setSubtitle(String subtitle);
 
-        void openReplyLayout();
+        void setReplyLayout(boolean opening);
+
+        void setReplyContent(String content, boolean clean);
     }
 
     interface Presenter extends BasePresenter {
@@ -33,6 +35,8 @@ public interface TopicActivityContract {
         void loadMoreComment();
 
         void refresh();
+
+        void submitComment(String content);
 
     }
 }

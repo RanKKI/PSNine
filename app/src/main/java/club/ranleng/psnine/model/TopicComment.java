@@ -1,7 +1,5 @@
 package club.ranleng.psnine.model;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +15,13 @@ public class TopicComment {
     private String maxPage;
 
     public int getMaxPage() {
-        maxPage = maxPage.replace(" ","");
-        maxPage = maxPage.replace("条","");
+        maxPage = maxPage.replace(" ", "");
+        maxPage = maxPage.replace("条", "");
         int max = Integer.valueOf(maxPage);
         int total = max / 40;
         int m = total % 40;
-        if(m != 0){
-            total ++;
+        if (m != 0) {
+            total++;
         }
         return total;
     }

@@ -17,6 +17,7 @@ import club.ranleng.psnine.R;
 public class SmartRecyclerView<T> extends RecyclerView {
 
     private onLoadMoreListener onLoadMoreListener;
+    private onMoving onMoving;
 
     public SmartRecyclerView(Context context) {
         super(context);
@@ -47,10 +48,22 @@ public class SmartRecyclerView<T> extends RecyclerView {
         }
     }
 
+    public void setOnMoving(onMoving onMoving) {
+        this.onMoving = onMoving;
+    }
+
     public interface onLoadMoreListener {
         void loadMore();
 
         boolean isLoading();
+    }
+
+    public interface onMoving {
+        void onScroll();
+
+        void onStop();
+
+        boolean isReplyLayoutShowing();
     }
 
     class ScrollListener<K> extends OnScrollListener {
@@ -87,6 +100,11 @@ public class SmartRecyclerView<T> extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
+            if (newState == SCROLL_STATE_IDLE && onMoving != null && !onMoving.isReplyLayoutShowing()) {
+                onMoving.onStop();
+            } else if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
+                onMoving.onScroll();
+            }
             if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_SETTLING) {
                 if (activity != null && !activity.isDestroyed()) {
                     Glide.with(activity).resumeRequests();

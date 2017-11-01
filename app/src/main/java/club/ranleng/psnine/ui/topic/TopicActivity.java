@@ -13,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import butterknife.BindView;
@@ -35,6 +37,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     @BindView(R.id.recyclerView) SmartRecyclerView<Activity> recyclerView;
     @BindView(R.id.reply_root) RelativeLayout reply_root;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.content) EditText content;
 
     private TopicActivityContract.Presenter presenter;
     private String url;
@@ -108,6 +111,22 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
                 return refreshLayout.isRefreshing();
             }
         });
+        recyclerView.setOnMoving(new SmartRecyclerView.onMoving() {
+            @Override
+            public void onScroll() {
+                fab.hide();
+            }
+
+            @Override
+            public void onStop() {
+                fab.show();
+            }
+
+            @Override
+            public boolean isReplyLayoutShowing() {
+                return reply_root.getVisibility() == View.VISIBLE;
+            }
+        });
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -140,18 +159,38 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         }
     }
 
-    @OnClick(R.id.fab)
     @Override
+    public void setReplyLayout(boolean opening) {
+        ani(reply_root, opening, false);
+        ani(fab, !opening, true);
+        if (!opening) {
+            KeyboardUtils.hideSoftInput(this);
+        }
+    }
+
+    @Override
+    public void setReplyContent(String content, boolean clean) {
+        if (clean) {
+            this.content.setText(content);
+        } else {
+            this.content.append(content);
+        }
+    }
+
+    @OnClick(R.id.fab)
     public void openReplyLayout() {
-        ani(reply_root, true, false);
-        ani(fab, false, true);
+        setReplyLayout(true);
+    }
+
+    @OnClick(R.id.send_button)
+    public void newComment() {
+        presenter.submitComment(content.getText().toString());
     }
 
     @Override
     public void onBackPressed() {
         if (reply_root.getVisibility() == View.VISIBLE) {
-            ani(reply_root, false, false);
-            ani(fab, true, true);
+            setReplyLayout(false);
         } else {
             super.onBackPressed();
         }

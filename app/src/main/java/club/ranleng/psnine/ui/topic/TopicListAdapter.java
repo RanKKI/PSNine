@@ -59,6 +59,12 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         notifyItemRangeInserted(start, getItemCount());
     }
 
+    void addComment(TopicComment.Comment comment) {
+        int pos = getItemCount() - 1;
+        comments.add(comment);
+        notifyItemRangeChanged(pos, getItemCount());
+    }
+
     void clearComments() {
         int end = comments.size();
         comments.clear();

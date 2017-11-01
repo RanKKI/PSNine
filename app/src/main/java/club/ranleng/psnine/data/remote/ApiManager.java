@@ -15,6 +15,7 @@ import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.interceptor.NetworkInterceptor;
 import club.ranleng.psnine.data.interceptor.RequestInterceptor;
 import club.ranleng.psnine.data.module.Callback;
+import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.model.HttpRequest;
 import club.ranleng.psnine.model.TopicComment;
 import club.ranleng.psnine.model.UserInfo;
@@ -129,7 +130,7 @@ public class ApiManager {
                 });
     }
 
-    public void Signin(){
+    public void Signin() {
         apiService.Signin()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -139,5 +140,41 @@ public class ApiManager {
                         ToastUtils.showShort("签到成功");
                     }
                 });
+    }
+
+    public void setReply(final TopicCommentCallback callback, int type, String id, String content) {
+        FormBody.Builder body = new FormBody.Builder();
+        body.add("type", KeyGetter.getGeneOrTopic(type))
+                .add("param", id)
+                .add("old", "yes")
+                .add("com", "")
+                .add("content", content);
+        apiService.Reply(body.build())
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, HttpRequest>() {
+                    @Override
+                    public HttpRequest apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        int code = 211;
+                        if (result.contains("div")) {
+                            code = 200;
+                        }
+                        return new HttpRequest(result, code);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<HttpRequest>() {
+                    @Override
+                    public void accept(HttpRequest httpRequest) throws Exception {
+                        if (httpRequest.getCode() == 200) {
+                            callback.onSuccess(new Fruit().fromHtml(httpRequest.getMessage(), TopicComment.Comment.class));
+                        } else {
+                            callback.onFailure();
+                            ToastUtils.showShort(httpRequest.getMessage());
+                        }
+                    }
+                });
+
     }
 }

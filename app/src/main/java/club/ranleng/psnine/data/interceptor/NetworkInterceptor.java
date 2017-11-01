@@ -1,5 +1,7 @@
 package club.ranleng.psnine.data.interceptor;
 
+import android.support.annotation.NonNull;
+
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 
@@ -11,7 +13,7 @@ import okhttp3.Response;
 
 public class NetworkInterceptor implements Interceptor {
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
         int code = response.code();
         if (code >= 400 && code <= 600) {
@@ -19,6 +21,7 @@ public class NetworkInterceptor implements Interceptor {
             return new Response.Builder().request(chain.request())
                     .protocol(chain.connection().protocol())
                     .code(211)
+                    .message("OK")
                     .body(response.body()).build();
         }
         return response;

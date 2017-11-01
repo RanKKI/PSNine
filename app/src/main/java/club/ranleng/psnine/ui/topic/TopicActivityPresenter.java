@@ -1,6 +1,7 @@
 package club.ranleng.psnine.ui.topic;
 
 import club.ranleng.psnine.base.BaseTopic;
+import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.TopicComment;
@@ -75,6 +76,24 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
         comment_page = 1;
         adapter.clearComments();
         loadTopic();
+    }
+
+    @Override
+    public void submitComment(String content) {
+
+        ApiManager.getDefault().setReply(new TopicCommentCallback() {
+            @Override
+            public void onSuccess(TopicComment.Comment comment) {
+                view.setReplyContent("", true);
+                view.setReplyLayout(false);
+                adapter.addComment(comment);
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        }, view.getType(), id, content);
     }
 
 }

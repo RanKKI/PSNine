@@ -28,4 +28,10 @@ public interface ApiService {
 
     @GET("set/qidao/ajax")
     Observable<ResponseBody> Signin();
+
+    @POST("set/comment/ajax")
+    Observable<ResponseBody> Reply(@Body FormBody body);
+
+    @POST("set/edit/ajax")
+    Observable<ResponseBody> editReply(@Body FormBody body);
 }
