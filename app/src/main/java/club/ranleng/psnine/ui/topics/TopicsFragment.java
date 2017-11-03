@@ -1,10 +1,8 @@
 package club.ranleng.psnine.ui.topics;
 
 import android.app.Fragment;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,8 +14,8 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseFragment;
 import club.ranleng.psnine.common.Key;
-import club.ranleng.psnine.model.TopicsGene;
 import club.ranleng.psnine.model.Topics;
+import club.ranleng.psnine.model.TopicsGene;
 import club.ranleng.psnine.model.TopicsQA;
 import club.ranleng.psnine.view.SmartRecyclerView;
 

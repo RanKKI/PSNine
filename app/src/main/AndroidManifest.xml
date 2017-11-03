@@ -3,6 +3,7 @@
           package="club.ranleng.psnine">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
@@ -38,7 +39,6 @@
                 <data
                     android:host="psnine.com"
                     android:scheme="http"/>
-
             </intent-filter>
         </activity>
         <activity
@@ -46,6 +46,9 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.setting.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

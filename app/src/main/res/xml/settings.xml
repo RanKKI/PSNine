@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="基础设置">
+
+        <ListPreference
+            android:defaultValue="@string/settings_entries_ob_default_value"
+            android:entries="@array/settings_entries_ob"
+            android:entryValues="@array/settings_entry_values_ob"
+            android:key="settings_ob"
+            android:summary="@string/settings_entries_ob_obdate"
+            android:title="排序"/>
+
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_emoji_dialog"
+            android:summary="选择完表情关闭表情框"
+            android:title="表情框"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_single_line"
+            android:summary="标题内容浓缩到一行"
+            android:title="单行标题"/>
+
+        <Preference
+            android:key="settings_tabs"
+            android:summary=""
+            android:title="自定义主页面标签"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="网络相关">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_images_quality"
+            android:summary="文章中图片加载高质量图片"
+            android:title="图片质量"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_preload"
+            android:summary="提前加载下一页的内容"
+            android:title="提前加载"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

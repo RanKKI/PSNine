@@ -15,6 +15,9 @@ public class TopicComment {
     private String maxPage;
 
     public int getMaxPage() {
+        if (maxPage == null) {
+            return 1;
+        }
         maxPage = maxPage.replace(" ", "");
         maxPage = maxPage.replace("条", "");
         int max = Integer.valueOf(maxPage);

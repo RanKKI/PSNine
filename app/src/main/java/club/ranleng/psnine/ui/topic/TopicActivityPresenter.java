@@ -65,7 +65,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
 
     @Override
     public void loadMoreComment() {
-        if (comment_page <= maxCommentPage) {
+        if (comment_page < maxCommentPage) {
             comment_page++;
             loadComment();
         }
@@ -80,7 +80,6 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
 
     @Override
     public void submitComment(String content) {
-
         ApiManager.getDefault().setReply(new TopicCommentCallback() {
             @Override
             public void onSuccess(TopicComment.Comment comment) {
@@ -88,11 +87,8 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
                 view.setReplyLayout(false);
                 adapter.addComment(comment);
             }
-
             @Override
-            public void onFailure() {
-
-            }
+            public void onFailure() {}
         }, view.getType(), id, content);
     }
 

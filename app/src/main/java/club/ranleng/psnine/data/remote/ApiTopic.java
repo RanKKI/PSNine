@@ -30,9 +30,9 @@ public class ApiTopic<T> {
     public Observable<T> getTopics(int type, int page, final Class<T> tClass) {
         Observable<ResponseBody> observable;
         if (type == Key.TOPIC || type == Key.GENE || type == Key.QA) {
-            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page);
+            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
         } else {
-            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page);
+            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
         }
         return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {

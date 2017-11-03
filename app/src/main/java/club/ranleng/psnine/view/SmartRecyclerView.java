@@ -100,23 +100,22 @@ public class SmartRecyclerView<T> extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            if (newState == SCROLL_STATE_IDLE && onMoving != null && !onMoving.isReplyLayoutShowing()) {
-                onMoving.onStop();
-            } else if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
-                onMoving.onScroll();
-            }
-            if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_SETTLING) {
+            if (newState == SCROLL_STATE_IDLE) {
+                if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
+                    onMoving.onStop();
+                }
                 if (activity != null && !activity.isDestroyed()) {
                     Glide.with(activity).resumeRequests();
-                }
-                if (fragment != null && !fragment.isDetached()) {
+                } else if (fragment != null && !fragment.isDetached()) {
                     Glide.with(fragment).resumeRequests();
                 }
-            } else if (newState == SCROLL_STATE_DRAGGING) {
+            } else if (newState == SCROLL_STATE_DRAGGING || newState == SCROLL_STATE_SETTLING) {
+                if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
+                    onMoving.onScroll();
+                }
                 if (activity != null && !activity.isDestroyed()) {
                     Glide.with(activity).pauseRequests();
-                }
-                if (fragment != null && !fragment.isDetached()) {
+                } else if (fragment != null && !fragment.isDetached()) {
                     Glide.with(fragment).pauseRequests();
                 }
             }

@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.ToastUtils;
+
+import club.ranleng.psnine.R;
+import club.ranleng.psnine.common.Key;
+
 public abstract class BaseFragment extends Fragment {
 
     public Context mContext;
@@ -15,7 +21,6 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isVisible;
     private boolean isPrepared;
     private boolean isLoadData = false;
-    private boolean isResume = false;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -58,16 +63,16 @@ public abstract class BaseFragment extends Fragment {
      * 懒加载
      */
     protected void lazyLoad() {
-//        if(!NetworkUtils.isConnected()){
-//            MakeToast.str("无网络连接");
-//            return;
-//        }
+        if (!NetworkUtils.isConnected()) {
+            ToastUtils.showShort(R.string.no_internet);
+            return;
+        }
 
-//        if (isPrepared && Key.PREF_PRELOAD && !isLoadData) {
-//            isLoadData = true;
-//            initData();
-//            return;
-//        }
+        if (isPrepared && Key.getSetting().PREF_PRELOAD && !isLoadData) {
+            isLoadData = true;
+            initData();
+            return;
+        }
 
         if (!isPrepared || !isVisible) {
             return;

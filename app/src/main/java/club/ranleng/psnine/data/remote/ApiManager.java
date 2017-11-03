@@ -44,7 +44,7 @@ public class ApiManager {
 
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         builder.readTimeout(30, TimeUnit.SECONDS);
-        builder.connectTimeout(10, TimeUnit.SECONDS);
+        builder.connectTimeout(29, TimeUnit.SECONDS);
         builder.cookieJar(cookieJar);
         builder.addInterceptor(new RequestInterceptor());
         builder.addNetworkInterceptor(new NetworkInterceptor());

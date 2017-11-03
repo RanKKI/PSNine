@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -25,8 +24,10 @@ import butterknife.OnClick;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.model.Topic;
 import club.ranleng.psnine.model.TopicGene;
+import club.ranleng.psnine.model.TopicQA;
 import club.ranleng.psnine.utils.Parse;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
@@ -65,7 +66,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             new TopicActivityPresenter<>(this, TopicGene.class);
         } else if (type == Key.QA) {
             //TODO
-            ToastUtils.showShort("暂不支持查看问与答.");
+            ToastUtils.showShort(R.string.not_support);
             finish();
             return;
 //            new TopicActivityPresenter<>(this, TopicQA.class);
@@ -73,12 +74,12 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             new TopicActivityPresenter<>(this, Topic.class);
         }
         presenter.start();
+        fab.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_topic, menu);
+//        getMenuInflater().inflate(R.menu.activity_topic, menu);
         return true;
     }
 
@@ -111,22 +112,6 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
                 return refreshLayout.isRefreshing();
             }
         });
-        recyclerView.setOnMoving(new SmartRecyclerView.onMoving() {
-            @Override
-            public void onScroll() {
-                fab.hide();
-            }
-
-            @Override
-            public void onStop() {
-                fab.show();
-            }
-
-            @Override
-            public boolean isReplyLayoutShowing() {
-                return reply_root.getVisibility() == View.VISIBLE;
-            }
-        });
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -135,6 +120,24 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        if (UserState.isLogin()) {
+            recyclerView.setOnMoving(new SmartRecyclerView.onMoving() {
+                @Override
+                public void onScroll() {
+                    fab.hide();
+                }
+
+                @Override
+                public void onStop() {
+                    fab.show();
+                }
+
+                @Override
+                public boolean isReplyLayoutShowing() {
+                    return reply_root.getVisibility() == View.VISIBLE;
+                }
+            });
+        }
     }
 
     @Override
@@ -179,11 +182,17 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @OnClick(R.id.fab)
     public void openReplyLayout() {
+        if (!UserState.isLogin()) {
+            return;
+        }
         setReplyLayout(true);
     }
 
     @OnClick(R.id.send_button)
     public void newComment() {
+        if (!UserState.isLogin()) {
+            return;
+        }
         presenter.submitComment(content.getText().toString());
     }
 

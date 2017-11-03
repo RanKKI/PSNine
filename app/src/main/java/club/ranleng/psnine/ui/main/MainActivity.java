@@ -3,7 +3,6 @@ package club.ranleng.psnine.ui.main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,20 +19,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.UserInfo;
 import club.ranleng.psnine.ui.LoginActivity;
-import club.ranleng.psnine.ui.topic.TopicActivity;
+import club.ranleng.psnine.ui.setting.SettingsActivity;
 import club.ranleng.psnine.utils.CacheUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         Utils.init(this.getApplication());
         context = this;
-
+        Key.getSetting();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -94,6 +92,8 @@ public class MainActivity extends AppCompatActivity
                     if (!userInfo.getSign()) {
                         ApiManager.getDefault().Signin();
                     }
+                } else {
+                    nav_username.setText(R.string.not_log_in);
                 }
                 Menu menu = navigationView.getMenu();
                 menu.setGroupVisible(R.id.user_root, UserState.isLogin());
@@ -146,9 +146,7 @@ public class MainActivity extends AppCompatActivity
                     })
                     .setNegativeButton(R.string.cancel, null).create().show();
         } else if (id == R.id.nav_setting) {
-            Bundle bundle = new Bundle();
-            bundle.putString("url", "http://psnine.com/topic/7552");
-            ActivityUtils.startActivity(bundle, TopicActivity.class);
+            ActivityUtils.startActivity(SettingsActivity.class);
         }
         return true;
     }
