@@ -45,7 +45,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
                 bundle.putString("url", url);
                 ActivityUtils.startActivity(bundle, ImageViewActivity.class);
             }
-        }, "http://.+\\.sinaimg\\.cn/.*");
+        }, Parse.sineimg_pattern);
     }
 
     void setHeaderView(BaseTopic baseTopic) {
@@ -134,9 +134,9 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         void bind(int position) {
             TopicComment.Comment comment = comments.get(position);
             content.setImageClick(imageClick);
+            content.setHtml(Parse.parseHtml(comment.getContent()), new HtmlImageGetter(context, content));
             time.setText(comment.getTime());
             username.setText(comment.getUsername());
-            content.setHtml(Parse.parseHtml(comment.getContent()), new HtmlImageGetter(context, content));
             Glide.with(context).load(comment.getAvatar()).into(avatar);
         }
     }

@@ -10,6 +10,8 @@ import club.ranleng.psnine.common.Key;
 
 public class Parse {
 
+    public static final String sineimg_pattern = "http(|s)://.+\\.sinaimg\\.cn/(.+)/.+\\.jpg";
+
     public static int getType(String url) {
         url = url.replace("http://psnine.com/", "");
         if (url.startsWith("gene")) {
@@ -56,11 +58,10 @@ public class Parse {
      */
     public static String parseImageUrl(String url, int quality) {
         String[] sizes = new String[]{"large", "mw690", "thumbnail"};
-        String pattern = "http://.+\\.sinaimg\\.cn/(.+)/.+\\.jpg";
-        Pattern r = Pattern.compile(pattern);
+        Pattern r = Pattern.compile(sineimg_pattern);
         Matcher m = r.matcher(url);
         if (m.find()) {
-            url = url.replace(m.group(1), sizes[quality]);
+            url = url.replace(m.group(2), sizes[quality]);
         }
         return url;
     }
