@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.Utils;
 
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.onRequestPermissionCallback;
+import club.ranleng.psnine.ui.main.MainActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -26,7 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             Utils.init(this.getApplication());
         }
         init();
-        if (getSupportActionBar() != null) {
+        if (getSupportActionBar() != null && !(this instanceof MainActivity)) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
