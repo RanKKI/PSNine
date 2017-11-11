@@ -60,5 +60,6 @@
     <string name="not_log_in">未登陆</string>
     <string name="no_internet">无网络连接</string>
     <string name="not_support">暂不支持</string>
+    <string name="new_reply">有新回复</string>
     
 </resources>

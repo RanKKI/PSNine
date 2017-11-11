@@ -68,16 +68,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if (requestCode == Key.REQUEST_PERMISSION) {
+            if (PermissionCallback == null) {
+                return;
+            }
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (PermissionCallback != null) {
-                    PermissionCallback.onGranted();
-                }
+                PermissionCallback.onGranted();
             } else {
-                if (PermissionCallback != null) {
-                    PermissionCallback.onDenied();
-                }
+                PermissionCallback.onDenied();
             }
         }
     }

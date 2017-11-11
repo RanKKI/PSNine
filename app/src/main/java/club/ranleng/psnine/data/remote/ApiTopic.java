@@ -22,6 +22,7 @@ public class ApiTopic<T> {
                     public T apply(ResponseBody responseBody) throws Exception {
                         String result = responseBody.string();
                         responseBody.close();
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
                         return new Fruit().fromHtml(result, tClass);
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
@@ -40,9 +41,7 @@ public class ApiTopic<T> {
                     public T apply(ResponseBody responseBody) throws Exception {
                         String result = responseBody.string();
                         responseBody.close();
-                        if (!UserState.isLogin()) {
-                            RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
-                        }
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
                         return new Fruit().fromHtml(result, tClass);
                     }
                 }).observeOn(AndroidSchedulers.mainThread());

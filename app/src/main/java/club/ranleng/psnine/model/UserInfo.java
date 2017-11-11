@@ -14,6 +14,8 @@ public class UserInfo {
     private String username;
     @Pick(value = "a.yuan:not(.mt10)")
     private String sign;
+    @Pick(value = "span.badge.dot")
+    private String notice;
 
     public String getAvatar() {
         if (!avatar.contains("?")) {
@@ -37,5 +39,9 @@ public class UserInfo {
 
     public Boolean getSign() {
         return sign == null;
+    }
+
+    public Boolean getNotice() {
+        return notice == null;
     }
 }

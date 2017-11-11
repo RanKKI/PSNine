@@ -2,7 +2,6 @@ package club.ranleng.psnine.ui.main;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -11,20 +10,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.Utils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
+import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
@@ -41,7 +41,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -56,51 +56,37 @@ public class MainActivity extends AppCompatActivity
     private Context context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setContentView() {
         setContentView(R.layout.activity_main);
+        context = this;
+    }
+
+    @Override
+    public void find_setup_Views() {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        Utils.init(this.getApplication());
-        context = this;
-        Key.getSetting();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.inflateMenu(R.menu.activity_main_drawer);
         navigationView.setNavigationItemSelectedListener(this);
         nav_username = navigationView.getHeaderView(0).findViewById(R.id.nav_username);
         nav_avatar = navigationView.getHeaderView(0).findViewById(R.id.nav_avatar);
-
+        navigationView.getMenu().findItem(R.id.nav_notice).setActionView(R.layout.nav_menu_badge);
         assert nav_avatar != null;
         assert nav_username != null;
-
         mViewPagerAdapter mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void getData() {
+        Key.getSetting();
         refreshCache();
-        //注册RxBus.
-        userInfo = RxBus.getDefault().toObservable(UserInfo.class).subscribe(new Consumer<UserInfo>() {
-            @Override
-            public void accept(UserInfo userInfo) throws Exception {
-                if (userInfo.getUsername() != null && !UserState.isLogin()) {
-                    UserState.setLogin(true);
-                    UserState.setUserInfo(userInfo);
-                    Glide.with(context).load(userInfo.getAvatar()).into(nav_avatar);
-                    nav_username.setText(userInfo.getUsername());
-                    if (!userInfo.getSign()) {
-                        ApiManager.getDefault().Signin();
-                    }
-                } else {
-                    nav_username.setText(R.string.not_log_in);
-                }
-                Menu menu = navigationView.getMenu();
-                menu.setGroupVisible(R.id.user_root, UserState.isLogin());
-                menu.findItem(R.id.nav_login).setVisible(!UserState.isLogin());
-                menu.findItem(R.id.nav_logout).setVisible(UserState.isLogin());
-            }
-        });
+        userInfo = RxBus.getDefault().toObservable(UserInfo.class)
+                .subscribe(new updateUserInfo());
     }
 
     @Override
@@ -166,6 +152,38 @@ public class MainActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_cache).setTitle(s);
                     }
                 });
+
+    }
+
+    class updateUserInfo implements Consumer<UserInfo> {
+
+        @Override
+        public void accept(UserInfo userInfo) throws Exception {
+            if (!userInfo.getNotice()) {
+                ToastUtils.showShort(R.string.new_reply);
+            }
+            View notice_badge = navigationView.getMenu().findItem(R.id.nav_notice).getActionView();
+            notice_badge.setVisibility(!userInfo.getNotice() ? View.VISIBLE : View.INVISIBLE);
+
+            if (UserState.isLogin()) {
+                return;
+            }
+            if (userInfo.getUsername() != null) {
+                UserState.setLogin(true);
+                UserState.setUserInfo(userInfo);
+                Glide.with(context).load(userInfo.getAvatar()).into(nav_avatar);
+                nav_username.setText(userInfo.getUsername());
+                if (!userInfo.getSign()) {
+                    ApiManager.getDefault().Signin();
+                }
+            } else {
+                nav_username.setText(R.string.not_log_in);
+            }
+            Menu menu = navigationView.getMenu();
+            menu.setGroupVisible(R.id.user_root, UserState.isLogin());
+            menu.findItem(R.id.nav_login).setVisible(!UserState.isLogin());
+            menu.findItem(R.id.nav_logout).setVisible(UserState.isLogin());
+        }
 
     }
 }

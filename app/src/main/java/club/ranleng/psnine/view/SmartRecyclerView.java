@@ -91,7 +91,7 @@ public class SmartRecyclerView<T> extends RecyclerView {
             if (getLayoutManager() instanceof LinearLayoutManager) {
                 int lastVisibleItem = ((LinearLayoutManager) getLayoutManager()).findLastVisibleItemPosition();
                 int totalItemCount = SmartRecyclerView.this.getAdapter().getItemCount();
-                if (lastVisibleItem >= totalItemCount - 2 && dy > 0) {
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                     onLoadMoreListener.loadMore();
                 }
             }
@@ -100,24 +100,29 @@ public class SmartRecyclerView<T> extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            if (newState == SCROLL_STATE_IDLE) {
-                if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
-                    onMoving.onStop();
-                }
+
+            if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_DRAGGING) {
                 if (activity != null && !activity.isDestroyed()) {
                     Glide.with(activity).resumeRequests();
                 } else if (fragment != null && !fragment.isDetached()) {
                     Glide.with(fragment).resumeRequests();
                 }
-            } else if (newState == SCROLL_STATE_DRAGGING || newState == SCROLL_STATE_SETTLING) {
-                if (onMoving != null && !onMoving.isReplyLayoutShowing()) {
-                    onMoving.onScroll();
-                }
+            } else if (newState == SCROLL_STATE_SETTLING) {
                 if (activity != null && !activity.isDestroyed()) {
                     Glide.with(activity).pauseRequests();
                 } else if (fragment != null && !fragment.isDetached()) {
                     Glide.with(fragment).pauseRequests();
                 }
+            }
+
+            if (onMoving == null || onMoving.isReplyLayoutShowing()) {
+                return;
+            }
+
+            if (newState == SCROLL_STATE_IDLE) {
+                onMoving.onStop();
+            } else {
+                onMoving.onScroll();
             }
         }
     }

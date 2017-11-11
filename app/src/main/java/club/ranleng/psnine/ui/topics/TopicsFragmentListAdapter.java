@@ -22,13 +22,14 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseTopics;
 import club.ranleng.psnine.ui.topic.TopicActivity;
 
-public class TopicsFragmentListAdapter<T> extends RecyclerView.Adapter<TopicsFragmentListAdapter<T>.ViewHolder> {
+public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
+        extends RecyclerView.Adapter<TopicsFragmentListAdapter<T>.ViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
     private List<T> Items = new ArrayList<>();
     private Fragment fragment;
 
-    public TopicsFragmentListAdapter(Fragment fragment) {
+    TopicsFragmentListAdapter(Fragment fragment) {
         this.fragment = fragment;
         mLayoutInflater = LayoutInflater.from(Utils.getApp());
     }
@@ -54,7 +55,7 @@ public class TopicsFragmentListAdapter<T> extends RecyclerView.Adapter<TopicsFra
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BaseTopics.BaseItem item = (BaseTopics.BaseItem) Items.get(position);
+        BaseTopics.BaseItem item = Items.get(position);
         holder.content.setText(item.getContent());
         holder.username.setText(item.getUsername());
         holder.reply.setText(item.getReply());
@@ -83,7 +84,7 @@ public class TopicsFragmentListAdapter<T> extends RecyclerView.Adapter<TopicsFra
 
         @Override
         public void onClick(View v) {
-            BaseTopics.BaseItem item = (BaseTopics.BaseItem) Items.get(getAdapterPosition());
+            BaseTopics.BaseItem item = Items.get(getAdapterPosition());
             Bundle bundle = new Bundle();
             bundle.putString("url", item.getUrl());
             bundle.putString("content", item.getContent());

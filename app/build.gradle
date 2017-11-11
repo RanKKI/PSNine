@@ -33,19 +33,18 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     //third party lib
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.4'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0' //network
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0' // adapter for rxjava
-    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1' // cookies saver
-    compile 'com.github.bumptech.glide:glide:4.2.0' // Image loader
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0' //network
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0' // adapter for rxjava
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1' // cookies saver
+    implementation 'com.github.bumptech.glide:glide:4.2.0' // Image loader
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
-    compile 'com.blankj:utilcode:1.9.2' //Utils
-    compile 'com.jakewharton:butterknife:8.8.1' //Bind view
+    implementation 'com.blankj:utilcode:1.9.2' //Utils
+    implementation 'com.jakewharton:butterknife:8.8.1' //Bind view
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'me.ghui:Fruit:1.0.4' // Html 标签处理
-    compile group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1' // html tag
-    compile 'de.hdodenhof:circleimageview:2.2.0' //CircleImageView
-    compile 'com.alexvasilkov:gesture-views:2.3.2' // Gesture ImageView
+    implementation 'me.ghui:Fruit:1.0.4' // Html 标签处理
+    implementation 'de.hdodenhof:circleimageview:2.2.0' //CircleImageView
+    implementation 'com.alexvasilkov:gesture-views:2.3.2' // Gesture ImageView
     implementation project(path: ':HtmlTextView') // View.
 }
