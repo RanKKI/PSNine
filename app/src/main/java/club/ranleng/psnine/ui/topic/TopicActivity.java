@@ -237,4 +237,5 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     public int getType() {
         return type;
     }
+
 }

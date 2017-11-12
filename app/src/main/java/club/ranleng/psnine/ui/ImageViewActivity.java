@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
@@ -76,6 +77,9 @@ public class ImageViewActivity extends BaseActivity implements DialogInterface.O
     @Override
     public void getData() {
         swipeRefreshLayout.setRefreshing(true);
+        if (url.contains("gif") && !url.contains("large")) {
+            url = Parse.parseImageUrl(url, 0);
+        }
         list.clear();
         list.add(getString(R.string.save));
         if (!url.contains("large")) {
@@ -85,18 +89,20 @@ public class ImageViewActivity extends BaseActivity implements DialogInterface.O
                 .setTitle(R.string.option)
                 .setItems(list.toArray(new String[list.size()]), this).create();
         LogUtils.d("Load image: " + url);
-        Glide.with(this).load(url).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                gestureImageView.setImageDrawable(resource);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        if (url.contains("gif")) {
+            Glide.with(this).asGif().load(url).into(new ImageViewTarget<GifDrawable>());
+        } else {
+            Glide.with(this).load(url).into(new ImageViewTarget<>());
+        }
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == 0) {
+            if (url.contains("gif")) {
+                ToastUtils.showShort("暂不支持GIF.");
+                return;
+            }
             requestRuntimePermission(WRITE_EXTERNAL_STORAGE, this);
         } else if (!url.contains("large") && which == list.size() - 1) {
             url = Parse.parseImageUrl(url, 0);
@@ -127,4 +133,17 @@ public class ImageViewActivity extends BaseActivity implements DialogInterface.O
     public void onDenied() {
         ToastUtils.showShort(R.string.permissionDenied);
     }
+
+    class ImageViewTarget<T extends Drawable> extends SimpleTarget<T> {
+
+        @Override
+        public void onResourceReady(T resource, Transition<? super T> transition) {
+            gestureImageView.setImageDrawable(resource);
+            if (resource instanceof GifDrawable) {
+                ((GifDrawable) resource).start();
+            }
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
 }

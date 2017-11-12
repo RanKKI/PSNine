@@ -45,7 +45,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
                 bundle.putString("url", url);
                 ActivityUtils.startActivity(bundle, ImageViewActivity.class);
             }
-        }, Parse.sineimg_pattern);
+        }, Parse.sinaimg_pattern);
     }
 
     void setHeaderView(BaseTopic baseTopic) {

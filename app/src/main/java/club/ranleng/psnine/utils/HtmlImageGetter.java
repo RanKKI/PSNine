@@ -11,11 +11,9 @@ import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import club.ranleng.psnine.R;
 import io.reactivex.annotations.Nullable;
 
 public class HtmlImageGetter implements Html.ImageGetter {
@@ -36,10 +34,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
     @Override
     public Drawable getDrawable(String s) {
         final URLDrawable urlDrawable = new URLDrawable();
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.ic_cloud_download_black_24dp);
-        Glide.with(context).setDefaultRequestOptions(requestOptions)
-                .asBitmap().thumbnail(0.5f).load(s)
+        Glide.with(context).asBitmap().thumbnail(0.5f).load(s)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {

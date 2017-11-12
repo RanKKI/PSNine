@@ -50,6 +50,9 @@
         <activity
             android:name=".ui.setting.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.topics.TopicsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

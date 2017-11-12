@@ -3,7 +3,6 @@ package club.ranleng.psnine.data.remote;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
-import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,6 +31,8 @@ public class ApiTopic<T> {
         Observable<ResponseBody> observable;
         if (type == Key.TOPIC || type == Key.GENE || type == Key.QA) {
             observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
+        } else if (type == Key.NOTICE) {
+            observable = ApiManager.getDefault().getApiService().getMy(KeyGetter.getKEY(type));
         } else {
             observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
         }

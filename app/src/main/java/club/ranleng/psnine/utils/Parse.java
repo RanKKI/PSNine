@@ -1,5 +1,6 @@
 package club.ranleng.psnine.utils;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 
 import java.util.regex.Matcher;
@@ -10,7 +11,7 @@ import club.ranleng.psnine.common.Key;
 
 public class Parse {
 
-    public static final String sineimg_pattern = "http(|s)://.+\\.sinaimg\\.cn/(.+)/.+\\.jpg";
+    public static final String sinaimg_pattern = "http(|s)://.+\\.sinaimg\\.cn/(.+)/.+\\.(jpg|gif)";
 
     public static int getType(String url) {
         url = url.replace("http://psnine.com/", "");
@@ -49,18 +50,28 @@ public class Parse {
         return text;
     }
 
+    public static String parseNoticeHtml(String html) {
+        html = html.replace("<br>", "").replace("\\n", "");
+        html = parseImageUrl(html, -1);
+        return html;
+    }
+
     /**
-     * Parse image form sinaimg
+     * Parse image form sinaimg_pattern
      *
      * @param url     original image url
-     * @param quality 0:原图,1:中等尺寸,2:缩略图
+     * @param quality 0:原图,1:中等尺寸,2:缩略图,-1:缩写
      * @return parsed url
      */
     public static String parseImageUrl(String url, int quality) {
         String[] sizes = new String[]{"large", "mw690", "thumbnail"};
-        Pattern r = Pattern.compile(sineimg_pattern);
+        Pattern r = Pattern.compile(sinaimg_pattern);
         Matcher m = r.matcher(url);
         if (m.find()) {
+            if (quality == -1) {
+                url = "[图片]";
+                return url;
+            }
             url = url.replace(m.group(2), sizes[quality]);
         }
         return url;

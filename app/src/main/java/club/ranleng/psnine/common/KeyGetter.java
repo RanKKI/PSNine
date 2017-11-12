@@ -16,6 +16,8 @@ public class KeyGetter {
                 return "plus";
             case Key.QA:
                 return "qa";
+            case Key.NOTICE:
+                return "notice";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
     }
@@ -34,6 +36,8 @@ public class KeyGetter {
                 return "PLUS";
             case Key.QA:
                 return "问与答";
+            case Key.NOTICE:
+                return "短消息";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
     }

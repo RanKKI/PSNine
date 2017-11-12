@@ -34,4 +34,7 @@ public interface ApiService {
 
     @POST("set/edit/ajax")
     Observable<ResponseBody> editReply(@Body FormBody body);
+
+    @GET("my/{type}")
+    Observable<ResponseBody> getMy(@Path("type") String type);
 }

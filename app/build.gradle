@@ -38,8 +38,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0' //network
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0' // adapter for rxjava
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1' // cookies saver
-    implementation 'com.github.bumptech.glide:glide:4.2.0' // Image loader
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.3.1' // Image loader
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     implementation 'com.blankj:utilcode:1.9.2' //Utils
     implementation 'com.jakewharton:butterknife:8.8.1' //Bind view
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

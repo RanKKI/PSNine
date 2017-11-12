@@ -2,6 +2,7 @@ package club.ranleng.psnine.ui.main;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -32,6 +33,7 @@ import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.UserInfo;
 import club.ranleng.psnine.ui.LoginActivity;
 import club.ranleng.psnine.ui.setting.SettingsActivity;
+import club.ranleng.psnine.ui.topics.TopicsActivity;
 import club.ranleng.psnine.utils.CacheUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -133,6 +135,10 @@ public class MainActivity extends BaseActivity
                     .setNegativeButton(R.string.cancel, null).create().show();
         } else if (id == R.id.nav_setting) {
             ActivityUtils.startActivity(SettingsActivity.class);
+        } else if (id == R.id.nav_notice) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", Key.NOTICE);
+            ActivityUtils.startActivity(bundle, TopicsActivity.class);
         }
         return true;
     }

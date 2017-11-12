@@ -1,4 +1,4 @@
-package club.ranleng.psnine.ui.setting;
+package club.ranleng.psnine.ui.topics;
 
 import android.support.v7.widget.Toolbar;
 
@@ -6,8 +6,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
+import club.ranleng.psnine.common.KeyGetter;
 
-public class SettingsActivity extends BaseActivity {
+public class TopicsActivity extends BaseActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -24,9 +25,14 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public void getData() {
+        int type = getIntent().getIntExtra("type", -1);
+        if (type == -1) {
+            finish();
+            return;
+        }
+        setTitle(KeyGetter.getKEYName(type));
         getFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, SettingFragment.newInstance())
+                .replace(R.id.frameLayout, TopicsFragment.newInstance(type))
                 .commit();
     }
 }
-
