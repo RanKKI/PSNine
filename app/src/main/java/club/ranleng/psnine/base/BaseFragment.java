@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.ToastUtils;
 
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.ui.main.MainActivity;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -68,20 +69,22 @@ public abstract class BaseFragment extends Fragment {
             return;
         }
 
-        if (isPrepared && Key.getSetting().PREF_PRELOAD && !isLoadData) {
+        if (!isPrepared || isLoadData) {
+            return;
+        }
+
+        if (Key.getSetting().PREF_PRELOAD || !(getActivity() instanceof MainActivity)) {
             isLoadData = true;
             initData();
             return;
         }
 
-        if (!isPrepared || !isVisible) {
+        if (!isVisible) {
             return;
         }
 
-        if (!isLoadData) {
-            isLoadData = true;
-            initData();
-        }
+        isLoadData = true;
+        initData();
 
     }
 

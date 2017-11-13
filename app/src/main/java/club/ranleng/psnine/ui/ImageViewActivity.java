@@ -1,5 +1,6 @@
 package club.ranleng.psnine.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -32,9 +33,8 @@ import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.onRequestPermissionCallback;
 import club.ranleng.psnine.utils.Parse;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-public class ImageViewActivity extends BaseActivity implements DialogInterface.OnClickListener, onRequestPermissionCallback {
+public class ImageViewActivity extends BaseActivity implements DialogInterface.OnClickListener,
+        onRequestPermissionCallback {
 
     @BindView(R.id.gestureImageView) GestureImageView gestureImageView;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
@@ -51,6 +51,9 @@ public class ImageViewActivity extends BaseActivity implements DialogInterface.O
             ToastUtils.showShort(R.string.error);
             finish();
             return;
+        }
+        if (!url.startsWith("http")) {
+            url = "https://ww4.sinaimg.cn/large/" + url;
         }
         setContentView(R.layout.activity_image_view);
         context = this;
@@ -103,7 +106,7 @@ public class ImageViewActivity extends BaseActivity implements DialogInterface.O
                 ToastUtils.showShort("暂不支持GIF.");
                 return;
             }
-            requestRuntimePermission(WRITE_EXTERNAL_STORAGE, this);
+            requestRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, this);
         } else if (!url.contains("large") && which == list.size() - 1) {
             url = Parse.parseImageUrl(url, 0);
             getData();

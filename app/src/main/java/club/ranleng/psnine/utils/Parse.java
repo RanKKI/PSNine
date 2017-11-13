@@ -1,6 +1,5 @@
 package club.ranleng.psnine.utils;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 
 import java.util.regex.Matcher;
@@ -8,10 +7,11 @@ import java.util.regex.Pattern;
 
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.common.KeyGetter;
 
 public class Parse {
 
-    public static final String sinaimg_pattern = "http(|s)://.+\\.sinaimg\\.cn/(.+)/.+\\.(jpg|gif)";
+    public static final String sinaimg_pattern = "http(|s)://.+\\.sinaimg\\.cn/(.+)/(.+)\\.(jpg|gif)";
 
     public static int getType(String url) {
         url = url.replace("http://psnine.com/", "");
@@ -60,7 +60,7 @@ public class Parse {
      * Parse image form sinaimg_pattern
      *
      * @param url     original image url
-     * @param quality 0:原图,1:中等尺寸,2:缩略图,-1:缩写
+     * @param quality 0:原图,1:中等尺寸,2:缩略图,-1:缩写,-2:保留key
      * @return parsed url
      */
     public static String parseImageUrl(String url, int quality) {
@@ -69,8 +69,10 @@ public class Parse {
         Matcher m = r.matcher(url);
         if (m.find()) {
             if (quality == -1) {
-                url = "[图片]";
+                url = url.replace(m.group(0), "[图片]");
                 return url;
+            } else if (quality == -2) {
+                return m.group(3);
             }
             url = url.replace(m.group(2), sizes[quality]);
         }
@@ -121,5 +123,13 @@ public class Parse {
                 break;
         }
         return error_message;
+    }
+
+    public static String parseNodeForNewTopic(int type) {
+        if (type == Key.TOPIC) {
+            return "talk";
+        } else {
+            return KeyGetter.getKEY(type);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Topic;
 
 import java.util.ArrayList;
 import java.util.List;

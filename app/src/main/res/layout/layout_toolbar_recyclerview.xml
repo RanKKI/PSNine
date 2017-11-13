@@ -5,12 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/layout_base_toolbar"/>
+    <include layout="@layout/layout_base_toolbar"/>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <include layout="@layout/recycler_view_with_swipe_refreash"/>
 
 </LinearLayout>

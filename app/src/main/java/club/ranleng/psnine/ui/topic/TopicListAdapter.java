@@ -20,7 +20,7 @@ import java.util.List;
 
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseTopic;
-import club.ranleng.psnine.model.TopicComment;
+import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.utils.HtmlImageGetter;
 import club.ranleng.psnine.utils.Parse;

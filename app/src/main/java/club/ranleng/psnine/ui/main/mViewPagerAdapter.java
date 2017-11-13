@@ -23,7 +23,7 @@ public class mViewPagerAdapter extends FragmentPagerAdapter {
         add(Key.PLUS);
     }};
 
-    public mViewPagerAdapter(FragmentManager fm) {
+    mViewPagerAdapter(FragmentManager fm) {
         super(fm);
         for (Integer type : fragments_types) {
             fragments.add((TopicsFragment.newInstance(type)));
@@ -43,6 +43,10 @@ public class mViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return KeyGetter.getKEYName(fragments_types.get(position));
+    }
+
+    public int getKeyByPosition(int position) {
+        return fragments_types.get(position);
     }
 
 }

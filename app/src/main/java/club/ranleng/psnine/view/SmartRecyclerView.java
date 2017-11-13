@@ -17,7 +17,6 @@ import club.ranleng.psnine.R;
 public class SmartRecyclerView<T> extends RecyclerView {
 
     private onLoadMoreListener onLoadMoreListener;
-    private onMoving onMoving;
 
     public SmartRecyclerView(Context context) {
         super(context);
@@ -48,9 +47,6 @@ public class SmartRecyclerView<T> extends RecyclerView {
         }
     }
 
-    public void setOnMoving(onMoving onMoving) {
-        this.onMoving = onMoving;
-    }
 
     public interface onLoadMoreListener {
         void loadMore();
@@ -58,13 +54,6 @@ public class SmartRecyclerView<T> extends RecyclerView {
         boolean isLoading();
     }
 
-    public interface onMoving {
-        void onScroll();
-
-        void onStop();
-
-        boolean isReplyLayoutShowing();
-    }
 
     class ScrollListener<K> extends OnScrollListener {
 
@@ -113,16 +102,6 @@ public class SmartRecyclerView<T> extends RecyclerView {
                 } else if (fragment != null && !fragment.isDetached()) {
                     Glide.with(fragment).pauseRequests();
                 }
-            }
-
-            if (onMoving == null || onMoving.isReplyLayoutShowing()) {
-                return;
-            }
-
-            if (newState == SCROLL_STATE_IDLE) {
-                onMoving.onStop();
-            } else {
-                onMoving.onScroll();
             }
         }
     }

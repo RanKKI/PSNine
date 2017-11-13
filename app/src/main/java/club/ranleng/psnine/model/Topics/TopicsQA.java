@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Topics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,13 @@ import club.ranleng.psnine.base.BaseTopics;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
-public class Topics extends BaseTopics<Topics.Items> {
+public class TopicsQA extends BaseTopics<TopicsQA.Items> {
 
     @Pick(value = "ul.list > li")
-    private List<Items> Items = new ArrayList<>();
+    private List<TopicsQA.Items> Items = new ArrayList<>();
 
     @Override
-    public List<Items> items() {
+    public List<TopicsQA.Items> items() {
         return Items;
     }
 
@@ -21,15 +21,15 @@ public class Topics extends BaseTopics<Topics.Items> {
 
         @Pick(value = "a.l > img", attr = Attrs.SRC)
         private String avatar;
-        @Pick(value = "a.psnnode")
+        @Pick(value = "div.ml64 > div.meta > a.psnnode")
         private String username;
         @Pick(value = "div.ml64 > div.meta", attr = Attrs.OWN_TEXT)
         private String time;
-        @Pick(value = "a.rep.r")
-        private String reply = "0";
-        @Pick(value = "div.ml64 > div.title > a")
+        @Pick(value = " div.ml64 > div.meta > span.r > span:not(.text-bronze)")
+        private String reply = "";
+        @Pick(value = "div.ml64 > p.title > a")
         private String content;
-        @Pick(value = "div.ml64 > div.title > a", attr = Attrs.HREF)
+        @Pick(value = "div.ml64 > p.title > a", attr = Attrs.HREF)
         private String url;
 
         @Override
@@ -44,12 +44,12 @@ public class Topics extends BaseTopics<Topics.Items> {
 
         @Override
         public String time() {
-            return time;
+            return time.replace(" ", "").split("前")[0] + "前";
         }
 
         @Override
         public String reply() {
-            return reply + "评论";
+            return reply;
         }
 
         @Override

@@ -25,8 +25,8 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.UserState;
-import club.ranleng.psnine.model.Topic;
-import club.ranleng.psnine.model.TopicGene;
+import club.ranleng.psnine.model.Topic.Topic;
+import club.ranleng.psnine.model.Topic.TopicGene;
 import club.ranleng.psnine.utils.Parse;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
@@ -73,7 +73,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
             new TopicActivityPresenter<>(this, Topic.class);
         }
         presenter.start();
-        if (!UserState.isLogin()) fab.setVisibility(View.INVISIBLE);
+        fab.setVisibility(UserState.isLogin() ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -119,25 +119,6 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        if (!UserState.isLogin()) {
-            return;
-        }
-        recyclerView.setOnMoving(new SmartRecyclerView.onMoving() {
-            @Override
-            public void onScroll() {
-                fab.hide();
-            }
-
-            @Override
-            public void onStop() {
-                fab.show();
-            }
-
-            @Override
-            public boolean isReplyLayoutShowing() {
-                return reply_root.getVisibility() == View.VISIBLE;
-            }
-        });
     }
 
     @Override

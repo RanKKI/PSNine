@@ -4,7 +4,7 @@ import club.ranleng.psnine.base.BaseTopic;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.remote.ApiTopic;
-import club.ranleng.psnine.model.TopicComment;
+import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.utils.Parse;
 import io.reactivex.functions.Consumer;
 
@@ -17,7 +17,6 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     private String id;
     private Class<T> tClass;
     private boolean loadComment = true;
-
 
     TopicActivityPresenter(TopicActivityContract.View view, Class<T> tClass) {
         this.view = view;
@@ -87,8 +86,10 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
                 view.setReplyLayout(false);
                 adapter.addComment(comment);
             }
+
             @Override
-            public void onFailure() {}
+            public void onFailure() {
+            }
         }, view.getType(), id, content);
     }
 

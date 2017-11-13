@@ -25,10 +25,11 @@
             android:icon="@drawable/notice"
             android:title="@string/nav_notice"/>
 
-        <!--<item-->
-        <!--android:id="@+id/nav_photo"-->
-        <!--android:icon="@drawable/image"-->
-        <!--android:title="@string/nav_photo"/>-->
+        <item
+            android:id="@+id/nav_photo"
+            android:icon="@drawable/photo"
+            android:title="@string/nav_photo"/>
+
         <!--<item-->
         <!--android:id="@+id/nav_element"-->
         <!--android:icon="@drawable/element"-->

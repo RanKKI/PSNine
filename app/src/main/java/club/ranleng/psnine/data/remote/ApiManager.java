@@ -7,6 +7,7 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import club.ranleng.psnine.common.KeyGetter;
@@ -17,7 +18,8 @@ import club.ranleng.psnine.data.interceptor.RequestInterceptor;
 import club.ranleng.psnine.data.module.Callback;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.model.HttpRequest;
-import club.ranleng.psnine.model.TopicComment;
+import club.ranleng.psnine.model.Images;
+import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,7 +28,10 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import me.ghui.fruit.Fruit;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -176,5 +181,41 @@ public class ApiManager {
                     }
                 });
 
+    }
+
+    public Observable<ResponseBody> newGene(FormBody body) {
+        return apiService.newGene(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResponseBody> newTopic(FormBody body) {
+        return apiService.newTopic(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResponseBody> uploadPhoto(File file) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upimg", file.getName(), requestFile);
+        return apiService.upload(body).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void deletePhoto(String id) {
+        FormBody body = new FormBody.Builder()
+                .add("delimg", id).build();
+        apiService.del(body).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+    }
+
+    public Observable<Images> getAllPhotos() {
+        return apiService.getMy("photo").subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, Images>() {
+                    @Override
+                    public Images apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return new Fruit().fromHtml(result, Images.class);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
     }
 }

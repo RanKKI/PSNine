@@ -48,6 +48,9 @@
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
     <string name="send">发送</string>
+    <string name="submit">提交</string>
+    <string name="local_upload">本地上传</string>
+    <string name="take_photo_and_upload">照相</string>
 
     <!--message-->
     <string name="permissionDenied">权限申请被拒绝</string>
@@ -61,5 +64,21 @@
     <string name="no_internet">无网络连接</string>
     <string name="not_support">暂不支持</string>
     <string name="new_reply">有新回复</string>
+    <string name="sending">提交中…</string>
+
+    <!--hint-->
+    <string name="gene_video_hint">视频地址，选填，目前仅支持 youku 和 bilibili</string>
+    <string name="gene_url_hint">出处，选填，http 开头哦</string>
+    <string name="already_selected">已选图片:</string>
+    <string name="click_to_pick">点我选择图片</string>
+    <string name="gene_ele_hint">元素，选填，只能由「中文字母数字」组成，2~15 个字符</string>
+    <string name="gene_main_hint">请说说你对这些图/音乐/视频/电影的感受和看法，不要超过 600 字哦</string>
+    <string name="topic_title">标题</string>
+    <string name="topic_use_magic">使用魔法</string>
+    <string name="topic_content">内容</string>
+
+
+    <string name="floatingFabBehaviour" translatable="false">club.ranleng.psnine.view.FloatingFabBehaviour</string>
+    <string name="authProvider" translatable="false">club.ranleng.psnine.provider</string>
 
 </resources>

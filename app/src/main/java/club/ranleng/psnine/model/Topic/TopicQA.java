@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Topic;
 
 import club.ranleng.psnine.base.BaseTopic;
 import me.ghui.fruit.Attrs;

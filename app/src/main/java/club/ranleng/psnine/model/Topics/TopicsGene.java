@@ -1,4 +1,4 @@
-package club.ranleng.psnine.model;
+package club.ranleng.psnine.model.Topics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,13 @@ import club.ranleng.psnine.base.BaseTopics;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
-public class TopicsQA extends BaseTopics<TopicsQA.Items> {
+public class TopicsGene extends BaseTopics<TopicsGene.Items> {
 
-    @Pick(value = "ul.list > li")
-    private List<TopicsQA.Items> Items = new ArrayList<>();
+    @Pick(value = "ul.list.genelist > li")
+    private List<TopicsGene.Items> Items = new ArrayList<>();
 
     @Override
-    public List<TopicsQA.Items> items() {
+    public List<TopicsGene.Items> items() {
         return Items;
     }
 
@@ -25,11 +25,10 @@ public class TopicsQA extends BaseTopics<TopicsQA.Items> {
         private String username;
         @Pick(value = "div.ml64 > div.meta", attr = Attrs.OWN_TEXT)
         private String time;
-        @Pick(value = " div.ml64 > div.meta > span.r > span:not(.text-bronze)")
-        private String reply = "";
-        @Pick(value = "div.ml64 > p.title > a")
+        private String reply = "0";
+        @Pick(value = "div.ml64 > a > div.content")
         private String content;
-        @Pick(value = "div.ml64 > p.title > a", attr = Attrs.HREF)
+        @Pick(value = "div.ml64 > a.touch", attr = Attrs.HREF)
         private String url;
 
         @Override
@@ -49,7 +48,7 @@ public class TopicsQA extends BaseTopics<TopicsQA.Items> {
 
         @Override
         public String reply() {
-            return reply;
+            return time.replace(" ", "").split("前")[1];
         }
 
         @Override

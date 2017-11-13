@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
@@ -31,7 +33,9 @@ import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.UserInfo;
+import club.ranleng.psnine.ui.imageGallery.ImagesGalleryActivity;
 import club.ranleng.psnine.ui.LoginActivity;
+import club.ranleng.psnine.ui.newTopic.newTopicActivity;
 import club.ranleng.psnine.ui.setting.SettingsActivity;
 import club.ranleng.psnine.ui.topics.TopicsActivity;
 import club.ranleng.psnine.utils.CacheUtils;
@@ -51,11 +55,13 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
     private Disposable userInfo;
     private TextView nav_username;
     private ImageView nav_avatar;
     private Context context;
+    private mViewPagerAdapter mViewPagerAdapter;
 
     @Override
     public void setContentView() {
@@ -78,9 +84,10 @@ public class MainActivity extends BaseActivity
         navigationView.getMenu().findItem(R.id.nav_notice).setActionView(R.layout.nav_menu_badge);
         assert nav_avatar != null;
         assert nav_username != null;
-        mViewPagerAdapter mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
+        mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        fab.setVisibility(UserState.isLogin() ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -139,6 +146,8 @@ public class MainActivity extends BaseActivity
             Bundle bundle = new Bundle();
             bundle.putInt("type", Key.NOTICE);
             ActivityUtils.startActivity(bundle, TopicsActivity.class);
+        } else if (id == R.id.nav_photo) {
+            ActivityUtils.startActivity(ImagesGalleryActivity.class);
         }
         return true;
     }
@@ -159,6 +168,15 @@ public class MainActivity extends BaseActivity
                     }
                 });
 
+    }
+
+    @OnClick(R.id.fab)
+    public void newTopic() {
+        int position = tabLayout.getSelectedTabPosition();
+        int type = mViewPagerAdapter.getKeyByPosition(position);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        ActivityUtils.startActivity(bundle, newTopicActivity.class);
     }
 
     class updateUserInfo implements Consumer<UserInfo> {
@@ -189,7 +207,7 @@ public class MainActivity extends BaseActivity
             menu.setGroupVisible(R.id.user_root, UserState.isLogin());
             menu.findItem(R.id.nav_login).setVisible(!UserState.isLogin());
             menu.findItem(R.id.nav_logout).setVisible(UserState.isLogin());
+            fab.setVisibility(UserState.isLogin() ? View.VISIBLE : View.INVISIBLE);
         }
-
     }
 }

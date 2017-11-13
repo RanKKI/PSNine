@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/new_topic_waning_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FAF8F0"
+                    android:padding="6dp"
+                    android:textColor="#C09853"/>
+
+                <EditText
+                    android:id="@+id/new_topic_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:hint="@string/topic_title"
+                    android:inputType="text"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <Button
+                    android:id="@+id/new_topic_magic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/topic_use_magic"/>
+
+                <EditText
+                    android:id="@+id/new_topic_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:gravity="left|top"
+                    android:hint="@string/topic_content"
+                    android:minHeight="100dp"
+                    android:nestedScrollingEnabled="true"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#FAF8F0"
+                    android:padding="6dp"
+                    android:textColor="#C09853"/>
+
+                <Button
+                    android:id="@+id/new_topic_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#3890FF"
+                    android:text="@string/submit"
+                    android:textColor="#FFFFFF"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/new_gene_waning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FAF8F0"
+                    android:padding="6dp"
+                    android:textColor="#C09853"/>
+
+                <EditText
+                    android:id="@+id/new_gene_main_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:gravity="left|top"
+                    android:hint="@string/gene_main_hint"
+                    android:minHeight="100dp"
+                    android:nestedScrollingEnabled="true"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/new_gene_ele"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:hint="@string/gene_ele_hint"
+                    android:inputType="text"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <Button
+                        android:id="@+id/new_gene_select_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_weight="0.25"
+                        android:background="#8CC14C"
+                        android:text="@string/click_to_pick"
+                        android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.1"
+                        android:text="@string/already_selected"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/new_gene_selected_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 张"
+                        android:textColor="#C0A09F"/>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/new_gene_video_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:hint="@string/gene_video_hint"
+                    android:inputType="textUri"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/new_gene_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="#EFEFEF"
+                    android:ems="10"
+                    android:hint="@string/gene_url_hint"
+                    android:inputType="textUri"
+                    android:padding="6dp"
+                    android:textSize="14sp"/>
+
+                <Button
+                    android:id="@+id/new_gene_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#3890FF"
+                    android:text="@string/submit"
+                    android:textColor="#FFFFFF"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
