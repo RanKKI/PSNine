@@ -2,6 +2,7 @@ package club.ranleng.psnine.ui.topics;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -34,17 +36,43 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
         mLayoutInflater = LayoutInflater.from(Utils.getApp());
     }
 
-    void add(BaseTopics<T> baseTopics) {
-        List<T> newItems = baseTopics.getItems();
-        int start = getItemCount();
-        Items.addAll(newItems);
-        notifyItemRangeInserted(start, getItemCount());
+    void add(BaseTopics<T> baseTopics, int page) {
+        final List<T> newItems = baseTopics.getItems();
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return Items.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newItems.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return true;
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return Items.get(oldItemPosition).getContent().equals(newItems.get(newItemPosition).getContent());
+            }
+        });
+        if (page == 1) {
+            Items.clear();
+            Items = newItems;
+        } else {
+            Items.addAll(newItems);
+        }
+        diffResult.dispatchUpdatesTo(this);
     }
 
     void clear() {
-        int end = getItemCount();
+//        int end = getItemCount();
         Items.clear();
-        this.notifyItemRangeRemoved(0, end);
+        LogUtils.d(Items.size());
+//        this.notifyItemRangeRemoved(0, end);
     }
 
     @Override

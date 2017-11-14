@@ -83,8 +83,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.clean();
-                presenter.load();
+                presenter.refresh();
             }
         });
     }
@@ -102,5 +101,10 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     @Override
     public int getType() {
         return type;
+    }
+
+    @Override
+    public void scrollTo(int pos) {
+        recyclerView.scrollToPosition(pos);
     }
 }

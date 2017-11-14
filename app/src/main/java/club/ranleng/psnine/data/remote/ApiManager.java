@@ -76,7 +76,7 @@ public class ApiManager {
         return defaultInstance;
     }
 
-    public ApiService getApiService() {
+    ApiService getApiService() {
         return apiService;
     }
 

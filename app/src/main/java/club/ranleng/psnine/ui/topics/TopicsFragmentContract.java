@@ -18,6 +18,8 @@ public interface TopicsFragmentContract {
 
         int getType();
 
+        void scrollTo(int pos);
+
     }
 
     interface Presenter extends BasePresenter{
@@ -26,7 +28,7 @@ public interface TopicsFragmentContract {
 
         void loadMore();
 
-        void clean();
+        void refresh();
 
     }
 }

@@ -4,7 +4,8 @@ import club.ranleng.psnine.base.BaseTopics;
 import club.ranleng.psnine.data.remote.ApiTopic;
 import io.reactivex.functions.Consumer;
 
-public class TopicsFragmentPresenter<T extends BaseTopics> implements TopicsFragmentContract.Presenter {
+public class TopicsFragmentPresenter<T extends BaseTopics>
+        implements TopicsFragmentContract.Presenter {
 
     private TopicsFragmentContract.View view;
     private TopicsFragmentListAdapter adapter;
@@ -32,8 +33,11 @@ public class TopicsFragmentPresenter<T extends BaseTopics> implements TopicsFrag
                 .subscribe(new Consumer<T>() {
                     @Override
                     public void accept(T t) throws Exception {
-                        adapter.add(t);
+                        adapter.add(t, page);
                         view.loading(false);
+                        if (page == 1) {
+                            view.scrollTo(0);
+                        }
                     }
                 });
     }
@@ -45,8 +49,9 @@ public class TopicsFragmentPresenter<T extends BaseTopics> implements TopicsFrag
     }
 
     @Override
-    public void clean() {
+    public void refresh() {
         page = 1;
-        adapter.clear();
+        load();
     }
+
 }

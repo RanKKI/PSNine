@@ -1,6 +1,7 @@
 package club.ranleng.psnine.ui.imageGallery;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         if (list != null) {
             photos.addAll(list);
         }
+        images = new Images();
     }
 
     void delete(int pos) {
@@ -37,9 +39,29 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         notifyItemRemoved(pos);
     }
 
-    void update(Images images) {
-        this.images = images;
-        notifyItemRangeChanged(0, getItemCount());
+    void update(final Images newImages) {
+        DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return images.getItems().size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newImages.getItems().size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return true;
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return images.getItems().get(oldItemPosition).getId().equals(newImages.getItems().get(newItemPosition).getId());
+            }
+        }).dispatchUpdatesTo(this);
+        this.images = newImages;
     }
 
     @Override
@@ -73,6 +95,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     }
 
     public interface OnClick {
+        
         void onClick(View v, View root, String url);
 
         void onLongClick(View v, String id, int pos, String url);

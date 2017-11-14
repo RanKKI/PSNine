@@ -2,7 +2,6 @@ package club.ranleng.psnine.ui.imageGallery;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -47,7 +46,6 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
     private File tmpFile;
     private ArrayList<String> photos;
     private boolean selectable;
-    private Context context;
     private ImageGalleryAdapter adapter;
 
     @Override
@@ -58,7 +56,6 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
     @Override
     public void find_setup_Views() {
         ButterKnife.bind(this);
-        context = this;
         setSupportActionBar(toolbar);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -67,7 +64,7 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
             }
         });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new ImageGalleryAdapter(context, photos, ImagesGalleryActivity.this);
+        adapter = new ImageGalleryAdapter(this, photos, ImagesGalleryActivity.this);
         recyclerView.setAdapter(adapter);
     }
 
