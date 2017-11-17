@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.util.ArrayList;
+
 import io.reactivex.annotations.Nullable;
 
 public class HtmlImageGetter implements Html.ImageGetter {
@@ -32,8 +34,18 @@ public class HtmlImageGetter implements Html.ImageGetter {
     }
 
     @Override
-    public Drawable getDrawable(String s) {
+    public Drawable getDrawable(final String s) {
         final URLDrawable urlDrawable = new URLDrawable();
+        int w = 64;
+        int h = 64;
+        if (!s.contains("photo.psnine.com/face")) {
+            ArrayList<Integer> list = LCache.get(s);
+            if (list != null) {
+                w = list.get(0);
+                h = list.get(1);
+            }
+        }
+        urlDrawable.setBounds(0, 0, w, h);
         Glide.with(context).asBitmap().thumbnail(0.5f).load(s)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -57,6 +69,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
                         resource = Bitmap.createBitmap(resource, 0, 0, width, height, matrix, true);
                         width = resource.getWidth();
                         height = resource.getHeight();
+                        LCache.add(s, width, height);
                         urlDrawable.bitmap = resource;
                         urlDrawable.setBounds(0, 0, width, height);
                         if (tv != null) {

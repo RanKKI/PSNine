@@ -8,6 +8,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
+import club.ranleng.psnine.utils.LCache;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -32,6 +33,7 @@ public class InitActivity extends BaseActivity {
     public void getData() {
         SkinCompatManager.withoutActivity(this.getApplication()).loadSkin();
         Key.getSetting();
+        LCache.init();
         ApiManager.getDefault();
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override

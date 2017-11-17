@@ -9,11 +9,23 @@
         <item name="android:screenOrientation">portrait</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:textColor">@color/primary_text</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ActivityAnimation" parent="@android:style/Animation.Activity">
+        <!--A1 启动 A2 时，A2 出现在屏幕上-->
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
+        <!--A1 启动 A2 时，A1 从屏幕上消失-->
+        <item name="android:activityOpenExitAnimation">@anim/out_from_left</item>
+        <!--A2 退出回到 A1 时，A1 出现在屏幕上-->
+        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
+        <!--A2 退出回到 A1 时，A2 从屏幕上消失-->
+        <item name="android:activityCloseExitAnimation">@anim/out_from_right</item>
     </style>
 
 </resources>

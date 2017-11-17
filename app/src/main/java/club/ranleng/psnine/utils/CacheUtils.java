@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class CacheUtils {
 
-    public static String getFormatSize(double size) {
+    private static String getFormatSize(double size) {
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
             return size + "Byte";
@@ -35,7 +35,7 @@ public class CacheUtils {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 
-    public static long getFolderSize(File file) {
+    private static long getFolderSize(File file) {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
@@ -53,7 +53,7 @@ public class CacheUtils {
         return size;
     }
 
-    public static String getCount(File file){
+    public static String getCount(File file) {
         return CacheUtils.getFormatSize(CacheUtils.getFolderSize(file));
     }
 
@@ -67,7 +67,6 @@ public class CacheUtils {
                 }
             }
         }
-        // The directory is now empty so delete it
         return dir.delete();
     }
 }
