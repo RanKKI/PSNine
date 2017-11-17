@@ -68,13 +68,6 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
         diffResult.dispatchUpdatesTo(this);
     }
 
-    void clear() {
-//        int end = getItemCount();
-        Items.clear();
-        LogUtils.d(Items.size());
-//        this.notifyItemRangeRemoved(0, end);
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.adapter_topics_item, parent, false);

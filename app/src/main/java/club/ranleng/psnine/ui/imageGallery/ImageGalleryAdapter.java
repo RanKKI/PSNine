@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -25,18 +26,19 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     private Context context;
     private List<String> photos = new ArrayList<>();
 
-    ImageGalleryAdapter(Context context, List<String> list, OnClick onClick) {
+    ImageGalleryAdapter(Context context, OnClick onClick) {
         this.onClick = onClick;
         this.context = context;
-        if (list != null) {
-            photos.addAll(list);
-        }
         images = new Images();
     }
 
     void delete(int pos) {
         images.getItems().remove(pos);
         notifyItemRemoved(pos);
+    }
+
+    void updateList(List<String> list) {
+        photos = list;
     }
 
     void update(final Images newImages) {
@@ -95,7 +97,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     }
 
     public interface OnClick {
-        
+
         void onClick(View v, View root, String url);
 
         void onLongClick(View v, String id, int pos, String url);

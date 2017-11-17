@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:screenOrientation">portrait</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:textColor">@color/primary_text</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

@@ -8,23 +8,7 @@
     android:orientation="vertical"
     tools:context="club.ranleng.psnine.ui.topic.TopicActivity">
 
-    <include layout="@layout/layout_base_toolbar"/>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <club.ranleng.psnine.view.SmartRecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </club.ranleng.psnine.view.SmartRecyclerView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+    <include layout="@layout/layout_toolbar_recyclerview"/>
 
     <RelativeLayout
         android:id="@+id/reply_root"
@@ -61,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:background="@color/accent"
         app:layout_behavior="@string/floatingFabBehaviour"
         app:srcCompat="@android:drawable/ic_input_add"/>
 

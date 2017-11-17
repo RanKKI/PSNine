@@ -7,6 +7,6 @@
 
     <include layout="@layout/layout_base_toolbar"/>
 
-    <include layout="@layout/recycler_view_with_swipe_refreash"/>
+    <include layout="@layout/swiperefrsh_recyclerview"/>
 
 </LinearLayout>

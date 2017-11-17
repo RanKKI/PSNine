@@ -14,15 +14,14 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:civ_border_width="2dp"
-        app:civ_circle_background_color="@color/colorCircleBorder"
-        app:srcCompat="@mipmap/ic_launcher"/>
+        app:civ_circle_background_color="@color/colorCircleBorder"/>
 
     <LinearLayout
         android:id="@+id/info_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/header_icon"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/header_icon"
         android:orientation="horizontal"
         android:weightSum="20">
 
@@ -30,27 +29,25 @@
             android:id="@+id/header_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_weight="10"
-            android:textColor="#399adc"/>
+            android:textColor="@color/colorPSNineBlue"/>
 
         <TextView
             android:id="@+id/header_time"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="4"
-            android:textColor="#CCCCCE"/>
+            android:textColor="@color/secondary_text"/>
 
         <TextView
             android:id="@+id/header_replies"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="5"
             android:maxLines="1"
-            android:textColor="#CCCCCE"/>
+            android:textColor="@color/secondary_text"/>
 
     </LinearLayout>
 
@@ -59,8 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/info_root"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/header_icon"/>
+        android:layout_toEndOf="@+id/header_icon"/>
 
 </RelativeLayout>

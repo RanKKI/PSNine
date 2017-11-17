@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,8 +33,8 @@ import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.UserInfo;
-import club.ranleng.psnine.ui.imageGallery.ImagesGalleryActivity;
 import club.ranleng.psnine.ui.LoginActivity;
+import club.ranleng.psnine.ui.imageGallery.ImagesGalleryActivity;
 import club.ranleng.psnine.ui.newTopic.newTopicActivity;
 import club.ranleng.psnine.ui.setting.SettingsActivity;
 import club.ranleng.psnine.ui.topics.TopicsActivity;
@@ -88,12 +87,10 @@ public class MainActivity extends BaseActivity
         mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        fab.setVisibility(UserState.isLogin() ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public void getData() {
-        Key.getSetting();
         refreshCache();
         userInfo = RxBus.getDefault().toObservable(UserInfo.class)
                 .subscribe(new updateUserInfo());

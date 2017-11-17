@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
 
-    <color name="primary">#DCCECD</color>
-    <color name="primary_dark">#A5897B</color>
-    <color name="primary_light">#a4a4a4</color>
-
-    <color name="accent">#ec407a</color>
-
-    <color name="secondary">#bdbdbd</color>
-    <color name="secondary_drak">#8d8d8d</color>
-    <color name="secondary_light">#efefef</color>
-
-    <color name="primary_text">#8a000000</color>
-    <color name="secondary_text">#8a000000</color>
-
-    <color name="logo_blue">#4F91FC</color>
-    <color name="colorDivider">#bfbfbf</color>
-
-    <color name="colorIcon">#2c2c2c</color>
-    
+    <!--normal colors-->
+    <color name="primary">#FF9800</color>
+    <color name="primary_dark">#F57C00</color>
+    <color name="primary_light">#FFE0B2</color>
+    <color name="accent">#FF5722</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorIcon">#212121</color>
     <color name="colorCircleBorder">#FFFFFF</color>
+    <color name="colorPSNineBlue">#399ADC</color>
 
 </resources>

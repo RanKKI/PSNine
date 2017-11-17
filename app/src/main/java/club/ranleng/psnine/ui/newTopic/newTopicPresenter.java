@@ -1,10 +1,10 @@
 package club.ranleng.psnine.ui.newTopic;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.data.remote.ApiManager;
-import club.ranleng.psnine.utils.AlertUtils;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import okhttp3.FormBody;
@@ -13,6 +13,7 @@ import okhttp3.ResponseBody;
 public class newTopicPresenter implements newTopicContact.Presenter {
 
     private newTopicContact.View view;
+    private Disposable disposable;
 
     private newTopicPresenter(newTopicContact.View view) {
         this.view = view;
@@ -30,19 +31,26 @@ public class newTopicPresenter implements newTopicContact.Presenter {
 
     @Override
     public void post(FormBody body) {
-        final Disposable disposable = ApiManager.getDefault()
+        final ProgressDialog dialog = new ProgressDialog(view.getCtx());
+        dialog.setMessage(view.getCtx().getString(R.string.sending));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(true);
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (disposable != null) {
+                    disposable.dispose();
+                }
+            }
+        });
+        dialog.show();
+        disposable = ApiManager.getDefault()
                 .newGene(body)
                 .subscribe(new Consumer<ResponseBody>() {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
+                        dialog.dismiss();
                         view.finishPosted();
-                    }
-                });
-        AlertUtils.LoadingDialog(view.getCtx(),
-                R.string.sending, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        disposable.dispose();
                     }
                 });
     }

@@ -14,7 +14,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -47,4 +48,5 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0' //CircleImageView
     implementation 'com.alexvasilkov:gesture-views:2.3.2' // Gesture ImageView
     implementation project(path: ':HtmlTextView') // View.
+    implementation 'skin.support:skin-support:2.1.9'
 }

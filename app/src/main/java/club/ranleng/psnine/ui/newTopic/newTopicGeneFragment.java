@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +29,7 @@ import static android.app.Activity.RESULT_OK;
 public class newTopicGeneFragment extends BaseFragment implements newTopicContact.View {
 
     private final int selectPhotos = 91;
+    private final String selectedImagesText = "%d 张";
 
     @BindView(R.id.new_gene_waning) TextView waning;
     @BindView(R.id.new_gene_selected_img) TextView selected_img;
@@ -73,7 +73,8 @@ public class newTopicGeneFragment extends BaseFragment implements newTopicContac
                 .add("element", TextUtils.toString(ele))
                 .add("video", TextUtils.toString(video_url))
                 .add("url", TextUtils.toString(url))
-                .add("photo", TextUtils.toStringPhoto(photo_list));
+                .add("photo", TextUtils.toStringPhoto(photo_list))
+                .add("addgene","");
         presenter.post(bodyBuilder.build());
     }
 
@@ -88,7 +89,11 @@ public class newTopicGeneFragment extends BaseFragment implements newTopicContac
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == selectPhotos) {
             List<String> list = data.getStringArrayListExtra("photos");
-            if (list != null) photo_list.addAll(list);
+            if (list != null) {
+                photo_list.clear();
+                photo_list.addAll(list);
+            }
+            loadImagesSize();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -119,5 +124,9 @@ public class newTopicGeneFragment extends BaseFragment implements newTopicContac
     @Override
     public Context getCtx() {
         return context;
+    }
+
+    private void loadImagesSize() {
+        selected_img.setText(String.format(Locale.CHINA, selectedImagesText, photo_list.size()));
     }
 }

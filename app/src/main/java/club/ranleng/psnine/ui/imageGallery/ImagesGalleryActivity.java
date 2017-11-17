@@ -21,6 +21,7 @@ import com.blankj.utilcode.util.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +32,6 @@ import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.Images;
 import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.utils.FileUtils;
-import club.ranleng.psnine.utils.TextUtils;
 import io.reactivex.functions.Consumer;
 import okhttp3.ResponseBody;
 
@@ -64,13 +64,14 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
             }
         });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new ImageGalleryAdapter(this, photos, ImagesGalleryActivity.this);
+        adapter = new ImageGalleryAdapter(this, this);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void getData() {
         photos = getIntent().getStringArrayListExtra("photos");
+        adapter.updateList(photos);
         selectable = (photos != null);
         freshTitle();
         load();
@@ -169,7 +170,7 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
             setTitle("图床");
             return;
         }
-        setTitle("图床 (已选: " + TextUtils.toString(photos.size()) + ")");
+        setTitle(String.format(Locale.CHINA, "图床 (已选: %d )", photos.size()));
     }
 
     @Override
@@ -177,12 +178,12 @@ public class ImagesGalleryActivity extends BaseActivity implements ImageGalleryA
         if (!selectable) {
             return;
         }
-        boolean contain = photos.contains(url);
-        v.setVisibility(contain ? View.INVISIBLE : View.VISIBLE);
-        if (contain) {
+        if (photos.contains(url)) {
             photos.remove(url);
+            v.setVisibility(View.INVISIBLE);
         } else {
             photos.add(url);
+            v.setVisibility(View.VISIBLE);
         }
         freshTitle();
     }

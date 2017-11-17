@@ -12,7 +12,6 @@
             android:summary="@string/settings_entries_ob_obdate"
             android:title="排序"/>
 
-
         <SwitchPreference
             android:defaultValue="true"
             android:key="settings_emoji_dialog"

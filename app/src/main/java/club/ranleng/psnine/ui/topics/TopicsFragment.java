@@ -38,7 +38,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.recycler_view_with_swipe_refreash, container, false);
+        View view = inflater.inflate(R.layout.swiperefrsh_recyclerview, container, false);
         ButterKnife.bind(this, view);
         return view;
     }

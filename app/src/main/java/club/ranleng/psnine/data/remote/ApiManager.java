@@ -38,10 +38,12 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class ApiManager {
 
+    public static final String domain = "psnine.com";
     private static ClearableCookieJar cookieJar;
     private static ApiService apiService;
-
     private static volatile ApiManager defaultInstance;
+//    public static final String domain = "http://192.168.0.4:5000/";
+
 
     private ApiManager() {
         cookieJar = new PersistentCookieJar(new SetCookieCache(),
@@ -56,8 +58,7 @@ public class ApiManager {
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://psnine.com/")
-//                .baseUrl("http://192.168.0.4:5000/")
+                .baseUrl("http://" + domain)
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
