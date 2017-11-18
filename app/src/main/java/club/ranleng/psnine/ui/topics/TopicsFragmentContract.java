@@ -18,6 +18,8 @@ public interface TopicsFragmentContract {
 
         int getType();
 
+        String getQuery();
+
         void scrollTo(int pos);
 
     }

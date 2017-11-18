@@ -1,10 +1,11 @@
 package club.ranleng.psnine.ui.topic;
 
-import club.ranleng.psnine.base.BaseTopic;
+import club.ranleng.psnine.base.model.BaseTopic;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.Topic.TopicComment;
+import club.ranleng.psnine.model.Topic.TopicGene;
 import club.ranleng.psnine.utils.Parse;
 import io.reactivex.functions.Consumer;
 
@@ -42,7 +43,11 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
                 BaseTopic baseTopic = (BaseTopic) t;
                 adapter.setHeaderView(baseTopic);
                 String sub = baseTopic.getTitle();
-                view.setSubtitle(sub.length() > 20 ? sub.substring(0, 20) : sub);
+                view.setSubtitle(sub);
+                if (t instanceof TopicGene) {
+                    TopicGene topicGene = (TopicGene) t;
+                    view.setMenu(topicGene.getOriginalUrl());
+                }
                 if (loadComment) loadComment();
             }
         });
@@ -73,7 +78,8 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     @Override
     public void refresh() {
         comment_page = 1;
-        adapter.clearComments();
+        loadComment = true;
+        adapter.clear();
         loadTopic();
     }
 

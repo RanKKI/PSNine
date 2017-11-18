@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.base.BaseTopic;
+import club.ranleng.psnine.base.model.BaseTopic;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.utils.HtmlImageGetter;
@@ -65,10 +66,11 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         notifyItemRangeChanged(pos, getItemCount());
     }
 
-    void clearComments() {
-        int end = comments.size();
+    void clear() {
+//        int end = comments.size();
+        notifyItemRangeRemoved(0, getItemCount());
         comments.clear();
-        notifyItemRangeRemoved(1, end);
+        baseTopic = null;
     }
 
     @Override

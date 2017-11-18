@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -21,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.base.BaseTopics;
+import club.ranleng.psnine.base.model.BaseTopics;
 import club.ranleng.psnine.ui.topic.TopicActivity;
 
 public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
@@ -60,7 +59,6 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
             }
         });
         if (page == 1) {
-            Items.clear();
             Items = newItems;
         } else {
             Items.addAll(newItems);

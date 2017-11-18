@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements Callback {
 
     @Override
     public void getData() {
-        if(UserState.isLogin()){
+        if (UserState.isLogin()) {
             finish();
         }
     }
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements Callback {
 
     @Override
     public void onSuccess() {
-        new ApiTopic<Topic>().getTopics(Key.TOPIC,1,Topic.class)
+        new ApiTopic<Topic>().getTopics(Key.TOPIC, 1, "", Topic.class)
                 .subscribe(new Consumer<Topic>() {
                     @Override
                     public void accept(Topic topic) throws Exception {

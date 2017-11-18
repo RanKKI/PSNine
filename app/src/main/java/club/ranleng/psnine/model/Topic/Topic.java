@@ -1,6 +1,6 @@
 package club.ranleng.psnine.model.Topic;
 
-import club.ranleng.psnine.base.BaseTopic;
+import club.ranleng.psnine.base.model.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
@@ -21,18 +21,6 @@ public class Topic extends BaseTopic {
 
     //    @Pick(value = "div.page > ul > li")
 //    private List<Page> pages = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "ApiTopic{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", content='" + content + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", time='" + time + '\'' +
-                ", comments='" + comments + '\'' +
-                '}';
-    }
 
     @Override
     public String title() {

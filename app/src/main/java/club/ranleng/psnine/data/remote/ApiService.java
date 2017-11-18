@@ -15,10 +15,10 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @GET("{type}")
-    Observable<ResponseBody> getTopics(@Path("type") String type, @Query("page") int page, @Query("ob") String ob);
+    Observable<ResponseBody> getTopics(@Path("type") String type, @Query("page") int page, @Query("ob") String ob, @Query("title") String query);
 
     @GET("node/{type}")
-    Observable<ResponseBody> getTopicsWithNode(@Path("type") String type, @Query("page") int page, @Query("ob") String ob);
+    Observable<ResponseBody> getTopicsWithNode(@Path("type") String type, @Query("page") int page, @Query("ob") String ob, @Query("title") String query);
 
     @GET("{type}/{id}")
     Observable<ResponseBody> getTopic(@Path("type") String type, @Path("id") String id);

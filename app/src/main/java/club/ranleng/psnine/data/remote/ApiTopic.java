@@ -27,14 +27,14 @@ public class ApiTopic<T> {
                 }).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<T> getTopics(int type, int page, final Class<T> tClass) {
+    public Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
         Observable<ResponseBody> observable;
         if (type == Key.TOPIC || type == Key.GENE || type == Key.QA) {
-            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
+            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
         } else if (type == Key.NOTICE) {
             observable = ApiManager.getDefault().getApiService().getMy(KeyGetter.getKEY(type));
         } else {
-            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB);
+            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
         }
         return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {

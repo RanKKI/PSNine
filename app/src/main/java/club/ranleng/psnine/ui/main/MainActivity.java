@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,6 +88,7 @@ public class MainActivity extends BaseActivity
         mViewPagerAdapter = new mViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
     @Override
@@ -109,6 +111,28 @@ public class MainActivity extends BaseActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", getCurrentType());
+                bundle.putString("query", query);
+                ActivityUtils.startActivity(bundle, TopicsActivity.class);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -170,11 +194,14 @@ public class MainActivity extends BaseActivity
 
     @OnClick(R.id.fab)
     public void newTopic() {
-        int position = tabLayout.getSelectedTabPosition();
-        int type = mViewPagerAdapter.getKeyByPosition(position);
         Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
+        bundle.putInt("type", getCurrentType());
         ActivityUtils.startActivity(bundle, newTopicActivity.class);
+    }
+
+    private int getCurrentType() {
+        int position = tabLayout.getSelectedTabPosition();
+        return mViewPagerAdapter.getKeyByPosition(position);
     }
 
     class updateUserInfo implements Consumer<UserInfo> {

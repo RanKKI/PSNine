@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/activity_topic_menu_test"
-        android:title="test"/>
+        android:id="@+id/activity_topic_menu_originalUrl"
+        android:title="@string/originalUrl"/>
+
+    <item
+        android:id="@+id/activity_topic_menu_share"
+        android:title="@string/share"/>
+
 </menu>

@@ -21,6 +21,9 @@ public class LCache {
         if (mCache == null) {
             init();
         }
+        if (mCache.get(url) != null) {
+            return;
+        }
         ArrayList<Integer> list = new ArrayList<>();
         list.add(width);
         list.add(height);

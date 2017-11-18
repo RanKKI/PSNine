@@ -3,6 +3,7 @@ package club.ranleng.psnine.ui.topics;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,14 +24,20 @@ import club.ranleng.psnine.view.SmartRecyclerView;
 public class TopicsFragment extends BaseFragment implements TopicsFragmentContract.View {
 
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.recyclerView) SmartRecyclerView<Fragment> recyclerView;
+    @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
     private TopicsFragmentContract.Presenter presenter;
     private int type;
+    private String query;
 
     public static TopicsFragment newInstance(int type) {
+        return newInstance(type, null);
+    }
+
+    public static TopicsFragment newInstance(int type, String query) {
         Bundle args = new Bundle();
         args.putInt("type", type);
+        args.putString("query", query);
         TopicsFragment fragment = new TopicsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -46,6 +53,7 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     @Override
     public void initData() {
         type = getArguments().getInt("type");
+        query = getArguments().getString("query");
         if (type == Key.GENE) {
             new TopicsFragmentPresenter<>(this, TopicsGene.class);
         } else if (type == Key.QA) {
@@ -101,6 +109,11 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
     @Override
     public int getType() {
         return type;
+    }
+
+    @Override
+    public String getQuery() {
+        return query == null ? "" : query;
     }
 
     @Override

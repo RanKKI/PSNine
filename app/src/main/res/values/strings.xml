@@ -51,7 +51,8 @@
     <string name="submit">提交</string>
     <string name="local_upload">本地上传</string>
     <string name="take_photo_and_upload">照相</string>
-
+    <string name="search">搜索</string>
+    <string name="share">分享</string>
     <!--message-->
     <string name="permissionDenied">权限申请被拒绝</string>
     <string name="view_original_image">查看原始图片</string>
@@ -65,6 +66,7 @@
     <string name="not_support">暂不支持</string>
     <string name="new_reply">有新回复</string>
     <string name="sending">提交中…</string>
+    <string name="originalUrl">出处</string>
 
     <!--hint-->
     <string name="gene_video_hint">视频地址，选填，目前仅支持 youku 和 bilibili</string>

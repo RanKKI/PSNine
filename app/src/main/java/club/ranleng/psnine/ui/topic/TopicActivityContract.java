@@ -24,6 +24,9 @@ public interface TopicActivityContract {
         void setReplyLayout(boolean opening);
 
         void setReplyContent(String content, boolean clean);
+
+        void setMenu(String OriginalUrl);
+
     }
 
     interface Presenter extends BasePresenter {

@@ -1,4 +1,4 @@
-package club.ranleng.psnine.base;
+package club.ranleng.psnine.base.model;
 
 public abstract class BaseTopic {
 

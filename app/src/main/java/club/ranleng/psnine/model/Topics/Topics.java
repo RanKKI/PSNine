@@ -3,7 +3,7 @@ package club.ranleng.psnine.model.Topics;
 import java.util.ArrayList;
 import java.util.List;
 
-import club.ranleng.psnine.base.BaseTopics;
+import club.ranleng.psnine.base.model.BaseTopics;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 

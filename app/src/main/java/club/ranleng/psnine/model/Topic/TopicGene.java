@@ -1,6 +1,6 @@
 package club.ranleng.psnine.model.Topic;
 
-import club.ranleng.psnine.base.BaseTopic;
+import club.ranleng.psnine.base.model.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
 
@@ -16,8 +16,10 @@ public class TopicGene extends BaseTopic {
     private String avatar;
     @Pick(value = "div.pd10 > div.meta", attr = Attrs.OWN_TEXT)
     private String time;
-//    @Pick(value = "div.main > div.box > div.pd10 > div.meta", attr = Attrs.OWN_TEXT)
-//    private String comments;
+    @Pick(value = "div.content.pd10 > iframe", attr = Attrs.SRC)
+    private String iframeUrl;
+    @Pick(value = "div:nth-child(1) > div:nth-child(1) > div.meta > span > a.text-info", attr = Attrs.HREF)
+    private String OriginalUrl;
 
     @Override
     public String title() {
@@ -31,6 +33,13 @@ public class TopicGene extends BaseTopic {
 
     @Override
     public String content() {
+        if (iframeUrl != null) {
+            String html = "<center><a align=\"center\" href=\"" + iframeUrl + "\" >视频链接</a></center>";
+            if (!content.contains("img")) {
+                return html;
+            }
+            return content + "<br>" + html;
+        }
         return content;
     }
 
@@ -47,5 +56,9 @@ public class TopicGene extends BaseTopic {
     @Override
     public String comments() {
         return time.replace(" ", "").split("前")[1];
+    }
+
+    public String getOriginalUrl() {
+        return OriginalUrl;
     }
 }

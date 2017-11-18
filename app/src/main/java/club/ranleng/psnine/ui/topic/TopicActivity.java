@@ -2,8 +2,9 @@ package club.ranleng.psnine.ui.topic;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,8 @@ import android.view.ViewAnimationUtils;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
@@ -34,7 +37,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.recyclerView) SmartRecyclerView<Activity> recyclerView;
+    @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
     @BindView(R.id.reply_root) RelativeLayout reply_root;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.content) EditText content;
@@ -42,6 +45,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     private TopicActivityContract.Presenter presenter;
     private String url;
     private int type;
+    private String OriginalUrl;
 
     @Override
     public void setContentView() {
@@ -78,14 +82,21 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_topic, menu);
+        getMenuInflater().inflate(R.menu.activity_topic, menu);
+        menu.findItem(R.id.activity_topic_menu_originalUrl).setVisible(OriginalUrl != null);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.activity_topic_menu_test:
+            case R.id.activity_topic_menu_originalUrl:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OriginalUrl));
+                startActivity(intent);
+                return true;
+            case R.id.activity_topic_menu_share:
+                String shareContent = toolbar.getSubtitle() + " (分享自 @PSN中文站）" + url;
+                ActivityUtils.startActivity(IntentUtils.getShareTextIntent(shareContent));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -159,6 +170,12 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         } else {
             this.content.append(content);
         }
+    }
+
+    @Override
+    public void setMenu(String OriginalUrl) {
+        this.OriginalUrl = OriginalUrl;
+        invalidateOptionsMenu();
     }
 
     @OnClick(R.id.fab)

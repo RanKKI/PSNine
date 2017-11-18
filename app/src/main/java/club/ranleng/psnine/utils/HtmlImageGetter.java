@@ -46,39 +46,40 @@ public class HtmlImageGetter implements Html.ImageGetter {
             }
         }
         urlDrawable.setBounds(0, 0, w, h);
-        Glide.with(context).asBitmap().thumbnail(0.5f).load(s)
+        Glide.with(context).asBitmap()
+                .thumbnail(0.5f).load(s)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        resource = newBitmap(resource);
                         int width = resource.getWidth();
                         int height = resource.getHeight();
-                        float ratio = 1;
-                        //max length each line 24
-                        if (width > w_screen / 3 * 2 || height > h_screen / 3 * 2) {
-                            ratio = (float) w_screen / 3 * 2 / width;
-                        }
-                        if (width <= 50 || height <= 50) {
-                            ratio = 2;
-                        }
-                        float scaleWidth = ((float) width * ratio) / width;
-                        float scaleHeight = ((float) height * ratio) / height;
-                        // 取得想要缩放的 matrix 参数
-                        Matrix matrix = new Matrix();
-                        matrix.postScale(scaleWidth, scaleHeight);
-                        // 得到新的图片
-                        resource = Bitmap.createBitmap(resource, 0, 0, width, height, matrix, true);
-                        width = resource.getWidth();
-                        height = resource.getHeight();
                         LCache.add(s, width, height);
                         urlDrawable.bitmap = resource;
                         urlDrawable.setBounds(0, 0, width, height);
                         if (tv != null) {
-                            tv.invalidate();
-                            tv.setText(tv.getText()); // 解决图文重叠
+                            tv.setText(tv.getText());
                         }
                     }
                 });
         return urlDrawable;
+    }
+
+    private Bitmap newBitmap(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float ratio = 1;
+        if (width > w_screen / 3 * 2 || height > h_screen / 3 * 2) {
+            ratio = (float) w_screen / 3 * 2 / width;
+        }
+        if (width <= 50 || height <= 50) {
+            ratio = 2;
+        }
+        float scaleWidth = ((float) width * ratio) / width;
+        float scaleHeight = ((float) height * ratio) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
     @SuppressWarnings("deprecation")

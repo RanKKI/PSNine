@@ -30,9 +30,16 @@ public class TopicsActivity extends BaseActivity {
             finish();
             return;
         }
-        setTitle(KeyGetter.getKEYName(type));
+        String query = getIntent().getStringExtra("query");
+        String title = KeyGetter.getKEYName(type);
+        if (query == null) {
+            query = "";
+        } else {
+            title = query;
+        }
+        setTitle(title);
         getFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, TopicsFragment.newInstance(type))
+                .replace(R.id.frameLayout, TopicsFragment.newInstance(type, query))
                 .commit();
     }
 }
