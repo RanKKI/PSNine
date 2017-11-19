@@ -22,6 +22,12 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.model.BaseTopics;
 import club.ranleng.psnine.ui.topic.TopicActivity;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
         extends RecyclerView.Adapter<TopicsFragmentListAdapter<T>.ViewHolder> {

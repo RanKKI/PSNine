@@ -15,7 +15,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import skin.support.SkinCompatManager;
 
 public class InitActivity extends BaseActivity {
 
@@ -31,7 +30,6 @@ public class InitActivity extends BaseActivity {
 
     @Override
     public void getData() {
-        SkinCompatManager.withoutActivity(this.getApplication()).loadSkin();
         Key.getSetting();
         LCache.init();
         ApiManager.getDefault();

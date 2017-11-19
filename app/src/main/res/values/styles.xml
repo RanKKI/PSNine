@@ -9,12 +9,12 @@
         <item name="android:screenOrientation">portrait</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:textColor">@color/primary_text</item>
-        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Animation" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style>
 
     <style name="ActivityAnimation" parent="@android:style/Animation.Activity">

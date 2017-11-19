@@ -33,14 +33,12 @@ public class Key {
         public final String KEY_PREF_PRELOAD = "settings_preload";
         public final String KEY_PREF_OB = "settings_ob";
         public final String KEY_PREF_EMOJI = "settings_emoji_dialog";
-        public final String KEY_PREF_SINGLELINE = "settings_single_line";
         public final String KEY_PREF_IMAGES_QUALITY = "settings_images_quality";
         public final String KEY_PREF_TABS = "settings_tabs";
         public Boolean PREF_PRELOAD = true;
         public String PREF_OB = "obdate";
         public Boolean PREF_EMOJI = true;
-        public Boolean PREF_SINGLELINE = true;
-        public Boolean PREF_IMAGESQUALITY = true;
+        public Boolean PREF_IMAGES_QUALITY = true;
 
         Setting() {
             load();
@@ -51,8 +49,7 @@ public class Key {
             PREF_PRELOAD = sharedPref.getBoolean(KEY_PREF_PRELOAD, false);
             PREF_OB = sharedPref.getString(KEY_PREF_OB, "obdate");
             PREF_EMOJI = sharedPref.getBoolean(KEY_PREF_EMOJI, true);
-            PREF_SINGLELINE = sharedPref.getBoolean(KEY_PREF_SINGLELINE, true);
-            PREF_IMAGESQUALITY = sharedPref.getBoolean(KEY_PREF_IMAGES_QUALITY, true);
+            PREF_IMAGES_QUALITY = sharedPref.getBoolean(KEY_PREF_IMAGES_QUALITY, true);
         }
     }
 }

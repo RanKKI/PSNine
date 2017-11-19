@@ -82,5 +82,6 @@
 
     <string name="floatingFabBehaviour" translatable="false">club.ranleng.psnine.view.FloatingFabBehaviour</string>
     <string name="authProvider" translatable="false">club.ranleng.psnine.provider</string>
+    <string name="ActivityAnimationDuration" translatable="false">500</string>
 
 </resources>

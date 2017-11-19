@@ -45,7 +45,7 @@ public class Parse {
      * @return parsed html
      */
     public static String parseHtml(String text) {
-        int q = Key.getSetting().PREF_IMAGESQUALITY ? 0 : 2;
+        int q = Key.getSetting().PREF_IMAGES_QUALITY ? 0 : 2;
         text = parseImageUrl(text, q);
         return text;
     }
