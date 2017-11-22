@@ -1,4 +1,4 @@
-package club.ranleng.psnine.ui.topics;
+package club.ranleng.psnine.ui.topics.base;
 
 import android.support.v7.widget.Toolbar;
 

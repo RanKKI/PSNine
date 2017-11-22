@@ -29,7 +29,7 @@ public class ApiTopic<T> {
 
     public Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
         Observable<ResponseBody> observable;
-        if (type == Key.TOPIC || type == Key.GENE || type == Key.QA) {
+        if (type == Key.TOPIC || type == Key.GENE || type == Key.QA || type == Key.DISCOUNT) {
             observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
         } else if (type == Key.NOTICE) {
             observable = ApiManager.getDefault().getApiService().getMy(KeyGetter.getKEY(type));

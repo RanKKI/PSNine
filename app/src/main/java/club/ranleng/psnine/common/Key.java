@@ -15,6 +15,8 @@ public class Key {
     public static final int GUIDE = 1452;
     public static final int NOTICE = 1453;
     public static final int QA = 1454;
+    public static final int DISCOUNT = 14545;
+
 
     //about permission
     public static int REQUEST_PERMISSION = 2450;

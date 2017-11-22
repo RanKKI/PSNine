@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/adapter_list_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/discountItemIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <!--<TextView-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="省 10%"-->
+        <!--android:textSize="12dp"-->
+        <!--android:layout_below="@id/discountItemIcon"/>-->
+
+    <TextView
+        android:id="@+id/discountItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="7dp"
+        android:layout_toEndOf="@+id/discountItemIcon"
+        android:singleLine="true"
+        android:text="英服《Gran Turismo Sport》限时折扣优惠"
+        android:textColor="@color/colorPSNineBlue"/>
+
+    <TextView
+        android:id="@+id/discountItemActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/discountItemName"
+        android:layout_toEndOf="@+id/discountItemIcon"
+        android:text="黑色星期五折扣优惠活动"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/discountItemDes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/discountItemActivity"
+        android:layout_toEndOf="@+id/discountItemIcon"
+        android:text="Play Station Store　Full Game　Full Game"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/discountItemTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/adapter_list_time"
+        android:layout_below="@+id/discountItemDes"
+        android:layout_toEndOf="@+id/discountItemIcon"
+        android:text="17 年 11 月 21 日 ~ 17 年 11 月 27 日"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp"/>
+
+</RelativeLayout>

@@ -14,4 +14,8 @@
     <color name="colorCircleBorder">#FFFFFF</color>
     <color name="colorPSNineBlue">#399ADC</color>
 
+    <color name="colorDiscountOff">#EF5350</color>
+    <color name="colorDiscountOn">#66BB6A</color>
+
+
 </resources>

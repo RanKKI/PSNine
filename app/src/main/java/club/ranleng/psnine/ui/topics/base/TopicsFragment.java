@@ -1,9 +1,8 @@
-package club.ranleng.psnine.ui.topics;
+package club.ranleng.psnine.ui.topics.base;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,14 +18,16 @@ import club.ranleng.psnine.model.Notice;
 import club.ranleng.psnine.model.Topics.Topics;
 import club.ranleng.psnine.model.Topics.TopicsGene;
 import club.ranleng.psnine.model.Topics.TopicsQA;
+import club.ranleng.psnine.ui.topics.discount.TopicsDiscountPresenter;
+import club.ranleng.psnine.ui.topics.normal.TopicsPresenter;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
-public class TopicsFragment extends BaseFragment implements TopicsFragmentContract.View {
+public class TopicsFragment extends BaseFragment implements TopicsContract.View {
 
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
-    private TopicsFragmentContract.Presenter presenter;
+    private TopicsContract.Presenter presenter;
     private int type;
     private String query;
 
@@ -55,19 +56,21 @@ public class TopicsFragment extends BaseFragment implements TopicsFragmentContra
         type = getArguments().getInt("type");
         query = getArguments().getString("query");
         if (type == Key.GENE) {
-            new TopicsFragmentPresenter<>(this, TopicsGene.class);
+            new TopicsPresenter<>(this, TopicsGene.class);
         } else if (type == Key.QA) {
-            new TopicsFragmentPresenter<>(this, TopicsQA.class);
+            new TopicsPresenter<>(this, TopicsQA.class);
         } else if (type == Key.NOTICE) {
-            new TopicsFragmentPresenter<>(this, Notice.class);
+            new TopicsPresenter<>(this, Notice.class);
+        } else if (type == Key.DISCOUNT) {
+            new TopicsDiscountPresenter(this);
         } else {
-            new TopicsFragmentPresenter<>(this, Topics.class);
+            new TopicsPresenter<>(this, Topics.class);
         }
         presenter.start();
     }
 
     @Override
-    public void setPresenter(TopicsFragmentContract.Presenter presenter) {
+    public void setPresenter(TopicsContract.Presenter presenter) {
         this.presenter = presenter;
     }
 

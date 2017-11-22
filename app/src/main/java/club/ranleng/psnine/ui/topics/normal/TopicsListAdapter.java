@@ -1,4 +1,4 @@
-package club.ranleng.psnine.ui.topics;
+package club.ranleng.psnine.ui.topics.normal;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -22,21 +22,16 @@ import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.model.BaseTopics;
 import club.ranleng.psnine.ui.topic.TopicActivity;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
-public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
-        extends RecyclerView.Adapter<TopicsFragmentListAdapter<T>.ViewHolder> {
+public class TopicsListAdapter<T extends BaseTopics.BaseItem>
+        extends RecyclerView.Adapter<TopicsListAdapter<T>.ViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private List<T> Items = new ArrayList<>();
     private Fragment fragment;
+    private List<T> items = new ArrayList<>();
 
-    TopicsFragmentListAdapter(Fragment fragment) {
+
+    TopicsListAdapter(Fragment fragment) {
         this.fragment = fragment;
         mLayoutInflater = LayoutInflater.from(Utils.getApp());
     }
@@ -46,7 +41,7 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() {
-                return Items.size();
+                return items.size();
             }
 
             @Override
@@ -61,13 +56,13 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
 
             @Override
             public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                return Items.get(oldItemPosition).getContent().equals(newItems.get(newItemPosition).getContent());
+                return items.get(oldItemPosition).getContent().equals(newItems.get(newItemPosition).getContent());
             }
         });
         if (page == 1) {
-            Items = newItems;
+            items = newItems;
         } else {
-            Items.addAll(newItems);
+            items.addAll(newItems);
         }
         diffResult.dispatchUpdatesTo(this);
     }
@@ -80,7 +75,7 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BaseTopics.BaseItem item = Items.get(position);
+        BaseTopics.BaseItem item = items.get(position);
         holder.content.setText(item.getContent());
         holder.username.setText(item.getUsername());
         holder.reply.setText(item.getReply());
@@ -90,7 +85,7 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
 
     @Override
     public int getItemCount() {
-        return Items == null ? 0 : Items.size();
+        return items == null ? 0 : items.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -109,7 +104,7 @@ public class TopicsFragmentListAdapter<T extends BaseTopics.BaseItem>
 
         @Override
         public void onClick(View v) {
-            BaseTopics.BaseItem item = Items.get(getAdapterPosition());
+            BaseTopics.BaseItem item = items.get(getAdapterPosition());
             Bundle bundle = new Bundle();
             bundle.putString("url", item.getUrl());
             bundle.putString("content", item.getContent());

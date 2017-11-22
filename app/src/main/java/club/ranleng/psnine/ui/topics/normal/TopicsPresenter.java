@@ -1,18 +1,19 @@
-package club.ranleng.psnine.ui.topics;
+package club.ranleng.psnine.ui.topics.normal;
 
 import club.ranleng.psnine.base.model.BaseTopics;
 import club.ranleng.psnine.data.remote.ApiTopic;
+import club.ranleng.psnine.ui.topics.base.TopicsContract;
 import io.reactivex.functions.Consumer;
 
-public class TopicsFragmentPresenter<T extends BaseTopics>
-        implements TopicsFragmentContract.Presenter {
+public class TopicsPresenter<T extends BaseTopics>
+        implements TopicsContract.Presenter {
 
-    private TopicsFragmentContract.View view;
-    private TopicsFragmentListAdapter adapter;
+    private TopicsContract.View view;
+    private TopicsListAdapter adapter;
     private int page = 1;
     private Class<T> tClass;
 
-    TopicsFragmentPresenter(TopicsFragmentContract.View view, Class<T> tClass) {
+    public TopicsPresenter(TopicsContract.View view, Class<T> tClass) {
         this.view = view;
         this.tClass = tClass;
         view.setPresenter(this);
@@ -20,7 +21,7 @@ public class TopicsFragmentPresenter<T extends BaseTopics>
 
     @Override
     public void start() {
-        adapter = new TopicsFragmentListAdapter<T.BaseItem>(view.getFragment());
+        adapter = new TopicsListAdapter<T.BaseItem>(view.getFragment());
         view.setupList(adapter);
         load();
     }

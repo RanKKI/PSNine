@@ -38,7 +38,7 @@ import club.ranleng.psnine.ui.LoginActivity;
 import club.ranleng.psnine.ui.imageGallery.ImagesGalleryActivity;
 import club.ranleng.psnine.ui.newTopic.newTopicActivity;
 import club.ranleng.psnine.ui.setting.SettingsActivity;
-import club.ranleng.psnine.ui.topics.TopicsActivity;
+import club.ranleng.psnine.ui.topics.base.TopicsActivity;
 import club.ranleng.psnine.utils.CacheUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;

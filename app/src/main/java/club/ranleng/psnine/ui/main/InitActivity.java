@@ -1,6 +1,9 @@
 package club.ranleng.psnine.ui.main;
 
+import android.os.Bundle;
+
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
@@ -8,6 +11,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
+import club.ranleng.psnine.ui.topics.base.TopicsActivity;
 import club.ranleng.psnine.utils.LCache;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -37,6 +41,10 @@ public class InitActivity extends BaseActivity {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
                 String ip = NetworkUtils.getDomainAddress(ApiManager.domain);
+                if(ip == null){
+                    e.onNext(false);
+                    return;
+                }
                 e.onNext(NetworkUtils.isAvailableByPing(ip));
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {

@@ -9,7 +9,7 @@ import java.util.List;
 
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
-import club.ranleng.psnine.ui.topics.TopicsFragment;
+import club.ranleng.psnine.ui.topics.base.TopicsFragment;
 
 public class mViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -21,6 +21,7 @@ public class mViewPagerAdapter extends FragmentPagerAdapter {
         add(Key.QA);
         add(Key.GUIDE);
         add(Key.PLUS);
+        add(Key.DISCOUNT);
     }};
 
     mViewPagerAdapter(FragmentManager fm) {

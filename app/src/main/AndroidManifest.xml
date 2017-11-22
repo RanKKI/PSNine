@@ -55,7 +55,7 @@
             android:name=".ui.setting.SettingsActivity"
             android:theme="@style/AppTheme.Animation"/>
         <activity
-            android:name=".ui.topics.TopicsActivity"
+            android:name=".ui.topics.base.TopicsActivity"
             android:theme="@style/AppTheme.Animation"/>
         <activity
             android:name=".ui.newTopic.newTopicActivity"
