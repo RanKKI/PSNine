@@ -16,7 +16,6 @@ import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.data.module.Callback;
 import club.ranleng.psnine.data.remote.ApiManager;
-import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.Topic.Topic;
 import io.reactivex.functions.Consumer;
 
@@ -63,7 +62,7 @@ public class LoginActivity extends BaseActivity implements Callback {
 
     @Override
     public void onSuccess() {
-        new ApiTopic<Topic>().getTopics(Key.TOPIC, 1, "", Topic.class)
+        ApiManager.getDefault().getTopics(Key.TOPIC, 1, "", Topic.class)
                 .subscribe(new Consumer<Topic>() {
                     @Override
                     public void accept(Topic topic) throws Exception {

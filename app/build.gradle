@@ -14,7 +14,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 35
-//        versionName "0.6.5"
         versionName gitSha() + '-' + buildTime()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -62,7 +61,7 @@ dependencies {
 }
 
 static def buildTime() {
-    def df = new SimpleDateFormat("yyyy-MM-dd")
+    def df = new SimpleDateFormat("yyyyMMdd")
     return df.format(new Date())
 }
 

@@ -3,7 +3,6 @@ package club.ranleng.psnine.ui.topic;
 import club.ranleng.psnine.base.model.BaseTopic;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.data.remote.ApiManager;
-import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.model.Topic.TopicGene;
 import club.ranleng.psnine.utils.Parse;
@@ -37,7 +36,7 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     @Override
     public void loadTopic() {
         view.loading(true);
-        new ApiTopic<T>().getTopic(view.getType(), id, tClass).subscribe(new Consumer<T>() {
+        ApiManager.getDefault().getTopic(view.getType(), id, tClass).subscribe(new Consumer<T>() {
             @Override
             public void accept(T t) throws Exception {
                 BaseTopic baseTopic = (BaseTopic) t;

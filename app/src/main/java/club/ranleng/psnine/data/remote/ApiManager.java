@@ -10,6 +10,7 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
 import club.ranleng.psnine.common.UserState;
@@ -20,6 +21,7 @@ import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.model.HttpRequest;
 import club.ranleng.psnine.model.Images;
 import club.ranleng.psnine.model.Topic.TopicComment;
+import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -79,6 +81,56 @@ public class ApiManager {
 
     ApiService getApiService() {
         return apiService;
+    }
+
+    public<T> Observable<T> getTopic(int type, String id, final Class<T> tClass) {
+        return ApiManager.getDefault().getApiService().getTopic(KeyGetter.getPath(type), id)
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, T>() {
+                    @Override
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        return new Fruit().fromHtml(result, tClass);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public<T> Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
+        Observable<ResponseBody> observable;
+        if (type == Key.TOPIC || type == Key.GENE || type == Key.QA || type == Key.DISCOUNT) {
+            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
+        } else if (type == Key.NOTICE) {
+            observable = ApiManager.getDefault().getApiService().getMy(KeyGetter.getKEY(type));
+        } else {
+            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
+        }
+        return observable.subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, T>() {
+                    @Override
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        return new Fruit().fromHtml(result, tClass);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<TopicsDiscount> getTopicsDiscount(String region, String platform, String state, String type) {
+        Observable<ResponseBody> observable;
+        observable = ApiManager.getDefault().getApiService().getTopicsDiscount(type, region, platform, state);
+        return observable.subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, TopicsDiscount>() {
+                    @Override
+                    public TopicsDiscount apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        return new Fruit().fromHtml(result, TopicsDiscount.class);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
     }
 
     public void logout() {

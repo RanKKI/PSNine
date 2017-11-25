@@ -3,7 +3,7 @@ package club.ranleng.psnine.ui.topics.discount;
 import com.blankj.utilcode.util.LogUtils;
 
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.data.remote.ApiTopic;
+import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.ui.topics.base.TopicsContract;
 import io.reactivex.functions.Consumer;
@@ -30,7 +30,7 @@ public class TopicsDiscountPresenter implements TopicsContract.Presenter {
     @Override
     public void load() {
         view.loading(true);
-        new ApiTopic<>().getTopicsDiscount("", "", "", "")
+        ApiManager.getDefault().getTopicsDiscount("", "", "", "")
                 .subscribe(new Consumer<TopicsDiscount>() {
                     @Override
                     public void accept(TopicsDiscount discount) throws Exception {

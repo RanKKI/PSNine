@@ -82,49 +82,49 @@ public class Parse {
     }
 
     public static String parseHTTPErrorCode(int code) {
-        String error_message;
+        int error_message;
         switch (code) {
             case 400:
-                error_message = Utils.getApp().getString(R.string.http_code_bad_request);
+                error_message = R.string.http_code_bad_request;
                 break;
             case 401:
-                error_message = Utils.getApp().getString(R.string.http_code_unauthorized);
+                error_message = R.string.http_code_unauthorized;
                 break;
             case 402:
-                error_message = Utils.getApp().getString(R.string.http_code_payment_required);
+                error_message = R.string.http_code_payment_required;
                 break;
             case 403:
-                error_message = Utils.getApp().getString(R.string.http_code_forbidden);
+                error_message = R.string.http_code_forbidden;
                 break;
             case 404:
-                error_message = Utils.getApp().getString(R.string.http_code_not_found);
+                error_message = R.string.http_code_not_found;
                 break;
             case 405:
-                error_message = Utils.getApp().getString(R.string.http_code_method_not_allowed);
+                error_message = R.string.http_code_method_not_allowed;
                 break;
             case 406:
-                error_message = Utils.getApp().getString(R.string.http_code_not_acceptable);
+                error_message = R.string.http_code_not_acceptable;
                 break;
             case 500:
-                error_message = Utils.getApp().getString(R.string.http_code_internal_server_error);
+                error_message = R.string.http_code_internal_server_error;
                 break;
             case 501:
-                error_message = Utils.getApp().getString(R.string.http_code_not_implemented);
+                error_message = R.string.http_code_not_implemented;
                 break;
             case 502:
-                error_message = Utils.getApp().getString(R.string.http_code_bad_gateway);
+                error_message = R.string.http_code_bad_gateway;
                 break;
             case 503:
-                error_message = Utils.getApp().getString(R.string.http_code_service_unavailable);
+                error_message = R.string.http_code_service_unavailable;
                 break;
             case 504:
-                error_message = Utils.getApp().getString(R.string.http_code_gateway_timeout);
+                error_message = R.string.http_code_gateway_timeout;
                 break;
             default:
-                error_message = Utils.getApp().getString(R.string.http_code_unknown_error);
+                error_message = R.string.http_code_unknown_error;
                 break;
         }
-        return error_message;
+        return Utils.getApp().getString(error_message);
     }
 
     public static String parseNodeForNewTopic(int type) {

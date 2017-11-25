@@ -46,6 +46,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
     private String url;
     private int type;
     private String OriginalUrl;
+    private long lastClickTime = 0;
 
     @Override
     public void setContentView() {
@@ -61,6 +62,16 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         type = Parse.getType(url);
         String title = getIntent().getStringExtra("content");
         if (title != null) toolbar.setSubtitle(title);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long clickTime = System.currentTimeMillis();
+                if (clickTime - lastClickTime < 200) {
+                    recyclerView.smoothScrollToPosition(0);
+                }
+                lastClickTime = clickTime;
+            }
+        });
     }
 
     @Override
