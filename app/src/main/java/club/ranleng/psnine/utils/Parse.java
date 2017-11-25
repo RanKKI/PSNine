@@ -1,5 +1,7 @@
 package club.ranleng.psnine.utils;
 
+import android.net.Uri;
+
 import com.blankj.utilcode.util.Utils;
 
 import java.util.regex.Matcher;
@@ -130,6 +132,30 @@ public class Parse {
             return "talk";
         } else {
             return KeyGetter.getKEY(type);
+        }
+    }
+
+    public static Uri parsePSNStoreUrl(String psnineStoreUrl, String region) {
+        String baseStoreUrl = "https://store.playstation.com/%s/product/%s";
+        String key = psnineStoreUrl.split("/dd/")[1];
+        String regionKey = getRegionKeyByName(region);
+        return Uri.parse(String.format(baseStoreUrl, regionKey, key));
+    }
+
+    public static String getRegionKeyByName(String name) {
+        switch (name) {
+            case "英服":
+                return "eb-gb";
+            case "国服":
+                return "zh-hans-cn";
+            case "日服":
+                return "ja-jp";
+            case "美服":
+                return "en-us";
+            case "港服":
+                return "zh-hans-hk";
+            default:
+                return "en-us";
         }
     }
 }

@@ -1,5 +1,8 @@
 package club.ranleng.psnine.ui.topics.discount;
 
+import com.blankj.utilcode.util.LogUtils;
+
+import club.ranleng.psnine.R;
 import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.ui.topics.base.TopicsContract;
@@ -21,12 +24,13 @@ public class TopicsDiscountPresenter implements TopicsContract.Presenter {
         adapter = new TopicsDiscountListAdapter(view.getFragment());
         view.setupList(adapter);
         load();
+        view.setMenu(R.menu.fragment_topics_discount);
     }
 
     @Override
     public void load() {
         view.loading(true);
-        new ApiTopic<TopicsDiscount>().getTopics(view.getType(), page, view.getQuery(), TopicsDiscount.class)
+        new ApiTopic<>().getTopicsDiscount("", "", "", "")
                 .subscribe(new Consumer<TopicsDiscount>() {
                     @Override
                     public void accept(TopicsDiscount discount) throws Exception {
@@ -49,5 +53,13 @@ public class TopicsDiscountPresenter implements TopicsContract.Presenter {
     public void refresh() {
         page = 1;
         load();
+    }
+
+    @Override
+    public boolean menuItemSelected(int id) {
+        if (id == R.id.fragmentTopicsDiscountOptions) {
+            LogUtils.d("options menu item clicked");
+        }
+        return false;
     }
 }

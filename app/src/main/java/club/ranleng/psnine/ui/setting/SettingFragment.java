@@ -1,9 +1,13 @@
 package club.ranleng.psnine.ui.setting;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import java.util.HashMap;
@@ -31,6 +35,14 @@ public class SettingFragment extends PreferenceFragment
         findPreference(Key.getSetting().KEY_PREF_OB).setSummary(ob.get(Key.getSetting().PREF_OB));
         findPreference(Key.getSetting().KEY_PREF_TABS).setOnPreferenceClickListener(this);
         findPreference(Key.getSetting().KEY_PREF_OB).setOnPreferenceChangeListener(this);
+        findPreference(Key.getSetting().KEY_PREF_ABOUT).setOnPreferenceClickListener(this);
+        try {
+            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            String version = pInfo.versionName;
+            findPreference(Key.getSetting().KEY_VERSIONS).setSummary(version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -45,8 +57,11 @@ public class SettingFragment extends PreferenceFragment
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if(preference.getKey().equals(Key.getSetting().KEY_PREF_TABS)){
+        String key = preference.getKey();
+        if (key.equals(Key.getSetting().KEY_PREF_TABS)) {
             ToastUtils.showShort(R.string.not_support);
+        } else if (key.equals(Key.getSetting().KEY_PREF_ABOUT)) {
+            ActivityUtils.startActivity(IntentUtils.getAppDetailsSettingsIntent(getActivity().getPackageName()));
         }
 //        TabsPreference.newInstance().show(getFragmentManager(),"edit tabs");
         return false;

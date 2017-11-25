@@ -39,6 +39,20 @@
             android:key="settings_preload"
             android:summary="提前加载下一页的内容"
             android:title="提前加载"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="其他">
+        <Preference
+            android:key="settings_about"
+            android:summary=""
+            android:title="关于"/>
+        <Preference
+            android:enabled="false"
+            android:key="settings_versions"
+            android:summary=""
+            android:title="版本号"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

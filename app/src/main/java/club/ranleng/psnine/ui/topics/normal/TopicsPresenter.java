@@ -5,8 +5,7 @@ import club.ranleng.psnine.data.remote.ApiTopic;
 import club.ranleng.psnine.ui.topics.base.TopicsContract;
 import io.reactivex.functions.Consumer;
 
-public class TopicsPresenter<T extends BaseTopics>
-        implements TopicsContract.Presenter {
+public class TopicsPresenter<T extends BaseTopics> implements TopicsContract.Presenter {
 
     private TopicsContract.View view;
     private TopicsListAdapter adapter;
@@ -53,6 +52,11 @@ public class TopicsPresenter<T extends BaseTopics>
     public void refresh() {
         page = 1;
         load();
+    }
+
+    @Override
+    public boolean menuItemSelected(int id) {
+        return false;
     }
 
 }

@@ -37,6 +37,8 @@ public class Key {
         public final String KEY_PREF_EMOJI = "settings_emoji_dialog";
         public final String KEY_PREF_IMAGES_QUALITY = "settings_images_quality";
         public final String KEY_PREF_TABS = "settings_tabs";
+        public final String KEY_PREF_ABOUT = "settings_about";
+        public final String KEY_VERSIONS = "settings_versions";
         public Boolean PREF_PRELOAD = true;
         public String PREF_OB = "obdate";
         public Boolean PREF_EMOJI = true;

@@ -11,6 +11,7 @@ import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
+import club.ranleng.psnine.ui.psn.PSNActivity;
 import club.ranleng.psnine.ui.topics.base.TopicsActivity;
 import club.ranleng.psnine.utils.LCache;
 import io.reactivex.Observable;
@@ -37,6 +38,7 @@ public class InitActivity extends BaseActivity {
         Key.getSetting();
         LCache.init();
         ApiManager.getDefault();
+//        ActivityUtils.startActivity(PSNActivity.class);
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {

@@ -22,6 +22,8 @@ public interface TopicsContract {
 
         void scrollTo(int pos);
 
+        void setMenu(int menuID);
+
     }
 
     interface Presenter extends BasePresenter{
@@ -31,6 +33,8 @@ public interface TopicsContract {
         void loadMore();
 
         void refresh();
+
+        boolean menuItemSelected(int id);
 
     }
 }

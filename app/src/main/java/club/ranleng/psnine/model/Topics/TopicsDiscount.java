@@ -22,13 +22,19 @@ public class TopicsDiscount {
         private String icon;
         @Pick(value = "div.dd_info > h4.dd_title.mb10 > a")
         private String name;
+        @Pick(value = "div.dd_info > h4.dd_title.mb10 > a", attr = Attrs.HREF)
+        private String storeURL;
         @Pick(value = "div.dd_info > p:nth-child(5)")
         private String time;
         @Pick(value = "div.dd_info > p:nth-child(4)")
         private String des;
-        private String discount;
         @Pick(value = "div.dd_info > p:nth-child(2) > a")
         private String activity;
+        @Pick(value = "div.dd_info > p:nth-child(2) > a", attr = Attrs.HREF)
+        private String activityURL;
+        @Pick(value = "div.dd_info > p:nth-child(3)")
+        private String region;
+
 
         public String getIcon() {
             return icon;
@@ -46,12 +52,20 @@ public class TopicsDiscount {
             return des;
         }
 
-        public String getDiscount() {
-            return discount;
-        }
-
         public String getActivity() {
             return activity;
+        }
+
+        public String getStoreURL() {
+            return storeURL;
+        }
+
+        public String getActivityURL() {
+            return activityURL;
+        }
+
+        public String getRegion() {
+            return region;
         }
     }
 }

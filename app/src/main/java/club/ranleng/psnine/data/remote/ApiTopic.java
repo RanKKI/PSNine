@@ -3,6 +3,7 @@ package club.ranleng.psnine.data.remote;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.common.KeyGetter;
 import club.ranleng.psnine.common.RxBus;
+import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.model.UserInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -47,4 +48,20 @@ public class ApiTopic<T> {
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<TopicsDiscount> getTopicsDiscount(String region, String platform, String state, String type) {
+        Observable<ResponseBody> observable;
+        observable = ApiManager.getDefault().getApiService().getTopicsDiscount(type, region, platform, state);
+        return observable.subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, TopicsDiscount>() {
+                    @Override
+                    public TopicsDiscount apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        return new Fruit().fromHtml(result, TopicsDiscount.class);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

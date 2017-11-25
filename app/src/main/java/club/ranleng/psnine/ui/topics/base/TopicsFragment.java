@@ -6,6 +6,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -70,6 +73,16 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return presenter.menuItemSelected(item.getItemId()) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void setPresenter(TopicsContract.Presenter presenter) {
         this.presenter = presenter;
     }
@@ -122,5 +135,10 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     @Override
     public void scrollTo(int pos) {
         recyclerView.scrollToPosition(pos);
+    }
+
+    @Override
+    public void setMenu(int menuID) {
+        getFragmentManager().invalidateOptionsMenu();
     }
 }

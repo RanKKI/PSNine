@@ -37,6 +37,7 @@ import club.ranleng.psnine.model.UserInfo;
 import club.ranleng.psnine.ui.LoginActivity;
 import club.ranleng.psnine.ui.imageGallery.ImagesGalleryActivity;
 import club.ranleng.psnine.ui.newTopic.newTopicActivity;
+import club.ranleng.psnine.ui.psn.PSNActivity;
 import club.ranleng.psnine.ui.setting.SettingsActivity;
 import club.ranleng.psnine.ui.topics.base.TopicsActivity;
 import club.ranleng.psnine.utils.CacheUtils;
@@ -170,6 +171,8 @@ public class MainActivity extends BaseActivity
             ActivityUtils.startActivity(bundle, TopicsActivity.class);
         } else if (id == R.id.nav_photo) {
             ActivityUtils.startActivity(ImagesGalleryActivity.class);
+        } else if(id == R.id.nav_personal){
+            ActivityUtils.startActivity(PSNActivity.class);
         }
         return true;
     }

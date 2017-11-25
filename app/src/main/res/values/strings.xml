@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PSNine</string>
+    <!--<string name="app_name">PSNine</string>-->
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -78,7 +78,6 @@
     <string name="topic_title">标题</string>
     <string name="topic_use_magic">使用魔法</string>
     <string name="topic_content">内容</string>
-
 
     <string name="floatingFabBehaviour" translatable="false">club.ranleng.psnine.view.FloatingFabBehaviour</string>
     <string name="authProvider" translatable="false">club.ranleng.psnine.provider</string>

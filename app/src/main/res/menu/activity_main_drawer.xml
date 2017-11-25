@@ -70,11 +70,6 @@
             android:icon="@drawable/setting"
             android:title="@string/nav_setting"/>
 
-        <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/about"
-            android:title="@string/nav_about"/>
-
     </group>
 
 </menu>

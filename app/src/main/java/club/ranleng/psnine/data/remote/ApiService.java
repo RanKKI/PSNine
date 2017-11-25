@@ -17,6 +17,9 @@ public interface ApiService {
     @GET("{type}")
     Observable<ResponseBody> getTopics(@Path("type") String type, @Query("page") int page, @Query("ob") String ob, @Query("title") String query);
 
+    @GET("dd")
+    Observable<ResponseBody> getTopicsDiscount(@Query("type") String type, @Query("region") String region, @Query("pf") String pf, @Query("ddstatus") String ddstatus);
+
     @GET("node/{type}")
     Observable<ResponseBody> getTopicsWithNode(@Path("type") String type, @Query("page") int page, @Query("ob") String ob, @Query("title") String query);
 

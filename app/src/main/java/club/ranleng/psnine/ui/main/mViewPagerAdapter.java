@@ -24,7 +24,7 @@ public class mViewPagerAdapter extends FragmentPagerAdapter {
         add(Key.DISCOUNT);
     }};
 
-    mViewPagerAdapter(FragmentManager fm) {
+    public mViewPagerAdapter(FragmentManager fm) {
         super(fm);
         for (Integer type : fragments_types) {
             fragments.add((TopicsFragment.newInstance(type)));

@@ -31,7 +31,7 @@
         <activity
             android:name=".ui.topic.TopicActivity"
             android:label="@string/title_activity_topic"
-            android:theme="@style/AppTheme.Animation">
+            android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".common.LinkHandleActivity">
             <intent-filter>
@@ -62,8 +62,7 @@
             android:theme="@style/AppTheme.Animation"/>
         <activity
             android:name=".ui.imageGallery.ImagesGalleryActivity"
-            android:theme="@style/AppTheme.Animation"/>
-
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".ui.main.InitActivity"
             android:theme="@style/AppTheme">
@@ -72,6 +71,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.psn.PSNActivity"
+            android:theme="@style/AppTheme.Animation">
         </activity>
     </application>
 
