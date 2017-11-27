@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ActivityUtils;
 
+import club.ranleng.psnine.ui.psn.PSNActivity;
 import club.ranleng.psnine.ui.topic.TopicActivity;
 
 public class LinkHandleActivity extends AppCompatActivity {
@@ -23,6 +24,10 @@ public class LinkHandleActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("url", fullUrl);
                 ActivityUtils.startActivity(bundle, TopicActivity.class);
+            } else if (path.startsWith("psnid")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("psnid", path.replace("psnid/", ""));
+                ActivityUtils.startActivity(bundle, PSNActivity.class);
             }
         }
         finish();

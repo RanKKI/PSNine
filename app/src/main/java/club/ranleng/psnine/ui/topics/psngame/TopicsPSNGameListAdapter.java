@@ -1,17 +1,15 @@
-package club.ranleng.psnine.ui.topics.normal;
+package club.ranleng.psnine.ui.topics.psngame;
 
 import android.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 
@@ -21,24 +19,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
-import club.ranleng.psnine.base.model.BaseTopics;
-import club.ranleng.psnine.ui.topic.TopicActivity;
+import club.ranleng.psnine.model.PSNGames;
 
-public class TopicsListAdapter<T extends BaseTopics.BaseItem>
-        extends RecyclerView.Adapter<TopicsListAdapter<T>.ViewHolder> {
+public class TopicsPSNGameListAdapter extends RecyclerView.Adapter<TopicsPSNGameListAdapter.ViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
     private Fragment fragment;
-    private List<T> items = new ArrayList<>();
+    private List<PSNGames.Item> items = new ArrayList<>();
 
-
-    TopicsListAdapter(Fragment fragment) {
+    public TopicsPSNGameListAdapter(Fragment fragment) {
         this.fragment = fragment;
         mLayoutInflater = LayoutInflater.from(Utils.getApp());
     }
 
-    void add(BaseTopics<T> baseTopics, int page) {
-        final List<T> newItems = baseTopics.getItems();
+    void add(final List<PSNGames.Item> newItems, int page) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() {
@@ -57,7 +51,7 @@ public class TopicsListAdapter<T extends BaseTopics.BaseItem>
 
             @Override
             public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                return items.get(oldItemPosition).getContent().equals(newItems.get(newItemPosition).getContent());
+                return items.get(oldItemPosition).getName().equals(newItems.get(newItemPosition).getName());
             }
         });
         if (page == 1) {
@@ -70,18 +64,18 @@ public class TopicsListAdapter<T extends BaseTopics.BaseItem>
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.adapter_topics_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.adapter_topics_psngame_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BaseTopics.BaseItem item = items.get(position);
-        holder.content.setText(item.getContent());
-        holder.username.setText(item.getUsername());
-        holder.reply.setText(item.getReply());
+        PSNGames.Item item = items.get(position);
+        holder.name.setText(item.getName());
         holder.time.setText(item.getTime());
-        Glide.with(fragment).load(item.getAvatar()).into(holder.icon);
+        holder.trophy.setText(item.getTrophy());
+        holder.progressBar.setProgress(item.getProgress());
+        Glide.with(fragment).load(item.getIcon()).into(holder.icon);
     }
 
     @Override
@@ -89,27 +83,17 @@ public class TopicsListAdapter<T extends BaseTopics.BaseItem>
         return items == null ? 0 : items.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.adapter_list_content) TextView content;
-        @BindView(R.id.adapter_list_name) TextView username;
-        @BindView(R.id.adapter_list_time) TextView time;
-        @BindView(R.id.adapter_list_reply) TextView reply;
-        @BindView(R.id.adapter_list_icon) ImageView icon;
+        @BindView(R.id.PSNGameItemIcon) ImageView icon;
+        @BindView(R.id.PSNGameItemName) TextView name;
+        @BindView(R.id.PSNGameItemTime) TextView time;
+        @BindView(R.id.PSNGameItemTrophy) TextView trophy;
+        @BindView(R.id.PSNGameItemProgress) ProgressBar progressBar;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            BaseTopics.BaseItem item = items.get(getAdapterPosition());
-            Bundle bundle = new Bundle();
-            bundle.putString("url", item.getUrl());
-            bundle.putString("content", item.getContent());
-            ActivityUtils.startActivity(bundle, TopicActivity.class);
         }
     }
 }

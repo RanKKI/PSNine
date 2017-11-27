@@ -23,6 +23,7 @@ import club.ranleng.psnine.model.Topics.TopicsGene;
 import club.ranleng.psnine.model.Topics.TopicsQA;
 import club.ranleng.psnine.ui.topics.discount.TopicsDiscountPresenter;
 import club.ranleng.psnine.ui.topics.normal.TopicsPresenter;
+import club.ranleng.psnine.ui.topics.psngame.TopicsPSNGamePresenter;
 import club.ranleng.psnine.view.SmartRecyclerView;
 
 public class TopicsFragment extends BaseFragment implements TopicsContract.View {
@@ -31,17 +32,25 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     @BindView(R.id.recyclerView) SmartRecyclerView recyclerView;
 
     private TopicsContract.Presenter presenter;
-    private int type;
     private String query;
+    private int type;
+    private String psnid;
+    private int menuID = 0;
 
     public static TopicsFragment newInstance(int type) {
-        return newInstance(type, null);
+        return newInstance(type, null, null);
     }
 
     public static TopicsFragment newInstance(int type, String query) {
+        return newInstance(type, query, null);
+    }
+
+
+    public static TopicsFragment newInstance(int type, String query, String psnid) {
         Bundle args = new Bundle();
         args.putInt("type", type);
         args.putString("query", query);
+        args.putString("psnid", psnid);
         TopicsFragment fragment = new TopicsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -58,6 +67,7 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     public void initData() {
         type = getArguments().getInt("type");
         query = getArguments().getString("query");
+        psnid = getArguments().getString("psnid");
         if (type == Key.GENE) {
             new TopicsPresenter<>(this, TopicsGene.class);
         } else if (type == Key.QA) {
@@ -66,6 +76,8 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
             new TopicsPresenter<>(this, Notice.class);
         } else if (type == Key.DISCOUNT) {
             new TopicsDiscountPresenter(this);
+        } else if (type == Key.PSNGAMES) {
+            new TopicsPSNGamePresenter(this);
         } else {
             new TopicsPresenter<>(this, Topics.class);
         }
@@ -75,6 +87,9 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        if (menuID != 0) {
+            inflater.inflate(menuID, menu);
+        }
     }
 
     @Override
@@ -133,12 +148,18 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
     }
 
     @Override
+    public String getPSNID() {
+        return psnid;
+    }
+
+    @Override
     public void scrollTo(int pos) {
         recyclerView.scrollToPosition(pos);
     }
 
     @Override
     public void setMenu(int menuID) {
+        this.menuID = menuID;
         getFragmentManager().invalidateOptionsMenu();
     }
 }

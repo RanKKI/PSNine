@@ -20,6 +20,7 @@ import club.ranleng.psnine.data.module.Callback;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.model.HttpRequest;
 import club.ranleng.psnine.model.Images;
+import club.ranleng.psnine.model.PSNGames;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.model.UserInfo;
@@ -40,11 +41,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class ApiManager {
 
+    //    public static final String domain = "192.168.31.88:5000";
     public static final String domain = "psnine.com";
     private static ClearableCookieJar cookieJar;
     private static ApiService apiService;
     private static volatile ApiManager defaultInstance;
-//    public static final String domain = "http://192.168.0.4:5000/";
 
 
     private ApiManager() {
@@ -83,7 +84,7 @@ public class ApiManager {
         return apiService;
     }
 
-    public<T> Observable<T> getTopic(int type, String id, final Class<T> tClass) {
+    public <T> Observable<T> getTopic(int type, String id, final Class<T> tClass) {
         return ApiManager.getDefault().getApiService().getTopic(KeyGetter.getPath(type), id)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {
@@ -97,7 +98,7 @@ public class ApiManager {
                 }).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public<T> Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
+    public <T> Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
         Observable<ResponseBody> observable;
         if (type == Key.TOPIC || type == Key.GENE || type == Key.QA || type == Key.DISCOUNT) {
             observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
@@ -270,5 +271,18 @@ public class ApiManager {
                         return new Fruit().fromHtml(result, Images.class);
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public<T> Observable<T> getPSN(String psnid, int type, final Class<T> tClass) {
+        return apiService.getPSNGame(psnid, KeyGetter.getKEY(type)).subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, T>() {
+                    @Override
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return new Fruit().fromHtml(result,tClass);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

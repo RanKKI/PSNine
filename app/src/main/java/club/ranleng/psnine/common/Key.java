@@ -15,7 +15,11 @@ public class Key {
     public static final int GUIDE = 1452;
     public static final int NOTICE = 1453;
     public static final int QA = 1454;
-    public static final int DISCOUNT = 14545;
+    public static final int DISCOUNT = 1455;
+    public static final int PSNGAMES = 1456;
+    public static final int PSN = 1457;
+
+
 
 
     //about permission

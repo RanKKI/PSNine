@@ -171,8 +171,10 @@ public class MainActivity extends BaseActivity
             ActivityUtils.startActivity(bundle, TopicsActivity.class);
         } else if (id == R.id.nav_photo) {
             ActivityUtils.startActivity(ImagesGalleryActivity.class);
-        } else if(id == R.id.nav_personal){
-            ActivityUtils.startActivity(PSNActivity.class);
+        } else if (id == R.id.nav_personal) {
+            Bundle bundle = new Bundle();
+            bundle.putString("psnid", UserState.getUserInfo().getUsername());
+            ActivityUtils.startActivity(bundle, PSNActivity.class);
         }
         return true;
     }

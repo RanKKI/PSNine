@@ -20,6 +20,8 @@ public interface TopicsContract {
 
         String getQuery();
 
+        String getPSNID();
+
         void scrollTo(int pos);
 
         void setMenu(int menuID);

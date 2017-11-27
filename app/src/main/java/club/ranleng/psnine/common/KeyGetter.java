@@ -20,6 +20,10 @@ public class KeyGetter {
                 return "notice";
             case Key.DISCOUNT:
                 return "dd";
+            case Key.PSNGAMES:
+                return "psngame";
+            case Key.PSN:
+                return "";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
     }

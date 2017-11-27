@@ -1,40 +1,37 @@
-package club.ranleng.psnine.ui.topics.discount;
+package club.ranleng.psnine.ui.topics.psngame;
 
-import com.blankj.utilcode.util.LogUtils;
-
-import club.ranleng.psnine.R;
+import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
-import club.ranleng.psnine.model.Topics.TopicsDiscount;
+import club.ranleng.psnine.model.PSNGames;
 import club.ranleng.psnine.ui.topics.base.TopicsContract;
 import io.reactivex.functions.Consumer;
 
-public class TopicsDiscountPresenter implements TopicsContract.Presenter {
+public class TopicsPSNGamePresenter implements TopicsContract.Presenter {
 
     private TopicsContract.View view;
-    private TopicsDiscountListAdapter adapter;
     private int page = 1;
+    private TopicsPSNGameListAdapter adapter;
 
-    public TopicsDiscountPresenter(TopicsContract.View view) {
+    public TopicsPSNGamePresenter(TopicsContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }
 
     @Override
     public void start() {
-        adapter = new TopicsDiscountListAdapter(view.getFragment());
+        adapter = new TopicsPSNGameListAdapter(view.getFragment());
         view.setupList(adapter);
         load();
-        view.setMenu(R.menu.fragment_topics_discount);
     }
 
     @Override
     public void load() {
         view.loading(true);
-        ApiManager.getDefault().getTopicsDiscount("", "", "", "")
-                .subscribe(new Consumer<TopicsDiscount>() {
+        ApiManager.getDefault().getPSN(view.getPSNID(), Key.PSNGAMES, PSNGames.class)
+                .subscribe(new Consumer<PSNGames>() {
                     @Override
-                    public void accept(TopicsDiscount discount) throws Exception {
-                        adapter.add(discount, page);
+                    public void accept(PSNGames psnGames) throws Exception {
+                        adapter.add(psnGames.getItems(), page);
                         view.loading(false);
                         if (page == 1) {
                             view.scrollTo(0);
@@ -57,9 +54,6 @@ public class TopicsDiscountPresenter implements TopicsContract.Presenter {
 
     @Override
     public boolean menuItemSelected(int id) {
-        if (id == R.id.fragmentTopicsDiscountOptions) {
-            LogUtils.d("options menu item clicked");
-        }
         return false;
     }
 }

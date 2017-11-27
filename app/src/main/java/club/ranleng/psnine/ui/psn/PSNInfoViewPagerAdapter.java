@@ -8,15 +8,17 @@ import android.support.v13.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import club.ranleng.psnine.common.Key;
+import club.ranleng.psnine.ui.topics.base.TopicsFragment;
+
 public class PSNInfoViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] titles = new String[]{};
-    private String psnID;
+    private String[] titles = new String[]{"PSN游戏", "留言板", "主题", "基因"};
 
     public PSNInfoViewPagerAdapter(@NonNull String psnID, FragmentManager fm) {
         super(fm);
-        this.psnID = psnID;
+        fragments.add(TopicsFragment.newInstance(Key.PSNGAMES, null, psnID));
     }
 
     @Override

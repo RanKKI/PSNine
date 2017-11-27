@@ -1,12 +1,15 @@
 package club.ranleng.psnine.ui.main;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
+import club.ranleng.psnine.BuildConfig;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
@@ -39,11 +42,19 @@ public class InitActivity extends BaseActivity {
         LCache.init();
         ApiManager.getDefault();
 //        ActivityUtils.startActivity(PSNActivity.class);
+        if (BuildConfig.DEBUG) {
+            ActivityUtils.startActivity(MainActivity.class);
+            return;
+        }
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                if (ApiManager.domain.contains(":")) {
+                    e.onNext(true);
+                    return;
+                }
                 String ip = NetworkUtils.getDomainAddress(ApiManager.domain);
-                if(ip == null){
+                if (ip == null) {
                     e.onNext(false);
                     return;
                 }

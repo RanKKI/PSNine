@@ -21,8 +21,10 @@ import java.util.List;
 
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.model.BaseTopic;
+import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.ui.ImageViewActivity;
+import club.ranleng.psnine.ui.psn.PSNActivity;
 import club.ranleng.psnine.utils.HtmlImageGetter;
 import club.ranleng.psnine.utils.Parse;
 
@@ -118,7 +120,7 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         return super.getItemViewType(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView avatar;
         TextView username;
@@ -140,7 +142,15 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             time.setText(comment.getTime());
             username.setText(comment.getUsername());
             Glide.with(context).load(comment.getAvatar()).into(avatar);
+            avatar.setOnClickListener(this);
+            username.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            lookupPSN(comments.get(getLayoutPosition() - 1).getUsername());
+        }
+
     }
 
     class HeaderViewHolder extends ViewHolder {
@@ -167,6 +177,13 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             time.setText(baseTopic.getTime());
             replies.setText(baseTopic.getComments());
             Glide.with(context).load(baseTopic.getAvatar()).into(icon);
+            icon.setOnClickListener(this);
+            username.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            lookupPSN(baseTopic.getAuthor());
         }
     }
 
@@ -175,5 +192,11 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         FooterViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    private void lookupPSN(String username) {
+        Bundle bundle = new Bundle();
+        bundle.putString("psnid", username);
+        ActivityUtils.startActivity(bundle, PSNActivity.class);
     }
 }

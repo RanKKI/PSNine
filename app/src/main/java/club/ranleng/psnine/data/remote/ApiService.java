@@ -56,4 +56,7 @@ public interface ApiService {
 
     @POST("my/photo")
     Observable<ResponseBody> del(@Body FormBody body);
+
+    @GET("psnid/{psnid}/{path}")
+    Observable<ResponseBody> getPSNGame(@Path("psnid") String psnid, @Path("path") String path);
 }
