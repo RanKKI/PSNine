@@ -1,21 +1,13 @@
 package club.ranleng.psnine.ui.main;
 
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
-import club.ranleng.psnine.BuildConfig;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.BaseActivity;
 import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
-import club.ranleng.psnine.ui.psn.PSNActivity;
-import club.ranleng.psnine.ui.topics.base.TopicsActivity;
 import club.ranleng.psnine.utils.LCache;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -41,15 +33,10 @@ public class InitActivity extends BaseActivity {
         Key.getSetting();
         LCache.init();
         ApiManager.getDefault();
-//        ActivityUtils.startActivity(PSNActivity.class);
-        if (BuildConfig.DEBUG) {
-            ActivityUtils.startActivity(MainActivity.class);
-            return;
-        }
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                if (ApiManager.domain.contains(":")) {
+                if (true) {
                     e.onNext(true);
                     return;
                 }

@@ -64,7 +64,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         if (title != null) toolbar.setSubtitle(title);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //scroll to top
                 long clickTime = System.currentTimeMillis();
                 if (clickTime - lastClickTime < 200) {
                     recyclerView.smoothScrollToPosition(0);
@@ -167,8 +167,8 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public void setReplyLayout(boolean opening) {
-        ani(reply_root, opening, false);
-        ani(fab, !opening, true);
+        showHideWithAnimation(reply_root, opening, false);
+        showHideWithAnimation(fab, !opening, true);
         if (!opening) {
             KeyboardUtils.hideSoftInput(this);
         }
@@ -214,7 +214,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         }
     }
 
-    private void ani(final View view, boolean show, boolean center) {
+    private void showHideWithAnimation(final View view, boolean show, boolean center) {
         int cx = view.getMeasuredWidth();
         int cy = view.getMeasuredHeight();
         int w = view.getWidth();

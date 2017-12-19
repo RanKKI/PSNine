@@ -17,5 +17,8 @@
     <color name="colorDiscountOff">#EF5350</color>
     <color name="colorDiscountOn">#66BB6A</color>
 
+    <color name="colorInfoBack">#FAF8F0</color>
+    <color name="colorInfoBackGreen">#F5FAED</color>
+    <color name="colorInfoBackRed">#FDF7F7</color>
 
 </resources>

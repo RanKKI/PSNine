@@ -1,8 +1,10 @@
 package club.ranleng.psnine.ui.topics.normal;
 
 import club.ranleng.psnine.base.model.BaseTopics;
+import club.ranleng.psnine.common.Key;
 import club.ranleng.psnine.data.remote.ApiManager;
 import club.ranleng.psnine.ui.topics.base.TopicsContract;
+import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
 public class TopicsPresenter<T extends BaseTopics> implements TopicsContract.Presenter {
@@ -29,17 +31,22 @@ public class TopicsPresenter<T extends BaseTopics> implements TopicsContract.Pre
     @Override
     public void load() {
         view.loading(true);
-        ApiManager.getDefault().getTopics(view.getType(), page, view.getQuery(), tClass)
-                .subscribe(new Consumer<T>() {
-                    @Override
-                    public void accept(T t) throws Exception {
-                        adapter.add(t, page);
-                        view.loading(false);
-                        if (page == 1) {
-                            view.scrollTo(0);
-                        }
-                    }
-                });
+        Observable<T> observable;
+        if (view.getType() == Key.PSNTOPIC || view.getType() == Key.PSNGENE) {
+            observable = ApiManager.getDefault().getPSN(view.getPSNID(), view.getType(), tClass);
+        } else {
+            observable = ApiManager.getDefault().getTopics(view.getType(), page, view.getQuery(), tClass);
+        }
+        observable.subscribe(new Consumer<T>() {
+            @Override
+            public void accept(T t) throws Exception {
+                adapter.add(t, page);
+                view.loading(false);
+                if (page == 1) {
+                    view.scrollTo(0);
+                }
+            }
+        });
     }
 
     @Override

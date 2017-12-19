@@ -20,7 +20,6 @@ import club.ranleng.psnine.data.module.Callback;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.model.HttpRequest;
 import club.ranleng.psnine.model.Images;
-import club.ranleng.psnine.model.PSNGames;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.model.Topics.TopicsDiscount;
 import club.ranleng.psnine.model.UserInfo;
@@ -41,7 +40,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class ApiManager {
 
-    //    public static final String domain = "192.168.31.88:5000";
+    //    public static final String domain = "192.168.31.121:5000";
     public static final String domain = "psnine.com";
     private static ClearableCookieJar cookieJar;
     private static ApiService apiService;
@@ -101,11 +100,11 @@ public class ApiManager {
     public <T> Observable<T> getTopics(int type, int page, String query, final Class<T> tClass) {
         Observable<ResponseBody> observable;
         if (type == Key.TOPIC || type == Key.GENE || type == Key.QA || type == Key.DISCOUNT) {
-            observable = ApiManager.getDefault().getApiService().getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
+            observable = apiService.getTopics(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
         } else if (type == Key.NOTICE) {
-            observable = ApiManager.getDefault().getApiService().getMy(KeyGetter.getKEY(type));
+            observable = apiService.getMy(KeyGetter.getKEY(type));
         } else {
-            observable = ApiManager.getDefault().getApiService().getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
+            observable = apiService.getTopicsWithNode(KeyGetter.getKEY(type), page, Key.getSetting().PREF_OB, query);
         }
         return observable.subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {
@@ -114,6 +113,19 @@ public class ApiManager {
                         String result = responseBody.string();
                         responseBody.close();
                         RxBus.getDefault().send(new Fruit().fromHtml(result, UserInfo.class));
+                        return new Fruit().fromHtml(result, tClass);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public <T> Observable<T> getMy(final Class<T> tClass) {
+        return apiService.getMy("account")
+                .subscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, T>() {
+                    @Override
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        responseBody.close();
                         return new Fruit().fromHtml(result, tClass);
                     }
                 }).observeOn(AndroidSchedulers.mainThread());
@@ -273,14 +285,14 @@ public class ApiManager {
                 }).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public<T> Observable<T> getPSN(String psnid, int type, final Class<T> tClass) {
-        return apiService.getPSNGame(psnid, KeyGetter.getKEY(type)).subscribeOn(Schedulers.io())
+    public <T> Observable<T> getPSN(String psnid, int type, final Class<T> tClass) {
+        return apiService.getPSN(psnid, KeyGetter.getKEY(type)).subscribeOn(Schedulers.io())
                 .map(new Function<ResponseBody, T>() {
                     @Override
                     public T apply(ResponseBody responseBody) throws Exception {
                         String result = responseBody.string();
                         responseBody.close();
-                        return new Fruit().fromHtml(result,tClass);
+                        return new Fruit().fromHtml(result, tClass);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView style="@style/AccountCardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/colorInfoBack"
+                android:padding="5dp"
+                android:text="NB是站内积分，如果积分小于1银币，你的站内交流将受限制，请多留意 站规 和 NB说明文档" />
+
+            <TextView
+                android:id="@+id/NBAmount"
+                style="@style/AccountDetailItem"
+                android:layout_width="match_parent"
+                android:background="@color/colorInfoBackGreen" />
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView style="@style/AccountCardView">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ZBTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorInfoBack"
+                android:padding="5dp"
+                android:text="ZB是捐助币，只与VIP等级相关（VIP可享受各种站内福利），比例是1RMB = 0.8ZB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ZBTip"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/ZBCount"
+                    style="@style/AccountDetailItem"
+                    android:background="@color/colorInfoBackGreen" />
+
+                <TextView
+                    android:id="@+id/VIPLevel"
+                    style="@style/AccountDetailItem"
+                    android:background="@color/colorInfoBackRed" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView style="@style/AccountCardView">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

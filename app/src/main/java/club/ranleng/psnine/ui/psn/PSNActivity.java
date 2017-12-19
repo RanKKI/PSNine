@@ -63,6 +63,7 @@ public class PSNActivity extends BaseActivity {
     @Override
     public void getData() {
         String psnID = getIntent().getStringExtra("psnid");
+        if (psnID == null) psnID = "ranleng";
         setTitle(psnID);
         PSNInfoViewPagerAdapter adapter = new PSNInfoViewPagerAdapter(psnID, getFragmentManager());
         viewPager.setAdapter(adapter);
@@ -71,14 +72,17 @@ public class PSNActivity extends BaseActivity {
                 .subscribe(new Consumer<PSNUserInfo>() {
                     @Override
                     public void accept(PSNUserInfo psnUserInfo) throws Exception {
-                        trophy.setText(psnUserInfo.getTrophy());
-                        des.setText(psnUserInfo.getDes());
-                        Glide.with(context).load(psnUserInfo.getAvatar()).into(avatar);
-                        Glide.with(context).load(psnUserInfo.getAuth()).into(authIcon);
-                        Glide.with(context).load(psnUserInfo.getPlus()).into(plusIcon);
-                        Glide.with(context).load(psnUserInfo.getRegion()).into(regionIcon);
-
+                        bindUserInfo(psnUserInfo);
                     }
                 });
+    }
+
+    private void bindUserInfo(PSNUserInfo psnUserInfo){
+        trophy.setText(psnUserInfo.getTrophy());
+        des.setText(psnUserInfo.getDes());
+        Glide.with(context).load(psnUserInfo.getAvatar()).into(avatar);
+        Glide.with(context).load(psnUserInfo.getAuth()).into(authIcon);
+        Glide.with(context).load(psnUserInfo.getPlus()).into(plusIcon);
+        Glide.with(context).load(psnUserInfo.getRegion()).into(regionIcon);
     }
 }

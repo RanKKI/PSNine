@@ -39,20 +39,13 @@ public class newTopicGeneFragment extends BaseFragment implements newTopicContac
     @BindView(R.id.new_gene_url) EditText url;
     @BindView(R.id.swipelayout) SwipeRefreshLayout swipeRefreshLayout;
 
-    private Context context;
     private newTopicContact.Presenter presenter;
     private ArrayList<String> photo_list = new ArrayList<>();
+
 
     public static newTopicGeneFragment newInstance() {
         return new newTopicGeneFragment();
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.layout_new_gene, container, false);
@@ -123,7 +116,7 @@ public class newTopicGeneFragment extends BaseFragment implements newTopicContac
 
     @Override
     public Context getCtx() {
-        return context;
+        return mContext;
     }
 
     private void loadImagesSize() {

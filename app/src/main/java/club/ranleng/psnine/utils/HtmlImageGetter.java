@@ -24,6 +24,7 @@ public class HtmlImageGetter implements Html.ImageGetter {
     private TextView tv;
     private int w_screen;
     private int h_screen;
+    private boolean loaded;
 
     public HtmlImageGetter(Context context, @Nullable TextView tv) {
         this.context = context;
@@ -38,11 +39,13 @@ public class HtmlImageGetter implements Html.ImageGetter {
         final URLDrawable urlDrawable = new URLDrawable();
         int w = 64;
         int h = 64;
+        loaded = false;
         if (!s.contains("photo.psnine.com/face")) {
             ArrayList<Integer> list = LCache.get(s);
             if (list != null) {
                 w = list.get(0);
                 h = list.get(1);
+                loaded = true;
             }
         }
         urlDrawable.setBounds(0, 0, w, h);
@@ -57,8 +60,12 @@ public class HtmlImageGetter implements Html.ImageGetter {
                         LCache.add(s, width, height);
                         urlDrawable.bitmap = resource;
                         urlDrawable.setBounds(0, 0, width, height);
+                        if(loaded){
+                            return;
+                        }
                         if (tv != null) {
                             tv.setText(tv.getText());
+                            tv.invalidate();
                         }
                     }
                 });

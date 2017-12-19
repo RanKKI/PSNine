@@ -44,6 +44,9 @@ public interface ApiService {
     @GET("my/{type}")
     Observable<ResponseBody> getMy(@Path("type") String type);
 
+    @GET("my/{type}")
+    Observable<ResponseBody> getMy(@Path("type") String type, @Query("channel") String channel);
+
     @POST("set/gene/post")
     Observable<ResponseBody> newGene(@Body FormBody body);
 
@@ -58,5 +61,5 @@ public interface ApiService {
     Observable<ResponseBody> del(@Body FormBody body);
 
     @GET("psnid/{psnid}/{path}")
-    Observable<ResponseBody> getPSNGame(@Path("psnid") String psnid, @Path("path") String path);
+    Observable<ResponseBody> getPSN(@Path("psnid") String psnid, @Path("path") String path);
 }

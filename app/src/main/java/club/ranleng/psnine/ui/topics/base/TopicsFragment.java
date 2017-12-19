@@ -68,7 +68,7 @@ public class TopicsFragment extends BaseFragment implements TopicsContract.View 
         type = getArguments().getInt("type");
         query = getArguments().getString("query");
         psnid = getArguments().getString("psnid");
-        if (type == Key.GENE) {
+        if (type == Key.GENE || type == Key.PSNGENE) {
             new TopicsPresenter<>(this, TopicsGene.class);
         } else if (type == Key.QA) {
             new TopicsPresenter<>(this, TopicsQA.class);

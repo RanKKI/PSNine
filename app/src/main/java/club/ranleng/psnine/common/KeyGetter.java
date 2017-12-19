@@ -24,6 +24,10 @@ public class KeyGetter {
                 return "psngame";
             case Key.PSN:
                 return "";
+            case Key.PSNTOPIC:
+                return "topic";
+            case Key.PSNGENE:
+                return "gene";
         }
         throw new IllegalArgumentException("key is not in the list, plz check it");
     }

@@ -34,7 +34,7 @@ public class TopicGene extends BaseTopic {
     @Override
     public String content() {
         if (iframeUrl != null) {
-            String html = "<center><a align=\"center\" href=\"" + iframeUrl + "\" >视频链接</a></center>";
+            String html = "<center><a href=\"" + iframeUrl + "\" >点击点开视频 (将启动浏览器)</a></center>";
             if (!content.contains("img")) {
                 return html;
             }
