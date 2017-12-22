@@ -1,5 +1,7 @@
 package club.ranleng.psnine.model.Topic;
 
+import java.util.List;
+
 import club.ranleng.psnine.base.model.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
@@ -47,5 +49,10 @@ public class TopicQA extends BaseTopic {
     @Override
     public String comments() {
         return comments;
+    }
+
+    @Override
+    public List<TopicGame> games() {
+        return null;
     }
 }

@@ -60,8 +60,6 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
         setTitle("主题");
         url = getIntent().getStringExtra("url");
         type = Parse.getType(url);
-        String title = getIntent().getStringExtra("content");
-        if (title != null) toolbar.setSubtitle(title);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //scroll to top
@@ -160,9 +158,7 @@ public class TopicActivity extends BaseActivity implements TopicActivityContract
 
     @Override
     public void setSubtitle(String subtitle) {
-        if (toolbar.getSubtitle() == null) {
-            toolbar.setSubtitle(subtitle);
-        }
+        toolbar.setSubtitle(subtitle);
     }
 
     @Override

@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -19,10 +19,12 @@ import org.sufficientlysecure.htmltextview.ImageClick;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import club.ranleng.psnine.R;
 import club.ranleng.psnine.base.model.BaseTopic;
-import club.ranleng.psnine.common.UserState;
 import club.ranleng.psnine.model.Topic.TopicComment;
+import club.ranleng.psnine.model.Topic.TopicGame;
 import club.ranleng.psnine.ui.ImageViewActivity;
 import club.ranleng.psnine.ui.psn.PSNActivity;
 import club.ranleng.psnine.utils.HtmlImageGetter;
@@ -32,11 +34,14 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
     private static final int HeaderView = 10;
     private static final int FooterView = 11;
+    private static final int GameView = 12;
     private LayoutInflater layoutInflater;
     private List<TopicComment.Comment> comments = new ArrayList<>();
     private BaseTopic baseTopic;
+    private List<TopicGame> topicGame;
     private Context context;
     private ImageClick imageClick;
+    private int gamesSize;
 
     TopicListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -54,6 +59,10 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
     void setHeaderView(BaseTopic baseTopic) {
         this.baseTopic = baseTopic;
         notifyItemChanged(0);
+    }
+
+    void setTopicGame(List<TopicGame> topicGame) {
+        this.topicGame = topicGame;
     }
 
     void addComments(TopicComment topicComment) {
@@ -83,6 +92,9 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         } else if (viewType == FooterView) {
             View footer = layoutInflater.inflate(R.layout.adapter_topic_footer, parent, false);
             return new FooterViewHolder(footer);
+        } else if(viewType == GameView){
+            View game = layoutInflater.inflate(R.layout.adapter_topics_psngame_item, parent, false);
+            return new GameViewHolder(game);
         }
         View view = layoutInflater.inflate(R.layout.adapter_topic_comment, parent, false);
         return new ViewHolder(view);
@@ -97,8 +109,14 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         if (holder instanceof FooterViewHolder && position == getItemCount() - 1) {
             return;
         }
+
+        if (holder instanceof GameViewHolder && position <= gamesSize) {
+            ((GameViewHolder) holder).bindGame(position - 1);
+            return;
+        }
+
         if (holder != null) {
-            holder.bind(position - 1);
+            holder.bind(position - 1 - gamesSize);
         }
     }
 
@@ -107,7 +125,11 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
         if (baseTopic == null) {
             return 0;
         }
-        return comments == null ? 2 : comments.size() + 2;
+        gamesSize = topicGame == null ? 0 : topicGame.size();
+        int size = 2;
+        size += comments.size();
+        size += gamesSize;
+        return size;
     }
 
     @Override
@@ -116,6 +138,8 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
             return HeaderView;
         } else if (position == getItemCount() - 1) {
             return FooterView;
+        } else if (position <= gamesSize) {
+            return GameView;
         }
         return super.getItemViewType(position);
     }
@@ -191,6 +215,29 @@ public class TopicListAdapter extends RecyclerView.Adapter<TopicListAdapter.View
 
         FooterViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    class GameViewHolder extends ViewHolder{
+
+        @BindView(R.id.PSNGameItemIcon) ImageView icon;
+        @BindView(R.id.PSNGameItemName) TextView name;
+        @BindView(R.id.PSNGameItemTrophy) TextView trophy;
+        @BindView(R.id.PSNGameItemTime) TextView perfect;
+        @BindView(R.id.PSNGameItemProgress) ProgressBar progressBar;
+
+        GameViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        void bindGame(int pos){
+            TopicGame game =  topicGame.get(pos);
+            Glide.with(context).load(game.getIcon()).into(icon);
+            name.setText(game.getName());
+            trophy.setText(game.getTrophy());
+            perfect.setText(game.getMode());
+            progressBar.setProgress(game.getPerfect());
         }
     }
 

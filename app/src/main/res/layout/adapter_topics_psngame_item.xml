@@ -33,12 +33,12 @@
 
     <TextView
         android:id="@+id/PSNGameItemTime"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/PSNGameItemTrophy"
         android:layout_toEndOf="@+id/PSNGameItemIcon"
         android:textColor="@color/secondary_text"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/PSNGameItemTrophy"

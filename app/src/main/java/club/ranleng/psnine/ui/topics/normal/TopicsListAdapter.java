@@ -108,7 +108,6 @@ public class TopicsListAdapter<T extends BaseTopics.BaseItem>
             BaseTopics.BaseItem item = items.get(getAdapterPosition());
             Bundle bundle = new Bundle();
             bundle.putString("url", item.getUrl());
-            bundle.putString("content", item.getContent());
             ActivityUtils.startActivity(bundle, TopicActivity.class);
         }
     }

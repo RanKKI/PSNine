@@ -1,5 +1,7 @@
 package club.ranleng.psnine.model.Topic;
 
+import java.util.List;
+
 import club.ranleng.psnine.base.model.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
@@ -56,6 +58,11 @@ public class TopicGene extends BaseTopic {
     @Override
     public String comments() {
         return time.replace(" ", "").split("前")[1];
+    }
+
+    @Override
+    public List<TopicGame> games() {
+        return null;
     }
 
     public String getOriginalUrl() {

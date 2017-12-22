@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView style="@style/AccountCardView">
@@ -23,7 +23,8 @@
                 android:id="@+id/NBAmount"
                 style="@style/AccountDetailItem"
                 android:layout_width="match_parent"
-                android:background="@color/colorInfoBackGreen" />
+                android:background="@color/colorInfoBackGreen"
+                android:text="@string/loading" />
 
         </LinearLayout>
 
@@ -56,12 +57,14 @@
                 <TextView
                     android:id="@+id/ZBCount"
                     style="@style/AccountDetailItem"
-                    android:background="@color/colorInfoBackGreen" />
+                    android:background="@color/colorInfoBackGreen"
+                    android:text="@string/loading" />
 
                 <TextView
                     android:id="@+id/VIPLevel"
                     style="@style/AccountDetailItem"
-                    android:background="@color/colorInfoBackRed" />
+                    android:background="@color/colorInfoBackRed"
+                    android:text="@string/loading" />
 
             </LinearLayout>
 
@@ -74,8 +77,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
+

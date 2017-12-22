@@ -3,18 +3,13 @@ package club.ranleng.psnine.view;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.bumptech.glide.ListPreloader;
-import com.bumptech.glide.RequestBuilder;
-
-import java.util.List;
+import com.bumptech.glide.Glide;
 
 import club.ranleng.psnine.R;
 
@@ -93,12 +88,11 @@ public class SmartRecyclerView extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-
-//            if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_DRAGGING) {
-//                Glide.with(context).resumeRequests();
-//            } else if (newState == SCROLL_STATE_SETTLING) {
-//                Glide.with(context).pauseRequests();
-//            }
+            if (newState == SCROLL_STATE_IDLE || newState == SCROLL_STATE_DRAGGING) {
+                Glide.with(context).resumeRequests();
+            } else if (newState == SCROLL_STATE_SETTLING) {
+                Glide.with(context).pauseRequests();
+            }
         }
     }
 }

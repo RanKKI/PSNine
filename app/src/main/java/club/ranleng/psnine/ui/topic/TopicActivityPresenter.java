@@ -3,6 +3,7 @@ package club.ranleng.psnine.ui.topic;
 import club.ranleng.psnine.base.model.BaseTopic;
 import club.ranleng.psnine.data.module.TopicCommentCallback;
 import club.ranleng.psnine.data.remote.ApiManager;
+import club.ranleng.psnine.model.Topic.Topic;
 import club.ranleng.psnine.model.Topic.TopicComment;
 import club.ranleng.psnine.model.Topic.TopicGene;
 import club.ranleng.psnine.utils.Parse;
@@ -36,20 +37,25 @@ public class TopicActivityPresenter<T> implements TopicActivityContract.Presente
     @Override
     public void loadTopic() {
         view.loading(true);
-        ApiManager.getDefault().getTopic(view.getType(), id, tClass).subscribe(new Consumer<T>() {
-            @Override
-            public void accept(T t) throws Exception {
-                BaseTopic baseTopic = (BaseTopic) t;
-                adapter.setHeaderView(baseTopic);
-                String sub = baseTopic.getTitle();
-                view.setSubtitle(sub);
-                if (t instanceof TopicGene) {
-                    TopicGene topicGene = (TopicGene) t;
-                    view.setMenu(topicGene.getOriginalUrl());
-                }
-                if (loadComment) loadComment();
-            }
-        });
+        ApiManager.getDefault()
+                .getTopic(view.getType(), id, tClass)
+                .subscribe(new Consumer<T>() {
+                    @Override
+                    public void accept(T t) throws Exception {
+                        BaseTopic baseTopic = (BaseTopic) t;
+                        adapter.setHeaderView(baseTopic);
+                        view.setSubtitle(baseTopic.getTitle());
+                        if (t instanceof TopicGene) {
+                            TopicGene topicGene = (TopicGene) t;
+                            view.setMenu(topicGene.getOriginalUrl());
+                        }
+
+                        if(t instanceof Topic){
+                            adapter.setTopicGame(baseTopic.getGames());
+                        }
+                        if (loadComment) loadComment();
+                    }
+                });
     }
 
     @Override

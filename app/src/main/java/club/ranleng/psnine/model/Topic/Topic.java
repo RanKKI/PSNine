@@ -1,5 +1,7 @@
 package club.ranleng.psnine.model.Topic;
 
+import java.util.List;
+
 import club.ranleng.psnine.base.model.BaseTopic;
 import me.ghui.fruit.Attrs;
 import me.ghui.fruit.annotations.Pick;
@@ -18,6 +20,8 @@ public class Topic extends BaseTopic {
     private String time;
     @Pick(value = "div.main > div.box > div.pd10 > div.meta", attr = Attrs.OWN_TEXT)
     private String comments;
+    @Pick(value = "div.box:not(.mt20):not(.pd10) > table > tbody > tr")
+    private List<TopicGame> games;
 
     //    @Pick(value = "div.page > ul > li")
 //    private List<Page> pages = new ArrayList<>();
@@ -50,6 +54,11 @@ public class Topic extends BaseTopic {
     @Override
     public String comments() {
         return comments;
+    }
+
+    @Override
+    public List<TopicGame> games() {
+        return games;
     }
 
 

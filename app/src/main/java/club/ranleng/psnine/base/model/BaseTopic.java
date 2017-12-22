@@ -1,5 +1,9 @@
 package club.ranleng.psnine.base.model;
 
+import java.util.List;
+
+import club.ranleng.psnine.model.Topic.TopicGame;
+
 public abstract class BaseTopic {
 
     public abstract String title();
@@ -13,6 +17,8 @@ public abstract class BaseTopic {
     public abstract String time();
 
     public abstract String comments();
+
+    public abstract List<TopicGame> games();
 
     public String getTitle() {
         return title();
@@ -50,6 +56,10 @@ public abstract class BaseTopic {
             result = content;
         }
         return result;
+    }
+
+    public List<TopicGame> getGames() {
+        return games();
     }
 
 }
