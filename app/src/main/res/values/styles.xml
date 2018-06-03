@@ -3,53 +3,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="android:screenOrientation">portrait</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Animation" parent="AppTheme">
-        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="ActivityAnimation" parent="@android:style/Animation.Activity">
-        <!--A1 启动 A2 时，A2 出现在屏幕上-->
-        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
-        <!--A1 启动 A2 时，A1 从屏幕上消失-->
-        <item name="android:activityOpenExitAnimation">@anim/out_from_left</item>
-        <!--A2 退出回到 A1 时，A1 出现在屏幕上-->
-        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
-        <!--A2 退出回到 A1 时，A2 从屏幕上消失-->
-        <item name="android:activityCloseExitAnimation">@anim/out_from_right</item>
-    </style>
-
-    <style name="AccountCardView" parent="CardView">
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="cardCornerRadius">6dp</item>
-    </style>
-
-    <style name="AccountDetailItem">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_margin">5dp</item>
-    </style>
-
-    <style name="AccountTransInfoItem">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:gravity">center</item>
-        <item name="android:maxLines">1</item>
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

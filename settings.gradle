@@ -1,1 +1,1 @@
-include ':app', ':HtmlTextView'
+include ':app'
