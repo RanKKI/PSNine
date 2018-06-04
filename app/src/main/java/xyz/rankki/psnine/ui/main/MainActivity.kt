@@ -1,10 +1,7 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package xyz.rankki.psnine.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.blankj.utilcode.util.Utils
 import org.jetbrains.anko.*
@@ -30,29 +27,33 @@ class MainActivity : AppCompatActivity() {
             appBarLayout {
                 toolbar {
                     id = ID_Toolbar
-                    menuInflater.inflate(R.menu.menu_main, menu)
                     title = "PSNine"
+                    backgroundColorResource = R.color.colorAppBarBackground
+                    setTitleTextColor(resources.getColor(R.color.colorAppBarText))
+                    menuInflater.inflate(R.menu.menu_main, menu)
                     onMenuItemClick { item ->
                         when (item!!.itemId) {
                             R.id.action_settings -> true
                             else -> super.onOptionsItemSelected(item)
                         }
                     }
-                }.lparams(width = matchParent, height = wrapContent)
+                }.lparams(matchParent, wrapContent)
                 tabLayout {
                     id = ID_TabLayout
-                }.lparams(width = matchParent, height = wrapContent)
+                    backgroundColorResource = R.color.colorAppBarBackground
+                    setTabTextColors(resources.getColor(R.color.colorTabTextNormal),
+                            resources.getColor(R.color.colorTabTextSelected))
+                }.lparams(matchParent, wrapContent)
             }
             viewPager {
                 id = ID_ViewPager
-            }.lparams(width = matchParent, height = matchParent)
+                adapter = ViewPagerAdapter(supportFragmentManager)
+            }.lparams(matchParent, matchParent)
         }
 
         Utils.init(application)
         HttpManager.init()
 
-        val viewPager: ViewPager = find(ID_ViewPager)
-        viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
-        find<TabLayout>(ID_TabLayout).setupWithViewPager(viewPager)
+        find<TabLayout>(ID_TabLayout).setupWithViewPager(find(ID_ViewPager))
     }
 }

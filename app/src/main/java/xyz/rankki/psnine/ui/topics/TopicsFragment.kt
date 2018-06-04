@@ -1,6 +1,5 @@
 package xyz.rankki.psnine.ui.topics
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -13,10 +12,10 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import xyz.rankki.psnine.base.BaseFragment
 import xyz.rankki.psnine.base.BaseModel
+import xyz.rankki.psnine.data.http.HttpManager
 
-class TopicsFragment<K> : BaseFragment(), TopicsContract.View {
+class TopicsFragment<K> : BaseFragment() {
 
-    private lateinit var mPresenter: TopicsContract.Presenter
     private lateinit var mAdapter: TopicsAdapter<K>
     private lateinit var clz: Class<*>
 
@@ -39,11 +38,6 @@ class TopicsFragment<K> : BaseFragment(), TopicsContract.View {
         }
     }
 
-    override fun setPresenter(presenter: TopicsContract.Presenter) {
-        mPresenter = presenter
-        mPresenter.start()
-    }
-
     override fun initView(): View {
         mAdapter = TopicsAdapter((mContext))
         clz = Class.forName(arguments?.getString("clz")) as Class<*>
@@ -64,17 +58,17 @@ class TopicsFragment<K> : BaseFragment(), TopicsContract.View {
     }
 
     override fun initData() {
-        TopicsPresenter(this, clz)
+        setRefreshing(true)
+        HttpManager.get()
+                .getTopics(arguments!!.getString("path"), clz)
+                .subscribe {
+                    mAdapter.updateData(it)
+                    setRefreshing(false)
+                }
     }
 
-    override fun setRefreshing(isRefreshing: Boolean) {
+    private fun setRefreshing(isRefreshing: Boolean) {
         find<SwipeRefreshLayout>(ID_SwipeRefreshLayout).isRefreshing = isRefreshing
     }
-
-    override fun getContext(): Context = mContext
-
-    override fun updateData(list: ArrayList<*>) = mAdapter.updateData(list)
-
-    override fun getPath(): String = arguments!!.getString("path")
 
 }
