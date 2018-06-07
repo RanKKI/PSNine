@@ -13,8 +13,9 @@ import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
-import xyz.rankki.psnine.base.BaseModel
+import retrofit2.http.Url
+import xyz.rankki.psnine.base.BaseTopicModel
+import xyz.rankki.psnine.base.BaseTopicsModel
 import xyz.rankki.psnine.data.http.interceptor.RequestInterceptor
 import java.util.concurrent.TimeUnit
 
@@ -22,8 +23,8 @@ import java.util.concurrent.TimeUnit
 class HttpManager {
 
     companion object {
-        private const val baseDomain: String = "192.168.0.100:5000"
-        //        private const val baseDomain: String = "psnine.com"
+        //        private const val baseDomain: String = "192.168.0.100:5000"
+        private const val baseDomain: String = "psnine.com"
         const val baseUrl: String = "http://$baseDomain"
 
         fun get(): HttpManager = Inner.instance
@@ -38,8 +39,8 @@ class HttpManager {
 
     interface Service {
 
-        @GET("{path}")
-        fun getWebPage(@Path("path") path: String): Observable<ResponseBody>
+        @GET
+        fun getWebPage(@Url url: String): Observable<ResponseBody>
 
     }
 
@@ -68,7 +69,11 @@ class HttpManager {
     private fun <T> getWebPage(path: String, clz: Class<T>): Observable<T> {
         return service.getWebPage(path)
                 .subscribeOn(Schedulers.io())
-                .map { return@map it.string() }
+                .map {
+                    val str: String = it.string()
+                    it.close()
+                    return@map str
+                }
                 .map { return@map Fruit().fromHtml(it, clz) }
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -77,7 +82,14 @@ class HttpManager {
     fun <T> getTopics(path: String, clz: Class<T>): Observable<ArrayList<*>> {
         return getWebPage(path, clz)
                 .subscribeOn(Schedulers.io())
-                .map { return@map (it as BaseModel<*>).getItems() }
+                .map { return@map (it as BaseTopicsModel<*>).getItems() }
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun <T> getTopic(path: String, clz: Class<T>): Observable<BaseTopicModel> {
+        return getWebPage(path, clz)
+                .subscribeOn(Schedulers.io())
+                .map { return@map it as BaseTopicModel }
                 .observeOn(AndroidSchedulers.mainThread())
     }
 

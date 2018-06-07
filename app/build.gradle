@@ -8,8 +8,8 @@ android {
         applicationId "xyz.rankki.psnine"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "0.0.1"
+        versionCode 2
+        versionName "0.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,39 +38,26 @@ dependencies {
     implementation 'me.ghui:Fruit:1.0.4'
     implementation 'com.blankj:utilcode:1.9.2'
 
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
+    implementation 'org.sufficientlysecure:html-textview:3.5'
+
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
-
-    // Appcompat-v7 (Anko Layouts)
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
-
-    // CardView-v7
-    implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
-
-    // Design
+//    implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
     implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
-
-    // GridLayout-v7
-    implementation "org.jetbrains.anko:anko-gridlayout-v7:$anko_version"
-
-    // Percent
+//    implementation "org.jetbrains.anko:anko-gridlayout-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-percent:$anko_version"
-
-    // RecyclerView-v7
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
-
-    // Support-v4 (only Anko Commons)
     implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
-
-    // Support-v4 (Anko Layouts)
     implementation "org.jetbrains.anko:anko-support-v4:$anko_version"
-
-    // ConstraintLayout
-    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
+//    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
 }
 kotlin {
     experimental {

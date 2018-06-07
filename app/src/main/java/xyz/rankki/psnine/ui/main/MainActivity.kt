@@ -3,6 +3,7 @@ package xyz.rankki.psnine.ui.main
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
+import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.appBarLayout
@@ -51,8 +52,11 @@ class MainActivity : AppCompatActivity() {
             }.lparams(matchParent, matchParent)
         }
 
-        Utils.init(application)
-        HttpManager.init()
+        doAsync {
+            Utils.init(application)
+            HttpManager.init()
+            ToastUtils.setBgColor(resources.getColor(R.color.colorToastBackground))
+        }
 
         find<TabLayout>(ID_TabLayout).setupWithViewPager(find(ID_ViewPager))
     }

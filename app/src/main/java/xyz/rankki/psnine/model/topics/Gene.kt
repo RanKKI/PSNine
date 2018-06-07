@@ -1,11 +1,12 @@
-package xyz.rankki.psnine.model
+package xyz.rankki.psnine.model.topics
 
 import me.ghui.fruit.Attrs
 import me.ghui.fruit.annotations.Pick
-import xyz.rankki.psnine.base.BaseModel
+import xyz.rankki.psnine.base.BaseTopicsModel
+import xyz.rankki.psnine.common.config.PSNineTypes
 
 
-class Gene : BaseModel<Gene.Topic>() {
+class Gene : BaseTopicsModel<Gene.Topic>() {
 
     @Pick(value = "ul.list.genelist > li:has(a)")
     private var _topics: ArrayList<Topic> = ArrayList()
@@ -14,8 +15,9 @@ class Gene : BaseModel<Gene.Topic>() {
 
     override fun getPath(): String = "gene"
     override fun getName(): String = "基因"
+    override fun getType(): Int = PSNineTypes.Gene
 
-    class Topic : BaseModel.BaseItem() {
+    class Topic : BaseTopicsModel.BaseItem() {
 
         @Pick(value = "a.l > img", attr = Attrs.SRC)
         private var _avatar: String = ""
@@ -38,9 +40,9 @@ class Gene : BaseModel<Gene.Topic>() {
 
         override fun getUsername(): String = _username
 
-        override fun getReplySize(): String = _info.split(" ")[0]
+        override fun getReplySize(): String = _info.split(" ")[1]
 
-        override fun getTime(): String = _info.split(" ")[1]
+        override fun getTime(): String = _info.split(" ")[0]
 
         override fun getTopicUrl(): String = _url
     }

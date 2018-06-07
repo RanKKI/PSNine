@@ -13,10 +13,20 @@
 
   - Android 版本 > 5.0 ( SDK version > 21 )
   - 网络连接
-  
+ 
+### Dependencies
+ - rxKotlin
+ - retrofit2
+ - Fruit
+ - Anko
+ - Glide
+
 #### 日志
 
  ```
- Version 0.0.1
- 使用kotlin + Anko重构
+ Version 0.0.2
+ 文章查看.
+ 图片适应手机宽度.
+ 表情放大.
+ 优化列表
  ```

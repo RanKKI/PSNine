@@ -1,11 +1,12 @@
-package xyz.rankki.psnine.model
+package xyz.rankki.psnine.model.topics
 
 import me.ghui.fruit.Attrs
 import me.ghui.fruit.annotations.Pick
-import xyz.rankki.psnine.base.BaseModel
+import xyz.rankki.psnine.base.BaseTopicsModel
+import xyz.rankki.psnine.common.config.PSNineTypes
 
 
-class Topics : BaseModel<Topics.Topic>() {
+open class Home : BaseTopicsModel<Home.Topic>() {
 
     @Pick(value = "ul.list > li")
     private var _topics: ArrayList<Topic> = ArrayList()
@@ -14,9 +15,10 @@ class Topics : BaseModel<Topics.Topic>() {
 
     override fun getPath(): String = ""
     override fun getName(): String = "主页"
+    override fun getType(): Int = PSNineTypes.Home
 
 
-    class Topic : BaseModel.BaseItem() {
+    open class Topic : BaseTopicsModel.BaseItem() {
 
         @Pick(value = "a.l > img", attr = Attrs.SRC)
         private var _avatar: String = ""
@@ -37,7 +39,7 @@ class Topics : BaseModel<Topics.Topic>() {
 
         override fun getUsername(): String = _username
 
-        override fun getReplySize(): String = _reply
+        override fun getReplySize(): String = _reply + "评论"
 
         override fun getTime(): String = _time
 

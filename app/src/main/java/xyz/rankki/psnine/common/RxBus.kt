@@ -1,4 +1,4 @@
-package xyz.rankki.psnine
+package xyz.rankki.psnine.common
 
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

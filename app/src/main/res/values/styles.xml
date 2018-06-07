@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="PSNineLightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <!--<item name="android:colorPrimary">@color/primary</item>-->
-        <!--<item name="android:colorPrimaryDark">@color/primary_dark</item>-->
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:listDivider">@color/colorDivider</item>
         <!--<item name="android:textColorPrimary">@color/primary_text</item>-->
         <!--<item name="android:textColorSecondary">@color/secondary_text</item>-->
         <!--<item name="android:textColor">@color/icons</item>-->
