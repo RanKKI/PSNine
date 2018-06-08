@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import org.jetbrains.anko.*
 import xyz.rankki.psnine.base.BaseTopicModel
 import xyz.rankki.psnine.common.config.PSNineTypes
@@ -29,8 +31,9 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
     private val _ankoContext = AnkoContext.createReusable(mContext, this)
     private var _topic: BaseTopicModel? = null
     private var _replies: ArrayList<Reply> = ArrayList()
-    private var _replyPositionOffset = -1
-    private var _imagePositionOffset = -1
+    private var _replyPositionOffset = 0
+    private var _imagePositionOffset = 0
+    private var _gamesPositionOffset = 0
 
     private var _images: ArrayList<Gene.Image> = ArrayList()
     private var _games: ArrayList<Home.Game> = ArrayList()
@@ -38,7 +41,6 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
     fun update(topic: BaseTopicModel) {
         doAsync {
             _replyPositionOffset = -1
-            _imagePositionOffset = -1
             _replies = topic.getReplies()
             _topic = topic
             if (_topic!!.isMoreReplies()) {
@@ -48,15 +50,17 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
                 val gene = _topic!! as Gene
                 _replyPositionOffset -= gene.images.size
                 _images = gene.images
+                _imagePositionOffset = -1
             }
-
             if (_topic?.getType() == PSNineTypes.Home) {
                 val home = _topic!! as Home
                 _replyPositionOffset -= home.games.size
                 _games = home.games
+                _gamesPositionOffset = -1
+                _gamesPositionOffset -= _imagePositionOffset
             }
             uiThread {
-                notifyDataSetChanged()
+                notifyItemRangeChanged(0, itemCount)
             }
         }
     }
@@ -69,10 +73,6 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
             Type_Game -> GameViewHolder(GameUI<TopicAdapter>().createView(_ankoContext))
             else -> ReplyViewHolder(TopicReplyUI<TopicAdapter>().createView(_ankoContext))
         }
-    }
-
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
     }
 
     override fun getItemCount(): Int {
@@ -97,19 +97,33 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
                 val viewHolder: HeaderViewHolder = holder as HeaderViewHolder
                 viewHolder.tvUsername.text = _topic!!.getUsername()
                 Glide.with(mContext).load(_topic!!.getAvatar()).into(viewHolder.ivAvatar)
-                HtmlUtil.setHtml(mContext, viewHolder.tvContent, _topic!!.getContent())
+                HtmlUtil.fromHtml(mContext, _topic!!.getContent(), viewHolder.tvContent)
+//                viewHolder.tvContent.text = _topic!!.getContent()
             }
 
             Type_Image -> {
                 val imagePosition: Int = _imagePositionOffset + position
                 val viewHolder: ImageViewHolder = holder as ImageViewHolder
+                val requestOptions = RequestOptions()
+                requestOptions.override(Target.SIZE_ORIGINAL)
                 Glide.with(mContext)
+                        .setDefaultRequestOptions(requestOptions)
                         .load((_topic!! as Gene).images[imagePosition].url)
                         .into(viewHolder.ivImage)
 
             }
 
             Type_Game -> {
+                val viewHolder: GameViewHolder = holder as GameViewHolder
+                val game: Home.Game = _games[_gamesPositionOffset + position]
+                viewHolder.tvGameEdition.text = game.gameEdition
+                viewHolder.tvGameName.text = game.gameName
+                viewHolder.tvGameTrophy.text = game.gameTrophy
+                Glide.with(mContext).load(game.gameAvatar).into(viewHolder.ivGameAvatar)
+                if (game.gameComment !== "") {
+                    viewHolder.tvComment.visibility = View.VISIBLE
+                    viewHolder.tvComment.text = game.gameComment
+                }
 
             }
 
@@ -122,7 +136,8 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
                 val reply: Reply = _replies[_replyPositionOffset + position]
                 viewHolder.tvUsername.text = reply.username
                 Glide.with(mContext).load(reply.avatar).into(viewHolder.ivAvatar)
-                HtmlUtil.setHtml(mContext, viewHolder.tvContent, reply.content)
+                HtmlUtil.fromHtml(mContext, reply.content, viewHolder.tvContent)
+//                holder.tvContent.text = reply.content
             }
         }
     }
@@ -163,7 +178,14 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
         val ivImage: ImageView = mView.find(ImageUI.ID_Image)
     }
 
-    class GameViewHolder(mView: View) : ViewHolder(mView)
+    class GameViewHolder(mView: View) : ViewHolder(mView) {
+        val tvGameName: TextView = mView.find(GameUI.ID_GameName)
+        val tvGameTrophy: TextView = mView.find(GameUI.ID_Trophy)
+        val tvGameEdition: TextView = mView.find(GameUI.ID_Edition)
+        val tvComment: TextView = mView.find(GameUI.ID_Comment)
+        val ivGameAvatar: ImageView = mView.find(GameUI.ID_GameAvatar)
+
+    }
 
 
 }

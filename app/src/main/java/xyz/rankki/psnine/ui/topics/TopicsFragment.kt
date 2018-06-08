@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewGroup
-import org.jetbrains.anko.matchParent
+import com.blankj.utilcode.util.ActivityUtils
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.find
@@ -17,6 +17,7 @@ import xyz.rankki.psnine.base.BaseTopicsModel
 import xyz.rankki.psnine.common.config.RefreshColors
 import xyz.rankki.psnine.common.listener.RecyclerViewStopGlideWhenScrollListener
 import xyz.rankki.psnine.data.http.HttpManager
+import xyz.rankki.psnine.ui.topic.TopicActivity
 
 class TopicsFragment<K> : BaseFragment() {
 
@@ -44,6 +45,14 @@ class TopicsFragment<K> : BaseFragment() {
 
     override fun initView(): View {
         mAdapter = TopicsAdapter(mContext)
+        mAdapter.setOnClickListener(View.OnClickListener {
+            val position: Int = find<RecyclerView>(ID_RecyclerView).getChildAdapterPosition(it)
+            if (position != RecyclerView.NO_POSITION) {
+                val extras = Bundle()
+                extras.putString("url", mAdapter.getData(position).getTopicUrl())
+                ActivityUtils.startActivity(extras, TopicActivity::class.java)
+            }
+        })
         clz = Class.forName(arguments?.getString("clz")) as Class<*>
         return UI {
             swipeRefreshLayout {

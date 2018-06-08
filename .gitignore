@@ -38,6 +38,7 @@ captures/
 
 # Intellij
 *.iml
+.idea/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -289,3 +290,5 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/macos,python,android,androidstudio
+
+API_Test_Files/

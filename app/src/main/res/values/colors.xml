@@ -22,5 +22,7 @@
 
     <color name="colorToastBackground">#757575</color>
 
+    <color name="colorBlockQuoteBackground">#EBDFC7</color>
+
 
 </resources>

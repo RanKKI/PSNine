@@ -13,4 +13,10 @@ class Reply {
     val time: String = ""
     @Pick(value = "div > div.content.pb10", attr = Attrs.INNER_HTML)
     val content: String = ""
+
+    override fun toString(): String {
+        return "Reply(avatar='$avatar', username='$username', time='$time', content='$content')"
+    }
+
+
 }

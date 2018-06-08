@@ -46,7 +46,20 @@ class Home : BaseTopicModel() {
     override fun getReplies(): ArrayList<Reply> = _replies
 
     class Game {
+        @Pick(value = "td.pdd10 > a > img", attr = Attrs.SRC)
+        var gameAvatar: String = ""
 
+        @Pick(value = "td.pd10 > p > a")
+        var gameName: String = ""
+
+        @Pick(value = "td.pd10 > p > span")
+        var gameEdition: String = ""
+
+        @Pick(value = "td.pd10 > div.meta")
+        var gameTrophy: String = ""
+
+        @Pick(value = "td.pd10 > blockquote")
+        var gameComment: String = ""
 
     }
 
