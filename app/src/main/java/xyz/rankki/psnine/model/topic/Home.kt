@@ -31,11 +31,17 @@ class Home : BaseTopicModel() {
     @Pick(value = "div.main > div.box > table.list > tbody > tr")
     var games: ArrayList<Game> = ArrayList()
 
+    @Pick(value = "div.main > div:nth-child(1) > div.content.pd10:has(table)", attr = "itemprop")
+    private var _hasTable: String = ""
+
+    @Pick(value = "div.main > div:nth-child(1) > div.content.pd10:has(div.pd10)", attr = "itemprop")
+    private var _hasTrophy: String = ""
+
     override fun getType(): Int = PSNineTypes.Home
 
     override fun getUsername(): String = _username
 
-    override fun getContent(): String = "<h1>$_title</h1><br>$_content"
+    override fun getContent(): String = "<h3>$_title</h3><br>$_content"
 
     override fun getTime(): String = _meta
 
@@ -44,6 +50,8 @@ class Home : BaseTopicModel() {
     override fun isMoreReplies(): Boolean = _isMoreReplies !== ""
 
     override fun getReplies(): ArrayList<Reply> = _replies
+
+    override fun usingWebView(): Boolean = _hasTable !== "" || _hasTrophy !== ""
 
     class Game {
         @Pick(value = "td.pdd10 > a > img", attr = Attrs.SRC)
@@ -62,5 +70,4 @@ class Home : BaseTopicModel() {
         var gameComment: String = ""
 
     }
-
 }

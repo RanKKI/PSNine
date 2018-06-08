@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package xyz.rankki.psnine.ui.topics
 
 import android.content.Context
@@ -11,7 +13,6 @@ import org.jetbrains.anko.*
 import xyz.rankki.psnine.base.BaseTopicsModel
 import xyz.rankki.psnine.ui.anko.TopicsItemUI
 
-@Suppress("UNCHECKED_CAST")
 class TopicsAdapter<T>(private val mContext: Context) : RecyclerView.Adapter<TopicsAdapter.ViewHolder>() {
 
     private val ankoContext = AnkoContext.createReusable(mContext, this)

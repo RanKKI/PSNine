@@ -13,6 +13,7 @@ class TopicHeaderUI<T> : AnkoComponent<T> {
         const val ID_Avatar: Int = 1
         const val ID_Content: Int = 2
         const val ID_Username: Int = 3
+        const val ID_Content_WebView = 4
 
     }
 
@@ -44,9 +45,23 @@ class TopicHeaderUI<T> : AnkoComponent<T> {
                 topPadding = 5
 
                 val rules: MutableMap<Int, Int> = HashMap()
-                rules[RelativeLayout.RIGHT_OF] = ID_Avatar
-                rules[RelativeLayout.BELOW] = ID_Username
-                layoutParams = RelativeLayoutParams().build(wrapContent, wrapContent, rules)
+                rules[RelativeLayout.BELOW] = ID_Avatar
+                layoutParams = RelativeLayoutParams().build(matchParent, wrapContent, rules)
+
+            }
+
+            webView {
+                id = ID_Content_WebView
+                topPadding = 5
+                visibility = View.GONE
+                backgroundColor = 0xFFFFFF
+                isHorizontalScrollBarEnabled = false
+
+                val websetting = this.settings
+                websetting.loadWithOverviewMode = true
+                val rules: MutableMap<Int, Int> = HashMap()
+                rules[RelativeLayout.BELOW] = ID_Avatar
+                layoutParams = RelativeLayoutParams().build(matchParent, wrapContent, rules)
 
             }
 

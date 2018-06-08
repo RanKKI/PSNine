@@ -18,4 +18,5 @@ abstract class BaseTopicModel {
 
     abstract fun getReplies(): ArrayList<Reply>
 
+    open fun usingWebView(): Boolean = false
 }

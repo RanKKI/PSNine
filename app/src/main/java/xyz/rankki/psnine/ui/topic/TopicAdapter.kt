@@ -4,12 +4,14 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import org.jetbrains.anko.*
+import xyz.rankki.psnine.R
 import xyz.rankki.psnine.base.BaseTopicModel
 import xyz.rankki.psnine.common.config.PSNineTypes
 import xyz.rankki.psnine.model.topic.Gene
@@ -17,6 +19,8 @@ import xyz.rankki.psnine.model.topic.Home
 import xyz.rankki.psnine.model.topic.Reply
 import xyz.rankki.psnine.ui.anko.*
 import xyz.rankki.psnine.utils.HtmlUtil
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAdapter.ViewHolder>() {
 
@@ -97,8 +101,23 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
                 val viewHolder: HeaderViewHolder = holder as HeaderViewHolder
                 viewHolder.tvUsername.text = _topic!!.getUsername()
                 Glide.with(mContext).load(_topic!!.getAvatar()).into(viewHolder.ivAvatar)
-                HtmlUtil.fromHtml(mContext, _topic!!.getContent(), viewHolder.tvContent)
-//                viewHolder.tvContent.text = _topic!!.getContent()
+                if (_topic!!.getType() == PSNineTypes.Gene || !(_topic!!.usingWebView())) {
+                    viewHolder.wvContent.visibility = View.GONE
+                    viewHolder.tvContent.visibility = View.VISIBLE
+                    HtmlUtil.fromHtml(mContext, _topic!!.getContent(), viewHolder.tvContent)
+                } else {
+                    viewHolder.wvContent.visibility = View.VISIBLE
+                    viewHolder.tvContent.visibility = View.GONE
+                    doAsync {
+                        val inputStream = mContext.resources.openRawResource(R.raw.p9css)
+                        val css = BufferedReader(InputStreamReader(inputStream))
+                                .readLines().joinToString("\n")
+                        val content = "<html><head><style>$css</style></head><body>${_topic!!.getContent()}</body></html>"
+                        uiThread {
+                            viewHolder.wvContent.loadData(content, "text/html", "utf-8")
+                        }
+                    }
+                }
             }
 
             Type_Image -> {
@@ -137,7 +156,6 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
                 viewHolder.tvUsername.text = reply.username
                 Glide.with(mContext).load(reply.avatar).into(viewHolder.ivAvatar)
                 HtmlUtil.fromHtml(mContext, reply.content, viewHolder.tvContent)
-//                holder.tvContent.text = reply.content
             }
         }
     }
@@ -164,6 +182,7 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
         val tvUsername: TextView = mView.find(TopicHeaderUI.ID_Username)
         val tvContent: TextView = mView.find(TopicHeaderUI.ID_Content)
         val ivAvatar: ImageView = mView.find(TopicHeaderUI.ID_Avatar)
+        val wvContent: WebView = mView.find(TopicHeaderUI.ID_Content_WebView)
     }
 
     class ReplyViewHolder(mView: View) : ViewHolder(mView) {

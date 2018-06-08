@@ -10,6 +10,7 @@ import android.text.Html
 import android.text.Spanned
 import android.widget.TextView
 import com.blankj.utilcode.util.ScreenUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -52,55 +53,53 @@ class HtmlUtil {
 
         override fun getDrawable(source: String?): Drawable {
 
-            val urlDrawable = UrlDrawable(mContext, tv,executorPool)
-            urlDrawable.set(source)
+            val urlDrawable = UrlDrawable()
+            doAsync(exceptionHandler = {
+                ToastUtils.showShort(it.message)
+            }, task = {
+                val bitmap = Glide.with(mContext).asBitmap().load(source).submit().get()
+                urlDrawable.set(resize(bitmap))
+                uiThread {
+                    tv.text = tv.text
+                    tv.invalidate()
+                }
+            }, executorService = executorPool)
             return urlDrawable
 
         }
 
-        class UrlDrawable(private val mContext: Context, private val tv: TextView, private val executorPool: ExecutorService) : BitmapDrawable() {
-
-            private var _bitmap: Bitmap? = null
-
-            init {
-                setBounds(0, 0, 100, 100)
+        private fun resize(bitmap: Bitmap): Bitmap {
+            val width = bitmap.width
+            val height = bitmap.height
+            val maxWidth = ScreenUtils.getScreenWidth()
+            val ratio = if (width <= 100 || height <= 100) {
+                2.0f
+            } else if (width > maxWidth) {
+                maxWidth / width.toFloat()
+            } else {
+                1.0f
             }
+            val scaledWidth = (ratio * width).toInt()
+            val scaledHeight = (ratio * height).toInt()
+            return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false)
+        }
 
-            fun set(source: String?) {
-                doAsync(exceptionHandler = {
-                    Log.i("error ${it.message}")
-                }, task = {
-                    val bitmap = Glide.with(mContext).asBitmap().load(source).submit().get()
-                    _bitmap = resize(bitmap)
-                    setBounds(0, 0, _bitmap!!.width, _bitmap!!.height)
-                    uiThread {
-                        tv.text = tv.text
-                        tv.invalidate()
-                    }
-                }, executorService = executorPool)
-            }
+    }
 
-            private fun resize(bitmap: Bitmap): Bitmap {
-                val width = bitmap.width
-                val height = bitmap.height
-                val maxWidth = ScreenUtils.getScreenWidth() / 3
-                val ratio = if (width <= 100 || height <= 100) {
-                    2.0f
-                } else if (width > maxWidth) {
-                    maxWidth / width.toFloat()
-                } else {
-                    1.0f
-                }
-                val scaledWidth = (ratio * width).toInt()
-                val scaledHeight = (ratio * height).toInt()
-                return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false)
-            }
+    class UrlDrawable : BitmapDrawable() {
 
-            override fun draw(canvas: Canvas?) {
-                super.draw(canvas)
-                if (_bitmap != null) {
-                    canvas?.drawBitmap(_bitmap, 0f, 0f, paint)
-                }
+        private var _bitmap: Bitmap? = null
+
+        fun set(bitmap: Bitmap) {
+            _bitmap = bitmap
+            setBounds(0, 0, _bitmap!!.width, _bitmap!!.height)
+        }
+
+
+        override fun draw(canvas: Canvas?) {
+            super.draw(canvas)
+            if (_bitmap != null) {
+                canvas?.drawBitmap(_bitmap, 0f, 0f, paint)
             }
         }
     }
