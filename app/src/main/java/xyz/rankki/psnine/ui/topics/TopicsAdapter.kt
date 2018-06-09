@@ -19,7 +19,7 @@ class TopicsAdapter<T>(private val mContext: Context) : RecyclerView.Adapter<Top
 
     private var data: ArrayList<T> = ArrayList()
 
-    private var clickListener: View.OnClickListener? = null
+    var clickListener: View.OnClickListener? = null
 
     fun updateData(newData: ArrayList<*>) {
         doAsync {
@@ -30,10 +30,6 @@ class TopicsAdapter<T>(private val mContext: Context) : RecyclerView.Adapter<Top
                 notifyItemRangeChanged(start, end)
             }
         }
-    }
-
-    fun setOnClickListener(listener: View.OnClickListener?) {
-        clickListener = listener
     }
 
     fun getData(position: Int): BaseTopicsModel.BaseItem = data[position] as BaseTopicsModel.BaseItem

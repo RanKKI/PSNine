@@ -42,29 +42,37 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
     private var _images: ArrayList<Gene.Image> = ArrayList()
     private var _games: ArrayList<Home.Game> = ArrayList()
 
-    fun update(topic: BaseTopicModel) {
+    fun updateTopic(topic: BaseTopicModel) {
         doAsync {
-            _replyPositionOffset = -1
-            _replies = topic.getReplies()
             _topic = topic
-            if (_topic!!.isMoreReplies()) {
-                _replyPositionOffset -= 1
-            }
-            if (_topic?.getType() == PSNineTypes.Gene) {
-                val gene = _topic!! as Gene
-                _replyPositionOffset -= gene.images.size
-                _images = gene.images
-                _imagePositionOffset = -1
-            }
-            if (_topic?.getType() == PSNineTypes.Home) {
-                val home = _topic!! as Home
-                _replyPositionOffset -= home.games.size
-                _games = home.games
-                _gamesPositionOffset = -1
-                _gamesPositionOffset -= _imagePositionOffset
+            _replyPositionOffset = -1
+            when (_topic?.getType()) {
+                PSNineTypes.Gene -> {
+                    val gene = _topic!! as Gene
+                    _replyPositionOffset -= gene.images.size
+                    _images = gene.images
+                    _imagePositionOffset = -1
+                }
+                PSNineTypes.Home -> {
+                    val home = _topic!! as Home
+                    _replyPositionOffset -= home.games.size
+                    _games = home.games
+                    _gamesPositionOffset = -1
+                    _gamesPositionOffset -= _imagePositionOffset
+                }
             }
             uiThread {
                 notifyItemRangeChanged(0, itemCount)
+            }
+        }
+    }
+
+    fun updateReplies(replies: ArrayList<Reply>) {
+        doAsync {
+            val start: Int = itemCount
+            _replies.addAll(replies)
+            uiThread {
+                notifyItemRangeInserted(start, _replies.size)
             }
         }
     }
@@ -87,9 +95,6 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
             var count = 1 // Header view
             count += _images.size // add Gene Images Views
             count += _games.size
-            if (_topic!!.isMoreReplies()) {
-                count += 1 // view more replies button
-            }
             count += _replies.size // add replies's size
             return@doAsyncResult count
         }.get()
@@ -164,12 +169,10 @@ class TopicAdapter(private val mContext: Context) : RecyclerView.Adapter<TopicAd
         return doAsyncResult {
             if (position == 0) {
                 return@doAsyncResult Type_Header
-            } else if (0 < position && position < _images.size + 1) {
+            } else if (position <= _images.size) {
                 return@doAsyncResult Type_Image
-            } else if (0 + _images.size < position && position < _games.size + _images.size + 1) {
+            } else if (_images.size < position && position <= _games.size + _images.size) {
                 return@doAsyncResult Type_Game
-            } else if (_topic!!.isMoreReplies() && position == _games.size + _images.size + 1) {
-                return@doAsyncResult Type_MoreReplies
             } else {
                 return@doAsyncResult Type_Reply
             }

@@ -13,7 +13,7 @@ open class Home : BaseTopicsModel<Home.Topic>() {
 
     override fun getItems(): ArrayList<Topic> = _topics
 
-    override fun getPath(): String = ""
+    override fun getPath(): String = "topic"
     override fun getName(): String = "主页"
     override fun getType(): Int = PSNineTypes.Home
 

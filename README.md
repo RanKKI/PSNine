@@ -14,7 +14,7 @@
   - Android 版本 > 5.0 ( SDK version > 21 )
   - 网络连接
  
-### Dependencies
+### 第三方依赖库
  - rxKotlin
  - retrofit2
  - Fruit
@@ -24,9 +24,7 @@
 #### 日志
 
  ```
- Version 0.0.2
- 文章查看.
- 图片适应手机宽度.
- 表情放大.
- 优化列表
+ Version 0.0.3
+ 加载更多主题
+ 加载更多回复
  ```

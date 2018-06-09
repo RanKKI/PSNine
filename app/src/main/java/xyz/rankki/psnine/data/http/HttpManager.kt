@@ -17,6 +17,7 @@ import retrofit2.http.Url
 import xyz.rankki.psnine.base.BaseTopicModel
 import xyz.rankki.psnine.base.BaseTopicsModel
 import xyz.rankki.psnine.data.http.interceptor.RequestInterceptor
+import xyz.rankki.psnine.model.topic.Replies
 import java.util.concurrent.TimeUnit
 
 
@@ -90,6 +91,12 @@ class HttpManager {
         return getWebPage(path, clz)
                 .subscribeOn(Schedulers.io())
                 .map { return@map it as BaseTopicModel }
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getReplies(path: String, repliesPage: Int): Observable<Replies> {
+        return getWebPage("$path/comment?page=$repliesPage", Replies::class.java)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 

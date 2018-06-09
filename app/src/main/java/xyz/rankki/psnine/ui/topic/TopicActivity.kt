@@ -18,14 +18,14 @@ import org.jetbrains.anko.toolbar
 import org.jetbrains.anko.verticalLayout
 import xyz.rankki.psnine.R
 import xyz.rankki.psnine.common.config.RefreshColors
-import xyz.rankki.psnine.common.listener.RecyclerViewStopGlideWhenScrollListener
+import xyz.rankki.psnine.common.listener.RecyclerViewScrollListener
 import xyz.rankki.psnine.data.http.HttpManager
 import xyz.rankki.psnine.model.topic.Gene
 import xyz.rankki.psnine.model.topic.Home
 import xyz.rankki.psnine.ui.topics.TopicsFragment
 import xyz.rankki.psnine.utils.ExtraSpaceLinearLayoutManager
 
-class TopicActivity : AppCompatActivity() {
+class TopicActivity : AppCompatActivity(), RecyclerViewScrollListener.LoadingListener {
 
     companion object {
         const val ID_SwipeRefreshLayout: Int = 1
@@ -37,6 +37,8 @@ class TopicActivity : AppCompatActivity() {
     private lateinit var mAdapter: TopicAdapter
     private lateinit var clz: Class<*>
     private lateinit var path: String
+    private var repliesPage = 1
+    private var maxRepliesPage = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,7 @@ class TopicActivity : AppCompatActivity() {
                     isDrawingCacheEnabled = true
                     drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
                     addItemDecoration(DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL))
-                    addOnScrollListener(RecyclerViewStopGlideWhenScrollListener(mContext))
+                    addOnScrollListener(RecyclerViewScrollListener(mContext, this@TopicActivity))
                 }
             }
         }
@@ -85,17 +87,53 @@ class TopicActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        getTopic()
+        getTopicReplies()
+    }
+
+    private var topicLoadedFlag: Boolean = false
+    private var topicRepliesLoadedFlag: Boolean = false
+
+    private fun getTopic() {
         setRefreshing(true)
+        topicLoadedFlag = false
         HttpManager.get()
                 .getTopic(path, clz)
                 .subscribe {
-                    mAdapter.update(it)
-                    setRefreshing(false)
+                    mAdapter.updateTopic(it)
+                    topicLoadedFlag = true
+                    if (topicRepliesLoadedFlag) {
+                        setRefreshing(false)
+                    }
+                }
+    }
+
+    private fun getTopicReplies() {
+        setRefreshing(true)
+        topicRepliesLoadedFlag = false
+        HttpManager.get()
+                .getReplies(path, repliesPage)
+                .subscribe {
+                    topicRepliesLoadedFlag = true
+                    mAdapter.updateReplies(it.replies)
+                    maxRepliesPage = it.getMaxPage()
+                    if (topicLoadedFlag) {
+                        setRefreshing(false)
+                    }
                 }
     }
 
     private fun setRefreshing(isRefreshing: Boolean) {
         find<SwipeRefreshLayout>(TopicsFragment.ID_SwipeRefreshLayout).isRefreshing = isRefreshing
+    }
+
+    override fun isLoading(): Boolean = find<SwipeRefreshLayout>(TopicsFragment.ID_SwipeRefreshLayout).isRefreshing
+
+    override fun loadMore() {
+        if (maxRepliesPage != 1 && repliesPage < maxRepliesPage) {
+            repliesPage += 1
+            getTopicReplies()
+        }
     }
 
 }

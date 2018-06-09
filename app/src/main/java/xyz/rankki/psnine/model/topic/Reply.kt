@@ -5,6 +5,7 @@ import me.ghui.fruit.annotations.Pick
 
 
 class Reply {
+
     @Pick(value = "a.l > img", attr = Attrs.SRC)
     val avatar: String = ""
     @Pick(value = "div > div.meta > a.psnnode")

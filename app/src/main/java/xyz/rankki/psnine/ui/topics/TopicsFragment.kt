@@ -15,14 +15,15 @@ import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import xyz.rankki.psnine.base.BaseFragment
 import xyz.rankki.psnine.base.BaseTopicsModel
 import xyz.rankki.psnine.common.config.RefreshColors
-import xyz.rankki.psnine.common.listener.RecyclerViewStopGlideWhenScrollListener
+import xyz.rankki.psnine.common.listener.RecyclerViewScrollListener
 import xyz.rankki.psnine.data.http.HttpManager
 import xyz.rankki.psnine.ui.topic.TopicActivity
 
-class TopicsFragment<K> : BaseFragment() {
+class TopicsFragment<K> : BaseFragment(), RecyclerViewScrollListener.LoadingListener {
 
     private lateinit var mAdapter: TopicsAdapter<K>
     private lateinit var clz: Class<*>
+    private var page: Int = 1
 
     companion object {
 
@@ -45,15 +46,16 @@ class TopicsFragment<K> : BaseFragment() {
 
     override fun initView(): View {
         mAdapter = TopicsAdapter(mContext)
-        mAdapter.setOnClickListener(View.OnClickListener {
+        mAdapter.clickListener = View.OnClickListener {
             val position: Int = find<RecyclerView>(ID_RecyclerView).getChildAdapterPosition(it)
             if (position != RecyclerView.NO_POSITION) {
                 val extras = Bundle()
                 extras.putString("url", mAdapter.getData(position).getTopicUrl())
                 ActivityUtils.startActivity(extras, TopicActivity::class.java)
             }
-        })
+        }
         clz = Class.forName(arguments?.getString("clz")) as Class<*>
+
         return UI {
             swipeRefreshLayout {
                 id = ID_SwipeRefreshLayout
@@ -66,7 +68,8 @@ class TopicsFragment<K> : BaseFragment() {
                     layoutManager = LinearLayoutManager(mContext)
                     adapter = mAdapter
                     addItemDecoration(DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL))
-                    addOnScrollListener(RecyclerViewStopGlideWhenScrollListener(mContext))
+                    val scrollListener = RecyclerViewScrollListener(mContext, this@TopicsFragment)
+                    addOnScrollListener(scrollListener)
                 }
             }
         }.view
@@ -75,7 +78,7 @@ class TopicsFragment<K> : BaseFragment() {
     override fun initData() {
         setRefreshing(true)
         HttpManager.get()
-                .getTopics(arguments!!.getString("path"), clz)
+                .getTopics("${arguments!!.getString("path")}?page=$page", clz)
                 .subscribe {
                     mAdapter.updateData(it)
                     setRefreshing(false)
@@ -85,5 +88,12 @@ class TopicsFragment<K> : BaseFragment() {
     private fun setRefreshing(isRefreshing: Boolean) {
         find<SwipeRefreshLayout>(ID_SwipeRefreshLayout).isRefreshing = isRefreshing
     }
+
+    override fun loadMore() {
+        page += 1
+        initData()
+    }
+
+    override fun isLoading(): Boolean = find<SwipeRefreshLayout>(ID_SwipeRefreshLayout).isRefreshing
 
 }
